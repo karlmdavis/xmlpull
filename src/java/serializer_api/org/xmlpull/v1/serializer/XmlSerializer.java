@@ -10,13 +10,20 @@ import java.io.*;
     independency. */
 
 public interface XmlSerializer {
-
-    public static final int CDSECT = 5;
-    public static final int ENTITY_REF = 6;
-    public static final int IGNORABLE_WHITESPACE = 7;
-    public static final int PROCESSING_INSTRUCTION = 8;
-    public static final int COMMENT = 9;
-    public static final int DOCDECL = 10;
+    /**
+     * FEATURE: disable or enable serializer output indentation
+     * for elements on that on or below current depth
+     * (as defined by matching endTag() to current in-scope startTag()).
+     *
+     * <p><strong>NOTE:</strong> can be changed during parsing!
+     * <p><strong>NOTE:</strong> may be ignored by serializers
+     *  (for example when serializer produces binary XML output like WBXML)
+     *
+     * @see #getFeature
+     * @see #setFeature
+     */
+    public static final String FEATURE_INDENT_OUTPUT =
+        "http://xmlpull.org/v1/doc/features.html#indent-output";
 
    public void setFeature(String name,
                            boolean state) throws IOException;
@@ -32,11 +39,6 @@ public interface XmlSerializer {
 
     public boolean getFeature(String name);
 
-    /** binds the given prefix to the given namespace.
-        valid for the next element including child elements */
-
-    void setPrefix (String prefix, String namespace);
-
 
     void setOutput (OutputStream os, String encoding);
 
@@ -44,6 +46,11 @@ public interface XmlSerializer {
         insert big warning here */
 
     void setOutput (Writer writer);
+
+    /** binds the given prefix to the given namespace.
+        valid for the next element including child elements */
+
+    void setPrefix (String prefix, String namespace);
 
     /** writes a start tag with the given namespace and name.
         if the indent flag is set, a \r\n and getDepth () spaces
@@ -59,18 +66,13 @@ public interface XmlSerializer {
     void attribute (String namespace, String name,
                     String value) throws IOException;
 
-    /** writes all pending output to the stream */
-
-    void flush () throws IOException;
-
 
     // indent must be set separately f. end: <!-- indented --> <tag>xxx</tag>
     // repetition of namespace and name is just for avoiding errors
     // background: in kXML I just had endTag, and non matching tags were
     // very difficult to find...
 
-    void endTag (String namespace, String name,
-                 boolean indent) throws IOException;
+    void endTag (String namespace, String name) throws IOException;
 
     /** Writes text, where special XML chars are escaped automatically */
 
@@ -85,7 +87,21 @@ public interface XmlSerializer {
         here, which may be ignored, and which events cause an
         exception???? XXX) */
 
-    void legacy (int type, String text)  throws IOException;
-    void legacy (int type, char [] text, int start, int len) throws IOException;
+    void cdsect (String text)  throws IOException;
+    void entityRef (String text)  throws IOException;
+    void processingInstruction (String text)  throws IOException;
+    void comment (String text)  throws IOException;
+    void docdecl (String text)  throws IOException;
+    void ignorableWhitespace (String text)  throws IOException;
+    //void legacy (int type, char [] text, int start, int len) throws IOException;
+
+    /**
+     * writes all pending output to the stream,
+     * if  startTag() or attribute() was caled then start tag is closed
+     * no more attributes an be added by calling attribute()
+     */
+    void flush () throws IOException;
+
+
 }
 
