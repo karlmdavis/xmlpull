@@ -26,10 +26,60 @@ import java.io.Reader;
  * <dt><a href="#END_DOCUMENT">END_DOCUMENT</a><dd> no more events is available
  * </dl>
  *
+ * The minimal working example of use of API would be looking like this:
+ * <pre>
+ * import java.io.IOException;
+ * import java.io.StringReader;
+ *
+ * import org.xmlpull.v1.XmlPullParser;
+ * import org.xmlpull.v1.XmlPullParserException;
+ * import org.xmlpull.v1.XmlPullParserFactory;
+ *
+ * public class SimpleXmlPullApp
+ * {
+ *
+ *     public static void main (String args[])
+ *         throws XmlPullParserException, IOException
+ *     {
+ *         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+ *         factory.setNamespaceAware(true);
+ *         XmlPullParser xpp = factory.newPullParser();
+ *
+ *         xpp.setInput ( new StringReader ( "&lt;foo>Hello World!&lt;/foo>" ) );
+ *         int eventType = xpp.getEventType();
+ *         while (eventType != xpp.END_DOCUMENT) {
+ *          if(eventType == xpp.START_DOCUMENT) {
+ *              System.out.println("Start document");
+ *          } else if(eventType == xpp.END_DOCUMENT) {
+ *              System.out.println("End document");
+ *          } else if(eventType == xpp.START_TAG) {
+ *              System.out.println("Start tag "+xpp.getName());
+ *          } else if(eventType == xpp.END_TAG) {
+ *              System.out.println("End tag "+xpp.getName());
+ *          } else if(eventType == xpp.TEXT) {
+ *              System.out.println("Text "+xpp.getText());
+ *          }
+ *          eventType = xpp.next();
+ *         }
+ *     }
+ * }
+ * </pre>
+ *
+ * <p>When run it will produce following output:
+ * <pre>
+ * Start document
+ * Start tag foo
+ * Text Hello World!
+ * End tag foo
+ * </pre>
+ *
+ * <p>For more details on use of API please read
+ * Quick Introduction available at <a href="http://www.xmlpull.org">http://www.xmlpull.org</a>
+ *
  * @see XmlPullParserFactory
  *
  * @author Stefan Haustein
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 
 public interface XmlPullParser {
@@ -68,7 +118,7 @@ public interface XmlPullParser {
      * (available from <a href="#next()">next()</a> and <a href="#nextToken()">nextToken()</a>).
      * The name of start tag is available from getName(), its namespace and prefix are
      * available from getNamespace() and getPrefix()
-     * if <a href='#PROCESS_NAMESPACES'>namespaces are enabled</a>.
+     * if <a href='#FEATURE_PROCESS_NAMESPACES'>namespaces are enabled</a>.
      * See getAttribute* methods to retrieve element attributes.
      * See getNamespace* methods to retrieve newly declared namespaces.
      *
@@ -77,11 +127,11 @@ public interface XmlPullParser {
      * @see #getName
      * @see #getPrefix
      * @see #getNamespace
-     * @see #getAttributesCount
+     * @see #getAttributeCount
      * @see #getDepth
-     * @see #getNamespacesCount
+     * @see #getNamespaceCount
      * @see #getNamespace
-     * @see #PROCESS_NAMESPACES
+     * @see #FEATURE_PROCESS_NAMESPACES
      */
     public final static int START_TAG = 2;
 
@@ -96,7 +146,7 @@ public interface XmlPullParser {
      * @see #getName
      * @see #getPrefix
      * @see #getNamespace
-     * @see #PROCESS_NAMESPACES
+     * @see #FEATURE_PROCESS_NAMESPACES
      */
     public final static int END_TAG = 3;
 
@@ -225,7 +275,7 @@ public interface XmlPullParser {
     /**
      * FEATURE: Report namespace attributes also - they can be distinguished
      * looking for prefix == "xmlns" or prefix == null and name == "xmlns
-     * it is off by default and only meningful when PROCESS_NAMESPACES feature is on.
+     * it is off by default and only meningful when FEATURE_PROCESS_NAMESPACES feature is on.
      * <p><strong>NOTE:</strong> can not be changed during parsing!
      *
      * @see #getFeature
@@ -269,7 +319,7 @@ public interface XmlPullParser {
      * such as namespace processing or doctype declaration handling.
      * This method must be called before the first call to next or
      * nextToken. Otherwise, an exception is trown.
-     * <p>Example: Use setFeature (PROCESS_NAMESPACES, true) in order
+     * <p>Example: Use setFeature (FEATURE_PROCESS_NAMESPACES, true) in order
      * to switch on namespace processing. Default settings correspond
      * to properties requested from the XML Pull Parser factory
      * (if none were requested then all feautures are by default false).
@@ -364,7 +414,7 @@ public interface XmlPullParser {
      * Convenience method for
      *
      * <pre>
-     *  for (int i = getNamespacesCount (getDepth ())-1; i >= 0; i--) {
+     *  for (int i = getNamespaceCount (getDepth ())-1; i >= 0; i--) {
      *   if (getNamespacePrefix (i).equals (prefix)) {
      *     return getNamespaceUri (i);
      *   }
@@ -374,7 +424,7 @@ public interface XmlPullParser {
      *
      * <p>However parser implementation can be more efficinet about.
      *
-     * @see #getNamespacesCount
+     * @see #getNamespaceCount
      * @see #getNamespacePrefix
      * @see #getNamespaceUri
      */
@@ -403,6 +453,7 @@ public interface XmlPullParser {
      * &lt;/root&gt;              1
      * &lt;!-- outside --&gt;     0
      * &lt;/pre&gt;
+     * </pre>
      */
     public int getDepth();
 
@@ -471,8 +522,6 @@ public interface XmlPullParser {
      * values returned in holder MUST be -1 (both start and length).
      *
      * @see #getText
-     * @see #getTextCharactersStart
-     * @see #getTextCharactersLength
      *
      * @param holderForStartAndLength the 2-element int array into which
      *   values of start offset and length will be written into frist and second slot of array.
@@ -630,6 +679,38 @@ public interface XmlPullParser {
      * This method works similarly to next() but will expose
      * additional event types (COMMENT, DOCDECL, PROCESSING_INSTRUCTION, ENTITY_REF or
      * IGNORABLE_WHITESPACE) if they are available in input.
+     *
+     * <p>If special feature FEATURE_XML_ROUNDTRIP (http://xmlpull.org/v1/features/xml-roundtrip)
+     * is true then it is possible to do XML document round trip ie. reproduce
+     * exectly on output the XML input using getText().
+     *
+     * <p>Here is the list of tokens that can be  returned from nextToken()
+     * and what getText() and getTextCharacters() returns:<dl>
+     * <dt>START_DOCUMENT<dd>null
+     * <dt>END_DOCUMENT<dd>null
+     * <dt>START_TAG<dd>null
+     *   unless FEATURE_XML_ROUNDTRIP enabled and then returns XML tag, ex: &lt;tag attr='val'>
+     * <dt>END_TAG<dd>null
+     * unless FEATURE_XML_ROUNDTRIP enabled and then returns XML tag, ex: &lt;/tag>
+     * <dt>TEXT<dd>return unnormalized element content
+     * <dt>CDSECT<dd>return unnormalized text _inside_ CDATA
+     *  ex. 'fo&lt;o' from &lt;!CDATA[fo&lt;o]]>
+     * ENTITY_REF return unnormalized text of entity_name (&entity_name;)
+     * <br><b>NOTE:</b> it is user responsibility to resolve entity reference
+     * <br><b>NOTE:</b> character entities and standard entities such as
+     *  &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos; are always
+     * resolved and reported as parts of TEXT!
+     * <dt>IGNORABLE_WHITESPACE<dd>return unnormalized characters
+     * <dt>PROCESSING_INSTRUCTION<dd>return unnormalized PI content ex: 'pi foo' from &lt;?pi foo?>
+     * <dt>COMMENT<dd>return comment content ex. 'foo bar' from &lt;!--foo bar-->
+     * <dt>DOCDECL<dd>return inside part of DOCDECL ex. returns:<pre>
+     * <br>&quot; titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
+     * <br>[&lt;!ENTITY % active.links "INCLUDE">]&quot;</pre>
+     * <p>in input document contained:<pre>
+     * <br>&lt;!DOCTYPE titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
+     * <br>[&lt;!ENTITY % active.links "INCLUDE">]></pre>
+     * </dd>
+     * </dl>
      *
      * <p><strong>NOTE:</strong> retirned text of token is not end-of-line normalized.
      *
