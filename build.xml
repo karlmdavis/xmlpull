@@ -51,6 +51,7 @@ All generated files are created under ${build} directory
   <property name="dist_lite_tgz" value="${dist_lite}.tgz"/>
   <property name="dist_full_tgz" value="${dist_full}.tgz"/>
   <property name="jar"  value="${build_lib}/${xmlpull_version}.jar"/>
+  <property name="tests_jar"  value="${build_lib}/xmlpull-tests_${version}.jar"/>
 
   <property name="website"      value="../xmlpull-website/v1"/>
 
@@ -79,9 +80,13 @@ All generated files are created under ${build} directory
     <mkdir dir="${build_tests}"/>
     <mkdir dir="${build_classes}"/>
     <touch file="${build_classes}/${xmlpull_tag}_VERSION"/>
+    <touch file="${build_tests}/${xmlpull_tag}_VERSION_TESTS"/>
     <available property="junit_present" classname="junit.framework.TestCase" />
     <uptodate property="build_notRequired" targetfile="${jar}">
       <srcfiles dir="${src_api}" includes="**/*.java"/>
+    </uptodate>
+    <uptodate property="build_tests_jar_notRequired" targetfile="${tests_jar}">
+      <srcfiles dir="${src_tests}" includes="**/*.java"/>
     </uptodate>
   </target>
 
@@ -142,7 +147,14 @@ All generated files are created under ${build} directory
     </javac>
   </target>
 
-  <target name="tests" depends="tests_junit"/>
+  <target name="tests_jar" unless="build_tests_jar_notRequired" depends="tests_junit">
+    <mkdir dir="${build_lib}"/>
+    <jar jarfile="${tests_jar}">
+      <fileset dir="${build_tests}"/>
+    </jar>
+  </target>
+
+  <target name="tests" depends="tests_jar"/>
 
   <target name="junit" if="junit_present" depends="tests">
     <junit haltonfailure="yes" fork="yes">
@@ -214,6 +226,7 @@ All generated files are created under ${build} directory
     <copy todir="${dist}/build">
       <fileset dir="${build}">
         <include name="lib/${xmlpull_version}*.jar"/>
+        <include name="lib/xmlpull-tests_${version}*.jar"/>
         <!--include name="classes/**"/-->
         <include name="samples/**"/>
         <include name="tests/**"/>
@@ -256,6 +269,7 @@ All generated files are created under ${build} directory
     </copy>
 
     <copy file="LICENSE.txt" tofile="${dist}/LICENSE.txt"/>
+    <copy file="LICENSE_TESTS.txt" tofile="${dist}/LICENSE_TESTS.txt"/>
     <copy file="README.html" tofile="${dist}/README.html"/>
     <!--copy file="README.txt" tofile="${dist}/README.txt"/-->
     <copy file="build.xml" tofile="${dist}/build.xml"/>
