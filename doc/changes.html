@@ -7,7 +7,7 @@
 </HEAD>
 <BODY BGCOLOR="white">
 
-<H1>Changes to XMLPULL V1 API</H1><P>
+<H1>Changes to XmlPull V1 API</H1><P>
 
 <h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2002-11-... (XMLPULL_1_2_1)</h3>
 <ul>
@@ -17,8 +17,9 @@ incorporate all changes since 1.0.x in stable version </ul>
 <h3>IN PROGRESS INTERIM RELEASE: </h3>
 
 <h3><a name="XMLPULL_1_1_2"></a>2002-10-16 (XMLPULL_1_1_2)</h3>
-
-
+<li>added to addons SAX2 driver,
+removed AttributesCachingDriver but left documented how to achieve this functionality
+<li>added to addons XML RPC implementation
 <ul>
 
 <li><b>NOTE:</b> <b>potentially backward incompatible change to nextToken</b>():
@@ -29,8 +30,8 @@ but instead content of XMLDecl is made available as set of properties
 and
 <a href="http://xmlpull.org/v1/doc/features.html#xmldecl-content">XMLDECL CONTENT</a>.
 
-<li>J2ME compatibility issue fixed: changed to use <tt>instanceof</tt> instead 
-of class in XmlPullParserFactory
+<li>J2ME compatibility issue fixed: changed to use <tt>instanceof</tt> instead
+of .class in XmlPullParserFactory
 
 <li>added to XmlSerializer three new utility methods:
 getDepth(), getName(), and getNamespace()
@@ -42,7 +43,7 @@ from inside exception handler
 and added tests to check for optional XMLDecl properties
 
 <li>XmlSerializer is now required to throw exception when user tries to
-write startTag()  in default namespace ("") and default namespace is bound
+write startTag() in default namespace ("") and default namespace is bound
 to non-empty string, added test to check for it
 
 <li>added patch by Holger Krug to SAX2 Driver to allow modification in sub classes

@@ -1,0 +1,130 @@
+<html><head>
+<title>XmlPull API Addons
+</title>
+</head>
+
+<body bgcolor="white">
+
+<h1>XmlPull API Addons
+</h1>
+
+<h2>What is it?</h2>
+
+<p>Addons are resuable components that built on top of XmlPull API.
+
+</p><p>
+All addons can be compiled by build target <code>addons</code>
+
+
+
+<a name="sax2">
+<h2>SAX2 driver</h2>
+</a>
+
+<p>It can be compiled by build target <code>sax2</code>
+
+</p><p>Source code is available in <code>addons/java/sax2_driver</code>.
+
+</p><p>
+NOTE: this driver is not going to work in MIDP environments
+
+
+</p>
+
+<a name="xmlrpc">
+<h2>XML RPC parser</h2>
+</a>
+<p>It can be compiled by build target <code>xmlrpc</code>
+
+</p><p>Source code is available in <code>addons/java/sax2_driver</code>.
+
+</p>
+
+<a name="notes">
+<h2>Additional notes</h2>
+</a>
+
+<a name="sax2_example">
+<h3>How to extend SAX2 driver to provide dsafe to keep Attributes?</h3>
+</a>
+
+<p>If you want to extend SAX2 Driver to provides a separate Attributes object
+for each startElement call (so it is safe to keep the reference to Attributes)
+then create class AttributesCachingDriver that extends current SAX2 driver
+(need to do it was requestd by Holger Krug), for example:
+</p>
+<pre>
+
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import org.xmlpull.v1.sax2.Driver;
+
+public class AttributesCachingDriver extends Driver
+{
+    public AttributesCachingDriver() throws XmlPullParserException {
+        super();
+    }
+
+    public AttributesCachingDriver(XmlPullParser pp) throws XmlPullParserException {
+        super(pp);
+    }
+
+    /**
+     * Calls startElement(String, String, String, Attributes) startElement} on the
+     * ContentHandlerwith copied attribute values. The Attributes object may
+     * be stored as each call gets a new copy of Attributes.
+     */
+    protected void startElement(String namespace, String localName, String qName) throws SAXException {
+        contentHandler.startElement(namespace, localName, qName, new AttributesImpl(this));
+    }
+
+}
+</pre>
+
+
+</p>
+
+
+<p>
+<address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+  and <a href="http://www.trantor.de/stefan.haustein/">Stefan Haustein</a>
+</address>
+
+</p><hr>
+<font size="-1">
+Last modified $Id: addons.html,v 1.1 2003/02/17 22:09:08 aslom Exp $
+</font>
+
+<!--extra space at bottom for hyperlinks #anchors to work -->
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+<p> <br>
+
+</body></html>
