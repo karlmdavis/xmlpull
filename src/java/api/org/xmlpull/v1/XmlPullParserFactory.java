@@ -20,7 +20,7 @@ import java.util.Vector;
  * a comma separated list of class names of factories or parsers to try (in order from
  * left to the right). If none found, it will throw an exception.
  *
- * <p><strong>NOTE:</strong>In J2SE or J2EE environments, you may want to use
+ * <br /><strong>NOTE:</strong>In J2SE or J2EE environments, you may want to use
  * <code>newInstance(property, classLoaderCtx)</code>
  * where first argument is
  * <code>System.getProperty(XmlPullParserFactory.PROPERTY_NAME)</code>
@@ -253,8 +253,8 @@ public class XmlPullParserFactory {
      * to create XML pull parsers (see class description for more
      * details).
      *
-     * @return a new instance of a PullParserFactory, as returned by newInstance (null, null); */
-
+     * @return a new instance of a PullParserFactory, as returned by newInstance (null, null); 
+     */
     public static XmlPullParserFactory newInstance () throws XmlPullParserException {
         return newInstance(null, null);
     }
@@ -265,7 +265,7 @@ public class XmlPullParserFactory {
         if (context == null) {
             //NOTE: make sure context uses the same class loader as API classes
             //      this is the best we can do without having access to context classloader in J2ME
-            //      if API is in the same clasloader as implementation then this will work
+            //      if API is in the same classloader as implementation then this will work
             context = referenceContextClass;
         }
 
@@ -315,7 +315,7 @@ public class XmlPullParserFactory {
 
             try {
                 candidate = Class.forName (name);
-                // neccessary because of J2ME .class issue
+                // necessary because of J2ME .class issue
                 instance = candidate.newInstance ();
             }
             catch (Exception e) {}

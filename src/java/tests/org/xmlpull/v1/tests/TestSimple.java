@@ -41,17 +41,17 @@ public class TestSimple extends UtilTestCase {
         assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
 
         // this SHOULD always be OK
-        assertEquals("START_DOCUMENT", xpp.TYPES[XmlPullParser.START_DOCUMENT]);
-        assertEquals("END_DOCUMENT", xpp.TYPES[XmlPullParser.END_DOCUMENT]);
-        assertEquals("START_TAG", xpp.TYPES[XmlPullParser.START_TAG]);
-        assertEquals("END_TAG", xpp.TYPES[XmlPullParser.END_TAG]);
-        assertEquals("TEXT", xpp.TYPES[XmlPullParser.TEXT]);
-        assertEquals("CDSECT", xpp.TYPES[xpp.CDSECT]);
-        assertEquals("ENTITY_REF", xpp.TYPES[xpp.ENTITY_REF]);
-        assertEquals("IGNORABLE_WHITESPACE", xpp.TYPES[xpp.IGNORABLE_WHITESPACE]);
-        assertEquals("PROCESSING_INSTRUCTION", xpp.TYPES[xpp.PROCESSING_INSTRUCTION]);
-        assertEquals("COMMENT", xpp.TYPES[xpp.COMMENT]);
-        assertEquals("DOCDECL", xpp.TYPES[xpp.DOCDECL]);
+        assertEquals("START_DOCUMENT", XmlPullParser.TYPES[XmlPullParser.START_DOCUMENT]);
+        assertEquals("END_DOCUMENT", XmlPullParser.TYPES[XmlPullParser.END_DOCUMENT]);
+        assertEquals("START_TAG", XmlPullParser.TYPES[XmlPullParser.START_TAG]);
+        assertEquals("END_TAG", XmlPullParser.TYPES[XmlPullParser.END_TAG]);
+        assertEquals("TEXT", XmlPullParser.TYPES[XmlPullParser.TEXT]);
+        assertEquals("CDSECT", XmlPullParser.TYPES[XmlPullParser.CDSECT]);
+        assertEquals("ENTITY_REF", XmlPullParser.TYPES[XmlPullParser.ENTITY_REF]);
+        assertEquals("IGNORABLE_WHITESPACE", XmlPullParser.TYPES[XmlPullParser.IGNORABLE_WHITESPACE]);
+        assertEquals("PROCESSING_INSTRUCTION", XmlPullParser.TYPES[XmlPullParser.PROCESSING_INSTRUCTION]);
+        assertEquals("COMMENT", XmlPullParser.TYPES[XmlPullParser.COMMENT]);
+        assertEquals("DOCDECL", XmlPullParser.TYPES[XmlPullParser.DOCDECL]);
 
         // check setInput semantics
         assertEquals(XmlPullParser.START_DOCUMENT, xpp.getEventType());

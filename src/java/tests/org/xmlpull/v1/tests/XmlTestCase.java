@@ -189,7 +189,7 @@ public class XmlTestCase extends UtilTestCase {
                 if(type != null) {
                     int event = convertToEventType(pp,type);
                     // comapring string give better error messages
-                    assertEquals(pp.TYPES[ event ], pp.TYPES[ testParser.getEventType() ]);
+                    assertEquals(XmlPullParser.TYPES[ event ], XmlPullParser.TYPES[ testParser.getEventType() ]);
                     // now compare actual int values
                     assertEquals(event, testParser.getEventType());
                 }
@@ -239,9 +239,9 @@ public class XmlTestCase extends UtilTestCase {
 
 
     private int convertToEventType(XmlPullParser pp, String eventName) {
-        for (int i = 0; i < pp.TYPES.length; i++)
+        for (int i = 0; i < XmlPullParser.TYPES.length; i++)
         {
-            if( eventName.equals(pp.TYPES[ i ]) ) {
+            if( eventName.equals(XmlPullParser.TYPES[ i ]) ) {
                 return i;
             }
         }
