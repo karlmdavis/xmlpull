@@ -1,69 +1,72 @@
 <HTML>
 <HEAD>
-<TITLE>Quick Introduction to XMLPULL V1 API
+<TITLE>Quick Introduction to XmlPull v1 API
 </TITLE>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="Author" content="Aleksander Slominski">
 </HEAD>
 <BODY BGCOLOR="white">
 
-<H1>Quick Introduction to XMLPULL V1 API</H2><P>
+<H1>Quick Introduction to XmlPull v1 API</H2><P>
 
-<p>XMLPULL V1 API is simple to use XML pull parsing API that was designed for 
+<p>XmlPull v1 API is a simple to use XML pull parsing API that was designed for 
 simplicity and very good performance both in constrained environment such as 
 defined by J2ME and on server side when used in J2EE application servers. XML 
-pull parsing allow incremental (sometimes called streaming) parsing of XML where 
+pull parsing allows incremental (sometimes called streaming) parsing of XML where 
 application is in control - the parsing can be interrupted at any given moment 
 and resumed when application is ready to consume more input.<p>This document&nbsp; 
 will show step by step how to create a simple&nbsp; application that is using 
-XMLPULL API. For more comprehensive introduction to XMLPULL V1 API and XML pull 
+XmlPull API to parse XML. If you need to write XML output check a companion 
+document <a href="quick_write.html">Quick Introduction to writing XML with 
+XmlSerializer</a>.&nbsp; For more comprehensive introduction to XmlPull v1 API and XML pull 
 parsing in general read JavaWorld.com article &quot;<a href="http://www.javaworld.com/javaworld/jw-04-2002/jw-0426-xmljava3.html">XML 
 documents on the run, Part 3</a>&quot; by <a href="http://www.sosnoski.com/">Dennis 
 M. Sosnoski</a>.<H2>Main features of API</H2>
 
 
-<P>Java version of XMLPULL V1 API provides:<ul>
+<P>Java version of XmlPull v1 API provides:<ul>
 <li><b>simple interface</b> - parser consists of one interface, one exception 
 and one factory to create parser<li><b>implementation independent</b> - factory 
-class is modeled after JAXP and allows easily to switch to different XMLPULL V1 
+class is modeled after JAXP and allows easily to switch to different XmlPull V1 
 API implementation without even modifying source code<li><b>ease of use</b> - 
 there is only one key method <b><i>next()</i></b> that is used to retrieve next 
-event and there are only five events:
+event and there are <b>only five events</b>:
 <dl>
-<dt><b>START DOCUMENT</b> <dd>document start - parser has not yet read any input
-<dt><b>START_TAG</b> <dd> parser is on start tag
-<dt><b>TEXT</b> <dd> parser is on element content
-<dt><b>END_TAG</b> <dd> parser is on end tag
-<dt><b>END_DOCUMENT</b> <dd> document finished and no more parsing is allowed
+<dt><b>&nbsp;&nbsp;&nbsp; START DOCUMENT</b> <dd>document start - parser has not yet read any input
+<dt><b>&nbsp;&nbsp;&nbsp; START_TAG</b> <dd> parser is on start tag
+<dt><b>&nbsp;&nbsp;&nbsp; TEXT</b> <dd> parser is on element content
+<dt><b>&nbsp;&nbsp;&nbsp; END_TAG</b> <dd> parser is on end tag
+<dt><b>&nbsp;&nbsp;&nbsp; END_DOCUMENT</b> <dd> document finished and no more parsing is allowed
 </dl>
 <li><b>versatility</b> - it is generic interface for XML parser and allows for
 multiple implementations and extensibility through features and properties
 <li><b>performance</b> - the interface is designed to allow implementing very fast XML parsers
 <li><b>minimal requirements</b> - designed to be compatible with J2ME (Java 2 Micro Edition)
-to work and on small devices and to allow create XMLPULL compliant parsers of  very small
+to work and on small devices and to allow create XmlPull compliant parsers of  very small
 memory footprint.
 </ul>
 
 
-<H2>Requirements</H2>
+<H2><a name="reqs"></a>Requirements</H2>
 
-<p>XMLPULL is API and it requires implementation to run.
+<p>XmlPull is API and it requires implementation to run.
 
 See <a href="http://www.xmlpull.org/impls.shtml">list of implementations</a> 
-on XMLPULL website. After downloading one of implementations of XMLPULL API V1 (version 1.0.*)
-add jar file to your CLASSPATH. As XMLPULL uses factory there is no need to 
+on  XmlPull website. After downloading one of implementations of XmlPull API v1 (version 1.1 
+or newer)
+add jar file to your CLASSPATH. As  XmlPull uses factory there is no need to 
 explicitly state what is class with parser implementation: it will be picked up
 automatically from implementation jar file.<H2>Code step-by-step</H2>
 
 <p>First we need to create an instance of parser.
 To do this three steps are required:<ul>
-<li>get instance of XMLPULL factory
+<li>get instance of  XmlPull factory
 <li>(optional step) by default factory will produce parsers that are not 
 namespace aware; to change setNamespaceAware() function must be called
 <li>create an instance of the parser
 </ul>
 
-Before doing anything make sure to import XMLPULL V1 API classes:
+Before doing anything make sure to import  XmlPull v1 API classes:
 
 <pre>import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -86,7 +89,7 @@ Next step is to set parser input:
 
 and now we can start parsing!
 
-<p>Typical XMLPULL applicaition will repeatedly call 
+<p>Typical  XmlPull applicaition will repeatedly call 
 next() function to retrieve next event, process event 
 until the even is END_DOCUMENT:
 
@@ -169,7 +172,7 @@ Processing end tag is very similar - main difference is that the end tag has no 
 
 
 The finished working sample created that was described is in 
-<a href="../src/java/samples/MyXmlPullApp.java">MyXmlPull.java</a> file in 
+<a href="../src/java/samples/MyXmlPullApp.java">MyXmlPullApp.java</a> file in 
 <a href="../src/java/samples/">src/java/samples</a> directory.
 
 <p>For more information please visit <a href="http://www.xmlpull.org/">
