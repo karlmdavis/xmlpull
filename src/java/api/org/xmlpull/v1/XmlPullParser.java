@@ -463,7 +463,8 @@ public interface XmlPullParser {
      *
      * <p><b>NOTE:</b> parser must be on
      * TEXT, COMMENT, PROCESSING_INSTRUCTION or DOCDECL event;
-     * otherwise, null is returned and holder will start and length will be set to -1.
+     * otherwise, null is returned and
+     * values returned in holder MUST be -1 (both start and length).
      *
      * @see #getText
      * @see #getTextCharactersStart
