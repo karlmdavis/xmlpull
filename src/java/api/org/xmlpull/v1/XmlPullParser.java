@@ -411,7 +411,7 @@ public interface XmlPullParser {
      *
      * <p><strong>NOTE:</strong> calling this function will not result in reading any input
      * bytes even when parser have to determine input encoding
-     * including byte order marks and detection <? xml encoding
+     * including byte order marks and detection &lt;? xml encoding
      * (in case when inputEncoding is null).
      * The XMLPULL implementation MUST postpone reading of input bytes until
      * first call to one of next() methods.
