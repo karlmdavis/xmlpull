@@ -531,12 +531,12 @@ public interface XmlPullParser {
     /**
      * Returns the namespace URI of the specified attribute
      *  number index (starts from 0).
-     * Returns "" if namespaces are not enabled.
+     * Returns empty string ("") if namespaces are not enabled or attribute has no namespace.
      * Throws an IndexOutOfBoundsException if the index is out of range
      * or current event type is not START_TAG.
      *
      * @param zero based index of attribute
-     * @return attribute namespace or null if namesapces processing is not enabled.
+     * @return attribute namespace or "" if namesapces processing is not enabled.
      */
     public String getAttributeNamespace (int index);
 
@@ -689,5 +689,4 @@ public interface XmlPullParser {
     public String readText () throws XmlPullParserException, IOException;
 
 }
-
 
