@@ -348,5 +348,76 @@ public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
     }
 
 
+    public void writeDouble(double d)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        if(d == Double.POSITIVE_INFINITY) {
+            xs.text("INF");
+        } else if(d == Double.NEGATIVE_INFINITY) {
+            xs.text("-INF");
+        } else {
+            xs.text(Double.toString(d));
+        }
+    }
+
+    public void writeFloat(float f)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        if(f == Float.POSITIVE_INFINITY) {
+            xs.text("INF");
+        } else if(f == Float.NEGATIVE_INFINITY) {
+            xs.text("-INF");
+        } else {
+            xs.text(Float.toString(f));
+        }
+    }
+
+    public void writeInt(int i)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        xs.text(Integer.toString(i));
+    }
+
+    public void writeString(String s)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        if( s == null ) {
+            throws new IllegalArgumentException("null string can not be written");
+        }
+        xs.text(s);
+    }
+
+    public void writeDoubleElement(String namespace, String name, double d)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        xs.startTag(namespace, name);
+        writeDouble(d);
+        xs.endTag(namespace, name);
+    }
+
+    public void writeFloatElement(String namespace, String name, float f)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        xs.startTag(namespace, name);
+        writeFloat(f);
+        xs.endTag(namespace, name);
+    }
+
+    public void writeIntElement(String namespace, String name, int i)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        xs.startTag(namespace, name);
+        writeInt(i);
+        xs.endTag(namespace, name);
+    }
+
+    public void wiriteStringElement(String namespace, String name, String s)
+        throws XmlPullParserException, IOException, IllegalArgumentException
+    {
+        xs.startTag(namespace, name);
+        writeString(s);
+        xs.endTag(namespace, name);
+    }
+
 }
 

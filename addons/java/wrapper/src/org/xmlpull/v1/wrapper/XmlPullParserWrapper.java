@@ -71,7 +71,7 @@ public interface XmlPullParserWrapper extends XmlPullParser {
      */
     public boolean isNil() throws IOException, XmlPullParserException;
 
-        /**
+    /**
      * Tests if the current event is of the given type and if the namespace and name match.
      * null will match any namespace and any name. If the test passes a true is returned
      * otherwise a false is returned.
@@ -131,6 +131,13 @@ public interface XmlPullParserWrapper extends XmlPullParser {
      */
     public void skipSubTree()
         throws XmlPullParserException, IOException;
+
+    // set of methods to read XSD types
+    public double readDouble() throws XmlPullParserException, IOException;
+    public float readFloat() throws XmlPullParserException, IOException;
+    public int readInt() throws XmlPullParserException, IOException;
+    public String readString() throws XmlPullParserException, IOException;
+
 
 }
 

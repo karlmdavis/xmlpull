@@ -69,7 +69,35 @@ public interface XmlSerializerWrapper extends XmlSerializer {
     public void event(XmlPullParser pp)
         throws IOException, IllegalArgumentException, IllegalStateException, XmlPullParserException;
 
-    public String escapeText(String text);
-    public String escapeAttributeValue(String text);
+    public String escapeText(String text) throws IllegalArgumentException;
+    public String escapeAttributeValue(String text) throws IllegalArgumentException;
+
+    // set of methods to make easy to write XSD types
+
+    /**
+     * Write as text value of argument.
+     */
+    public void writeDouble(double d)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
+    public void writeFloat(float f)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
+    public void writeInt(int i)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
+    public void writeString(String s)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
+
+    /**
+     * Write as element with namesoace and name and value inside
+     * (looks like &lt;ns:name>value&lt;/ns:name> where ns is prefix
+     * for namespace autoatically declared if needed).
+     */
+    public void writeDoubleElement(String namespace, String name, double d)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
+    public void writeFloatElement(String namespace, String name, float f)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
+    public void writeIntElement(String namespace, String name, int i)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
+    public void wiriteStringElement(String namespace, String name, String s)
+        throws XmlPullParserException, IOException, IllegalArgumentException;
 }
 

@@ -42,7 +42,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     }
 
 
-  /**
+    /**
      * Read the text of a required element and return it or throw exception if
      * required element is not found. Useful for getting the text of simple
      * elements such as <username>johndoe</username>. Assumes that parser is
@@ -53,20 +53,20 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     public String getRequiredElementText(String namespace, String name)
         throws IOException, XmlPullParserException
     {
-            if (name == null) {
-                throw new XmlPullParserException("name for element can not be null");
-            }
+        if (name == null) {
+            throw new XmlPullParserException("name for element can not be null");
+        }
 
-            String text = null;
-            nextStartTag(namespace, name);
-            if (isNil()) {
-                nextEndTag(namespace, name);
-            }
-            else {
-                text = pp.nextText();
-            }
-            pp.require(XmlPullParser.END_TAG, namespace, name);
-            return text;
+        String text = null;
+        nextStartTag(namespace, name);
+        if (isNil()) {
+            nextEndTag(namespace, name);
+        }
+        else {
+            text = pp.nextText();
+        }
+        pp.require(XmlPullParser.END_TAG, namespace, name);
+        return text;
     }
 
     public boolean isNil()
@@ -144,6 +144,59 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
 
     public void skipSubTree() throws XmlPullParserException, IOException {
         XmlPullUtil.skipSubTree(pp);
+    }
+
+    public double readDouble() throws XmlPullParserException, IOException {
+        String value = pp.nextText();
+        double d;
+        try {
+            d = Double.parseDouble(value);
+        } catch(NumberFormatException ex) {
+            if(value.equals("INF") || value.toLowerCase().equals("infinity")) {
+                d = Double.POSITIVE_INFINITY;
+            } else if (value.equals("-INF")
+                       || value.toLowerCase().equals("-infinity")) {
+                d = Double.NEGATIVE_INFINITY;
+            } else if (value.equals("NaN")) {
+                d = Double.NaN;
+            } else {
+                throw new XmlPullParserException("can't parse double value '"+value+"'", this, ex);
+            }
+        }
+        return d;
+    }
+
+    public float readFloat() throws XmlPullParserException, IOException {
+        String value = pp.nextText();
+        float f;
+        try {
+            f = Float.parseFloat(value);
+        } catch(NumberFormatException ex) {
+            if(value.equals("INF") || value.toLowerCase().equals("infinity")) {
+                f = Float.POSITIVE_INFINITY;
+            } else if (value.equals("-INF")
+                       || value.toLowerCase().equals("-infinity")) {
+                f = Float.NEGATIVE_INFINITY;
+            } else if (value.equals("NaN")) {
+                f = Float.NaN;
+            } else {
+                throw new XmlPullParserException("can't parse float value '"+value+"'", this, ex);
+            }
+        }
+        return f;
+    }
+
+    public int readInt() throws XmlPullParserException, IOException {
+        try {
+            int i = Integer.parseInt(pp.nextText());
+            return i;
+        } catch(NumberFormatException ex) {
+            throw new XmlPullParserException("can't parse int value", this, ex);
+        }
+    }
+
+    public String readString() throws XmlPullParserException, IOException {
+        return pp.nextText();
     }
 
 }
