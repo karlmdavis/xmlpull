@@ -95,24 +95,26 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 2, "n", "foo", null, false, 0);
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 3, "n", "foo", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
-        assertEquals(2, xpp.getNamespaceCount(1));
-        checkNamespace(xpp, 0, "ns1", "n1", true);
-        checkNamespace(xpp, 1, "ns2", "n2", true);
+        assertEquals(3, xpp.getNamespaceCount(1));
+        checkNamespace(xpp, 0, "", "n", true);
+        checkNamespace(xpp, 1, "ns1", "n1", true);
+        checkNamespace(xpp, 2, "ns2", "n2", true);
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, "ns1", 4, "x1", "bar", null, false, 0);
+        checkParserStateNs(xpp, 2, xpp.START_TAG, "ns1", 6, "x1", "bar", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
-        assertEquals(2, xpp.getNamespaceCount(1));
-        assertEquals(4, xpp.getNamespaceCount(2));
-        checkNamespace(xpp, 2, "ns1", "x1", true);
-        checkNamespace(xpp, 3, "ns3", "n3", true);
+        assertEquals(3, xpp.getNamespaceCount(1));
+        assertEquals(6, xpp.getNamespaceCount(2));
+        checkNamespace(xpp, 3, "ns1", "x1", true);
+        checkNamespace(xpp, 4, "ns3", "n3", true);
+        checkNamespace(xpp, 5, "", "n1", true);
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 4, "n2", "gugu", null, true, 4);
-        assertEquals(4, xpp.getNamespaceCount(2));
-        assertEquals(4, xpp.getNamespaceCount(3));
+        checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 6, "n2", "gugu", null, true, 4);
+        assertEquals(6, xpp.getNamespaceCount(2));
+        assertEquals(6, xpp.getNamespaceCount(3));
         assertEquals("x1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals("n3", xpp.getNamespace("ns3"));
@@ -122,27 +124,27 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkAttribNs(xpp, 3, "ns1", "x1", "a3", "v3");
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, "ns2", 4, "n2", "gugu", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, "ns2", 6, "n2", "gugu", null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, null, 5, "n1", "baz", null, false, 0);
+        checkParserStateNs(xpp, 3, xpp.START_TAG, null, 7, "n1", "baz", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
-        assertEquals(2, xpp.getNamespaceCount(1));
-        assertEquals(4, xpp.getNamespaceCount(2));
-        assertEquals(5, xpp.getNamespaceCount(3));
-        checkNamespace(xpp, 4, "ns1", "y1", true);
+        assertEquals(3, xpp.getNamespaceCount(1));
+        assertEquals(6, xpp.getNamespaceCount(2));
+        assertEquals(7, xpp.getNamespaceCount(3));
+        checkNamespace(xpp, 6, "ns1", "y1", true);
         assertEquals("y1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals("n3", xpp.getNamespace("ns3"));
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 4, "n1", "baz", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 6, "n1", "baz", null, false, -1);
         assertEquals("x1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals("n3", xpp.getNamespace("ns3"));
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, "ns1", 2, "x1", "bar", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, "ns1", 3, "x1", "bar", null, false, -1);
         assertEquals("n1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals(null, xpp.getNamespace("ns3"));

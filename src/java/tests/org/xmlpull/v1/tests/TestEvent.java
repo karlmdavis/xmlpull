@@ -59,19 +59,21 @@ public class TestEvent extends UtilTestCase {
 
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.START_TAG,
-                           null, 0, "http://www.xmlpull.org/temp", "hugo", null, false, 0);
+                           null, 1, "http://www.xmlpull.org/temp", "hugo", null, false, 0);
+        checkNamespace(xpp, 0, "", "http://www.xmlpull.org/temp", true);
+
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.TEXT, null, 0, null, null, " \n\n \n  ", false, -1);
+        checkParserStateNs(xpp, 2, xpp.TEXT, null, 1, null, null, " \n\n \n  ", false, -1);
 
         xpp.next();
         checkParserStateNs(xpp, 3, xpp.START_TAG,
-                           null, 0, "http://www.xmlpull.org/temp", "hugochild", null, false, 0);
+                           null, 1, "http://www.xmlpull.org/temp", "hugochild", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.TEXT, null, 0, null, null,
+        checkParserStateNs(xpp, 3, xpp.TEXT, null, 1, null, null,
                            "This is in a new namespace", false, -1);
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.END_TAG,
-                           null, 0, "http://www.xmlpull.org/temp", "hugochild", null, false, -1);
+                           null, 1, "http://www.xmlpull.org/temp", "hugochild", null, false, -1);
 
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.END_TAG,
