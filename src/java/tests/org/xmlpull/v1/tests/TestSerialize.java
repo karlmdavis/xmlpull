@@ -25,72 +25,72 @@ import org.xmlpull.v1.XmlSerializer;
 public class TestSerialize extends UtilTestCase {
     private XmlPullParserFactory factory;
     private XmlPullParser xpp;
-
-
+    
+    
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestSerialize.class));
     }
-
+    
     public TestSerialize(String name) {
         super(name);
     }
-
+    
     protected void setUp() throws XmlPullParserException {
         factory = factoryNewInstance();
         xpp = factory.newPullParser();
         assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
     }
-
+    
     protected void tearDown() {
     }
-
+    
     public void testSimpleWriter() throws Exception {
         XmlSerializer ser = factory.newSerializer();
         PackageTests.addNote("* default serializer "+ser.getClass()+"\n");
-
+        
         //assert there is error if trying to write
-
+        
         //assert there is error if trying to write
         try {
             ser.startTag(null, "foo");
             fail("exception was expected of serializer if no input was set on parser");
         } catch(Exception ex) {}
-
+        
         ser.setOutput(null);
-
+        
         //assert there is error if trying to write
         try {
             ser.startTag(null, "foo");
             fail("exception was expected of serializer if no input was set on parser");
         } catch(Exception ex) {}
-
+        
         StringWriter sw = new StringWriter();
-
+        
         ser.setOutput(sw);
-
+        
         try {
             ser.setOutput(null, null);
             fail("exception was expected of setOutput() if output stream is null");
         } catch(IllegalArgumentException ex) {}
-
+        
         //check get property
-
+        
         ser.setOutput(sw);
-
+        
         //assertEquals(null, ser.getOutputEncoding());
-
+        
         ser.startDocument("ISO-8859-1", Boolean.TRUE);
         ser.startTag(null, "foo");
-
+        
         ser.endTag(null, "foo");
         ser.endDocument();
-
+        
         // now validate that can be deserialzied
-
+        
         //xpp.setInput(new StringReader("<foo></foo>"));
         String serialized = sw.toString();
         xpp.setInput(new StringReader(serialized));
-
+        
         assertEquals(null, xpp.getInputEncoding());
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
@@ -100,10 +100,10 @@ public class TestSerialize extends UtilTestCase {
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
     }
-
+    
     public void testSimpleStream() throws Exception {
         XmlSerializer ser = factory.newSerializer();
-
+        
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ser.setOutput(baos, "UTF-8");
         ser.startDocument("UTF-8", null);
@@ -111,15 +111,15 @@ public class TestSerialize extends UtilTestCase {
         ser.text("test");
         ser.endTag("", "foo");
         ser.endDocument();
-
+        
         //check taking input form input stream
         //byte[] binput = "<foo>test</foo>".getBytes("UTF8");
-
+        
         byte[] binput = baos.toByteArray();
-
+        
         xpp.setInput(new ByteArrayInputStream( binput ), "UTF-8" );
         assertEquals("UTF-8", xpp.getInputEncoding());
-
+        
         //xpp.setInput(new StringReader( "<foo/>" ) );
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
@@ -132,59 +132,59 @@ public class TestSerialize extends UtilTestCase {
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
     }
-
+    
     public void testSimpleSerWithAttribute() throws Exception {
         XmlSerializer ser = factory.newSerializer();
         // one step further - it has an attribute and content ...
-
+        
         StringWriter sw = new StringWriter();
-
+        
         assertEquals(0, ser.getDepth());
         ser.setOutput(sw);
         assertEquals(0, ser.getDepth());
-
+        
         ser.startDocument(null, null);
         assertEquals(0, ser.getDepth());
         assertEquals(null, ser.getNamespace());
         assertEquals(null, ser.getName());
-
+        
         ser.startTag(null, "foo");
         assertEquals(1, ser.getDepth());
         assertEquals(null, ser.getNamespace());
         assertEquals("foo", ser.getName());
-
+        
         ser.attribute(null, "attrName", "attrVal");
         assertEquals(1, ser.getDepth());
         assertEquals(null, ser.getNamespace());
         assertEquals("foo", ser.getName());
-
+        
         ser.text("bar");
         assertEquals(1, ser.getDepth());
         assertEquals(null, ser.getNamespace());
         assertEquals("foo", ser.getName());
-
+        
         ser.startTag("", "p:t");
         assertEquals(2, ser.getDepth());
         assertEquals("", ser.getNamespace());
         assertEquals("p:t", ser.getName());
-
+        
         ser.text("\n\t ");
-
+        
         ser.endTag("", "p:t");
         assertEquals(1, ser.getDepth());
         assertEquals(null, ser.getNamespace());
         assertEquals("foo", ser.getName());
-
+        
         ser.endTag(null, "foo");
         assertEquals(0, ser.getDepth());
         assertEquals(null, ser.getNamespace());
         assertEquals(null, ser.getName());
-
+        
         ser.endDocument();
         assertEquals(0, ser.getDepth());
         assertEquals(null, ser.getNamespace());
         assertEquals(null, ser.getName());
-
+        
         //xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<p:t>\r\n\t </p:t></foo>"));
         String serialized = sw.toString();
         xpp.setInput(new StringReader(serialized));
@@ -206,13 +206,13 @@ public class TestSerialize extends UtilTestCase {
         checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
-
-
+        
+        
     }
-
-  public void testEscaping() throws Exception {
+    
+    public void testEscaping() throws Exception {
         XmlSerializer ser = factory.newSerializer();
-
+        
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ser.setOutput(baos, "UTF-8");
         ser.startDocument("UTF-8", null);
@@ -222,16 +222,16 @@ public class TestSerialize extends UtilTestCase {
         ser.text(s);
         ser.endTag("", "foo");
         ser.endDocument();
-
+        
         //check taking input form input stream
         //byte[] binput = "<foo>test</foo>".getBytes("UTF8");
-
+        
         byte[] binput = baos.toByteArray();
-        System.out.println(getClass()+" binput="+printable(new String(binput)));
+        //System.out.println(getClass()+" binput="+printable(new String(binput)));
         
         xpp.setInput(new ByteArrayInputStream( binput ), "UTF-8" );
         assertEquals("UTF-8", xpp.getInputEncoding());
-
+        
         //xpp.setInput(new StringReader( "<foo/>" ) );
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
@@ -244,6 +244,20 @@ public class TestSerialize extends UtilTestCase {
         checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        
+        baos = new ByteArrayOutputStream();
+        ser.setOutput(baos, "UTF-8");
+        ser.startDocument("UTF-8", null);
+        ser.startTag("", "foo");
+        s = "test\u0000\t\r\n";
+        try {
+            ser.attribute(null, "att", s);
+            fail("expected to fail as zero chartacter is illegal both in XML 1.0 and 1.1");
+        } catch(Exception e) {}
+        try {
+            ser.text(s);
+            fail("expected to fail as zero chartacter is illegal both in XML 1.0 and 1.1");
+        } catch(Exception e) {}
     }
 }
 
