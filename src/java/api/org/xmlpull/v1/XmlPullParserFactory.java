@@ -48,10 +48,6 @@ public class XmlPullParserFactory {
     private static final String RESOURCE_NAME = 
         "/META-INF/services/" + PROPERTY_NAME;
 
-    //    "org.xmlpull.xpp3.XmlPullParser,org.kxml2.io.KXmlParser";
-
-    // features are kept there
-    protected Hashtable features = new Hashtable();
 
     // public static final String DEFAULT_PROPERTY =
     //    "org.xmlpull.xpp3.XmlPullParser,org.kxml2.io.KXmlParser";
@@ -185,13 +181,6 @@ public class XmlPullParserFactory {
             } catch(Exception ex) {
                 issues.append (ppClass.getName () + ": "+ ex.toString ()+"; ");
             }
-<<<<<<< XmlPullParserFactory.java
-=======
-            return pp;
-        } catch(Exception ex) {
-            throw new XmlPullParserException(
-                "could not create parser "+foundParserClass+" : "+ex, null, ex);
->>>>>>> 1.8
         }
 
         throw new XmlPullParserException ("could not create parser: "+issues);
