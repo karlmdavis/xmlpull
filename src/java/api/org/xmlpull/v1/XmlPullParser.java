@@ -143,12 +143,12 @@ public interface XmlPullParser {
     
     // ----------------------------------------------------------------------------
     // additional events exposed by lower level nextToken()
-        
+    
     /**
      * CDATA sections was just read and value of text inside is available  by callling getText()
      */
     public final static byte CDSECT                = 5;
-        
+    
     /**
      * Ignorable whitespace was just read. For non-validating
      * parsers, this event is only reported by nextToken() when
@@ -170,7 +170,7 @@ public interface XmlPullParser {
      * and getText() will return text that is inside processing instruction.
      */
     public static final byte PROCESSING_INSTRUCTION = 8;
-        
+    
     /**
      * XML comment was just read and getText() will return value inside comment.
      */
@@ -182,6 +182,25 @@ public interface XmlPullParser {
      * and the entity naem is available by calling getName()
      */
     public final static byte ENTITY_REF            = 10;
+    
+    
+    /**
+     * Use this array to convert evebt type number (such as START_TAG) to
+     * to string giving event name "START_TAG" == TYPES[START_TAG]
+     */
+    public static final String [] TYPES = {
+        "START_DOCUMENT",
+            "END_DOCUMENT",
+            "START_TAG",
+            "END_TAG",
+            "TEXT",
+            "CDSECT",
+            "IGNORABLE_WHITESPACE",
+            "DOCDECL",
+            "PROCESSING_INSTRUCTION",
+            "COMMENT",
+            "ENTITY_REF"
+    };
     
     
     
