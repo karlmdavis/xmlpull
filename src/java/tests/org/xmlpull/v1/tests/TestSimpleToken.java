@@ -35,11 +35,28 @@ public class TestSimpleToken extends UtilTestCase {
         factory = factoryNewInstance();
         factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         assertEquals(true, factory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        //System.out.println(getClass()+"-factory="+factory);
     }
 
     protected void tearDown() {
     }
 
+    public void testVerySimpleToken() throws Exception {
+        XmlPullParser xpp = factory.newPullParser();
+        assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        xpp.setInput(new StringReader("<foo><!--comment--><?target pi?></foo>"));
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 0);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "comment", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, "target pi", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+    }
 
     public void testSimpleToken() throws Exception {
         XmlPullParser xpp = factory.newPullParser();

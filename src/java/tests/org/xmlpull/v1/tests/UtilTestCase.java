@@ -139,7 +139,6 @@ public class UtilTestCase extends TestCase {
         int nsCount,
         String namespace,
         String name,
-        String text,
         boolean isEmpty,
         int attribCount
     ) throws XmlPullParserException, IOException
@@ -160,6 +159,33 @@ public class UtilTestCase extends TestCase {
         assertEquals("getNamespacesCount(getDepth())", nsCount, xpp.getNamespaceCount(depth));
         assertEquals("getNamespace()", namespace, xpp.getNamespace());
 
+        if(type == xpp.START_TAG) {
+            assertEquals("isEmptyElementTag()", isEmpty, xpp.isEmptyElementTag());
+        } else {
+            try {
+                xpp.isEmptyElementTag();
+                fail("isEmptyElementTag() must throw exception if parser not on START_TAG");
+            } catch(XmlPullParserException ex) {
+            }
+        }
+        assertEquals("getAttributeCount()", attribCount, xpp.getAttributeCount());
+    }
+
+    public void checkParserStateNs(
+        XmlPullParser xpp,
+        int depth,
+        int type,
+        String prefix,
+        int nsCount,
+        String namespace,
+        String name,
+        String text,
+        boolean isEmpty,
+        int attribCount
+    ) throws XmlPullParserException, IOException
+    {
+        checkParserStateNs(xpp, depth, type, prefix, nsCount, namespace, name, isEmpty, attribCount);
+
         if(xpp.getEventType() != xpp.START_TAG && xpp.getEventType() != xpp.END_TAG) {
             assertEquals("getText()", printable(text), printable(xpp.getText()));
 
@@ -179,16 +205,7 @@ public class UtilTestCase extends TestCase {
 
         }
 
-        if(type == xpp.START_TAG) {
-            assertEquals("isEmptyElementTag()", isEmpty, xpp.isEmptyElementTag());
-        } else {
-            try {
-                xpp.isEmptyElementTag();
-                fail("isEmptyElementTag() must throw exception if parser not on START_TAG");
-            } catch(XmlPullParserException ex) {
-            }
-        }
-        assertEquals("getAttributeCount()", attribCount, xpp.getAttributeCount());
+
     }
 
     public void checkAttrib(

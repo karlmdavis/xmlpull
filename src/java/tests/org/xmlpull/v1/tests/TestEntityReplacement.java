@@ -73,7 +73,7 @@ public class TestEntityReplacement extends UtilTestCase {
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
             pp.setFeature( pp.FEATURE_PROCESS_DOCDECL, true );
-            PackageTests.addNote("* feature "+pp.FEATURE_PROCESS_DOCDECL+" is supported\n");
+            //PackageTests.addNote("* feature "+pp.FEATURE_PROCESS_DOCDECL+" is supported\n");
         } catch( Exception ex ){
         }
         if( pp.getFeature( pp.FEATURE_PROCESS_DOCDECL ) ) {
@@ -84,7 +84,7 @@ public class TestEntityReplacement extends UtilTestCase {
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
             pp.setFeature( pp.FEATURE_VALIDATION, true );
-            PackageTests.addNote("* feature "+pp.FEATURE_VALIDATION+" is supported\n");
+            //PackageTests.addNote("* feature "+pp.FEATURE_VALIDATION+" is supported\n");
         } catch( Exception ex ){
         }
         if( pp.getFeature( pp.FEATURE_VALIDATION ) ) {

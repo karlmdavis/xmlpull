@@ -44,7 +44,11 @@ public class PackageTests extends TestRunner
         suite.addTestSuite(TestMisc.class);
         suite.addTestSuite(TestSetInput.class);
 
-	// finally run tests based on XML input files
+        suite.addTestSuite(TestSimpleProcessDocdecl.class);
+        suite.addTestSuite(TestSimpleValidation.class);
+        suite.addTestSuite(TestProcessDocdecl.class);
+
+        // finally run tests based on XML input files
         suite.addTestSuite(TestBootstrapXmlTests.class);
         suite.addTestSuite(TestXmlSimple.class);
         suite.addTestSuite(TestXmlTypical.class);
