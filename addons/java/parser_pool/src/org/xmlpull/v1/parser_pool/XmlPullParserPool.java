@@ -28,6 +28,9 @@ public class XmlPullParserPool {
         this.factory = factory;
     }
 
+    protected XmlPullParser newParser() throws XmlPullParserException {
+        return factory.newPullParser();
+    }
 
     public XmlPullParser getPullParserFromPool()
         throws XmlPullParserException
@@ -41,7 +44,7 @@ public class XmlPullParserPool {
             }
         }
         if(pp == null) {
-            pp = factory.newPullParser();
+            pp = newParser();
             //System.err.println("new parser instance created pp="+pp);
         }
         return pp;
