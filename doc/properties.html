@@ -10,11 +10,14 @@
 
 <P>
 
-The property mechanism allows to pass information to 
-XmlPull parser implementation that is not part of API.<p>Please note: the key words &quot;<b>MUST</b>&quot;, &quot;<b>MUST NOT</b>&quot;, &quot;<b>REQUIRED</b>&quot;, 
-&quot;<b>SHALL</b>&quot;, &quot;<b>SHALL NOT</b>&quot;, &quot;<b>SHOULD</b>&quot;, &quot;<b>SHOULD NOT</b>&quot;, &quot;<b>RECOMMENDED</b>&quot;, 
-&quot;<b>MAY</b>&quot;, and &quot;<b>OPTIONAL</b>&quot; in this document are to be interpreted as 
+The property mechanism allows to pass information to
+XmlPull parser implementation that is not part of API.<p>Please note: the key words &quot;<b>MUST</b>&quot;, &quot;<b>MUST NOT</b>&quot;, &quot;<b>REQUIRED</b>&quot;,
+&quot;<b>SHALL</b>&quot;, &quot;<b>SHALL NOT</b>&quot;, &quot;<b>SHOULD</b>&quot;, &quot;<b>SHOULD NOT</b>&quot;, &quot;<b>RECOMMENDED</b>&quot;,
+&quot;<b>MAY</b>&quot;, and &quot;<b>OPTIONAL</b>&quot; in this document are to be interpreted as
 described in <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p><h2>
+
+
+
 
 Standard properties</h2>
 <P>
@@ -25,27 +28,36 @@ Currently there is no standard properties defined.<P>
 <h2>
 Optional properties</h2>
 <p>
-They <b>MAY</b> be supported but are not part of 
+They <b>MAY</b> be supported but are not part of
 <a href="http://www.xmlpull.org/">XmlPull API</a>.<p>
-Please report them to XmlPull discussion group so they can be added here and 
+Please report them to XmlPull discussion group so they can be added here and
 made easier to discover.<p>&nbsp;</p>
+
+
+<p>NOTE:</p> to detect if optional property
+is supported try to call getProperty()
+and only if it returns non-null value
+it can be assumed that the property is supported.
+Parser implementation is required to return null
+for all unknown properties names as null
+is assumed to be default value for all properties.
 
 <h3>
 <a name="xmldecl-version"></a>Optional property: XMLDECL VERSION</h3>
 <p>This property is identified by
 <a href="http://xmlpull.org/v1/doc/properties.html#xmldecl-version">
 http://xmlpull.org/v1/doc/properties.html#xmldecl-version</a> </p>
-<p>If <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">PROCESS 
-DOCDECL</a> feature is enabled it is REQUIRED property with String otherwise it 
+<p>If <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">PROCESS
+DOCDECL</a> feature is enabled it is REQUIRED property with String otherwise it
 is optional.</p>
 
 <p>If supported and there was
 <a href="http://www.w3.org/TR/REC-xml#NT-VersionInfo">VersionInfo</a> version in
-<a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">XMLDecl</a> then it returns 
-its content if standalone='no' otherwise if there was no standalone declaration 
+<a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">XMLDecl</a> then it returns
+its content if standalone='no' otherwise if there was no standalone declaration
 or this property is not supported it returns null.</p>
 
-<p>For example if input XML stream contained &lt;?xml&nbsp; version='1.0' 
+<p>For example if input XML stream contained &lt;?xml&nbsp; version='1.0'
 standalone='true'?&gt; then this property will contain &quot;1.0&quot;.</p>
 
 <p>&nbsp;</p>
@@ -56,14 +68,14 @@ standalone='true'?&gt; then this property will contain &quot;1.0&quot;.</p>
 <p>This feature is identified by
 <a href="http://xmlpull.org/v1/doc/properties.html#xmldecl-standalone">
 http://xmlpull.org/v1/doc/properties.html#xmldecl-standalone</a> </p>
-<p>If <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">PROCESS 
-DOCDECL</a> feature is enabled it is REQUIRED property with Boolean otherwise it 
+<p>If <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">PROCESS
+DOCDECL</a> feature is enabled it is REQUIRED property with Boolean otherwise it
 is optional.</p>
 
 <p>If supported and there was <a href="http://www.w3.org/TR/REC-xml#NT-SDDecl">
 SDDecl</a> standalone in <a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">
-XMLDecl</a> then it returns Boolean(true) if standalone='yes' or Boolean(false) 
-if standalone='no' otherwise if there was no standalone declaration or this 
+XMLDecl</a> then it returns Boolean(true) if standalone='yes' or Boolean(false)
+if standalone='no' otherwise if there was no standalone declaration or this
 property is not supported it returns null.</p>
 
 <p>&nbsp;</p>
@@ -74,15 +86,15 @@ property is not supported it returns null.</p>
 <p>This feature is identified by
 <a href="http://xmlpull.org/v1/doc/properties.html#xmldecl-content">
 http://xmlpull.org/v1/doc/properties.html#xmldecl-content</a></p>
-<p>If <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML 
-ROUNDTRIP</a> feature is enabled it is REQUIRED property with String otherwise 
+<p>If <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML
+ROUNDTRIP</a> feature is enabled it is REQUIRED property with String otherwise
 it is optional.</p>
 
-<p>If XML ROUNDTRIP feature is true then this property MUST contain everything 
+<p>If XML ROUNDTRIP feature is true then this property MUST contain everything
 after '&lt;?xml' and before final '?&gt;' if XML input contained XMLDecl (see section
-<a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">2.8 Prolog and Document Type 
-Declaration</a> in XML 1.0 ). For example if input XML stream contained &lt;?xml&nbsp; 
-version='1.0' standalone='true'?&gt; then this property will contain &quot; 
+<a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">2.8 Prolog and Document Type
+Declaration</a> in XML 1.0 ). For example if input XML stream contained &lt;?xml&nbsp;
+version='1.0' standalone='true'?&gt; then this property will contain &quot;
 version='1.0' standalone='true'&quot;.</p>
 
 <p>&nbsp;</p>
@@ -97,19 +109,19 @@ http://xmlpull.org/v1/doc/properties.html#serializer-indentation</a> </p>
 <p>If passed string is not empty that it is used to indent output by one level.</p>
 
 <p>If passed string is empty only line separator (depending on
-<a href="#serializer-line-separator">LINE SEPARATOR property</a>) will be 
+<a href="#serializer-line-separator">LINE SEPARATOR property</a>) will be
 written for indentation (if any).</p>
 
-<p>Otherwise if string is null no indentation 
+<p>Otherwise if string is null no indentation
 is not done</p>
 
-<p>For example use TAB (&quot;\t&quot;) or few spaces (&quot;&nbsp;&nbsp;&nbsp; &quot;) 
+<p>For example use TAB (&quot;\t&quot;) or few spaces (&quot;&nbsp;&nbsp;&nbsp; &quot;)
 as string value.</p>
 
 <p>&nbsp;</p>
 
 <h3>
-<a name="serializer-line-separator"></a>Optional property: SERIALIZER LINE 
+<a name="serializer-line-separator"></a>Optional property: SERIALIZER LINE
 SEPARATOR</h3>
 <p>This property is identified by
 <a href="http://xmlpull.org/v1/doc/properties.html#serializer-line-separator">
@@ -118,16 +130,25 @@ http://xmlpull.org/v1/doc/properties.html#serializer-line-separator</a> </p>
 
 <p>If indentation is enabled passed string will be used as line separator.</p>
 
-<p>It should be initialized to platform dependent values (on Windows &quot;\r\n&quot; on 
-Unix &quot;\n&quot;).</p>
+<p>If supported by default this property should be initialized just new line 
+character (&quot;\n&quot;).</p>
 
-<p>If value of property is null or String of length() == 0 no line separator 
+<p>If value of property is null or it is String of length() == 0 no line separator
 will be written.</p>
 
 <p>&nbsp;</p>
 
+
+
+
+<p>&nbsp;</p>
+
+
+
+
 <HR>
 <address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a><address>
+<font size="2">Last Modified: $Id: properties.html,v 1.8 2003/02/25 20:06:38 aslom Exp $</font><address>
 </address>
 </address>
 <p>&nbsp;</p>
