@@ -58,6 +58,7 @@ All generated files are created under ${build} directory
   <!-- ======================================== -->
   <!-- ADDONS -->
   <property name="build_addons" value="${build}/addons"/>
+  <property name="build_addons_tests" value="${build_addons}/tests"/>
 
   <property name="src_addons" value="addons/java"/>
 
@@ -80,6 +81,7 @@ All generated files are created under ${build} directory
 
   <property name="build_wrapper" value="${build_addons}/wrapper"/>
   <property name="src_wrapper" value="${src_addons}/wrapper/src"/>
+  <property name="src_wrapper_tests" value="${src_addons}/wrapper/tests"/>
   <property name="jar_wrapper"  value="${build_lib}/${xmlpull_version}-wrapper.jar"/>
 
   <property name="build_xmlrpc" value="${build_addons}/xmlrpc"/>
@@ -227,6 +229,13 @@ All generated files are created under ${build} directory
     </jar>       
   </target>
 
+  <target name="wrapper_tests" depends="require_junit,wrapper">
+    <mkdir dir="${build_addons_tests}"/>
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_wrapper_tests}" destdir="${build_wrapper}" 
+       classpath="${build_classes}:${build_util}:${build_wrapper}"/>
+  </target>
+
   <target name="xmlrpc" depends="api">
     <mkdir dir="${build_xmlrpc}"/>
     <javac debug="${debug}" deprecation="${deprecation}"
@@ -236,8 +245,9 @@ All generated files are created under ${build} directory
     </jar>       
   </target>
       
-
   <target name="addons" depends="prepare,sax2,util,wrapper,xmlrpc,parser_pool,dom2_builder"/>
+
+  <target name="addons_tests" depends="addons,wrapper_tests"/>
 
   <!-- =================================================================== -->
   <!-- JUnit automatic tests                                               -->
