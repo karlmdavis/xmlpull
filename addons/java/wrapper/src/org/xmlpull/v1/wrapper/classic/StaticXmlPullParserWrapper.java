@@ -186,9 +186,87 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         return f;
     }
 
+    // method copied from JiBX see http://sourceforge.net/projects/jibx/ for details
+    private int parseDigits(String text, int offset, int length)
+        throws XmlPullParserException
+    {
+
+        // check if overflow a potential problem
+        int value = 0;
+        if (length > 9) {
+
+            // use library parse code for potential overflow
+            try {
+                value = Integer.parseInt(text.substring(offset, offset+length));
+            } catch (NumberFormatException ex) {
+                throw new XmlPullParserException(ex.getMessage());
+            }
+
+        } else {
+
+            // parse with no overflow worries
+            int limit = offset + length;
+            while (offset < limit) {
+                char chr = text.charAt(offset++);
+                if (chr >= '0' && chr <= '9') {
+                    value = value * 10 + (chr - '0');
+                } else {
+                    throw new XmlPullParserException("non-digit in number value",this, null);
+                }
+            }
+
+        }
+        return value;
+    }
+
+    // method copied from JiBX see http://sourceforge.net/projects/jibx/ for details
+    private int parseInt(String text) throws XmlPullParserException {
+
+        // make sure there's text to be processed
+        int offset = 0;
+        int limit = text.length();
+        if (limit == 0) {
+            throw new XmlPullParserException("empty number value", this, null);
+        }
+
+        // check leading sign present in text
+        boolean negate = false;
+        char chr = text.charAt(0);
+        if (chr == '-') {
+            if (limit > 9) {
+
+                // special case to make sure maximum negative value handled
+                try {
+                    return Integer.parseInt(text);
+                } catch (NumberFormatException ex) {
+                    throw new XmlPullParserException(ex.getMessage(), this, null);
+                }
+
+            } else {
+                negate = true;
+                offset++;
+            }
+        } else if (chr == '+') {
+            offset++;
+        }
+        if (offset >= limit) {
+            throw new XmlPullParserException("Invalid number format", this, null);
+        }
+
+        // handle actual value conversion
+        int value = parseDigits(text, offset, limit-offset);
+        if (negate) {
+            return -value;
+        } else {
+            return value;
+        }
+    }
+
+
     public int readInt() throws XmlPullParserException, IOException {
         try {
-            int i = Integer.parseInt(pp.nextText());
+            //int i = Integer.parseInt(pp.nextText());
+            int i = parseInt(pp.nextText());
             return i;
         } catch(NumberFormatException ex) {
             throw new XmlPullParserException("can't parse int value", this, ex);
