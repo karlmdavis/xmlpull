@@ -209,12 +209,13 @@ public class XmlTestCase extends UtilTestCase {
                 pp.nextText();
             } else if("next-text".equals(action)) {
                 verbose(">>> "+action); //+" on "+testParser.getPositionDescription()+"");
-                String text = pp.getAttributeValue("", "text");
+                String expected = pp.getAttributeValue("", "text");
                 String testText = testParser.nextText();
-                if(text != null) {
-                    verbose(">>> "+action+" testParser="+testParser.getPositionDescription());
-                    assertEquals(testParser.getPositionDescription(), printable(text), printable(testText));
-                    assertEquals(text, testText);
+                if(expected != null) {
+                    verbose(">>> "+action+" testParser="+testParser.getPositionDescription()
+                           +" excpectecd='"+printable(expected)+"' test='"+printable(testText)+"'");
+                    assertEquals(testParser.getPositionDescription(), printable(expected), printable(testText));
+                    assertEquals(expected, testText);
                 }
                 pp.nextText();
             } else if("set-feature".equals(action)) {
@@ -225,7 +226,7 @@ public class XmlTestCase extends UtilTestCase {
                 verbose(">>> UNKNONW ACTION '"+action+"' ("+pp.getPositionDescription()+")");
                 String content = pp.nextText();
                 if(content.length() > 0) {
-                    if(verbose) System.err.println(">>> CONTENT:"+content);
+                    if(verbose) System.err.println(">>> CONTENT='"+printable(content)+"'");
                 }
 
             }
