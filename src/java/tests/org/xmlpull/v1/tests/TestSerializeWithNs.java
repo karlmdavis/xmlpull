@@ -264,51 +264,52 @@ public class TestSerializeWithNs extends UtilTestCase {
         String serialized = sw.toString();
         //System.out.println(getClass()+" serialized="+serialized);
         xpp.setInput(new StringReader(serialized));
-        xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
+        xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         
         xpp.nextToken();
-        checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.DOCDECL, null, 0, null, null, false, -1);
         String gotDocdecl = xpp.getText();
         if(gotDocdecl != null) {
             assertEquals(printable(docdecl), printable(gotDocdecl));
         }
         
         xpp.nextToken();
-        checkParserStateNs(xpp, 0, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, "pi test", false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.PROCESSING_INSTRUCTION, null, 0, null, null, "pi test", false, -1);
         
         
         xpp.nextToken();
-        if(xpp.getEventType() == xpp.IGNORABLE_WHITESPACE) {
+        if(xpp.getEventType() == XmlPullParser.IGNORABLE_WHITESPACE) {
             String expectedIws = gatherTokenText(xpp, xpp.IGNORABLE_WHITESPACE, true);
             assertEquals(printable(iws), printable(expectedIws));
         }
         
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 1);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, false, 1);
         checkAttribNs(xpp, 0, null, "", "attrName", attrVal);
         
         xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, "amp", "&", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.ENTITY_REF, null, 0, null, "amp", "&", false, -1);
         
         xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.CDSECT, null, 0, null, null, cdsect, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.CDSECT, null, 0, null, null, cdsect, false, -1);
         assertEquals(false, xpp.isWhitespace());
         
         xpp.nextToken();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, 2, "uri1", "bar", false, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, 2, "uri1", "bar", false, 0);
         
-        String gotText = nextTokenGathered(xpp, xpp.TEXT, false);
+        String gotText = nextTokenGathered(xpp, XmlPullParser.TEXT, false);
+        //System.out.println(getClass()+" text="+printable(text)+" got="+printable(gotText));
         assertEquals(printable(text), printable(gotText));
         
         //xpp.nextToken();
-        checkParserStateNs(xpp, 2, xpp.COMMENT, null, 2, null, null, comment, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.COMMENT, null, 2, null, null, comment, false, -1);
         
         xpp.nextToken();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, 2, "uri1", "bar", false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, 2, "uri1", "bar", false, -1);
         
         xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, 0, "", "foo", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, 0, "", "foo", false, -1);
         
     }
     

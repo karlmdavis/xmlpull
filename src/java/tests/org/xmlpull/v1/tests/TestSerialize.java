@@ -218,8 +218,33 @@ public class TestSerialize extends UtilTestCase {
         ser.startDocument("UTF-8", null);
         ser.startTag("", "foo");
         String s = "test\u0008\t\r\n";
+        try {
+            ser.attribute(null, "att", s);
+            fail("expected to fail for control character (<32)");
+        } catch(IllegalArgumentException e) {
+        } catch(IllegalStateException e){
+        }
+        
+        ser = factory.newSerializer();
+        baos = new ByteArrayOutputStream();
+        ser.setOutput(baos, "UTF-8");
+        ser.startDocument("UTF-8", null);
+        ser.startTag("", "foo");
+        try {
+            ser.text(s);
+        } catch(IllegalArgumentException e) {
+        } catch(IllegalStateException e){
+        }
+        
+        ser = factory.newSerializer();
+        baos = new ByteArrayOutputStream();
+        ser.setOutput(baos, "UTF-8");
+        ser.startDocument("UTF-8", null);
+        ser.startTag("", "foo");
+        s = "test\u0009\t\r\n";
         ser.attribute(null, "att", s);
         ser.text(s);
+        
         ser.endTag("", "foo");
         ser.endDocument();
         
