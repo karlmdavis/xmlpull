@@ -63,12 +63,11 @@ public class XmlRpcParserME {
             return new Integer(Integer.parseInt(parser.nextText()));
         else if (name.equals("array"))
             return parseArray();
-        else if (name.equals("string"))
-            return parser.nextText();
         else if (name.equals("struct"))
             return parseStruct();
-        else
-            throw new RuntimeException("unexpected element: " + name);
+        else // String and unrecognized types...
+	        return parser.nextText();
+//            throw new RuntimeException("unexpected element: " + name);
     }
 
     /** 
@@ -127,7 +126,7 @@ public class XmlRpcParserME {
 
         parser.require(XmlPullParser.END_TAG, "", "data");
         parser.nextTag();
-        parser.require(XmlPullParser.START_TAG, "", "array");
+        parser.require(XmlPullParser.END_TAG, "", "array");
 
         return v;
     }
