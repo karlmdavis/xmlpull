@@ -111,6 +111,21 @@ public class TestSimple extends TestCase {
 
         // one step further - it has content ...
 
+        xpp.setInput(new StringReader("<foo xmlns:ns1='n1'><ns1:bar xmlns:ns2='n2'></foo>"));
+        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 0);
+        assertEquals(0, xpp.getNamespacesCount(0));
+        xpp.next();
+        checkParserState(xpp, 1, xpp.START_TAG, "ns1", 0, "n1", "bar", null, true, 0);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+
+        
         xpp.setInput(new StringReader("<foo>bar</foo>"));
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
@@ -121,8 +136,8 @@ public class TestSimple extends TestCase {
         checkParserState(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
-
-
+        
+        
         xpp.setInput(new StringReader("<foo xmlns='ns1'>bar</foo>"));
         assertEquals(XmlPullParser.START_DOCUMENT, xpp.getType());
         assertEquals(XmlPullParser.START_TAG, xpp.next());

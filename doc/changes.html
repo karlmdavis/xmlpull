@@ -9,7 +9,15 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
-<h3>2001-03 (XMLPULL_1_0_2a)</h3>
+<h3>2001-03-29 (XMLPULL_1_0_3)</h3>
+<ul>
+<li>
+changed getTextCharacters to use pass by reference two int parameters (char[] 
+getTextCharacters (int [] holderForStartAndLength)<li>
+nextToken() is required to return actual input data with getText()&nbsp; (no 
+end-of-line normalization) - this will allow to reconstruct input XML</ul>
+
+<h3>2001-03-28 (XMLPULL_1_0_2a)</h3>
 <ul>
 <li>
 fixed typos in getAttribute(s)* and getNamespace(s)* functions<li>

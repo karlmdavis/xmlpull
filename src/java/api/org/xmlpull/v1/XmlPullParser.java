@@ -450,13 +450,12 @@ public interface XmlPullParser {
 
 
     /**
-     * Get the buffer that contains text of the current event.
-     *
-     * The actual location of text start at getTextCharactersStart()
-     * and its length is of getTextCharactersLengtht().
+     * Get the buffer that contains text of the current event and
+     * start offset of text is passed in first slot of input int array
+     * and its length is in second slot.
      *
      * <p><strong>NOTE:</strong> this buffer must not
-     * be modified and its content may change after call to next() or nextToken()
+     * be modified and its content MAY change after call to next() or nextToken().
      *
      * <p><b>NOTE:</b> parser must be on
      * TEXT, COMMENT, PROCESSING_INSTRUCTION or DOCDECL event;
@@ -466,25 +465,13 @@ public interface XmlPullParser {
      * @see #getTextCharactersStart
      * @see #getTextCharactersLength
      *
+     * @param holderForStartAndLength the 2-element int array into which
+     *   values of start offset and length will be written into frist and second slot of array.
      * @return char buffer that contains text of current event
      *  or null if the current event has no text associated.
      */
-    public char[] getTextCharacters();
+    public char[] getTextCharacters(int [] holderForStartAndLength);
 
-    /**
-     * Return start position of the text of the current event in the buffer.
-     *
-     * @see #getTextCharacters
-     */
-    public int getTextCharactersStart();
-
-    /**
-     * Return length of the text of the current event in the buffer.
-     *
-     * @see #getTextCharacters
-     */
-    public int getTextCharactersLength();
-    
     // --------------------------------------------------------------------------
     // START_TAG / END_TAG shared methods
 
@@ -635,6 +622,8 @@ public interface XmlPullParser {
      * This method works similarly to next() but will expose
      * additional event types (COMMENT, DOCDECL, PROCESSING_INSTRUCTION, ENTITY_REF or
      * IGNORABLE_WHITESPACE) if they are available in input.
+     *
+     * <p><strong>NOTE:</strong> retirned text of token is not end-of-line normalized.
      *
      * @see #next
      * @see #START_TAG
