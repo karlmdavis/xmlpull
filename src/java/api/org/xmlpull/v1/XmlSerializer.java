@@ -15,22 +15,6 @@ import java.io.Writer;
  */
 
 public interface XmlSerializer {
-    /**
-     * FEATURE: disable or enable serializer output indentation
-     * for elements on that on or below current depth
-     * (as defined by matching endTag() to current in-scope startTag()).
-     * If supported in the implementation then this featue MUST be scoped
-     * depending on startTag() and endTag() scope.
-     *
-     * <p><strong>NOTE:</strong> can be changed during parsing!
-     * <p><strong>NOTE:</strong> may be ignored by serializers
-     *  (for example when serializer produces binary XML output like WBXML)
-     *
-     * @see #getFeature
-     * @see #setFeature
-     */
-    public static final String FEATURE_INDENT_OUTPUT =
-        "http://xmlpull.org/v1/doc/features.html#indent-output";
 
     /**
      * Set feature identified by name (recommended to be URI for uniqueness).
