@@ -86,7 +86,7 @@ public class TestSimple extends UtilTestCase {
         xpp.next();
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 0);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
 
@@ -100,7 +100,7 @@ public class TestSimple extends UtilTestCase {
         xpp.next();
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, true /*empty*/, 0);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
 
@@ -119,9 +119,9 @@ public class TestSimple extends UtilTestCase {
         checkParserState(xpp, 2, xpp.TEXT, null, "\n\t ", false, -1);
         assertTrue(xpp.isWhitespace());
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "p:t", null, false, -1);
+        checkParserState(xpp, 2, xpp.END_TAG, "p:t", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
         xpp.next();
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
 

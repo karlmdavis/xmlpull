@@ -99,7 +99,7 @@ public class TestSimpleToken extends UtilTestCase {
                 }
             }
             xpp.nextToken();
-            checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+            checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
             if(roundtripSupported) {
                 if(empty) {
                     assertEquals("empty tag roundtrip",
@@ -136,7 +136,7 @@ public class TestSimpleToken extends UtilTestCase {
                            "barThis is test! Do NOT Panic!This is test! Do NOT Panic!< &>'\"  vo<o ",
                            false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
@@ -286,7 +286,7 @@ public class TestSimpleToken extends UtilTestCase {
         assertEquals(false, xpp.isWhitespace());
 
         xpp.nextToken();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         if(roundtripSupported) {
             assertEquals("end tag roundtrip", "</foo>", xpp.getText());
         }

@@ -60,7 +60,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false/*empty*/, 0);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
@@ -69,7 +69,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
@@ -85,7 +85,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "bar", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
@@ -130,7 +130,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkAttribNs(xpp, 3, "ns1", "x1", "a3", "v3");
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, "ns2", 6, "n2", "gugu", null, false, -1);
+        checkParserStateNs(xpp, 3, xpp.END_TAG, "ns2", 6, "n2", "gugu", null, false, -1);
 
         xpp.next();
         checkParserStateNs(xpp, 3, xpp.START_TAG, null, 7, "n1", "baz", null, false, 0);
@@ -144,13 +144,13 @@ public class TestSimpleWithNs extends UtilTestCase {
         assertEquals("n3", xpp.getNamespace("ns3"));
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 6, "n1", "baz", null, false, -1);
-        assertEquals("x1", xpp.getNamespace("ns1"));
+        checkParserStateNs(xpp, 3, xpp.END_TAG, null, 7, "n1", "baz", null, false, -1);
+        assertEquals("y1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals("n3", xpp.getNamespace("ns3"));
 
         // check that declared namespaces can be accessed for current end tag
-        assertEquals(2, xpp.getDepth());
+        assertEquals(3, xpp.getDepth());
         assertEquals(6, xpp.getNamespaceCount(2));
         assertEquals(7, xpp.getNamespaceCount(3));
 
@@ -164,17 +164,18 @@ public class TestSimpleWithNs extends UtilTestCase {
         assertEquals("ns1", xpp.getNamespacePrefix(6));
         assertEquals("y1", xpp.getNamespaceUri(6));
 
+
+        xpp.next();
+        checkParserStateNs(xpp, 2, xpp.END_TAG, "ns1", 6, "x1", "bar", null, false, -1);
         // check that namespace is undelcared
         assertEquals("x1", xpp.getNamespace("ns1"));
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, "ns1", 3, "x1", "bar", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 3, "n", "foo", null, false, -1);
+
         assertEquals("n1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals(null, xpp.getNamespace("ns3"));
-
-        xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "n", "foo", null, false, -1);
 
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);

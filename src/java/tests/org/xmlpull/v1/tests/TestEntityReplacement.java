@@ -102,7 +102,7 @@ public class TestEntityReplacement extends UtilTestCase {
         checkParserStateNs(pp, 1, pp.TEXT, null, 0, null, null,
                            "This sample shows a error-prone method.", false, -1);
         pp.next();
-        checkParserStateNs(pp, 0, pp.END_TAG,
+        checkParserStateNs(pp, 1, pp.END_TAG,
                            null, 0, "", "test", null, false, -1);
         pp.nextToken();
         checkParserStateNs(pp, 0, pp.END_DOCUMENT, null, 0, null, null, null, false, -1);

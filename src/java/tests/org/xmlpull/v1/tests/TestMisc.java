@@ -42,7 +42,7 @@ public class TestMisc extends UtilTestCase {
         pp.require( pp.START_TAG, null, "t");
         pp.nextTag();
         pp.require( pp.START_TAG, null, "test1");
-        assertEquals( "foo", pp.nextElementText() );
+        assertEquals( "foo", pp.nextText() );
         pp.require( pp.END_TAG, null, "test1");
 
         pp.nextTag();
@@ -70,7 +70,7 @@ public class TestMisc extends UtilTestCase {
 //        assertEquals( pp.TYPES[ pp.END_TAG ], pp.TYPES[ pp.getEventType() ]);
 //    }
 
-    public void testNextElementText() throws Exception {
+    public void testNextText() throws Exception {
         final String INPUT_XML =
             "<t><test1>foo</test1><test2></test2><test3/><test4>bar</test4></t>";
         XmlPullParser pp = factory.newPullParser();
@@ -79,24 +79,24 @@ public class TestMisc extends UtilTestCase {
         pp.require( pp.START_TAG, null, "t");
         pp.next();
         pp.require( pp.START_TAG, null, "test1");
-        assertEquals( "foo", pp.nextElementText() );
+        assertEquals( "foo", pp.nextText() );
         pp.require( pp.END_TAG, null, "test1");
 
         pp.next();
         pp.require( pp.START_TAG, null, "test2");
-        assertEquals( "", pp.nextElementText() );
+        assertEquals( "", pp.nextText() );
         pp.require( pp.END_TAG, null, "test2");
 
         pp.next();
         pp.require( pp.START_TAG, null, "test3");
-        assertEquals( "", pp.nextElementText() );
+        assertEquals( "", pp.nextText() );
         pp.require( pp.END_TAG, null, "test3");
 
         pp.next();
         pp.require( pp.START_TAG, null, "test4");
         //pp.next();
         //pp.require( pp.TEXT, null, null);
-        assertEquals( "bar", pp.nextElementText() );
+        assertEquals( "bar", pp.nextText() );
         pp.require( pp.END_TAG, null, "test4");
 
         pp.next();
@@ -113,7 +113,7 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         pp.require( pp.TEXT, null, null);
         try {
-            pp.nextElementText();
+            pp.nextText();
             fail("if current tag is TEXT no next text content can be returned!");
         } catch(XmlPullParserException ex) {}
 
@@ -121,7 +121,7 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         pp.require( pp.START_TAG, null, "t");
         try {
-            pp.nextElementText();
+            pp.nextText();
             fail("if next tag is START_TAG no text content can be returned!");
         } catch(XmlPullParserException ex) {}
 
@@ -134,7 +134,7 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         pp.require( pp.END_TAG, null, "test1");
         try {
-            pp.nextElementText();
+            pp.nextText();
             fail("if current tag is END_TAG no text content can be returned!");
         } catch(XmlPullParserException ex) {}
 

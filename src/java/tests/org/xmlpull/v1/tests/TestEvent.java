@@ -51,7 +51,7 @@ public class TestEvent extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.TEXT, null, 0, null, null, "bar", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "\n", false, -1);
 
@@ -70,12 +70,12 @@ public class TestEvent extends UtilTestCase {
         checkParserStateNs(xpp, 3, xpp.TEXT, null, 1, null, null,
                            "This is in a new namespace", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG,
+        checkParserStateNs(xpp, 3, xpp.END_TAG,
                            null, 1, "http://www.xmlpull.org/temp", "hugochild", null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG,
-                           null, 0, "http://www.xmlpull.org/temp", "hugo", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG,
+                           null, 1, "http://www.xmlpull.org/temp", "hugo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "\t\n", false, -1);
 
@@ -83,9 +83,9 @@ public class TestEvent extends UtilTestCase {
         checkParserStateNs(xpp, 2, xpp.START_TAG, null, 0, "", "bar", null, true, 1);
         checkAttribNs(xpp, 0, null, "", "testattr", "123abc");
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 0, "", "bar", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "root", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "root", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
@@ -101,13 +101,13 @@ public class TestEvent extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "bar", null, true, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "bar", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "char", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "char", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "char", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
@@ -119,13 +119,13 @@ public class TestEvent extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "bar", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "bar", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "char", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "char", null, false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "char", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
