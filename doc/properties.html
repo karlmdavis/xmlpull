@@ -22,11 +22,41 @@ Standard properties</h2>
 
 Currently there is no standard properties defined.<hr>
 <h2>
-Optional features</h2>
+Optional properties</h2>
 <p>
 They <b>MAY</b> be supported but are not part of XMLPULL API<p>
 Please report them to XMLPULL discussion group so they can be added here and 
 made easier to discover.<p>&nbsp;</p>
+
+<h3>
+<a name="serializer-indentation"></a>Optional property: SERIALIZER INDENTATION</h3>
+<p>This property is identified by
+<a href="http://xmlpull.org/v1/doc/properties.html#serializer-indentation">
+http://xmlpull.org/v1/doc/properties.html#serializer-indentation</a> </p>
+<p>OPTIONAL property with String value </p>
+
+<p>if length() &gt; 0 it is used otherwise if null or length() == 0 no indentation 
+is not done</p>
+
+<p>For example use TAB (&quot;\t&quot;) or few spaces (&quot;&nbsp;&nbsp;&nbsp; &quot;)</p>
+
+<p>&nbsp;</p>
+
+<h3>
+<a name="serializer-indentation"></a>Optional property: SERIALIZER LINE 
+SEPARATOR</h3>
+<p>This property is identified by
+<a href="http://xmlpull.org/v1/doc/properties.html#serializer-line-separator">
+http://xmlpull.org/v1/doc/properties.html#serializer-line-separator</a> </p>
+<p>OPTIONAL property with String value </p>
+
+<p>by default it SHOULD be initialized to platform dependent values (on Windows 
+&quot;\r\n&quot; on Unix &quot;\n&quot;);</p>
+
+<p>if value of property is null or String of length() == 0 no line separator 
+will be written</p>
+
+<p>&nbsp;</p>
 
 <HR>
 <address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a><address>
