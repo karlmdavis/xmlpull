@@ -13,7 +13,7 @@
 <ul>
 <li><b>two API changes are not backward compatible</b> with 1.0.7:
 <ul>
-<li><b>readText</b>() function was <b>removed</b>, please use nextText() instead
+<li><b>readText</b>() function was <b>removed</b>, please use nextElementText() instead
 <li><b>require</b>() is <b>changed</b> and no longer will skip white space content
 </ul>
 <li>added <b>new functions</b>:<ul>
@@ -21,7 +21,7 @@
 <li>isAttributeDefault(index)
 <li>setInput(InputStream is,  String inputEncoding)
 <li>getInputEncoding()
-<li>nextText()
+<li>nextElementText()
 <li>nextTag()
 </ul>
 <li>modified tests to allow -1 for column or line number and updated javadoc to reflect it

@@ -949,8 +949,8 @@ public interface XmlPullParser {
 //     *   return result;
 //     * </pre>
 //     *
-//     * @deprecated Replaced by nextText(), this method was too liberal.
-//     * @see #nextText()
+//     * @deprecated Replaced by nextElementText(), this method was too liberal.
+//     * @see #nextElementText()
 //     */
 //    public String readText() throws XmlPullParserException, IOException;
 
@@ -968,7 +968,7 @@ public interface XmlPullParser {
      * <pre>
      *   p.nextTag()
      *   p.requireEvent(p.START_TAG, "", "tag");
-     *   String content = p.nextText();
+     *   String content = p.nextElementText();
      *   p.requireEvent(p.END_TAG, "", "tag");
      * </pre>
      * This function together with nextTag make it very easy to parse XML that has
@@ -998,7 +998,7 @@ public interface XmlPullParser {
      *  }
      * </pre>
      */
-    public String nextText() throws XmlPullParserException, IOException;
+    public String nextElementText() throws XmlPullParserException, IOException;
 
     /**
      * Call next() and return event if it is START_TAG or END_TAG
