@@ -389,11 +389,24 @@ All generated files are created under ${build} directory
 
     <delete dir="${website}/download"/>
     <mkdir dir="${website}/download"/>
+
+    <copy file="${doc}/README_DOWNLOAD.html" tofile="${website}/download/README.html"/>
+
+
+    <!-- get JAR files for easy download by people -->
+    <copy todir="${website}/download">
+      <fileset dir="${build}/lib">
+        <include name="${xmlpull_version}*.jar"/>
+        <include name="xmlpull-tests_${version}*.jar"/>
+      </fileset>
+    </copy>
+
     <copy todir="${website}/download">
       <fileset dir="${build}/dist">
         <include name="${xmlpull_version}_*.*"/>
       </fileset>
     </copy>
+
 
     <!--gunzip src="${dist_full_tgz}" dest="${website}/download/unpacked.tar"/>
     <untar src="${website}/download/unpacked.tar" dest="${website}/download"/>
