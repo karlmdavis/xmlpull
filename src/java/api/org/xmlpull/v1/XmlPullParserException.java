@@ -12,7 +12,7 @@ public class XmlPullParserException extends Exception {
     protected Throwable detail;
     protected int row = -1;
     protected int column = -1;
-    
+     
     public XmlPullParserException() {
     }
     
