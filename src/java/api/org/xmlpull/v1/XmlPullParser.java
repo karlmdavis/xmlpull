@@ -469,7 +469,17 @@ public interface XmlPullParser {
      *  return null;
      * </pre>
      *
-     * <p>However parser implementation can be more efficient about.
+     * <p><strong>NOTE:</strong> parser implementation
+     * can do more efifcient lookup (using Hashtable for exmaple).
+     *
+     * <p><strong>NOTE:</strong>The 'xml' prefix is bound as defined in
+     * <a href="http://www.w3.org/TR/REC-xml-names/#ns-using">Namespaces in XML</a>
+     * specification to "http://www.w3.org/XML/1998/namespace".
+     *
+     * <p><strong>NOTE:</strong> The 'xmlns' prefix must be resolved to following namespace
+     * <a href="http://www.w3.org/2000/xmlns/">http://www.w3.org/2000/xmlns/</a>
+     * (visit this URL for description!).
+     *
      *
      * @see #getNamespaceCount
      * @see #getNamespacePrefix
@@ -583,7 +593,8 @@ public interface XmlPullParser {
     // START_TAG / END_TAG shared methods
 
     /**
-     * Returns the namespace URI of the current element.
+     * Returns the namespace URI of the current element (default namespace is represented
+     * as empty string).
      * If namespaces are NOT enabled, an empty String ("") always is returned.
      * The current event must be START_TAG or END_TAG, otherwise, null is returned.
      */
@@ -639,12 +650,12 @@ public interface XmlPullParser {
      * or current event type is not START_TAG.
      *
      * <p><strong>NOTE:</strong> if FEATURE_REPORT_NAMESPACE_ATTRIBUTES is set
-     * then namespace attributes (xmlns:ns='...') amust be reported
+     * then namespace attributes (xmlns:ns='...') must be reported
      * with namespace
      * <a href="http://www.w3.org/2000/xmlns/">http://www.w3.org/2000/xmlns/</a>
      * (visit this URL for description!).
      * The default namespace attribute (xmlns="...") will be reported with empty namespace.
-     * Then xml prefix is bound as defined in
+     * <p><strong>NOTE:</strong>The xml prefix is bound as defined in
      * <a href="http://www.w3.org/TR/REC-xml-names/#ns-using">Namespaces in XML</a>
      * specification to "http://www.w3.org/XML/1998/namespace".
      *
