@@ -541,10 +541,20 @@ public interface XmlPullParser {
      * Returns the numbers of elements in the namespace stack for the given
      * depth.
      * If namespaces are not enabled, 0 is returned.
-
+     *
      * <p><b>NOTE:</b> when parser is on END_TAG then it is allowed to call
      *  this function with getDepth()+1 argument to retrieve position of namespace
      *  prefixes and URIs that were declared on corresponding START_TAG.
+     * <p><b>NOTE:</b> to retrieve lsit of namespaces declared in current element:<pre>
+     *       XmlPullParser pp = ...
+     *       int nsStart = pp.getNamespaceCount(pp.getDepth()-1);
+     *       int nsEnd = pp.getNamespaceCount(pp.getDepth());
+     *       for (int i = nsStart; i < nsEnd; i++) {
+     *          String prefix = pp.getNamespacePrefix(i);
+     *          String ns = pp.getNamespaceUri(i);
+     *           // ...
+     *      }
+     * </pre>
      *
      * @see #getNamespacePrefix
      * @see #getNamespaceUri
@@ -556,6 +566,7 @@ public interface XmlPullParser {
     /**
      * Returns the namespace prefixe for the given position
      * in the namespace stack.
+     * Default namespace declaration (xmlns='...') will have null as prefix.
      * If the given index is out of range, an exception is thrown.
      * <p><b>Please note:</b> when the parser is on an END_TAG,
      * namespace prefixes that were declared
@@ -585,9 +596,9 @@ public interface XmlPullParser {
      * <p>This method is a convenience method for
      *
      * <pre>
-     *  for (int i = getNamespaceCount (getDepth ())-1; i >= 0; i--) {
-     *   if (getNamespacePrefix (i).equals (prefix)) {
-     *     return getNamespaceUri (i);
+     *  for (int i = getNamespaceCount(getDepth ())-1; i >= 0; i--) {
+     *   if (getNamespacePrefix(i).equals( prefix )) {
+     *     return getNamespaceUri(i);
      *   }
      *  }
      *  return null;
