@@ -508,10 +508,12 @@ public interface XmlPullParser {
     //public String getRawName();
     
     
-    /** Returns true if the current event is START_TAG and the
-     tag is degenerated (e.g. &lt;foobar/&gt;).*/
-    
-    public boolean isEmptyElementTag();
+    /**
+     * Returns true if the current event is START_TAG and the
+     * tag is degenerated (e.g. &lt;foobar/&gt;).
+     * <p><b>NOTE:</b> if parser is not on START_TAG the exception will be thrown.
+     */
+    public boolean isEmptyElementTag() throws XmlPullParserException;
     //public boolean isDegenerated ();
     
     
