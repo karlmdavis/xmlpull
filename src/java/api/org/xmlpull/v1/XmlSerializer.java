@@ -66,7 +66,7 @@ public interface XmlSerializer {
      * (the property name is recommened to be URI for uniqueness).
      * Some well known optional properties are defined in
      * <a href="http://www.xmlpull.org/v1/doc/properties.html">
-     * http://www.xmlpull.org/v1/doc/features.html</a>.
+     * http://www.xmlpull.org/v1/doc/properties.html</a>.
      *
      * If property is not recocgnized or can not be set
      * then IllegalStateException MUST be thrown.
@@ -218,6 +218,11 @@ public interface XmlSerializer {
      * Write all pending output to the stream.
      * If method startTag() or attribute() was called then start tag is closed (final &gt;)
      * before flush() is called on underlying output stream.
+     *
+     * <p><b>NOTE:</b> if there is need to close start tag
+     * (so no more attribute() calls are allowed) but without flushinging output
+     * call method text() with empty string (text("")).
+     *
      */
     public void flush ()
         throws IOException;
