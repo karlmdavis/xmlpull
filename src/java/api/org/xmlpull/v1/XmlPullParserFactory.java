@@ -175,19 +175,19 @@ public class XmlPullParserFactory {
         if (parserClasses.size() == 0) throw new XmlPullParserException
                 ("No valid parser classes found in "+classNamesLocation);
 
-        StringBuffer issues = new StringBuffer ();
+        final StringBuffer issues = new StringBuffer ();
 
         for (int i = 0; i < parserClasses.size (); i++) {
-            Class ppClass = (Class) parserClasses.elementAt (i);
+            final Class ppClass = (Class) parserClasses.elementAt (i);
             try {
-                XmlPullParser pp = (XmlPullParser) ppClass.newInstance();
+                final XmlPullParser pp = (XmlPullParser) ppClass.newInstance();
                 //            if( ! features.isEmpty() ) {
                 //Enumeration keys = features.keys();
                 // while(keys.hasMoreElements()) {
 
                 for (Enumeration e = features.keys (); e.hasMoreElements ();) {
-                    String key = (String) e.nextElement();
-                    Boolean value = (Boolean) features.get(key);
+                    final String key = (String) e.nextElement();
+                    final Boolean value = (Boolean) features.get(key);
                     if(value != null && value.booleanValue()) {
                         pp.setFeature(key, true);
                     }
@@ -224,12 +224,12 @@ public class XmlPullParserFactory {
                 ("No valid serializer classes found in "+classNamesLocation);
         }
 
-        StringBuffer issues = new StringBuffer ();
+        final StringBuffer issues = new StringBuffer ();
 
         for (int i = 0; i < serializerClasses.size (); i++) {
-            Class ppClass = (Class) serializerClasses.elementAt (i);
+            final Class ppClass = (Class) serializerClasses.elementAt (i);
             try {
-                XmlSerializer ser = (XmlSerializer) ppClass.newInstance();
+                final XmlSerializer ser = (XmlSerializer) ppClass.newInstance();
 
                 //                for (Enumeration e = features.keys (); e.hasMoreElements ();) {
                 //                    String key = (String) e.nextElement();
@@ -278,10 +278,10 @@ public class XmlPullParserFactory {
                 if (is == null) throw new XmlPullParserException
                         ("resource not found: "+RESOURCE_NAME
                              +" make sure that parser implementing XmlPull API is available");
-                StringBuffer sb = new StringBuffer();
+                final StringBuffer sb = new StringBuffer();
 
                 while (true) {
-                    int ch = is.read();
+                    final int ch = is.read();
                     if (ch < 0) break;
                     else if (ch > ' ')
                         sb.append((char) ch);
@@ -300,15 +300,15 @@ public class XmlPullParserFactory {
         }
 
         XmlPullParserFactory factory = null;
-        Vector parserClasses = new Vector ();
-        Vector serializerClasses = new Vector ();
+        final Vector parserClasses = new Vector ();
+        final Vector serializerClasses = new Vector ();
         int pos = 0;
 
         while (pos < classNames.length ()) {
             int cut = classNames.indexOf (',', pos);
 
             if (cut == -1) cut = classNames.length ();
-            String name = classNames.substring (pos, cut);
+            final String name = classNames.substring (pos, cut);
 
             Class candidate = null;
             Object instance = null;

@@ -253,9 +253,9 @@ public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
 
     private void writeStartTag(XmlPullParser pp) throws XmlPullParserException, IOException {
         if (!pp.getFeature (XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES)) {
-            for (int i = pp.getNamespaceCount (pp.getDepth ()-1);
-                 i < pp.getNamespaceCount (pp.getDepth ()); i++)
-            {
+            int nsStart = pp.getNamespaceCount(pp.getDepth()-1);
+            int nsEnd = pp.getNamespaceCount(pp.getDepth());
+            for (int i = nsStart; i < nsEnd; i++) {
                 String prefix = pp.getNamespacePrefix(i);
                 String ns = pp.getNamespaceUri(i);
                 setPrefix(prefix, ns);

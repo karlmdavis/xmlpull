@@ -77,7 +77,7 @@ public class Driver implements Locator, XMLReader, Attributes
     /**
      */
     public Driver() throws XmlPullParserException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         pp = factory.newPullParser();
     }
@@ -92,7 +92,7 @@ public class Driver implements Locator, XMLReader, Attributes
     public String getURI(int index) { return pp.getAttributeNamespace(index); }
     public String getLocalName(int index) { return pp.getAttributeName(index); }
     public String getQName(int index) {
-        String prefix = pp.getAttributePrefix(index);
+        final String prefix = pp.getAttributePrefix(index);
         if(prefix != null) {
             return prefix+':'+pp.getAttributeName(index);
         } else {
@@ -273,11 +273,11 @@ public class Driver implements Locator, XMLReader, Attributes
         systemId = source.getSystemId();
         contentHandler.setDocumentLocator(this);
 
-        Reader reader = source.getCharacterStream();
+        final Reader reader = source.getCharacterStream();
         try {
             if (reader == null) {
                 InputStream stream = source.getByteStream();
-                String encoding = source.getEncoding();
+                final String encoding = source.getEncoding();
 
                 if (stream == null) {
                     systemId = source.getSystemId();
@@ -289,13 +289,13 @@ public class Driver implements Locator, XMLReader, Attributes
                     }
                     // NOTE: replace with Connection to run in J2ME environment
                     try {
-                        URL url = new URL(systemId);
+                        final URL url = new URL(systemId);
                         stream = url.openStream();
                     } catch (MalformedURLException nue) {
                         try {
                             stream = new FileInputStream(systemId);
                         } catch (FileNotFoundException fnfe) {
-                            SAXParseException saxException = new SAXParseException(
+                            final SAXParseException saxException = new SAXParseException(
                                 "could not open file with systemId "+systemId, this, fnfe);
                             errorHandler.fatalError(saxException);
                             return;
@@ -307,7 +307,7 @@ public class Driver implements Locator, XMLReader, Attributes
                 pp.setInput(reader);
             }
         } catch (XmlPullParserException ex)  {
-            SAXParseException saxException = new SAXParseException(
+            final SAXParseException saxException = new SAXParseException(
                 "parsing initialization error: "+ex, this, ex);
             //if(DEBUG) ex.printStackTrace();
             errorHandler.fatalError(saxException);
@@ -321,14 +321,14 @@ public class Driver implements Locator, XMLReader, Attributes
             pp.next();
             // it should be start tag...
             if(pp.getEventType() != XmlPullParser.START_TAG) {
-                SAXParseException saxException = new SAXParseException(
+                final SAXParseException saxException = new SAXParseException(
                     "expected start tag not"+pp.getPositionDescription(), this);
                 //throw saxException;
                 errorHandler.fatalError(saxException);
                 return;
             }
         } catch (XmlPullParserException ex)  {
-            SAXParseException saxException = new SAXParseException(
+            final SAXParseException saxException = new SAXParseException(
                 "parsing initialization error: "+ex, this, ex);
             //ex.printStackTrace();
             errorHandler.fatalError(saxException);
@@ -351,14 +351,14 @@ public class Driver implements Locator, XMLReader, Attributes
 
     public void parseSubTree(XmlPullParser pp) throws SAXException, IOException {
         this.pp = pp;
-        boolean namespaceAware = pp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES);
+        final boolean namespaceAware = pp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES);
         try {
             if(pp.getEventType() != XmlPullParser.START_TAG) {
                 throw new SAXException(
                     "start tag must be read before skiping subtree"+pp.getPositionDescription());
             }
-            int[] holderForStartAndLength = new int[2];
-            StringBuffer rawName = new StringBuffer();
+            final int[] holderForStartAndLength = new int[2];
+            final StringBuffer rawName = new StringBuffer(16);
             String prefix = null;
             String name = null;
             int level = pp.getDepth() - 1;
@@ -369,11 +369,11 @@ public class Driver implements Locator, XMLReader, Attributes
                 switch(type) {
                     case XmlPullParser.START_TAG:
                         if(namespaceAware) {
-                            int depth = pp.getDepth() - 1;
-                            int countPrev =
+                            final int depth = pp.getDepth() - 1;
+                            final int countPrev =
                                 (level > depth) ? pp.getNamespaceCount(depth) : 0;
                             //int countPrev = pp.getNamespaceCount(pp.getDepth() - 1);
-                            int count = pp.getNamespaceCount(depth + 1);
+                            final int count = pp.getNamespaceCount(depth + 1);
                             for (int i = countPrev; i < count; i++)
                             {
                                 contentHandler.startPrefixMapping(
@@ -401,7 +401,7 @@ public class Driver implements Locator, XMLReader, Attributes
 
                         break;
                     case XmlPullParser.TEXT:
-                        char[] chars = pp.getTextCharacters(holderForStartAndLength);
+                        final char[] chars = pp.getTextCharacters(holderForStartAndLength);
                         contentHandler.characters(chars,
                                                   holderForStartAndLength[0], //start
                                                   holderForStartAndLength[1] //len
@@ -423,8 +423,8 @@ public class Driver implements Locator, XMLReader, Attributes
                                                       prefix != null ? name : rawName.toString()
                                                      );
                             // when entering show prefixes for all levels!!!!
-                            int depth = pp.getDepth();
-                            int countPrev =
+                            final int depth = pp.getDepth();
+                            final int countPrev =
                                 (level > depth) ? pp.getNamespaceCount(pp.getDepth()) : 0;
                             int count = pp.getNamespaceCount(pp.getDepth() - 1);
                             // undeclare them in reverse order
@@ -448,7 +448,7 @@ public class Driver implements Locator, XMLReader, Attributes
                 type = pp.next();
             } while(pp.getDepth() > level);
         } catch (XmlPullParserException ex)  {
-            SAXParseException saxException = new SAXParseException("parsing error: "+ex, this, ex);
+            final SAXParseException saxException = new SAXParseException("parsing error: "+ex, this, ex);
             ex.printStackTrace();
             errorHandler.fatalError(saxException);
         }
