@@ -417,7 +417,7 @@ public interface XmlPullParser {
      *   http://xmlpull.org/v1/doc/features.html#detect-encoding MUST be true
      *   otherwise it must be false
      *
-     * @param inputStream if not null it contains raw byte input stream of possibly
+     * @param inputStream contains raw byte input stream of possibly
      *     unknown encoding (when inputEncoding is null) and in such case the parser
      *     must derive encoding from &lt;?xml declaration or assume UTF8 or UTF16 as
      *     described in <a href="http://www.w3.org/TR/REC-xml#sec-guessing-no-ext-info">XML 1.0
@@ -428,10 +428,21 @@ public interface XmlPullParser {
      *             Appendix F.2 Priorities in the Presence of External Encoding Information</a>
      *      that allows for exception only for files and in such cases inputEncoding should
      *      be null to trigger autodetecting.
+     *      if inputStream is null the IllegalArgumentException must be thrown
      * @param inputEncoding if not null it MUST be used as encoding for inputStream
      */
-    //public void setInput(java.io.InputStream inputStream, String inputEncoding)
-    //    throws XmlPullParserException, IOException;
+    public void setInput(java.io.InputStream inputStream, String inputEncoding)
+        throws XmlPullParserException, IOException;
+
+    /**
+     * Return input encoding if known or null if unknown.
+     * If setInput(InputStream, inputEncoding) was called with not null inpuEncoding
+     * it must be returned by this function. Otherwise if inputEncoding is null and parser suppports
+     * feature http://xmlpull.org/v1/doc/features.html#detect-encoding
+     * then it must return detected encoding.
+     * If setInput(Reader) was called returned encoding name is null.
+     */
+    public String getInputEncoding();
 
     /**
      * Set new value for entity replacement text as defined in
@@ -525,8 +536,6 @@ public interface XmlPullParser {
      * @see #getNamespacePrefix
      * @see #getNamespaceUri
      */
-
-
     public String getNamespace (String prefix);
 
 
@@ -744,8 +753,7 @@ public interface XmlPullParser {
      * @param zero based index of attribute
      * @return attribute type (null is never returned)
      */
-    //public String getAttributeType(int index);
-
+    public String getAttributeType(int index);
 
     /**
      * Returns if the specified attribute was not in input was declared in XML.
@@ -755,7 +763,7 @@ public interface XmlPullParser {
      * @param zero based index of attribute
      * @return false if attribute was in input
      */
-    //public boolean isAttributeDefault(int index);
+    public boolean isAttributeDefault(int index);
 
     /**
      * Returns the given attributes value.
@@ -929,50 +937,19 @@ public interface XmlPullParser {
      *   next();
      *   return result;
      * </pre>
+     *
+     * @deprecated Replaced by nextText(), this method was too liberal.
+     * @see #nextText()
      */
     public String readText() throws XmlPullParserException, IOException;
 
 
-    /**
-     * Test if the current event is of the given type and if the
-     * namespace and name do match. null will match any namespace
-     * and any name. If the test is not passed, an exception is
-     * thrown. The exception text indicates the parser position,
-     * the expected event and the current event (not meeting the
-     * requirement.
-     *
-     * <p>essentially it does this
-     * <pre>
-     *  if (type != getEventType()
-     *  || (namespace != null && !namespace.equals( getNamespace () ) )
-     *  || (name != null && !name.equals( getName() ) ) )
-     *     throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
-     * </pre>
-     */
-    //public void requireEvent(int eventType, String namespace, String name)
-    //    throws XmlPullParserException, IOException;
 
     /**
-     * Call next() and return event if it is START_TAG or END_TAG
-     * otherwise throw an exception.
-     *
-     * <p>essentially it does this
-     * <pre>
-     *   int eventType = next();
-     *   if (eventType != START_TAG && eventType != END_TAG) {
-     *      throw new XmlPullParserException("expected start or end tag", this, null);
-     *   }
-     *   return eventType;
-     * </pre>
-     */
-    //public String nextTag() throws XmlPullParserException, IOException;
-
-
-    /**
-     * If current event is START_TAG and isEmptyElementTag() is true
-     * then empty string ("") is returned,
-     * if the next event is TEXT, the value of getText is returned
-     * otherwise exception is thrown indicating that TEXT was expected.
+     * If current event is TEXT and next event is END_TAG then text is returned and
+     * parser is on END_TAG. If current event is START_TAG then if next element is TEXT
+     * then element content is returned or if next is END_TAG then emoty string is returned.
+     * Otherwise exception is thrown.
      *
      * <p>The motivation for this function is to allow to parse consistently both
      * empty elements and elements that has non empty content, for example for input: <ol>
@@ -983,22 +960,54 @@ public interface XmlPullParser {
      *   p.nextTag()
      *   p.requireEvent(p.START_TAG, "", "tag");
      *   String content = p.nextText();
-     *   p.nextTag()
      *   p.requireEvent(p.END_TAG, "", "tag");
      * </pre>
      *
      * <p>essentially it does this
      * <pre>
-     *    if(getEventType() == START_TAG && isEmptyElementTag()) {
-     *      return "";
-     *    }
-     *    if(next() != TEXT) {
-     *      throw new XmlPullParserException("expected TEXT and not "+TYPES[getEventType()], this, null);
-     *    }
-     *    return getText();
+     *  String result = null;
+     *  boolean onStartTag = false;
+     *  if(eventType == START_TAG) {
+     *     onStartTag = true;
+     *     next();
+     *  }
+     *  if(eventType == TEXT) {
+     *     result = getText();
+     *     next();
+     *  } else if(onStartTag && eventType == END_TAG) {
+     *     result = "";
+     *  } else {
+     *     throw new XmlPullParserException(
+     *  "parser must be on START_TAG or TEXT to read text", this, null);
+     *  }
+     *  if(eventType != END_TAG) {
+     *     throw new XmlPullParserException(
+     *  "event TEXT it must be immediately followed by END_TAG", this, null);
+     *  }
+     *  return result;
      * </pre>
      */
-    //public String nextText () throws XmlPullParserException, IOException;
+    public String nextText () throws XmlPullParserException, IOException;
+
+
+    /**
+     * Call next() and return event if it is START_TAG or END_TAG
+     * otherwise throw an exception.
+     * It will skip whitespace TEXT before actual tag if any.
+     *
+     * <p>essentially it does this
+     * <pre>
+     *   int eventType = next();
+     *   if(eventType == TEXT && isWhitespace()) {   // skip whitespace
+     *      eventType = next();
+     *   }
+     *   if (eventType != START_TAG && eventType != END_TAG) {
+     *      throw new XmlPullParserException("expected start or end tag", this, null);
+     *   }
+     *   return eventType;
+     * </pre>
+     */
+    public int nextTag() throws XmlPullParserException, IOException;
 
 }
 
