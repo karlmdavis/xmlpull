@@ -20,7 +20,9 @@
                                                 </member>
                                         <member>
                                                 <name>dateCreated</name>
-                                                <value>20030218T14:54:21</value>
+                                                <value>
+                                                        <dateTime.iso8601>20030218T14:54:21</dateTime.iso8601>
+                                                        </value>
                                                 </member>
                                         <member>
                                                 <name>postid</name>
@@ -42,7 +44,9 @@
                                                 </member>
                                         <member>
                                                 <name>dateCreated</name>
-                                                <value>20030218T10:18:01</value>
+                                                <value>
+                                                        <dateTime.iso8601>20030218T10:18:01</dateTime.iso8601>
+                                                        </value>
                                                 </member>
                                         <member>
                                                 <name>postid</name>
@@ -64,7 +68,9 @@
                                                 </member>
                                         <member>
                                                 <name>dateCreated</name>
-                                                <value>20030218T10:04:29</value>
+                                                <value>
+                                                        <dateTime.iso8601>20030218T10:04:29</dateTime.iso8601>
+                                                        </value>
                                                 </member>
                                         <member>
                                                 <name>postid</name>
@@ -86,7 +92,9 @@
                                                 </member>
                                         <member>
                                                 <name>dateCreated</name>
-                                                <value>20030218T10:02:38</value>
+                                                <value>
+                                                        <dateTime.iso8601>20030218T10:02:38</dateTime.iso8601>
+                                                        </value>
                                                 </member>
                                         <member>
                                                 <name>postid</name>
@@ -108,7 +116,9 @@
                                                 </member>
                                         <member>
                                                 <name>dateCreated</name>
-                                                <value>20030218T09:49:47</value>
+                                                <value>
+                                                        <dateTime.iso8601>20030218T09:49:47</dateTime.iso8601>
+                                                        </value>
                                                 </member>
                                         <member>
                                                 <name>postid</name>
@@ -133,4 +143,3 @@
 
 
         </methodResponse>
-
