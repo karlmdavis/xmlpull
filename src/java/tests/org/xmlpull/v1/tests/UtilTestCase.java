@@ -53,6 +53,11 @@ public class UtilTestCase extends TestCase {
         int attribCount
     ) throws XmlPullParserException, IOException
     {
+        assertTrue("line number must be -1 or >= 1 not "+xpp.getLineNumber(),
+                   xpp.getLineNumber() == -1 || xpp.getLineNumber() >= 1);
+        assertTrue("column number must be -1 or >= 0 not "+xpp.getColumnNumber(),
+                   xpp.getColumnNumber() == -1 || xpp.getColumnNumber() >= 0);
+
         assertEquals("PROCESS_NAMESPACES", false, xpp.getFeature(xpp.FEATURE_PROCESS_NAMESPACES));
         assertEquals("TYPES[getType()]", xpp.TYPES[type], xpp.TYPES[xpp.getEventType()]);
         assertEquals("getType()", type, xpp.getEventType());
@@ -103,6 +108,11 @@ public class UtilTestCase extends TestCase {
         int attribCount
     ) throws XmlPullParserException, IOException
     {
+        assertTrue("line number must be -1 or >= 1 not "+xpp.getLineNumber(),
+                   xpp.getLineNumber() == -1 || xpp.getLineNumber() >= 1);
+        assertTrue("column number must be -1 or >= 0 not "+xpp.getColumnNumber(),
+                   xpp.getColumnNumber() == -1 || xpp.getColumnNumber() >= 0);
+
         // this methid can be used with enabled and not enabled namespaces
         //assertEquals("PROCESS_NAMESPACES", true, xpp.getFeature(xpp.FEATURE_PROCESS_NAMESPACES));
         assertEquals("TYPES[getType()]", xpp.TYPES[type], xpp.TYPES[xpp.getEventType()]);

@@ -9,23 +9,37 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
-<h3>2001-04 (XMLPULL_1_0_7_1)</h3>
+<h3>2001-04 (XMLPULL_1_0_8)</h3>
+<ul>
+<li>modified tests to allow -1 for column or line number and updated javadoc to reflect it
+<li>
+&nbsp;</ul>
+
+<h3>2001-04-20 (XMLPULL_1_0_7_1)</h3>
 <ul>
 <li>
-fixed Quick Introduction to use correct API for getTextCharacters and 
+fixed Quick Introduction to use correct API for getTextCharacters and
 getEventType (instead of getType)<li>
 added requirement to getNamespace(prefix) to have 'xml' and 'xmlns' pre-declared<li>
-removed from getNamespace(prefiix) exception XmlPullParserException as this 
-function simply retunrs null when namespace is not declared ...</ul>
+removed from getNamespace(prefiix) exception XmlPullParserException as this
+function simply retunrs null when namespace is not declared ...<li>
+updated tests:<ul>
+<li>updated header with license pointer to <a href="http://www.xmlpull.org">
+http://www.xmlpull.org</a>
+<li>added printing test summary (parser used, supported features)
+<li>added one test to check that tokens are equivalent to events (next() &lt;-&gt;
+nextToken())
+</ul>
+<li>&nbsp;</ul>
 
 <h3>2001-04-08 (XMLPULL_1_0_7)</h3>
 <ul>
 <li>
-changed default namespace semantics: the prefix must be reported as null and not 
-empty string from getNamespacePrefix(depth) and getNamespace(null) must return 
+changed default namespace semantics: the prefix must be reported as null and not
+empty string from getNamespacePrefix(depth) and getNamespace(null) must return
 default namespace if declared in XML<li>
-modified getText() method behavior for ENTITY_REF: in this case getText() must 
-return entity replacement text and getTextCharacters() returns actual input 
+modified getText() method behavior for ENTITY_REF: in this case getText() must
+return entity replacement text and getTextCharacters() returns actual input
 buffer with entity name the same as getName()<li>
 for ENTITY_REF token getName() must return entity name<li>
 added specific requirement that attribute values MUST be normalized</ul>
@@ -33,28 +47,28 @@ added specific requirement that attribute values MUST be normalized</ul>
 <h3>2001-04-06 (XMLPULL_1_0_6)</h3>
 <ul>
 <li>
-changed hard coded parser factory in XmlPullParserFactory name for KXML2 to 
+changed hard coded parser factory in XmlPullParserFactory name for KXML2 to
 org.kxml2.io.KXmlParserFactory<li>
 clarified required semantics in <a href="features.html">features</a> description
 <li>
 refactored XmlPullParserFactory: <ul>
-<li>reduced in size as much as possible,&nbsp; 
-<li>String classNames 
-in newInstance() can now specify both 
+<li>reduced in size as much as possible,&nbsp;
+<li>String classNames
+in newInstance() can now specify both
 factories and parsers
-<li>removed method newInstance(String classNames) the same can be done with newInstance(classNames, 
+<li>removed method newInstance(String classNames) the same can be done with newInstance(classNames,
 null)<li>modified  tests  use newInstance(*,null) instead of one argument version</ul>
 <li>
 removed constructor with line numbers and Throwable from XmlPullParserException<li>
-changed API to add default namespace declaration to be counted in 
+changed API to add default namespace declaration to be counted in
 getNamespaceCount() and available from getNamespace...(...) methods<li>
-refactored tests for common problem: check if no XMLPULL implementation 
+refactored tests for common problem: check if no XMLPULL implementation
 available and print just one error message (instead of dozen...)</ul>
 
 <h3>2001-04-03 (XMLPULL_1_0_5)</h3>
 <ul>
 <li>
-changed features URI to point to actual documentation on 
+changed features URI to point to actual documentation on
 <a href="http://www.xmlpull.org">http://www.xmlpull.org</a>&nbsp;
 <li>
 automatic JUnit tests now covers whole API<li>

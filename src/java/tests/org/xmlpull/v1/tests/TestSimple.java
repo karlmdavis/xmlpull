@@ -67,15 +67,13 @@ public class TestSimple extends UtilTestCase {
             fail("exception was expected of next() if no input was set on parser");
         } catch(XmlPullParserException ex) {}
 
-        assertEquals(1, xpp.getLineNumber());
-        assertEquals(0, xpp.getColumnNumber());
-
-
+        assertTrue("line number must be -1 or >= 1 not "+xpp.getLineNumber(),
+                   xpp.getLineNumber() == -1 || xpp.getLineNumber() >= 1);
+        assertTrue("column number must be -1 or >= 0 not "+xpp.getColumnNumber(),
+                   xpp.getColumnNumber() == -1 || xpp.getColumnNumber() >= 0);
 
         // check the simplest possible XML document - just one root element
         xpp.setInput(new StringReader("<foo></foo>"));
-        assertEquals(1, xpp.getLineNumber());
-        assertEquals(0, xpp.getColumnNumber());
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 0);
@@ -86,8 +84,6 @@ public class TestSimple extends UtilTestCase {
 
 
         xpp.setInput(new StringReader( "<foo/>" ) );
-        assertEquals(1, xpp.getLineNumber());
-        assertEquals(0, xpp.getColumnNumber());
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, true /*empty*/, 0);

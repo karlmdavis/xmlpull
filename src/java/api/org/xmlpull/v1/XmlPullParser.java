@@ -565,11 +565,20 @@ public interface XmlPullParser {
 
     /**
      * Current line number: numebering starts from 1.
+     * It must return -1 if parser does not know current line number
+     * or can not determine it (for example in case of WBXML)
+     *
+     * @return current column number or -1 of unknown
      */
     public int getLineNumber();
 
     /**
-     * Current column: numbering starts from 0 (returned when parser is in START_DOCUMENT state!)
+     * Current column: numbering starts from 0
+     * (zero should be returned when parser is in START_DOCUMENT state!)
+     * It must return -1 if parser does not know current line number
+     * or can not determine it (for example in case of WBXML)
+     *
+     * @return current column number or -1 of unknown
      */
     public int getColumnNumber();
 
