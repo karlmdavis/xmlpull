@@ -1,0 +1,95 @@
+<HTML>
+<HEAD>
+<TITLE>XMLPULL FAQ
+</TITLE>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Aleksander Slominski">
+</HEAD>
+<BODY BGCOLOR="white">
+
+<H1>XMLPULL V1 API Features</H2>
+
+<p>Please note: the key words &quot;<b>MUST</b>&quot;, &quot;<b>MUST NOT</b>&quot;, &quot;<b>REQUIRED</b>&quot;, 
+&quot;<b>SHALL</b>&quot;, &quot;<b>SHALL NOT</b>&quot;, &quot;<b>SHOULD</b>&quot;, &quot;<b>SHOULD NOT</b>&quot;, &quot;<b>RECOMMENDED</b>&quot;, 
+&quot;<b>MAY</b>&quot;, and &quot;<b>OPTIONAL</b>&quot; in this document are to be interpreted as 
+described in <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p><h2>
+
+Standard features</h2>
+<P>
+
+Features listed here should be recognized by all XMLPULL implementations however 
+the implementations <b>MUST</b> only implemented default feature semantics that 
+are for false value with exception of FEATURE_PROCESS_DOCDECL and 
+FEATURE_VALIDATION that default <b>MAY</b> be true or false and <b>MAY</b> be 
+immutable (for example if parser is validating and does not allow to switch to 
+non-validating mode).<h3>
+
+<a name="process-namespaces"></a>FEATURE_PROCESS_NAMESPACES</h3>
+
+<p>
+The feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#process-namespaces">
+http://xmlpull.org/v1/doc/features.html#process-namespaces</a> <p>
+If set to false XML namespaces not will be process and will be treated as normal 
+attributes. If set to true than XML namespaces <b>MUST</b> be processed 
+according to <a href="http://www.w3.org/TR/1998/PR-xml-names-19981117">
+Namespaces in XML specification</a>.<p>
+Processing of namespaces in XMLPULL V1 parser is by default set to false.<p>
+This feature can not be changed during parsing!<p>
+&nbsp;<h3>
+<a name="report-namespace-prefixes"></a>FEATURE_REPORT_NAMESPACE_ATTRIBUTES<br>
+&nbsp;</h3>
+<p>
+The feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#report-namespace-prefixes">
+http://xmlpull.org/v1/doc/features.html#report-namespace-prefixes</a> <p>
+It is off by default and only meaningful when FEATURE_PROCESS_NAMESPACES feature 
+is on.<p>
+When set to true then XMLPULL parser <b>MUST</b> report namespace attributes 
+also - they can be distinguished looking for prefix == &quot;xmlns&quot; or prefix == &quot;&quot; 
+and name == &quot;xmlns<p>
+This feature can not be changed during parsing!<p>
+&nbsp;<h3>
+<a name="process-docdecl"></a>FEATURE_PROCESS_DOCDECL</h3>
+<p>
+Identified by <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">
+http://xmlpull.org/v1/doc/features.html#process-docdecl</a> <p>
+Processing of DOCDECL is by default set to false and if DOCDECL is encountered 
+it is reported by nextToken() and ignored by next().<p>
+If processing is set to true then DOCDECL must be processed by parser. If 
+FEATURE_VALIDATION is false then parser <b>MUST</b> be non validating as defined 
+in <a href="http://www.w3.org/TR/2000/REC-xml-20001006">XML 1.0 specification</a> 
+otherwise if FEATURE_VALIDATION .is true then parser <b>MUST</b> be validating 
+as defined in <a href="http://www.w3.org/TR/2000/REC-xml-20001006">XML 1.0 
+specification</a>.<p>
+If the DOCDECL was ignored further in parsing there may be fatal exception when 
+undeclared entity is encountered!<br>
+<br>
+This feature can not be changed during parsing!<p>
+&nbsp;<h3>
+<a name="validation"></a>FEATURE_VALIDATION</h3>
+<p>
+Identified by <a href="http://xmlpull.org/v1/doc/features.html#validation">
+http://xmlpull.org/v1/doc/features.html#validation</a> <br>
+&nbsp;<p>
+Report all validation errors as defined by XML 1.0 sepcification (implies that 
+FEATURE_PROCESS_DOCDECL is true and both internal and external DOCDECL will be 
+processed).<p>
+It can can not be changed during parsing!<h2>
+Optional features</h2>
+<p>
+They may be supported but are not part of XMLPULL API<h3>
+<a name="xml-roundtrip"></a>FEATURE_XML_ROUNDTRIP<br>
+&nbsp;</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">
+http://xmlpull.org/v1/doc/features.html#xml-roundtrip</a> </p>
+<p>If set to true then XMLPULL parser <b>MUST</b> report original XML value for 
+START_TAG and END_TAG events with getText() and getTextCharacters() functions.<br>
+&nbsp;</p>
+
+<HR>
+<address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a><address>
+</address>
+</BODY>
+</HTML>
