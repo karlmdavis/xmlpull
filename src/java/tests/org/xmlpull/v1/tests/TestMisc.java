@@ -196,6 +196,31 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         pp.require( pp.END_TAG, null, "foo");
 
+        pp.setInput( new StringReader( "<foo><?XmL test?></foo>" ) );
+        pp.require( pp.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( pp.START_TAG, null, "foo");
+        try {
+            pp.next();
+            fail("expected exception for invalid PI starting with xml");
+        } catch(XmlPullParserException ex){}
+
+        pp.setInput( new StringReader( "<foo><?pi test?></foo>" ) );
+        pp.require( pp.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( pp.START_TAG, null, "foo");
+        pp.nextToken();
+        pp.require( pp.PROCESSING_INSTRUCTION, null, null);
+        assertEquals("PI", "pi test", pp.getText());
+        pp.next();
+        pp.require( pp.END_TAG, null, "foo");
+
+
+    }
+
+    public void testXmlDecl() throws Exception {
+        XmlPullParser pp = factory.newPullParser();
+
         pp.setInput( new StringReader( "<?xml version='1.0'?><foo/>" ) );
         pp.require( pp.START_DOCUMENT, null, null);
         pp.next();
@@ -214,26 +239,64 @@ public class TestMisc extends UtilTestCase {
         pp.setInput( new StringReader(
                         "<?xml  version=\"1.0\" \t encoding='UTF-8' \nstandalone='yes' ?><foo/>" ));
         pp.require( pp.START_DOCUMENT, null, null);
+        assertNull(pp.getProperty(PROPERTY_XMLDECL_VERSION));
+        assertNull(pp.getProperty(PROPERTY_XMLDECL_STANDALONE));
+        assertNull(pp.getProperty(PROPERTY_XMLDECL_CONTENT));
+
         pp.next();
         pp.require( pp.START_TAG, null, "foo");
+        String xmlDeclVersion = (String) pp.getProperty(PROPERTY_XMLDECL_VERSION);
+        if(xmlDeclVersion != null) {
+            assertEquals("XMLDecl version","1.0", xmlDeclVersion);
+            PackageTests.addNote("* property "+PROPERTY_XMLDECL_VERSION+" is supported\n");
+        }
+        Boolean xmlDeclStandalone = (Boolean) pp.getProperty(PROPERTY_XMLDECL_STANDALONE);
+        if(xmlDeclStandalone != null) {
+            assertTrue("XMLDecl standalone",xmlDeclStandalone.booleanValue());
+            PackageTests.addNote("* property "+PROPERTY_XMLDECL_STANDALONE+" is supported\n");
+        }
+        String xmlDeclContent = (String) pp.getProperty(PROPERTY_XMLDECL_CONTENT);
+        if(xmlDeclContent != null) {
+            String expected = "  version=\"1.0\" \t encoding='UTF-8' \nstandalone='yes' ";
+            assertEquals("XMLDecl content", printable(expected), printable(xmlDeclContent));
+            PackageTests.addNote("* property "+PROPERTY_XMLDECL_CONTENT+" is supported\n");
+        }
+
 
         // XML decl without required verion
         pp.setInput( new StringReader( "<?xml test?><foo/>" ) );
         pp.require( pp.START_DOCUMENT, null, null);
+
+        // check that proerties are reset
+        assertNull(pp.getProperty(PROPERTY_XMLDECL_VERSION));
+        assertNull(pp.getProperty(PROPERTY_XMLDECL_STANDALONE));
+        assertNull(pp.getProperty(PROPERTY_XMLDECL_CONTENT));
+
         try {
             pp.next();
-            fail("expected exception for invalid XML declaration wiuthout verion");
+            fail("expected exception for invalid XML declaration without version");
         } catch(XmlPullParserException ex){}
 
 
-        pp.setInput( new StringReader( "<foo><?XmL test?></foo>" ) );
+        pp.setInput( new StringReader(
+                        "<?xml version=\"1.0\" standalone='yes' encoding=\"UTF-8\" ?>\n<foo/>" ));
         pp.require( pp.START_DOCUMENT, null, null);
-        pp.next();
-        pp.require( pp.START_TAG, null, "foo");
         try {
             pp.next();
-            fail("expected exception for invalid PI starting with xml");
+            fail("expected exception for invalid XML declaration with standalone at wrong position");
         } catch(XmlPullParserException ex){}
+
+
+        pp.setInput( new StringReader(
+                        "<?xml  version=\"1.0\" \t encoding='UTF-8' \nstandalone='yes' ?><foo/>" ));
+        pp.require( pp.START_DOCUMENT, null, null);
+        // make sure that XMLDecl is not reported
+        pp.nextToken();
+        pp.require( pp.START_TAG, null, "foo");
+        pp.next();
+        pp.require( pp.END_TAG, null, "foo");
+        pp.next();
+        pp.require( pp.END_DOCUMENT, null, null);
 
     }
 

@@ -63,8 +63,17 @@ public class TestSimpleValidation extends UtilTestCase {
 
         xpp.setInput(new StringReader( XML_MIN_VALID ));
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        assertNull(xpp.getProperty(PROPERTY_XMLDECL_VERSION));
+        assertNull(xpp.getProperty(PROPERTY_XMLDECL_STANDALONE));
+        assertNull(xpp.getProperty(PROPERTY_XMLDECL_CONTENT));
+
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "greeting", null, false/*empty*/, 0);
+
+        //XMLDecl support is required when PROCESS DOCDECL enabled
+        assertEquals("1.0", xpp.getProperty(PROPERTY_XMLDECL_VERSION));
+        assertEquals(null, xpp.getProperty(PROPERTY_XMLDECL_STANDALONE));
+
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "Hello, world!", false, -1);
         xpp.next();
