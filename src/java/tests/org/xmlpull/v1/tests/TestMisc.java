@@ -185,39 +185,6 @@ public class TestMisc extends UtilTestCase {
 
     }
 
-    public void testPI() throws Exception {
-        XmlPullParser pp = factory.newPullParser();
-        //System.out.println(getClass()+"-pp="+pp);
-
-        pp.setInput( new StringReader( "<foo><?XmLsdsd test?></foo>" ) );
-        pp.require( pp.START_DOCUMENT, null, null);
-        pp.next();
-        pp.require( pp.START_TAG, null, "foo");
-        pp.next();
-        pp.require( pp.END_TAG, null, "foo");
-
-        pp.setInput( new StringReader( "<foo><?XmL test?></foo>" ) );
-        pp.require( pp.START_DOCUMENT, null, null);
-        pp.next();
-        pp.require( pp.START_TAG, null, "foo");
-        try {
-            pp.next();
-            fail("expected exception for invalid PI starting with xml");
-        } catch(XmlPullParserException ex){}
-
-        pp.setInput( new StringReader( "<foo><?pi test?></foo>" ) );
-        pp.require( pp.START_DOCUMENT, null, null);
-        pp.next();
-        pp.require( pp.START_TAG, null, "foo");
-        pp.nextToken();
-        pp.require( pp.PROCESSING_INSTRUCTION, null, null);
-        assertEquals("PI", "pi test", pp.getText());
-        pp.next();
-        pp.require( pp.END_TAG, null, "foo");
-
-
-    }
-
     public void testXmlDecl() throws Exception {
         XmlPullParser pp = factory.newPullParser();
 
@@ -248,18 +215,18 @@ public class TestMisc extends UtilTestCase {
         String xmlDeclVersion = (String) pp.getProperty(PROPERTY_XMLDECL_VERSION);
         if(xmlDeclVersion != null) {
             assertEquals("XMLDecl version","1.0", xmlDeclVersion);
-            PackageTests.addNote("* property "+PROPERTY_XMLDECL_VERSION+" is supported\n");
+            PackageTests.addNote("* optional property "+PROPERTY_XMLDECL_VERSION+" is supported\n");
         }
         Boolean xmlDeclStandalone = (Boolean) pp.getProperty(PROPERTY_XMLDECL_STANDALONE);
         if(xmlDeclStandalone != null) {
             assertTrue("XMLDecl standalone",xmlDeclStandalone.booleanValue());
-            PackageTests.addNote("* property "+PROPERTY_XMLDECL_STANDALONE+" is supported\n");
+            PackageTests.addNote("* optional property "+PROPERTY_XMLDECL_STANDALONE+" is supported\n");
         }
         String xmlDeclContent = (String) pp.getProperty(PROPERTY_XMLDECL_CONTENT);
         if(xmlDeclContent != null) {
             String expected = "  version=\"1.0\" \t encoding='UTF-8' \nstandalone='yes' ";
             assertEquals("XMLDecl content", printable(expected), printable(xmlDeclContent));
-            PackageTests.addNote("* property "+PROPERTY_XMLDECL_CONTENT+" is supported\n");
+            PackageTests.addNote("* optional property "+PROPERTY_XMLDECL_CONTENT+" is supported\n");
         }
 
 
@@ -313,7 +280,63 @@ public class TestMisc extends UtilTestCase {
             pp.next();
             fail("expected eception for invalid comment ending with --->");
         } catch(XmlPullParserException ex){}
+        testContentMerging(pp, "<foo><!-- this is a comment --></foo>", null);
+        testContentMerging(pp, "<foo>\n<!-- this is a comment -->\n</foo>", "\n\n");
+        testContentMerging(pp, "<foo><!-- this is a comment -->\n</foo>", "\n");
     }
+
+    public void testContentMerging(final XmlPullParser pp, final String xml, final String expected)
+        throws Exception {
+        pp.setInput( new StringReader( xml ) );
+        pp.next();
+        pp.require( pp.START_TAG, null, "foo");
+        if(expected != null) {
+            pp.next();
+            pp.require( pp.TEXT, null, null);
+            assertEquals(printable(expected), printable(pp.getText()));
+            assertEquals(expected, pp.getText());
+        }
+        pp.next();
+        pp.require( pp.END_TAG, null, "foo");
+    }
+
+
+    public void testPI() throws Exception {
+        XmlPullParser pp = factory.newPullParser();
+        //System.out.println(getClass()+"-pp="+pp);
+
+        pp.setInput( new StringReader( "<foo><?XmLsdsd test?></foo>" ) );
+        pp.require( pp.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( pp.START_TAG, null, "foo");
+        pp.next();
+        pp.require( pp.END_TAG, null, "foo");
+
+        pp.setInput( new StringReader( "<foo><?XmL test?></foo>" ) );
+        pp.require( pp.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( pp.START_TAG, null, "foo");
+        try {
+            pp.next();
+            fail("expected exception for invalid PI starting with xml");
+        } catch(XmlPullParserException ex){}
+
+        pp.setInput( new StringReader( "<foo><?pi test?></foo>" ) );
+        pp.require( pp.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( pp.START_TAG, null, "foo");
+        pp.nextToken();
+        pp.require( pp.PROCESSING_INSTRUCTION, null, null);
+        assertEquals("PI", "pi test", pp.getText());
+        pp.next();
+        pp.require( pp.END_TAG, null, "foo");
+
+        testContentMerging(pp, "<foo><? this is PI ?></foo>", null);
+        testContentMerging(pp, "<foo>\n<? this is PI ?>\n</foo>", "\n\n");
+        testContentMerging(pp, "<foo><? this is PI ?>\n</foo>", "\n");
+
+    }
+
 
     public void testReportNamespaceAttributes() throws Exception {
         XmlPullParser pp = factory.newPullParser();
@@ -322,10 +345,10 @@ public class TestMisc extends UtilTestCase {
         try {
             pp.setFeature(XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES, true);
         }catch(XmlPullParserException ex) {
-            // skip rest of test if parser does nto support reporting
+            // skip rest of test if parser does not support reporting
             return;
         }
-        PackageTests.addNote("* feature "+pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES+" is supported\n");
+        PackageTests.addNote("* optional feature "+pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES+" is supported\n");
         // see XML Namespaces spec for namespace URIs for 'xml' and 'xmlns'
         //   xml is bound to http://www.w3.org/XML/1998/namespace
         //   "(...) The prefix xmlns is used only for namespace bindings

@@ -6,6 +6,7 @@ package org.xmlpull.v1.tests;
 import junit.framework.Test;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import junit.textui.ResultPrinter;
 import junit.textui.TestRunner;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -19,19 +20,16 @@ import org.xmlpull.v1.XmlSerializer;
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
-public class PackageTests extends TestRunner
-{
+public class PackageTests extends TestRunner {
     private static boolean runAll;
 
     public static boolean runnigAllTests() { return runAll; }
 
-    public PackageTests()
-    {
+    public PackageTests() {
         super();
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         TestSuite suite = new TestSuite("XmlPull V1 API TESTS");
 
         suite.addTestSuite(TestFactory.class);
@@ -62,13 +60,22 @@ public class PackageTests extends TestRunner
         return suite;
     }
 
-    public synchronized void startTest(Test test) {
-        writer().print(".");
-        //if (fColumn++ >= 40) {
-        //      writer().println();
-        //      fColumn= 0;
+    public synchronized void tick() {
+        //if(resultPrinter != null) {
+        //    resultPrinter.startTest(null);
+        //} else {
+            System.err.print(".");
         //}
     }
+
+    //    public synchronized void startTest(Test test) {
+    //        writer()
+    //      System.err.print(".");
+    //        //if (fColumn++ >= 40) {
+    //        //      writer().println();
+    //        //      fColumn= 0;
+    //        //}
+    //    }
 
     private static StringBuffer notes = new StringBuffer();
     public static void addNote(String note) {
@@ -81,8 +88,9 @@ public class PackageTests extends TestRunner
 
 
     public void runPackageTests(String testFactoryName) {
-        writer().println("Executing XMLPULL tests"
-                             +(testFactoryName != null ? " for '"+testFactoryName+"'" : ""));
+        //writer()
+        System.err.println("Executing XmlPull API tests"
+                               +(testFactoryName != null ? " for '"+testFactoryName+"'" : ""));
         notes.setLength(0);
         XmlPullParserFactory f = null;
         try {
@@ -137,18 +145,23 @@ public class PackageTests extends TestRunner
         }
 
         if(notes.length() > 0) {
-            writer().println("Test results "
-                                 +(testFactoryName != null ? "for '"+testFactoryName+"'" : "")
-                                 +"\n"+notes+"\n");
+            //writer().
+            System.err.println("Test results "
+                                   +(testFactoryName != null ? "for '"+testFactoryName+"'" : "")
+                                   +"\n"+notes+"\n");
         }
     }
 
     public void printFinalReport() {
-        writer().println("\nAll tests were passed.");
+        //writer()
+        System.err.println("\nAll tests were passed.");
     }
 
     public static void main (String[] args) {
         final PackageTests driver = new PackageTests();
+        final ResultPrinter resultPrinter = new ResultPrinter(System.err);
+        driver.setPrinter(resultPrinter);
+
         final String listOfTests = System.getProperty("org.xmlpull.v1.tests");
         final String name = XmlPullParserFactory.PROPERTY_NAME;
         final String oldValue = System.getProperty(name);

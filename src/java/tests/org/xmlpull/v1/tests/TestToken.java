@@ -367,7 +367,7 @@ public class TestToken extends UtilTestCase {
         if(!roundtripSupported) {
             return;
         }
-        PackageTests.addNote("* feature "+FEATURE_XML_ROUNDTRIP+" is supported\n");
+        PackageTests.addNote("* optional feature "+FEATURE_XML_ROUNDTRIP+" is supported\n");
 
         StringWriter sw = new StringWriter();
         String s;

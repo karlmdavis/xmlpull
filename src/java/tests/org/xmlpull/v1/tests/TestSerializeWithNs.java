@@ -141,7 +141,7 @@ public class TestSerializeWithNs extends UtilTestCase {
 
     public void testNamespaceGeneration() throws Exception {
         XmlSerializer ser = factory.newSerializer();
-        System.out.println(getClass()+" ser="+ser);
+        //System.out.println(getClass()+" ser="+ser);
 
         StringWriter sw = new StringWriter();
         ser.setOutput(sw);
@@ -176,7 +176,7 @@ public class TestSerializeWithNs extends UtilTestCase {
 
         //xpp.setInput(new StringReader("<foo></foo>"));
         String serialized = sw.toString();
-        System.out.println(getClass()+" serialized="+serialized);
+        //System.out.println(getClass()+" serialized="+serialized);
         //xpp.setInput(new StringReader(serialized));
     }
 
@@ -369,8 +369,7 @@ public class TestSerializeWithNs extends UtilTestCase {
             // ignore test if optional property not supported
             return;
         }
-        PackageTests.addNote(
-            "* feature "+FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported\n");
+        PackageTests.addNote("* optional feature "+FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported\n");
 
         boolean useApost = ser.getFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE);
         assertEquals(true, useApost);
@@ -462,7 +461,7 @@ public class TestSerializeWithNs extends UtilTestCase {
             // ignore test if optional property not supported
             return;
         }
-        PackageTests.addNote("* property "+PROPERTY_SERIALIZER_INDENTATION+" is supported\n");
+        PackageTests.addNote("* optional property "+PROPERTY_SERIALIZER_INDENTATION+" is supported\n");
 
         StringWriter sw = new StringWriter();
         ser.setOutput(sw);
@@ -549,7 +548,7 @@ public class TestSerializeWithNs extends UtilTestCase {
             // ignore test if optional property not supported
             return;
         }
-        PackageTests.addNote("* property "+PROPERTY_SERIALIZER_LINE_SEPARATOR+" is supported\n");
+        PackageTests.addNote("* optional property "+PROPERTY_SERIALIZER_LINE_SEPARATOR+" is supported\n");
     }
 
     /** generate SOAP 1.2 envelope
