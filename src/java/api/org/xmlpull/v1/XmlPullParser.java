@@ -15,7 +15,8 @@ import java.io.Reader;
  * kinds of parser depending on which features are set:<ul>
  * <li>behaves like XML 1.0 comliant non-validating parser
  *  <em>if no DOCDECL is present</em> in XML documents when
- *   FEATURE_PROCESS_DOCDECL is false (this is <b>default</b>)
+ *   FEATURE_PROCESS_DOCDECL is false (this is <b>default parser</b>
+ *   and internal enetites can still be defiend with defineEntityReplacementText())
  * <li>non-validating parser as defined in XML 1.0 spec when
  *   FEATURE_PROCESS_DOCDECL is true
  * <li>validating parser as defined in XML 1.0 spec when
@@ -90,8 +91,16 @@ import java.io.Reader;
  * Quick Introduction available at <a href="http://www.xmlpull.org">http://www.xmlpull.org</a>
  *
  * @see XmlPullParserFactory
+ * @see #defineEntityReplacementText
+ * @see #next
+ * @see #nextToken
  * @see #FEATURE_PROCESS_DOCDECL
  * @see #FEATURE_VALIDATION
+ * @see #START_DOCUMENT
+ * @see #START_TAG
+ * @see #TEXT
+ * @see #END_TAG
+ * @see #END_DOCUMENT
  *
  * @author Stefan Haustein
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
@@ -205,7 +214,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public final static byte ENTITY_REF            = 6;
+    public final static byte ENTITY_REF = 6;
 
     /**
      * TOKEN: Ignorable whitespace was just read
@@ -519,17 +528,19 @@ public interface XmlPullParser {
 
     /**
      * Check if current TEXT event contains only whitespace characters.
-     * For IGNORABLE_WHITESPACE, this is always true. If the current event
-     * is neither a text then false is always returned.
-     * Please note that non-validating parsers are not
+     * For IGNORABLE_WHITESPACE, this is always true.
+     * For TEXT and CDSECT if the current event text contains at lease one non white space
+     * character then false is returned. For any other event type exception is thrown.
+     *
+     * <p><b>NOTE:</b>  non-validating parsers are not
      * able to distinguish whitespace and ignorable whitespace
      * except from whitespace outside the root element. ignorable
      * whitespace is reported as separate event which is exposed
      * via nextToken only.
      *
-     * <p><b>NOTE:</b> it can be only called for element content related events
-     * such as TEXT, CDSECT, IGNORABLE_WHITESPACE and ENTITY_REF otherwise
-     * exception will be thrown.
+     * <p><b>NOTE:</b> this function can be only called for element content related events
+     * such as TEXT, CDSECT or IGNORABLE_WHITESPACE otherwise
+     * exception will be thrown!
      */
 
     public boolean isWhitespace() throws XmlPullParserException;
@@ -620,6 +631,16 @@ public interface XmlPullParser {
      * Returns empty string ("") if namespaces are not enabled or attribute has no namespace.
      * Throws an IndexOutOfBoundsException if the index is out of range
      * or current event type is not START_TAG.
+     *
+     * <p><strong>NOTE:</p> if FEATURE_REPORT_NAMESPACE_ATTRIBUTES is set
+     * then namespace attributes (xmlns:ns='...') amust be reported
+     * with namespace
+     * <a href="http://www.w3.org/2000/xmlns/">http://www.w3.org/2000/xmlns/</a>
+     * (visit this URL for description!).
+     * The default namespace attribute (xmlns="...") will be reported with empty namespace.
+     * Then xml prefix is bound as defined in
+     * <a href="http://www.w3.org/TR/REC-xml-names/#ns-using">Namespaces in XML</a>
+     * specification to "http://www.w3.org/XML/1998/namespace".
      *
      * @param zero based index of attribute
      * @return attribute namespace or "" if namesapces processing is not enabled.
@@ -784,7 +805,7 @@ public interface XmlPullParser {
      *  if (type != getEventType()
      *  || (namespace != null && !namespace.equals (getNamespace ()))
      *  || (name != null && !name.equals (getName ()))
-     *     throw new XmlPullParserException ( "....");
+     *     throw new XmlPullParserException ( "expected "+ TYPES[ type ]+getPositionDesctiption());
      * </pre>
      */
     public void require (int type, String namespace, String name)
