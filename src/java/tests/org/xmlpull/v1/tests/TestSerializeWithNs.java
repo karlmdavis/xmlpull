@@ -139,9 +139,9 @@ public class TestSerializeWithNs extends UtilTestCase {
 
     }
 
-    //TODO add test for simple namespace generation
     public void testNamespaceGeneration() throws Exception {
         XmlSerializer ser = factory.newSerializer();
+        System.out.println(getClass()+" ser="+ser);
 
         StringWriter sw = new StringWriter();
         ser.setOutput(sw);
@@ -150,18 +150,34 @@ public class TestSerializeWithNs extends UtilTestCase {
 
         ser.startDocument("ISO-8859-1", Boolean.TRUE);
 
-        ser.setPrefix("soap", "http://tm");
+        ser.setPrefix("boo", "http://example.com/boo");
         ser.startTag("", "foo");
+        ser.attribute("http://example.com/boo", "attr", "val");
 
-        //TODO: check that startTag(null, ...) is not allowed
+        String booPrefix = ser.getPrefix("http://example.com/boo", false);
+        assertEquals("boo", booPrefix);
+
+        //check that new prefix may be generated after startTag and used as attribbute value
+        String newPrefix = ser.getPrefix("http://example.com/bar", true);
+        ser.attribute("http://example.com/bar", "attr", "val");
+
+        ser.startTag("http://example.com/bar", "foo");
+        ser.endTag("http://example.com/bar", "foo");
+
+        String checkPrefix = ser.getPrefix("http://example.com/bar", false);
+        assertEquals(newPrefix, checkPrefix);
 
         ser.endTag("", "foo");
+        checkPrefix = ser.getPrefix("http://example.com/bar", false);
+        assertEquals(null, checkPrefix);
+
         ser.endDocument();
 
 
         //xpp.setInput(new StringReader("<foo></foo>"));
         String serialized = sw.toString();
-        xpp.setInput(new StringReader(serialized));
+        System.out.println(getClass()+" serialized="+serialized);
+        //xpp.setInput(new StringReader(serialized));
     }
 
     public void testMisc() throws Exception {

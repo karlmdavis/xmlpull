@@ -7,21 +7,33 @@
 </HEAD>
 <BODY BGCOLOR="white">
 
-<H1>Changes to XmlPull V1 API</H1><P>
+<H1>Changes to XmlPull v1 API</H1><P>
 
-<h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2002-11-... (XMLPULL_1_2_1)</h3>
+<h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2003-03-... (XMLPULL_1_2_1)</h3>
 <ul>
 <li>this will be next official stable release (based on last of 1.1.x) to
 incorporate all changes since 1.0.x in stable version </ul>
 
 <h3>IN PROGRESS INTERIM RELEASE: </h3>
 
-<h3><a name="XMLPULL_1_1_2"></a>2002-10-16 (XMLPULL_1_1_2)</h3>
+<h3><a name="XMLPULL_1_1_3"></a>2003-03 (XMLPULL_1_1_3)</h3>
+
+<ul>
+<li>added test to check that generating namespae prefix for attributes is allowed
+(method getPrefix(uri, true) called after startTag() shoul dadd new prefix to
+current start tag elements and not next start tag)
+
+<li>added tests to check optional support for formatting XML output from XML serializer
+
 <li>added to addons SAX2 driver,
 removed AttributesCachingDriver but left documented how to achieve this functionality
 <li>added to addons XML RPC implementation
-<ul>
+</ul>
 
+
+<h3><a name="XMLPULL_1_1_2"></a>2002-10-16 (XMLPULL_1_1_2)</h3>
+
+<ul>
 <li><b>NOTE:</b> <b>potentially backward incompatible change to nextToken</b>():
 XMLDecl (&lt;?xml ... ?&gt;) will no longer be reported as PROCESSING_INSTRUCTION
 but instead content of XMLDecl is made available as set of properties
