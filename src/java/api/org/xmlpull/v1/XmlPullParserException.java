@@ -42,6 +42,7 @@ public class XmlPullParserException extends Exception {
             this.row = parser.getLineNumber();
             this.column = parser.getColumnNumber();
         }
+        this.detail = chain;
     }
 
     public Throwable getDetail() { return detail; }

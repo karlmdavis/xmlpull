@@ -639,10 +639,10 @@ public interface XmlPullParser {
      * characters.
      * For IGNORABLE_WHITESPACE, this is always true.
      * For TEXT and CDSECT, false is returned when the current event text
-     * contains at lease one non-white space character. For any other
+     * contains at least one non-white space character. For any other
      * event type an exception is thrown.
      *
-     * <p><b>Please note:</b> Non-validating parsers are not
+     * <p><b>Please note:</b> non-validating parsers are not
      * able to distinguish whitespace and ignorable whitespace,
      * except from whitespace outside the root element. Ignorable
      * whitespace is reported as separate event, which is exposed
