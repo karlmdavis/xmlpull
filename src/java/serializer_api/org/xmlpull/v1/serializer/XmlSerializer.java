@@ -135,6 +135,11 @@ public interface XmlSerializer {
     public void setPrefix (String prefix, String namespace) throws IOException;
 
     /**
+     * Return prefix that is currently bound to namespace.
+     */
+    public String getPrefix (String namespace);
+
+    /**
      * Writes a start tag with the given namespace and name.
      * If there is no prefix defined for the given namespace,
      * a prefix will be defined automatically.
