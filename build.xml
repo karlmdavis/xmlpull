@@ -10,8 +10,8 @@ All generated files are created under ${build} directory
   <!-- set global properties for this build -->
 
   <property name="name" value="XMLPULL"/>
-  <property name="year" value="2002"/>
-  <property name="version" value="1_1_2"/>
+  <property name="year" value="2003"/>
+  <property name="version" value="1_1_2_1"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
   <property name="copyright"
@@ -55,6 +55,17 @@ All generated files are created under ${build} directory
   <property name="jar"  value="${build_lib}/${xmlpull_version}.jar"/>
   <property name="tests_jar"  value="${build_lib}/xmlpull-tests_${version}.jar"/>
 
+  <!-- ADDONS -->
+  <property name="build_addons" value="${build}/addons"/>
+  <property name="build_sax2" value="${build_addons}/sax2_driver"/>
+  <property name="build_xmlrpc" value="${build_addons}/xmlrpc"/>
+  <property name="src_addons" value="addons/java"/>
+  <property name="src_sax2" value="${src_addons}/sax2_driver/src"/>
+  <property name="src_xmlrpc" value="${src_addons}/xmlrpc/src"/>
+  <property name="lib_sax2" value="${src_addons}/sax2_driver/lib"/>
+  <property name="sax2_jar"  value="${build_lib}/${xmlpull_version}-sax2.jar"/>
+  <property name="xmlrpc_jar"  value="${build_lib}/${xmlpull_version}-xmlrpc.jar"/>
+
   <property name="website"      value="../xmlpull-website/v1"/>
 
   <patternset id="all_source_files">
@@ -68,6 +79,7 @@ All generated files are created under ${build} directory
   <!-- Preparing build environment                                         -->
   <!-- =================================================================== -->
   <target name="clean">
+    <delete dir="${build_addons}"/>
     <delete dir="${build_classes}"/>
     <delete dir="${build_lib}"/>
     <delete dir="${build_tests}"/>
@@ -130,6 +142,40 @@ All generated files are created under ${build} directory
   <target name="compile" depends="xmlpull,tests,samples"/>
 
   <target name="all" depends="clean,compile"/>
+
+  <!-- =================================================================== -->
+  <!-- ADDONS                                                              -->
+  <!-- =================================================================== -->
+
+
+  <target name="sax2" depends="api">
+    <mkdir dir="${build_sax2}"/>
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_sax2}" destdir="${build_sax2}">
+       <classpath>
+        <pathelement location="${build_classes}" />
+        <fileset dir="${lib_sax2}">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>    
+    <mkdir dir="${build_lib}"/>
+    <jar jarfile="${sax2_jar}">
+      <fileset dir="${build_sax2}"/>
+    </jar>       
+  </target>
+
+  <target name="xmlrpc" depends="api">
+    <mkdir dir="${build_xmlrpc}"/>
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_xmlrpc}" destdir="${build_xmlrpc}" classpath="${build_classes}"/>
+    <mkdir dir="${build_lib}"/>
+    <jar jarfile="${xmlrpc_jar}">
+      <fileset dir="${build_xmlrpc}"/>
+    </jar>       
+  </target>
+      
+  <target name="addons" depends="prepare,sax2,xmlrpc"/>
 
   <!-- =================================================================== -->
   <!-- JUnit automatic tests                                               -->
