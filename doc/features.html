@@ -150,8 +150,9 @@ from nextToken().</p>
 http://xmlpull.org/v1/doc/features.html#xml-roundtrip</a> </p>
 <p>If set to true then XMLPULL parser <b>MUST</b> make available original XML 
 value for START_TAG and END_TAG events with getText() and getTextCharacters() 
-functions and implicitly&nbsp; <a href="#unnormalized-xml">UNNORMALIZED XML</a> 
-feature is set to true.<br>
+functions, also parse MUST return exact content of DOCTYPE for DOCDECL token and 
+exact PI content for PROCESSING_INSTRUCTION token and implicitly&nbsp; <a href="#unnormalized-xml">UNNORMALIZED XML</a> 
+feature is set to true and <b>MUST</b> be reported as true.<br>
 &nbsp;</p>
 
 <h3>

@@ -16,14 +16,12 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlPullParserException;
 
 /**
- * Simple test ot verify pull parser factory
+ * Conformance test to verify nextToken() behavior.
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestToken extends UtilTestCase {
     private XmlPullParserFactory factory;
-    private static final String FEATURE_XML_ROUNDTRIP=
-        "http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
 
     public TestToken(String name) {
         super(name);
@@ -118,6 +116,7 @@ public class TestToken extends UtilTestCase {
         }
         // did we succeeded?
         boolean roundtripSupported = xpp.getFeature(FEATURE_XML_ROUNDTRIP);
+        boolean unnormalizedSupported = xpp.getFeature(FEATURE_UNNORMALIZED_XML);
 
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
         try {
@@ -127,11 +126,14 @@ public class TestToken extends UtilTestCase {
         }
 
 	if(checkPrologAndEpilog) {
-	    if(roundtripSupported) {
-		xpp.nextToken();
-		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
-				   "\n \r\n \n\r", false, -1);
-		assertTrue(xpp.isWhitespace());
+	    if(unnormalizedSupported) {
+		//		xpp.nextToken();
+		//		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
+		//				   "\n \r\n \n\r", false, -1);
+		//		assertTrue(xpp.isWhitespace());
+		String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+		assertEquals(printable("\n \r\n \n\r"), printable(text));
+		assertEquals("\n \r\n \n\r", text);
 	    }
 
 	    xpp.nextToken();
@@ -142,16 +144,20 @@ public class TestToken extends UtilTestCase {
 	    } catch(XmlPullParserException ex) {
 	    }
 
-	    if(roundtripSupported) {
+	    if(unnormalizedSupported) {
+		//		xpp.nextToken();
+		//		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null, "  \r\n", false, -1);
+		//		assertTrue(xpp.isWhitespace());
+		String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+		assertEquals(printable("  \r\n"), printable(text));
+	    } else {
 		xpp.nextToken();
-		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null, "  \r\n", false, -1);
-		assertTrue(xpp.isWhitespace());
 	    }
 
 
+	} else {
+	    xpp.nextToken();
 	}
-
-	xpp.nextToken();
 	checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null,
 			       (roundtripSupported  ? " titlepage "+
 				    //"SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
@@ -177,11 +183,12 @@ public class TestToken extends UtilTestCase {
         } catch(XmlPullParserException ex) {
         }
 
-        xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "bar", false, -1);
-        assertEquals(false, xpp.isWhitespace());
+	{
+	    String text = nextTokenGathered(xpp, xpp.TEXT, false);
+	    assertEquals(printable("bar"), printable(text));
+	}
 
-        xpp.nextToken();
+        //xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "comment", false, -1);
         try {
 	    xpp.isWhitespace();
@@ -274,15 +281,19 @@ public class TestToken extends UtilTestCase {
         }
 
 	if(checkPrologAndEpilog) {
-	    if(roundtripSupported) {
+	    if(unnormalizedSupported) {
+		//		xpp.nextToken();
+		//		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
+		//				   " \r\n", false, -1);
+		//		assertTrue(xpp.isWhitespace());
+		String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+		assertEquals(printable("\r\n "), printable(text));
+	    } else {
 		xpp.nextToken();
-		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
-				   " \r\n", false, -1);
-		assertTrue(xpp.isWhitespace());
 	    }
+	} else {
+	    xpp.nextToken();
 	}
-
-	xpp.nextToken();
 	checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 	try {
 	    xpp.isWhitespace();

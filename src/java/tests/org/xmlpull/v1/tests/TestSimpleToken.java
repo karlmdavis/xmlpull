@@ -21,8 +21,7 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class TestSimpleToken extends UtilTestCase {
     private XmlPullParserFactory factory;
-    private static final String FEATURE_XML_ROUNDTRIP=
-        "http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
+
 
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestSimpleToken.class));
@@ -110,5 +109,28 @@ public class TestSimpleToken extends UtilTestCase {
         }
     }
 
+
+    public void testNormalization() throws Exception {
+        XmlPullParser xpp = factory.newPullParser();
+        assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+	xpp.setInput(new StringReader("<foo>\n \r\n \n\r</foo>"));
+	checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+	xpp.nextToken();
+	checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false/*empty*/, 0);
+
+	boolean normalized = xpp.getFeature(FEATURE_UNNORMALIZED_XML) == false;
+	String text = nextTokenGathered(xpp, XmlPullParser.TEXT, true);
+	if(normalized) {
+	    assertEquals(printable("\n \n \n\n"), printable(text));
+	    assertEquals("\n \n \n\n", text);
+	} else {
+	    assertEquals(printable("\n \r\n \n\r"), printable(text));
+	    assertEquals("\n \r\n \n\r", text);
+	}
+
+	checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+	xpp.nextToken();
+	checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+    }
 }
 
