@@ -257,7 +257,11 @@ public class XmlPullParserFactory {
     public static XmlPullParserFactory newInstance (String classNames, Class context)
         throws XmlPullParserException {
 
-        if (context == null) context = "".getClass ();
+        if (context == null) {
+            //make sure context uses the smae class loader as API classes
+            XmlPullParserFactory f = new XmlPullParserFactory();
+            context = f.getClass ();
+        }
 
         String  classNamesLocation = null;
 
