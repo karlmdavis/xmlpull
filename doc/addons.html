@@ -14,7 +14,61 @@
 
 </p><p>
 All addons can be compiled by build target <code>addons</code> (use: <code>ant addons</code>)
+<p>&nbsp;</p>
 
+<a name="util"><h2>Util class</h2>
+</a>
+
+<p>This class provides set of static utility methods for XmlPull parser and 
+serializer.
+</p>
+
+<p>Here is example usage:</p>
+<pre>import org.xmlpull.v1.util.XmlPullUtil;
+
+XmlPullParser parser = ...
+parser.require(XmlPullParser.START_TAG, ..., ...);
+XmlPullUtil.skipSubTree(pp);
+</pre>
+
+<p>It can be compiled by build target <code>util</code>
+
+</p><p>Source code is available in <code>addons/java/util</code>.
+
+</p><p>
+TODO: add link to JavaDoc</p>
+
+
+
+
+
+<a name="wrapper"><h2>Wrapper: Parser and Serializer Extended Interfaces</h2>
+</a>
+
+<p>This package provides extended XmlPullParser and XmlSerializer interfaces 
+called XmlPullParserWrapper and XmlSerializerWrapper that has additional
+methods that make it more convenient and more concise to write parsing and serialzing
+code by providing seemlesly integrated additional methods.
+</p>
+
+<p>Wrappers can be uesd exactly the same as XmlPullParser and XmlSerialzier as those
+interface <b>extend</b> them.
+
+<p>Here is example usage:</p>
+<pre>import org.xmlpull.v1.wrapper.*;
+
+XmlPullWrapperFactory wrapper = XmlPullWrapperFactory.newInstance();
+XmlPullParserWrapper pw = wrapper.newPullWrapper();
+pw.require(XmlPullParser.START_TAG, ..., ...);
+pw.skipSubTree();
+</pre>
+
+<p>It can be compiled by build target <code>wrapper</code>
+
+</p><p>Source code is available in <code>addons/java/wrapper</code>.
+
+</p><p>
+TODO: add link to JavaDoc</p>
 
 
 <a name="dom2_builder">
@@ -179,7 +233,7 @@ public class AttributesCachingDriver extends Driver
 
 </p><hr>
 <font size="-1">
-Last modified $Id: addons.html,v 1.3 2003/04/23 13:36:06 aslom Exp $
+Last modified $Id: addons.html,v 1.4 2003/05/03 06:24:40 aslom Exp $
 </font>
 
 <!--extra space at bottom for hyperlinks #anchors to work -->
