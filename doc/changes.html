@@ -12,14 +12,21 @@
 <h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2002-08 (XMLPULL_1_2_1)</h3>
 <ul>
 <li>this will be next official stable release (based on last of 1.1.x) to 
-incorporate all changes especially XmlSerializer</ul>
+incorporate all changes since 1.0.x in stable version </ul>
 
-<h3>IN PROGRESS INTERIM RELEASE: <a name="XMLPULL_1_1_1"></a>2002-08-07 
-(XMLPULL_1_1_1)</h3>
+<h3>IN PROGRESS INTERIM RELEASE: </h3>
+
+<h3><a name="XMLPULL_1_1_2"></a>2002-09 (XMLPULL_1_1_2)</h3>
 <ul>
-<li><strong>NEW! XmlSerializer API</strong> that is now required part of
-XMLPULL API on J2SE (on J2ME typically factory is not used and only implementation of
-serializer or parser interface may be available).
+<li>&nbsp;</ul>
+
+<h3>&nbsp;</h3>
+
+<h3><a name="XMLPULL_1_1_1"></a>2002-08-27 (XMLPULL_1_1_1)</h3>
+<ul>
+<li><strong>NEW! XmlSerializer API</strong> that is now required part of XMLPULL 
+API on J2SE (on J2ME typically factory is not used and only implementation of 
+serializer or parser may be available).
 
 <li><b>NOTE:</b> <b>potentially backward incompatible change to nextToken</b>(): 
 content returned by getText()/getTextCharacters() is end-of-line normalized and 
@@ -37,7 +44,9 @@ Information Item properties</a> which only contain comments and processing
 instructions but not white space content (so now reporting IGNORABLE_WHITESPACE 
 event outside is optional).&nbsp; 
 
-<li>added clarification to nextToken() that there is no requirement for reported 
+<li>added optional features&nbsp; EXPAND ENTITY REF and SERIALIZER ATTVALUE USE 
+APOSTROPHE<li>added optional properties related to indenting serializer output 
+(pretty printing): SERIALIZER INDENTATION,&nbsp; SERIALIZER LINE SEPARATOR<li>added clarification to nextToken() that there is no requirement for reported 
 token events to be coalesced (for example nextToken() may report multiple 
 consecutive TEXT or IGNORABLE_WHITESPACE events). This is different from next() 
 that always report exactly one TEXT event<li>conformance tests can be now described in XML allowing to keep tests in 
