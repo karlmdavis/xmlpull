@@ -257,6 +257,8 @@ public class XmlPullParserFactory {
                 }
                 else throw new XmlPullParserException ("incompatible class: "+name);
             }
+
+            pos = cut + 1;
         }                        
         
         if (factory == null) factory = new XmlPullParserFactory ();
