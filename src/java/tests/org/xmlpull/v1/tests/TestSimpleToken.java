@@ -72,14 +72,20 @@ public class TestSimpleToken extends UtilTestCase {
         // one step further - it has content ...
 
 
-        xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<!--comment--><?pi ds> "+
-                                          "<![CDATA[ do ]]></foo>"));
-//        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
-//        xpp.nextToken();
-//        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 1);
-//        checkAttribNs(xpp, 0, null, "", "attrName", "attrVal");
-//        xpp.next();
-//        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "bar", false, -1);
+        xpp.setInput(new StringReader("<!--c-->  \r\n<foo attrName='attrVal'>bar<!--comment-->"+
+                                          <?pi ds><![CDATA[ do ]]></foo>"));
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.COMMENT, null, 0, null, null, "<!--c-->", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null, "  \r\n", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 1);
+        checkAttribNs(xpp, 0, null, "", "attrName", "attrVal");
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "bar", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "<!--comment-->", false, -1);
 //        xpp.next();
 //        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
 //        xpp.next();

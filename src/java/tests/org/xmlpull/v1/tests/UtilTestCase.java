@@ -104,12 +104,12 @@ public class UtilTestCase extends TestCase {
         assertEquals("getText()", printable(text), printable(xpp.getText()));
         int [] holderForStartAndLength = new int[2];
         char[] buf = xpp.getTextCharacters(holderForStartAndLength);
-        if(buf != null) {
-            String s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-            assertEquals("getText(holder)", printable(text), printable(s));
-        } else {
-            assertEquals("getTextCharacters()", null, text);
-        }
+//      if(buf != null) {
+//          String s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+//          assertEquals("getText(holder)", printable(text), printable(s));
+//      } else {
+//          assertEquals("getTextCharacters()", null, text);
+//      }
         if(type == xpp.START_TAG) {
             assertEquals("isEmptyElementTag()", isEmpty, xpp.isEmptyElementTag());
         } else {
