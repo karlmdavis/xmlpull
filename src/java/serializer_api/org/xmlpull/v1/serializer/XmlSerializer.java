@@ -40,30 +40,30 @@ public interface XmlSerializer {
     public boolean getFeature(String name);
 
 
-    void setOutput (OutputStream os, String encoding);
+    public void setOutput (OutputStream os, String encoding);
 
     /** sets the output to the given writer;
         insert big warning here */
 
-    void setOutput (Writer writer);
+    public void setOutput (Writer writer);
 
     /** binds the given prefix to the given namespace.
         valid for the next element including child elements */
 
-    void setPrefix (String prefix, String namespace);
+    public void setPrefix (String prefix, String namespace);
 
     /** writes a start tag with the given namespace and name.
         if the indent flag is set, a \r\n and getDepth () spaces
         are written. If there is no prefix defined for the given namespace,
         a prefix will be defined automatically. */
 
-    void startTag (String namespace, String name) throws IOException;
+    public void startTag (String namespace, String name) throws IOException;
 
     /** writes an attribute. calls to attribute must follow a call to
         startTag() immediately. if there is no prefix defined for the
         given namespace, a prefix will be defined automatically. */
 
-    void attribute (String namespace, String name,
+    public void attribute (String namespace, String name,
                     String value) throws IOException;
 
 
@@ -72,13 +72,13 @@ public interface XmlSerializer {
     // background: in kXML I just had endTag, and non matching tags were
     // very difficult to find...
 
-    void endTag (String namespace, String name) throws IOException;
+    public void endTag (String namespace, String name) throws IOException;
 
     /** Writes text, where special XML chars are escaped automatically */
 
-    void text (String text) throws IOException;
+    public void text (String text) throws IOException;
 
-    void text (char [] buf, int start, int len) throws IOException;
+    public void text (char [] buf, int start, int len) throws IOException;
 
     /** Find a better name for this.... writes a "legacy event": Any
         of CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,
@@ -87,20 +87,19 @@ public interface XmlSerializer {
         here, which may be ignored, and which events cause an
         exception???? XXX) */
 
-    void cdsect (String text)  throws IOException;
-    void entityRef (String text)  throws IOException;
-    void processingInstruction (String text)  throws IOException;
-    void comment (String text)  throws IOException;
-    void docdecl (String text)  throws IOException;
-    void ignorableWhitespace (String text)  throws IOException;
-    //void legacy (int type, char [] text, int start, int len) throws IOException;
+    public void cdsect (String text)  throws IOException;
+    public void entityRef (String text)  throws IOException;
+    public void processingInstruction (String text)  throws IOException;
+    public void comment (String text)  throws IOException;
+    public void docdecl (String text)  throws IOException;
+    public void ignorableWhitespace (String text)  throws IOException;
 
     /**
      * writes all pending output to the stream,
      * if  startTag() or attribute() was caled then start tag is closed
      * no more attributes an be added by calling attribute()
      */
-    void flush () throws IOException;
+    public void flush () throws IOException;
 
 
 }
