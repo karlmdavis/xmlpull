@@ -61,7 +61,7 @@ public class TestXmlPullWrapper extends TestCase {
 
         String s = sw.toString();
         System.out.println(getClass()+" s="+s);
-        XmlPullParserWrapper pw = wrapperFactory.newPullWrapper();
+        XmlPullParserWrapper pw = wrapperFactory.newPullParserWrapper();
         pw.setInput(new StringReader(s));
         pw.nextStartTag("test");
         assertEquals(pw.getAttributeValue("fooAttr"), "fooValue");
@@ -96,7 +96,7 @@ public class TestXmlPullWrapper extends TestCase {
             "<tag><?"+PI+"?></tag>";
         final String PI_NORMALIZED = normalized(PI);
 
-        XmlPullParserWrapper pw = wrappedFactory.newPullWrapper();
+        XmlPullParserWrapper pw = wrappedFactory.newPullParserWrapper();
         pw.setInput(new StringReader(XML_TEST_PI));
 
         assertEquals(XmlPullParser.START_TAG, pw.next());

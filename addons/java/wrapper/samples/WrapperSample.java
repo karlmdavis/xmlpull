@@ -18,7 +18,7 @@ public class WrapperSample {
     public static void main(String[] args) throws Exception
     {
         StringReader sr = new StringReader("<hello>world!</hello>");
-        XmlPullParserWrapper pw = XmlPullWrapperFactory.newInstance().newPullWrapper();
+        XmlPullParserWrapper pw = XmlPullWrapperFactory.newInstance().newPullParserWrapper();
         pw.setInput(sr);
         pw.nextTag();
         pw.require(XmlPullParser.START_TAG, null, "hello");
