@@ -39,32 +39,32 @@ public class XmlPullCount
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
             System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null);
         factory.setNamespaceAware(true);
-        System.out.println("using factory "+factory.getClass());
+        System.err.println("using factory "+factory.getClass());
 
         XmlPullParser xpp = factory.newPullParser();
-        System.out.println("using parser "+xpp.getClass());
+        System.err.println("using parser "+xpp.getClass());
 
         XmlPullCount app = new XmlPullCount();
 
         for(int c = 0; c < 2; ++c) {
-            System.out.println("run#"+c);
+            System.err.println("run#"+c);
             app.resetCounters();
             if(args.length == 0) {
-                System.out.println("Parsing simple sample XML length="+SAMPLE_XML.length());
+                System.err.println("Parsing simple sample XML length="+SAMPLE_XML.length());
                 xpp.setInput( new StringReader( SAMPLE_XML ) );
                 app.countXml(xpp);
             } else {
                 //r (int i = 0; i < args.length; i++) {
 
                 File f = new File(args[0]);
-                System.out.println("Parsing file: "+args[0]+" length="+f.length());
+                System.err.println("Parsing file: "+args[0]+" length="+f.length());
                 xpp.setInput ( new FileReader ( args [0] ) );
                 app.countXml(xpp);
                 //
             }
             app.printReport();
         }
-        System.out.println("finished");
+        System.err.println("finished");
     }
 
     public void resetCounters() {
@@ -72,7 +72,7 @@ public class XmlPullCount
     }
 
     public void printReport() {
-        System.out.println("characters="+countChars
+        System.err.println("characters="+countChars
                                +" elements="+countSTags
                                +" attributes="+countAttribs);
 
@@ -82,13 +82,11 @@ public class XmlPullCount
 
         int holderForStartAndLength[] = new int[2];
 
-
-        int eventType = xpp.getEventType();
-        if(eventType == XmlPullParser.START_DOCUMENT) {
-            eventType = xpp.next();
-        }
+        xpp.require(XmlPullParser.START_DOCUMENT, null, null);
+        int eventType = xpp.next();
+        xpp.require(XmlPullParser.START_TAG, null, null);
         while (eventType != XmlPullParser.END_DOCUMENT) {
-            //System.out.println("pos="+xpp.getPositionDescription());
+            //System.err.println("pos="+xpp.getPositionDescription());
             if(eventType == XmlPullParser.START_TAG) {
                 ++countSTags;
                 countAttribs += xpp.getAttributeCount();

@@ -113,7 +113,7 @@ public class TestSetInput extends UtilTestCase {
             "http://xmlpull.org/v1/doc/features.html#detect-encoding";
         if(xpp.getFeature(FEATURE_DETECT_ENCODING)) {
 
-            PackageTests.addNote("* optional feature "+FEATURE_DETECT_ENCODING+" is supported\n");
+            PackageTests.addNote("* optional feature  "+FEATURE_DETECT_ENCODING+" is supported\n");
 
             isw = new InputStreamWrapper(
                 new ByteArrayInputStream( binput ));

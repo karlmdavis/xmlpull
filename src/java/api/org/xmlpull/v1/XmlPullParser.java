@@ -498,6 +498,8 @@ public interface XmlPullParser {
      * (http://xmlpull.org/v1/doc/features.html#detect-encoding),
      * it must return the detected encoding.
      * If setInput(Reader) was called, null is returned.
+     * After first call to next if XML declaration was present this method
+     * will return encoding declared.
      */
     public String getInputEncoding();
 

@@ -348,7 +348,7 @@ public class TestMisc extends UtilTestCase {
             // skip rest of test if parser does not support reporting
             return;
         }
-        PackageTests.addNote("* optional feature "+pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES+" is supported\n");
+        PackageTests.addNote("* optional feature  "+pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES+" is supported\n");
         // see XML Namespaces spec for namespace URIs for 'xml' and 'xmlns'
         //   xml is bound to http://www.w3.org/XML/1998/namespace
         //   "(...) The prefix xmlns is used only for namespace bindings

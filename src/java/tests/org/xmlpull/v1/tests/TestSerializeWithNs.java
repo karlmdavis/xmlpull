@@ -369,7 +369,7 @@ public class TestSerializeWithNs extends UtilTestCase {
             // ignore test if optional property not supported
             return;
         }
-        PackageTests.addNote("* optional feature "+FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported\n");
+        PackageTests.addNote("* optional feature  "+FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported\n");
 
         boolean useApost = ser.getFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE);
         assertEquals(true, useApost);
