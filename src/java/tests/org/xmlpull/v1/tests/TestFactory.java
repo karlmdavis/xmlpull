@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE_TESTS.txt in distribution for copyright and license information
+// for license see accompanying LICENSE_TESTS.txt file (available also at http://www.xmlpull.org)
 
 package org.xmlpull.v1.tests;
 
@@ -24,6 +24,7 @@ public class TestFactory extends UtilTestCase {
         XmlPullParserFactory factory = factoryNewInstance();
         //System.out.println("factory = "+factory);
         XmlPullParser xpp = factory.newPullParser();
+        PackageTests.addNote("* default parser "+xpp.getClass()+"\n");
         assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         xpp = factory.newPullParser();
@@ -43,6 +44,8 @@ public class TestFactory extends UtilTestCase {
         assertEquals(true, factory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         xpp = factory.newPullParser();
         assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        PackageTests.addNote("* namespace enabled parser "+xpp.getClass()+"\n");
+
     }
 
     public static void main (String[] args) {

@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE_TESTS.txt in distribution for copyright and license information
+// for license see accompanying LICENSE_TESTS.txt file (available also at http://www.xmlpull.org)
 
 package org.xmlpull.v1.tests;
 
@@ -22,7 +22,8 @@ import org.xmlpull.v1.XmlPullParserException;
 public class TestSimpleToken extends UtilTestCase {
     private XmlPullParserFactory factory;
 
-    private static final String FEATURE_XML_ROUNDTRIP="http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
+    private static final String FEATURE_XML_ROUNDTRIP=
+        "http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
     private static final String MISC_XML =
         "\n \r\n \n\r<!DOCTYPE titlepage SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
         "[<!ENTITY % active.links \"INCLUDE\">"+
@@ -45,6 +46,7 @@ public class TestSimpleToken extends UtilTestCase {
 
     protected void tearDown() {
     }
+
 
     public void testSimpleToken() throws Exception {
         XmlPullParser xpp = factory.newPullParser();
@@ -112,6 +114,32 @@ public class TestSimpleToken extends UtilTestCase {
             xpp.nextToken();
             checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
         }
+    }
+
+    public void testTokenEventEquivalency() throws Exception {
+        XmlPullParser xpp = factory.newPullParser();
+        assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        xpp.setInput(new StringReader(MISC_XML));
+        boolean processDocdecl = xpp.getFeature(xpp.FEATURE_PROCESS_DOCDECL);
+
+        // make sure entity "test" can be resolved even when parser is not parsing DOCDECL
+        if(!processDocdecl) {
+            xpp.defineEntityReplacementText("test", "This is test! Do NOT Panic!");
+        }
+
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 1);
+        checkAttribNs(xpp, 0, null, "", "attrName", "attrVal");
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null,
+                           "barThis is test! Do NOT Panic!This is test! Do NOT Panic!< &>'\"  vo<o ",
+                           false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+
     }
 
     // one step further - it has content ...
@@ -187,13 +215,23 @@ public class TestSimpleToken extends UtilTestCase {
         } catch(XmlPullParserException ex) {
         }
 
+        boolean processDocdecl = xpp.getFeature(xpp.FEATURE_PROCESS_DOCDECL);
+
         // uresolved entity must be reurned as null by nextToken()
         xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
-                           "test", null, false, -1);
+        if(!processDocdecl) {
+            checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
+                               "test", null, false, -1);
+        } else {
+            checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
+                               "test", "This is test! Do NOT Panic!", false, -1);
+
+        }
 
         // now we check if we can resolve entity
-        xpp.defineEntityReplacementText("test", "This is test! Do NOT Panic!");
+        if(!processDocdecl) {
+            xpp.defineEntityReplacementText("test", "This is test! Do NOT Panic!");
+        }
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
                            "test", "This is test! Do NOT Panic!", false, -1);
@@ -289,7 +327,10 @@ public class TestSimpleToken extends UtilTestCase {
         // did we succeeded?
         boolean roundtripSupported = xpp.getFeature(FEATURE_XML_ROUNDTRIP);
 
-        if(!roundtripSupported) return;
+        if(!roundtripSupported) {
+            return;
+        }
+        PackageTests.addNote("* optional feature "+FEATURE_XML_ROUNDTRIP+" is supported\n");
 
         StringWriter sw = new StringWriter();
         String s;
@@ -299,9 +340,6 @@ public class TestSimpleToken extends UtilTestCase {
         char[] buf;
         while(xpp.nextToken() != xpp.END_DOCUMENT) {
             switch(xpp.getEventType()) {
-                //case xpp.START_DOCUMENT:
-                //case xpp.END_DOCUMENT:
-                //  break LOOP;
                 case XmlPullParser.START_TAG:
                     buf = xpp.getTextCharacters(holderForStartAndLength);
                     s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);

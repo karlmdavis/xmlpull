@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE_TESTS.txt in distribution for copyright and license information
+// for license see accompanying LICENSE_TESTS.txt file (available also at http://www.xmlpull.org)
 
 package org.xmlpull.v1.tests;
 
@@ -40,9 +40,15 @@ public class PackageTests extends TestCase
         return suite;
     }
 
+    private static StringBuffer notes = new StringBuffer();
+    public static void addNote(String note) {
+        notes.append(note);
+    }
+
     public static void main (String[] args) {
         try {
-            UtilTestCase.factoryNewInstance();
+            Object o = UtilTestCase.factoryNewInstance();
+            addNote("* factory "+o.getClass()+"\n");
         } catch (Exception ex) {
             System.err.println(
                 "ERROR: tests aborted - could not create instance of XmlPullParserFactory:");
@@ -50,6 +56,9 @@ public class PackageTests extends TestCase
             System.exit(1);
         }
         junit.textui.TestRunner.run (suite());
+        if(notes.length() > 0) {
+          System.out.println("Notes:\n"+notes);
+        }
         System.exit(0);
     }
 

@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE_TESTS.txt in distribution for copyright and license information
+// for license see accompanying LICENSE_TESTS.txt file (available also at http://www.xmlpull.org)
 
 package org.xmlpull.v1.tests;
 
@@ -159,7 +159,7 @@ public class TestAttributes extends UtilTestCase {
 
         ex = null;
         try {
-            parseOneElement(pp, duplicateAttribs, true);
+            parseOneElement(pp, duplicateAttribs, false);
         } catch(XmlPullParserException rex) {
             ex = rex;
         }
@@ -167,7 +167,7 @@ public class TestAttributes extends UtilTestCase {
 
         ex = null;
         try {
-            parseOneElement(pp, duplicateAttribs, false);
+            parseOneElement(pp, duplicateAttribs, true);
         } catch(XmlPullParserException rex) {
             ex = rex;
         }
@@ -197,17 +197,27 @@ public class TestAttributes extends UtilTestCase {
         }
         assertNotNull(ex);
 
-        final String declaringEmptyNs  =
+        final String declaringDefaultEmptyNs  =
+            "<m:test xmlns='' xmlns:m='uri'/>";
+
+        // allowed when namespaces disabled
+        parseOneElement(pp, declaringDefaultEmptyNs, false);
+
+        // allowed to redeclare defaut anemspace to empty string, see:
+        //   http://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-decl
+        parseOneElement(pp, declaringDefaultEmptyNs, true);
+
+        final String declaringPrefixedEmptyNs  =
             "<m:test xmlns:m='' />";
 
         // allowed when namespaces disabled
-        parseOneElement(pp, declaringEmptyNs, false);
+        parseOneElement(pp, declaringPrefixedEmptyNs, false);
 
         // otherwise it is error to declare '' for non-default NS as described in
         //   http://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-decl
         ex = null;
         try {
-            parseOneElement(pp, declaringEmptyNs, true);
+            parseOneElement(pp, declaringPrefixedEmptyNs, true);
         } catch(XmlPullParserException rex) {
             ex = rex;
         }

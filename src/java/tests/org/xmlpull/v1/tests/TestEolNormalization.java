@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE_TESTS.txt in distribution for copyright and license information
+// for license see accompanying LICENSE_TESTS.txt file (available also at http://www.xmlpull.org)
 
 package org.xmlpull.v1.tests;
 
@@ -127,6 +127,7 @@ public class TestEolNormalization extends UtilTestCase {
 
         parseOneElement(pp, manyTag, true);
         assertEquals(XmlPullParser.TEXT, pp.next());
+        assertEquals(printable(manyExpected), printable(pp.getText()));
         assertEquals(manyExpected, pp.getText());
 
         assertEquals(pp.next(), XmlPullParser.END_TAG);

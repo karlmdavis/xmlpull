@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE_TESTS.txt in distribution for copyright and license information
+// for license see accompanying LICENSE_TESTS.txt file (available also at http://www.xmlpull.org)
 
 package org.xmlpull.v1.tests;
 
@@ -88,6 +88,7 @@ public class TestMisc extends UtilTestCase {
             // skip rest of test if parser does nto support reporting
             return;
         }
+        PackageTests.addNote("* feature "+pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES+" is supported\n");
         // see XML Namespaces spec for namespace URIs for 'xml' and 'xmlns'
         //   xml is bound to http://www.w3.org/XML/1998/namespace
         //   "(...) The prefix xmlns is used only for namespace bindings

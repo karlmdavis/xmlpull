@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE_TESTS.txt in distribution for copyright and license information
+// for license see accompanying LICENSE_TESTS.txt file (available also at http://www.xmlpull.org)
 
 package org.xmlpull.v1.tests;
 
@@ -73,6 +73,7 @@ public class TestEntityReplacement extends UtilTestCase {
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
             pp.setFeature( pp.FEATURE_PROCESS_DOCDECL, true );
+            PackageTests.addNote("* feature "+pp.FEATURE_PROCESS_DOCDECL+" is supported\n");
         } catch( Exception ex ){
         }
         if( pp.getFeature( pp.FEATURE_PROCESS_DOCDECL ) ) {
@@ -83,6 +84,7 @@ public class TestEntityReplacement extends UtilTestCase {
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
             pp.setFeature( pp.FEATURE_VALIDATION, true );
+            PackageTests.addNote("* feature "+pp.FEATURE_VALIDATION+" is supported\n");
         } catch( Exception ex ){
         }
         if( pp.getFeature( pp.FEATURE_VALIDATION ) ) {
