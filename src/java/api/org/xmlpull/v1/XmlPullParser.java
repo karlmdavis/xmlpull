@@ -273,6 +273,9 @@ public interface XmlPullParser {
      * to switch on namespace processing. Default settings correspond
      * to properties requested from the XML Pull Parser factory
      * (if none were requested then all feautures are by default false).
+     *
+     * @exception XmlPullParserException if feature is not supported or can not be set
+     * @exception IllegalArgumentException if feature string is null
      */
     public void setFeature(String name,
                            boolean state) throws XmlPullParserException;
@@ -283,6 +286,7 @@ public interface XmlPullParser {
      *
      * @param name The name of feature to be retrieved.
      * @return The value of named feature.
+     * @exception IllegalArgumentException if feature string is null
      */
 
     public boolean getFeature(String name);
@@ -299,7 +303,7 @@ public interface XmlPullParser {
      * Look up the value of a property.
      *
      * The property name is any fully-qualified URI. I
-     * <p><strong>NOTE:</strong> unknown features are <string>always</strong> returned as false
+     * <p><strong>NOTE:</strong> unknown features are <string>always</strong> returned as null
      *
      * @param name The name of property to be retrieved.
      * @return The value of named property.
@@ -334,7 +338,7 @@ public interface XmlPullParser {
      * @see #getNamespace()
      * @see #getNamespace(String)
      */
-    public int getNamespacesCount(int depth) throws XmlPullParserException;
+    public int getNamespaceCount(int depth) throws XmlPullParserException;
 
     /**
      * Return namespace prefixes for position pos in namespace stack
@@ -527,7 +531,7 @@ public interface XmlPullParser {
      * @see #getAttributePrefix
      * @see #getAttributeValue
      */
-    public int getAttributesCount();
+    public int getAttributeCount();
 
     /**
      * Returns the namespace URI of the specified attribute

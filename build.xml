@@ -8,10 +8,10 @@ All generated files are created under ${build} directory
 <project name="XMLPULL_V1" default="compile" basedir=".">
 
   <!-- set global properties for this build -->
-  
+
   <property name="name" value="XMLPULL"/>
   <property name="year" value="2002"/>
-  <property name="version" value="1_0_4"/>
+  <property name="version" value="1_0_5"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
   <property name="copyright"
@@ -19,7 +19,7 @@ All generated files are created under ${build} directory
 
   <property name="debug" value="on"/>
   <property name="deprecation" value="off"/>
-  
+
   <property name="doc" value="doc"/>
 
   <property name="src" value="src/java"/>
@@ -27,7 +27,7 @@ All generated files are created under ${build} directory
   <property name="src_api" value="${src}/api"/>
   <property name="src_tests" value="${src}/tests"/>
   <property name="src_samples" value="${src}/samples"/>
-  
+
   <property name="build" value="build"/>
   <property name="build_dist" value="${build}/dist"/>
   <property name="build_lib" value="${build}/lib"/>
@@ -231,7 +231,7 @@ All generated files are created under ${build} directory
         <exclude name="**/*_protocol/**"/>
       </fileset>
     </copy>
-    
+
     <mkdir dir="${dist}/${src_tests}"/>
     <copy todir="${dist}/${src_tests}">
       <fileset dir="${src_tests}">
@@ -289,11 +289,11 @@ All generated files are created under ${build} directory
 
      <chmod perm="a+x" dir="${dist}"
        includes="**/*.sh" />
-     
+
     <zip zipfile="${dist_lite_zip}" basedir="${build}/dist"
       includes="${xmlpull_version}/**"
       excludes="${xmlpull_version}/build/**,${xmlpull_version}/doc/api/**"/>
-      
+
      <tar tarfile="${dist_lite_tar}"
          longfile="gnu">
 
@@ -314,7 +314,7 @@ All generated files are created under ${build} directory
 
      <gzip zipfile="${dist_lite_tgz}" src="${dist_lite_tar}" />
     <delete file="${dist_lite_tar}"/>
-     
+
   </target>
 
   <target name="dist_lib" depends="dist_lite">
@@ -324,7 +324,7 @@ All generated files are created under ${build} directory
           <exclude name="**/*jsse*/*.jar"/>
         </fileset>
       </copy>
-  
+
     <delete file="${dist_full_zip}"/>
     <zip zipfile="${dist_full_zip}" basedir="${build}/dist"
       includes="${xmlpull_version}/**"/>
@@ -345,7 +345,7 @@ All generated files are created under ${build} directory
          </tarfileset>
 
      </tar>
-     
+
      <gzip zipfile="${dist_full_tgz}" src="${dist_full_tar}" />
     <delete file="${dist_full_tar}"/>
 
@@ -385,7 +385,7 @@ All generated files are created under ${build} directory
     <untar src="${website}/download/unpacked.tar" dest="${website}/download"/>
     <delete file="${website}/unpacked.tar"/>
     <move file="${website}/download/${xmlpull_version}" todir="${website}/download/unpacked"/-->
-    
+
     <mkdir dir="${website}/download/unpacked"/>
     <copy todir="${website}/download/unpacked">
       <fileset dir="${dist}"/>

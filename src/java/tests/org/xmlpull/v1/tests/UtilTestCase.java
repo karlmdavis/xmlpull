@@ -50,7 +50,7 @@ public class UtilTestCase extends TestCase {
         assertEquals("getType()", type, xpp.getEventType());
         assertEquals("getDepth()", depth, xpp.getDepth());
         assertEquals("getPrefix()", null, xpp.getPrefix());
-        assertEquals("getNamespacesCount(getDepth())", 0, xpp.getNamespacesCount(depth));
+        assertEquals("getNamespacesCount(getDepth())", 0, xpp.getNamespaceCount(depth));
         if(xpp.getEventType() == xpp.START_TAG || xpp.getEventType() == xpp.END_TAG) {
             assertEquals("getNamespace()", "", xpp.getNamespace());
         } else {
@@ -75,7 +75,7 @@ public class UtilTestCase extends TestCase {
             } catch(XmlPullParserException ex) {
             }
         }
-        assertEquals("getAttributeCount()", attribCount, xpp.getAttributesCount());
+        assertEquals("getAttributeCount()", attribCount, xpp.getAttributeCount());
     }
 
     public void checkParserStateNs(
@@ -99,7 +99,7 @@ public class UtilTestCase extends TestCase {
 
         assertEquals("getDepth()", depth, xpp.getDepth());
         assertEquals("getPrefix()", prefix, xpp.getPrefix());
-        assertEquals("getNamespacesCount(getDepth())", nsCount, xpp.getNamespacesCount(depth));
+        assertEquals("getNamespacesCount(getDepth())", nsCount, xpp.getNamespaceCount(depth));
         assertEquals("getNamespace()", namespace, xpp.getNamespace());
         assertEquals("getText()", printable(text), printable(xpp.getText()));
         int [] holderForStartAndLength = new int[2];
@@ -119,7 +119,7 @@ public class UtilTestCase extends TestCase {
             } catch(XmlPullParserException ex) {
             }
         }
-        assertEquals("getAttributeCount()", attribCount, xpp.getAttributesCount());
+        assertEquals("getAttributeCount()", attribCount, xpp.getAttributeCount());
     }
 
     public void checkAttrib(

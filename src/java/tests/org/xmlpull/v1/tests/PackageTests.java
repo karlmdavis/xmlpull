@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
  *
  * attrib uniq
  * EOL normalization
+ * mixed next() with nextToken()
  *
  *     public static final String REPORT_NAMESPACE_ATTRIBUTES =
  *        "http://xmlpull.org/v1/features/report-namespace-prefixes";

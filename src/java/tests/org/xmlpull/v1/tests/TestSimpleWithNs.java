@@ -97,23 +97,23 @@ public class TestSimpleWithNs extends UtilTestCase {
 
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.START_TAG, null, 2, "n", "foo", null, false, 0);
-        assertEquals(0, xpp.getNamespacesCount(0));
-        assertEquals(2, xpp.getNamespacesCount(1));
+        assertEquals(0, xpp.getNamespaceCount(0));
+        assertEquals(2, xpp.getNamespaceCount(1));
         checkNamespace(xpp, 0, "ns1", "n1", true);
         checkNamespace(xpp, 1, "ns2", "n2", true);
 
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.START_TAG, "ns1", 4, "x1", "bar", null, false, 0);
-        assertEquals(0, xpp.getNamespacesCount(0));
-        assertEquals(2, xpp.getNamespacesCount(1));
-        assertEquals(4, xpp.getNamespacesCount(2));
+        assertEquals(0, xpp.getNamespaceCount(0));
+        assertEquals(2, xpp.getNamespaceCount(1));
+        assertEquals(4, xpp.getNamespaceCount(2));
         checkNamespace(xpp, 2, "ns1", "x1", true);
         checkNamespace(xpp, 3, "ns3", "n3", true);
 
         xpp.next();
         checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 4, "n2", "gugu", null, true, 3);
-        assertEquals(4, xpp.getNamespacesCount(2));
-        assertEquals(4, xpp.getNamespacesCount(3));
+        assertEquals(4, xpp.getNamespaceCount(2));
+        assertEquals(4, xpp.getNamespaceCount(3));
         assertEquals("x1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals("n3", xpp.getNamespace("ns3"));
@@ -126,10 +126,10 @@ public class TestSimpleWithNs extends UtilTestCase {
 
         xpp.next();
         checkParserStateNs(xpp, 3, xpp.START_TAG, null, 5, "n1", "baz", null, false, 0);
-        assertEquals(0, xpp.getNamespacesCount(0));
-        assertEquals(2, xpp.getNamespacesCount(1));
-        assertEquals(4, xpp.getNamespacesCount(2));
-        assertEquals(5, xpp.getNamespacesCount(3));
+        assertEquals(0, xpp.getNamespaceCount(0));
+        assertEquals(2, xpp.getNamespaceCount(1));
+        assertEquals(4, xpp.getNamespaceCount(2));
+        assertEquals(5, xpp.getNamespaceCount(3));
         checkNamespace(xpp, 4, "ns1", "y1", true);
         assertEquals("y1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
