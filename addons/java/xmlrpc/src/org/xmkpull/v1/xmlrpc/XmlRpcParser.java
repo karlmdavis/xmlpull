@@ -120,12 +120,19 @@ public class XmlRpcParser {
 
     Vector parseArray() throws IOException, XmlPullParserException {
         Vector v = new Vector();
+        
         parser.require(parser.START_TAG, "", "array");
+        parser.nextTag();
+        parser.require(parser.START_TAG, "", "data");
 
         while (parser.nextTag() == parser.START_TAG)
             v.addElement(parseValue());
 
-        parser.require(parser.END_TAG, "", "array");
+
+        parser.require(parser.END_TAG, "", "data");
+        parser.nextTag();   
+        parser.require(parser.START_TAG, "", "array");
+
         return v;
     }
 
