@@ -35,7 +35,7 @@ public class XmlPullParserException extends Exception {
 
     public XmlPullParserException(String msg, XmlPullParser parser, Throwable chain) {
         super ((msg == null ? "" : msg+" ")
-               + (parser == null ? "" : "(position: "+parser.getPositionDescription()+") ")
+               + (parser == null ? "" : "(position:"+parser.getPositionDescription()+") ")
                + (chain == null ? "" : "caused by: "+chain));
 
         if (parser != null) {

@@ -3,6 +3,11 @@ import java.io.*;
 import java.util.*;
 import java.text.MessageFormat;
 
+/**
+ * Rewritten http://www-106.ibm.com/developerworks/xml/library/x-saxapi/listing4.html
+ * to make easy to comapre how to "natutal is to manage state with SAX and with XMLPULL API.
+ * For details see: http://www-106.ibm.com/developerworks/xml/library/x-saxapi/
+ */
 public class BestDeal {
 
     protected static final String MESSAGE =
