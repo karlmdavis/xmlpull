@@ -35,26 +35,35 @@ made easier to discover.<p>&nbsp;</p>
 http://xmlpull.org/v1/doc/properties.html#serializer-indentation</a> </p>
 <p>OPTIONAL property with String value </p>
 
-<p>if length() &gt; 0 it is used otherwise if null or length() == 0 no indentation 
+<p>If passed string is not empty that it is used to indent output by one level.</p>
+
+<p>If passed string is empty only line separator (depending on
+<a href="#serializer-line-separator">LINE SEPARATOR property</a>) will be 
+written for indentation (if any).</p>
+
+<p>Otherwise if string is null no indentation 
 is not done</p>
 
-<p>For example use TAB (&quot;\t&quot;) or few spaces (&quot;&nbsp;&nbsp;&nbsp; &quot;)</p>
+<p>For example use TAB (&quot;\t&quot;) or few spaces (&quot;&nbsp;&nbsp;&nbsp; &quot;) 
+as string value.</p>
 
 <p>&nbsp;</p>
 
 <h3>
-<a name="serializer-indentation"></a>Optional property: SERIALIZER LINE 
+<a name="serializer-line-separator"></a>Optional property: SERIALIZER LINE 
 SEPARATOR</h3>
 <p>This property is identified by
 <a href="http://xmlpull.org/v1/doc/properties.html#serializer-line-separator">
 http://xmlpull.org/v1/doc/properties.html#serializer-line-separator</a> </p>
 <p>OPTIONAL property with String value </p>
 
-<p>by default it SHOULD be initialized to platform dependent values (on Windows 
-&quot;\r\n&quot; on Unix &quot;\n&quot;);</p>
+<p>If indentation is enabled passed string will be used as line separator.</p>
 
-<p>if value of property is null or String of length() == 0 no line separator 
-will be written</p>
+<p>It should be initialized to platform dependent values (on Windows &quot;\r\n&quot; on 
+Unix &quot;\n&quot;).</p>
+
+<p>If value of property is null or String of length() == 0 no line separator 
+will be written.</p>
 
 <p>&nbsp;</p>
 

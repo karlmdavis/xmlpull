@@ -206,6 +206,30 @@ be null to trigger auto detecting.
 
 <p>&nbsp;</p>
 
+<h3>
+<a name="serializer-attvalue-use-apostrophe"></a>Optional feature: SERIALIZER 
+ATTVALUE USE APOSTROPHE<br>
+&nbsp;</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#serializer-attvalue-use-apostrophe">
+http://xmlpull.org/v1/doc/features.html#serializer-attvalue-use-apostrophe</a> </p>
+<p>If this feature is supported that means that XmlSerializer output for 
+attribute value quotation can be controlled (when serializing XML 1.0 it allows 
+to chose one of <a href="http://www.w3.org/TR/REC-xml#NT-AttValue">alternative 
+representations for AttValue</a>).</p>
+
+<p>If the feature is set to true it means than XmlSerializer parser <b>MUST</b> 
+use apostrophe (') to quote attribute value.</p>
+
+<p>If the feature is set to false it means than XmlSerializer parser <b>MUST</b> 
+use quotation mark (&quot;) to quote attribute value.</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
 <HR>
 <address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a><address>
 </address>
