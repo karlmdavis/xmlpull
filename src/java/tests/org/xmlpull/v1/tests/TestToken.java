@@ -104,7 +104,7 @@ public class TestToken extends UtilTestCase {
                                boolean useRoundtrip) throws Exception {
         XmlPullParser xpp = factory.newPullParser();
         assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
-        System.out.println("using "+xpp);
+        //System.out.println("using "+xpp);
 
         if(checkPrologAndEpilog) {
             xpp.setInput(new StringReader(MISC_XML));
@@ -157,7 +157,8 @@ public class TestToken extends UtilTestCase {
                 //              xpp.nextToken();
                 //              checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null, "  \r\n", false, -1);
                 //              assertTrue(xpp.isWhitespace());
-                String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+                //String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+                String text = gatherTokenText(xpp, xpp.IGNORABLE_WHITESPACE, true);
                 if(roundtripSupported) {
                     assertEquals(printable("  \r\n"), printable(text));
                 } else {
@@ -300,11 +301,12 @@ public class TestToken extends UtilTestCase {
                 //              checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
                 //                                 " \r\n", false, -1);
                 //              assertTrue(xpp.isWhitespace());
-                String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+                //String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+                String text = gatherTokenText(xpp, xpp.IGNORABLE_WHITESPACE, true);
                 if(roundtripSupported) {
-                    assertEquals(printable("\r\n "), printable(text));
+                    assertEquals(printable(" \r\n"), printable(text));
                 } else {
-                    assertEquals(printable("\n "), printable(text));
+                    assertEquals(printable(" \n"), printable(text));
                 }
             }
         }
