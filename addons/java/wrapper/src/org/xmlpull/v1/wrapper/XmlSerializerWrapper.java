@@ -75,30 +75,30 @@ public interface XmlSerializerWrapper extends XmlSerializer {
 
     // set of methods to make easy to write XSD types
 
-    /**
-     * Write as text value of argument (just calls text!).
-     */
-    public void writeDouble(double d)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
-    public void writeFloat(float f)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
-    public void writeInt(int i)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
-    public void writeString(String s)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
-
-    /**
-     * Write as element with namesoace and name and value inside
-     * (looks like &lt;ns:name>value&lt;/ns:name> where ns is prefix
-     * for namespace autoatically declared if needed).
-     */
-    public void writeDoubleElement(String namespace, String name, double d)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
-    public void writeFloatElement(String namespace, String name, float f)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
-    public void writeIntElement(String namespace, String name, int i)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
-    public void writeStringElement(String namespace, String name, String s)
-        throws XmlPullParserException, IOException, IllegalArgumentException;
+//    /**
+//     * Write as text value of argument (just calls text!).
+//     */
+//    public void writeDouble(double d)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
+//    public void writeFloat(float f)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
+//    public void writeInt(int i)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
+//    public void writeString(String s)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
+//
+//    /**
+//     * Write as element with namesoace and name and value inside
+//     * (looks like &lt;ns:name>value&lt;/ns:name> where ns is prefix
+//     * for namespace autoatically declared if needed).
+//     */
+//    public void writeDoubleElement(String namespace, String name, double d)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
+//    public void writeFloatElement(String namespace, String name, float f)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
+//    public void writeIntElement(String namespace, String name, int i)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
+//    public void writeStringElement(String namespace, String name, String s)
+//        throws XmlPullParserException, IOException, IllegalArgumentException;
 }
 

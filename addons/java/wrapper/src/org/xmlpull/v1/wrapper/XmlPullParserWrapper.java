@@ -17,7 +17,6 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author Naresh Bhatia
  */
 public interface XmlPullParserWrapper extends XmlPullParser {
-    public static final String NO_NAMESPACE = "";
     public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
     public static final String XSD_NS = "http://www.w3.org/2001/XMLSchema";
 
@@ -135,64 +134,64 @@ public interface XmlPullParserWrapper extends XmlPullParser {
 
     // set of methods to read XSD types
 
-    /**
-     * Read string content of elment and try to convert it to double.
-     * Take special care of INF, Infinity and NaN.
-     * After this method executed the parser is positioned on END_TAG.
-     */
-    public double readDouble() throws XmlPullParserException, IOException;
-
-    /**
-     * Read string content of elment and convert it to float.
-     * Take special care of INF, Infinity and NaN.
-     * After this method executed the parser is positioned on END_TAG.
-     */
-    public float readFloat() throws XmlPullParserException, IOException;
-
-    /**
-     * Read string content of elment and try to convert it to int.
-     * Take special care of INF, Infinity and NaN.
-     * After this method executed the parser is positioned on END_TAG.
-     */
-    public int readInt() throws XmlPullParserException, IOException;
-
-    /**
-     * Check for xsi:nil and if it has value 'true' returns null
-     * as described in
-     * <a href="http://www.w3.org/TR/xmlschema-1/#Instance_Document_Constructions">XML Schemas
-     * Part 1</a>
-     * otherwise it calls nextText().
-     * After this method executed the parser is positioned on END_TAG.
-     */
-    public String readString() throws XmlPullParserException, IOException;
-
-    /**
-     * Check that parser is on START_TAG with given namespace and name
-     * and then call readDouble().
-     */
-    public double readDoubleElement(String namespace, String name)
-        throws XmlPullParserException, IOException;
-
-    /**
-     * Check that parser is on START_TAG with given namespace and name
-     * and then call readFloat().
-     */
-    public float readFloatElement(String namespace, String name)
-        throws XmlPullParserException, IOException;
-
-    /**
-     * Check that parser is on START_TAG with given namespace and name
-     * and then call readInt().
-     */
-    public int readIntElement(String namespace, String name)
-        throws XmlPullParserException, IOException;
-
-    /**
-     * Check that parser is on START_TAG with given namespace and name
-     * and then call readString().
-     */
-    public String readStringElemet(String namespace, String name)
-        throws XmlPullParserException, IOException;
-
+//    /**
+//     * Read string content of elment and try to convert it to double.
+//     * Take special care of INF, Infinity and NaN.
+//     * After this method executed the parser is positioned on END_TAG.
+//     */
+//    public double readDouble() throws XmlPullParserException, IOException;
+//
+//    /**
+//     * Read string content of elment and convert it to float.
+//     * Take special care of INF, Infinity and NaN.
+//     * After this method executed the parser is positioned on END_TAG.
+//     */
+//    public float readFloat() throws XmlPullParserException, IOException;
+//
+//    /**
+//     * Read string content of elment and try to convert it to int.
+//     * Take special care of INF, Infinity and NaN.
+//     * After this method executed the parser is positioned on END_TAG.
+//     */
+//    public int readInt() throws XmlPullParserException, IOException;
+//
+//    /**
+//     * Check for xsi:nil and if it has value 'true' returns null
+//     * as described in
+//     * <a href="http://www.w3.org/TR/xmlschema-1/#Instance_Document_Constructions">XML Schemas
+//     * Part 1</a>
+//     * otherwise it calls nextText().
+//     * After this method executed the parser is positioned on END_TAG.
+//     */
+//    public String readString() throws XmlPullParserException, IOException;
+//
+//    /**
+//     * Check that parser is on START_TAG with given namespace and name
+//     * and then call readDouble().
+//     */
+//    public double readDoubleElement(String namespace, String name)
+//        throws XmlPullParserException, IOException;
+//
+//    /**
+//     * Check that parser is on START_TAG with given namespace and name
+//     * and then call readFloat().
+//     */
+//    public float readFloatElement(String namespace, String name)
+//        throws XmlPullParserException, IOException;
+//
+//    /**
+//     * Check that parser is on START_TAG with given namespace and name
+//     * and then call readInt().
+//     */
+//    public int readIntElement(String namespace, String name)
+//        throws XmlPullParserException, IOException;
+//
+//    /**
+//     * Check that parser is on START_TAG with given namespace and name
+//     * and then call readString().
+//     */
+//    public String readStringElemet(String namespace, String name)
+//        throws XmlPullParserException, IOException;
+//
 }
 
