@@ -12,13 +12,17 @@ import java.io.Writer;
 //ISSUE: is flush doing anything but call closeStartTag()?
 //ISSUE: maybe replace flush() with closeStartTag() (if not used it is still called implicitly ...)
 //      this will allow to write unesscaped strings safely (like for example BASE64 or hexbin)
+
+// RESOLVED: left flush() with exact description what it does but also added text("") to close stag
+
+//ISSUE: implicit closing of startTag() by text("") requires more description and exmaples!!!
+
 //ISSUE: how to write efficiently unescaped XML --> use flush() and write into stream ...
-//ISSUE: implicit closing of startTag() requires more description and exmaples!!!
 
-// RESOLVED: left flush() with exact description what it does but also added closeTag()
+// PROPOSAL: maybe have unesapced(String), unesapced(char[], off, len) methods?
 
-//ISSUE: where setPrefix() should or not be called (before first startTag(), between attribute() ...
-// RESOLVED: setPrefix() is affecting only
+//ISSUE: where setPrefix() should (or not) be called (before first startTag(), between attribute() ...
+// RESOLVED: setPrefix() MUST be called before startTag() is affecting only this startTag
 
 //ISSUE: add close() that validates if XML document was writent correctly (finsihed depth == 0, etc.)
 //RESOLVED: instead provides endDocument() (and startDoument())
@@ -124,23 +128,28 @@ public interface XmlSerializer {
      * Binds the given prefix to the given namespace.
      * valid for the next element including child elements.
      *
-     * <p><b>NOTE:</b> prefixes "xml" and "xmlns" msut be already bound
+     * <p><b>NOTE:</b> this method MUST be called direclty before startTag()
+     *   and if aything but startTag() or setPrefix() is called next there will be exception.
+     * <p><b>NOTE:</b> prefixes "xml" and "xmlns" are already bound
      */
-    public void setPrefix (String prefix, String namespace);
+    public void setPrefix (String prefix, String namespace) throws IOException;
 
-    /** writes a start tag with the given namespace and name.
-     if the indent flag is set, a \r\n and getDepth () spaces
-     are written. If there is no prefix defined for the given namespace,
-     a prefix will be defined automatically.
-     If namespace is nul no namespace prefix is printed but just name.
+    /**
+     * Writes a start tag with the given namespace and name.
+     * If there is no prefix defined for the given namespace,
+     * a prefix will be defined automatically.
+     * The explicit prefixes for namespaces can be established by calling setPrefix()
+     * immediately before this method.
+     * If namespace is empty string no namespace prefix is printed but just name.
      */
 
     public void startTag (String namespace, String name) throws IOException;
 
-    /** writes an attribute. calls to attribute must follow a call to
-     startTag() immediately. if there is no prefix defined for the
-     given namespace, a prefix will be defined automatically.
-     If namespace is nul no namespace prefix is printed but just name.
+    /**
+     * Writes an attribute. calls to attribute must follow a call to
+     * startTag() immediately. if there is no prefix defined for the
+     * given namespace, a prefix will be defined automatically.
+     * If namespace is nul no namespace prefix is printed but just name.
      */
 
     public void attribute (String namespace, String name,
@@ -152,11 +161,12 @@ public interface XmlSerializer {
      * serializer to write completely start tag. No more attributes
      * is allowed to be added after this call.
      */
-    public void closeStartTag () throws IOException;
+    //public void closeStartTag () throws IOException;
+    // use text("") instead
 
 
     /**
-     * repetition of namespace and name is just for avoiding errors
+     * Write end tag. Repetition of namespace and name is just for avoiding errors
      * background: in kXML I just had endTag, and non matching tags were
      *  very difficult to find...
      * If namespace is nul no namespace prefix is printed but just name.
@@ -186,8 +196,7 @@ public interface XmlSerializer {
     /**
      * writes all pending output to the stream,
      * if  startTag() or attribute() was caled then start tag is closed
-     * by calling closeStartTag() and then flush() is called on
-     * underlying output stream.
+     * and flush() is called on underlying output stream.
      */
     public void flush () throws IOException;
 
