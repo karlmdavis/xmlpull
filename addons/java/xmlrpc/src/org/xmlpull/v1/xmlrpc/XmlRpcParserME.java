@@ -58,9 +58,8 @@ public class XmlRpcParserME {
     }
 
     protected Object parseType(String name) throws IOException, XmlPullParserException {
-        if (name.equals("double"))
-            return new Double(parser.nextText());
-        else if (name.equals("int") || name.equals("i4"))
+	//	System.out.println("type:"+name);
+        if (name.equals("int") || name.equals("i4"))
             return new Integer(Integer.parseInt(parser.nextText()));
         else if (name.equals("array"))
             return parseArray();
@@ -84,22 +83,26 @@ public class XmlRpcParserME {
         parser.require(XmlPullParser.START_TAG, "", "value"); // precondition
         parser.next();
 
-        Object result;
-
-        if (parser.getEventType() == XmlPullParser.END_TAG)
-            result = "";
-        else if (parser.getEventType() == XmlPullParser.TEXT) {
+        Object result = null;
+        
+        if (parser.getEventType() == XmlPullParser.TEXT) {
             result = parser.getText();
             parser.nextTag();
         }
-        else {
-            parser.require(XmlPullParser.START_TAG, "", null);
+        
+        
+		if (parser.getEventType() == XmlPullParser.START_TAG) {
+		    
+		    if (result != null && ((String) result).trim().length() > 0)
+		    	throw new RuntimeException("illegal mixed content!");
+		    
             String name = parser.getName();
             result = parseType(name);
 
             parser.require(XmlPullParser.END_TAG, "", name);
             parser.nextTag();
         }
+
         parser.require(XmlPullParser.END_TAG, "", "value"); // postcond.
         return result;
     }
