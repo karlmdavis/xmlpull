@@ -72,6 +72,10 @@ public class PackageTests extends TestRunner
 
     private static StringBuffer notes = new StringBuffer();
     public static void addNote(String note) {
+        if(PackageTests.runnigAllTests() == false) {
+            System.out.print(note);
+            System.out.flush();
+        }
         notes.append(note);
     }
 

@@ -287,6 +287,7 @@ public class Driver implements Locator, XMLReader, Attributes
                         errorHandler.fatalError(saxException);
                         return;
                     }
+                    // NOTE: replace with Connection to run in J2ME environment
                     try {
                         URL url = new URL(systemId);
                         stream = url.openStream();
@@ -465,6 +466,3 @@ public class Driver implements Locator, XMLReader, Attributes
     }
 
 }
-
-
-

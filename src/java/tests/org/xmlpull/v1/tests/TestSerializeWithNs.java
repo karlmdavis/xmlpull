@@ -341,6 +341,201 @@ public class TestSerializeWithNs extends UtilTestCase {
     private boolean serializerLineSeparatorSupported;
     private boolean serializerUseApostropheSupported;
 
+
+    /**
+     * Test optional support pretty printing
+     */
+    public void testUseApostrophe() throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+        try {
+            ser.setFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE, true);
+        } catch(Exception ex) {
+            // ignore test if optional property not supported
+            return;
+        }
+        PackageTests.addNote(
+            "* feature "+FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported\n");
+
+        boolean useApost = ser.getFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE);
+        assertEquals(true, useApost);
+        checkAttributeQuot(true, ser);
+
+        ser.setFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE, false);
+        useApost = ser.getFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE);
+        assertEquals(false, useApost);
+
+        checkAttributeQuot(false, ser);
+        useApost = ser.getFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE);
+        assertEquals(false, useApost);
+
+        ser.setFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE, true);
+        useApost = ser.getFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE);
+        assertEquals(true, useApost);
+        checkAttributeQuot(true, ser);
+
+        checkAttributeQuotMix(ser);
+    }
+
+    /**
+     * Check that attribute was quoted correctly
+     */
+    private void checkAttributeQuot(boolean useApostrophe, XmlSerializer ser) throws Exception {
+        StringWriter sw = new StringWriter();
+        ser.setOutput(sw);
+
+        ser.startTag("", "test");
+        ser.attribute(null, "att", "value");
+        ser.endTag("", "test");
+        ser.endDocument();
+
+        String s = sw.toString();
+        if(useApostrophe) {
+            assertTrue("use apostrophe for attribute value", s.indexOf("'value'") !=-1);
+        } else {
+            assertTrue("use quotation for attribute value", s.indexOf("\"value\"") !=-1);
+        }
+
+        // some validaiton of serialized XML
+        XmlPullParser pp = factory.newPullParser();
+        pp.setInput(new StringReader(s));
+        pp.nextTag();
+        pp.require(pp.START_TAG, null, "test");
+        assertEquals("value", pp.getAttributeValue(pp.NO_NAMESPACE, "att"));
+        pp.nextTag();
+        pp.require(pp.END_TAG, null, "test");
+    }
+
+    /**
+     * Check that attribute quotations can be changed _during_ serialization
+     */
+    private void checkAttributeQuotMix(XmlSerializer ser) throws Exception {
+        StringWriter sw = new StringWriter();
+        ser.setOutput(sw);
+
+        ser.startTag("", "test");
+        ser.attribute(null, "att", "value");
+        ser.setFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE, true);
+        ser.attribute(null, "attA", "valueA");
+        ser.setFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE, false);
+        ser.attribute(null, "attQ", "valueQ");
+        ser.endTag("", "test");
+        ser.endDocument();
+
+        String s = sw.toString();
+        assertTrue("use apostrophe for attribute value", s.indexOf("'valueA'") !=-1);
+        assertTrue("use apostrophe for attribute value", s.indexOf("\"valueQ\"") !=-1);
+
+        // some validaiton of serialized XML
+        XmlPullParser pp = factory.newPullParser();
+        pp.setInput(new StringReader(s));
+        pp.nextTag();
+        pp.require(pp.START_TAG, null, "test");
+        assertEquals("value", pp.getAttributeValue(pp.NO_NAMESPACE, "att"));
+        assertEquals("valueA", pp.getAttributeValue(pp.NO_NAMESPACE, "attA"));
+        assertEquals("valueQ", pp.getAttributeValue(pp.NO_NAMESPACE, "attQ"));
+        pp.nextTag();
+        pp.require(pp.END_TAG, null, "test");
+    }
+
+
+    public void testIndentation() throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+        try {
+            ser.setProperty(PROPERTY_SERIALIZER_INDENTATION, " ");
+        } catch(Exception ex) {
+            // ignore test if optional property not supported
+            return;
+        }
+        PackageTests.addNote("* property "+PROPERTY_SERIALIZER_INDENTATION+" is supported\n");
+
+        StringWriter sw = new StringWriter();
+        ser.setOutput(sw);
+
+        ser.startTag("", "S1");
+        ser.startTag("", "S2");
+        ser.text("T");
+        ser.endTag("", "S2");
+        ser.startTag("", "M2");
+        ser.startTag("", "M3");
+        ser.endTag("", "M3");
+        ser.endTag("", "M2");
+        ser.endTag("", "S1");
+        ser.endDocument();
+
+        String xml = sw.toString();
+        //System.out.println(getClass()+" xml="+xml);
+        checkFormatting(" ", 0, "\n", "<S1", xml);
+        checkFormatting(" ", 1, "\n", "<S2", xml);
+        checkFormatting("T", 1, null, "</S2", xml); //special case set that no indent but content
+        checkFormatting(" ", 1, "\n", "<M2", xml);
+        checkFormatting(" ", 2, "\n", "<M3", xml);
+        checkFormatting(" ", 1, "\n", "</M2", xml);
+        checkFormatting(" ", 0, "\n", "</S1", xml);
+
+        //TODO check if line separators property is supported ...
+    }
+
+    private void checkFormatting(String indent, int level, String lineSeparator,
+                                 String s, String xml) throws Exception {
+        // check that s is on output XML
+        int pos = xml.indexOf(s);
+        assertTrue(pos >= 0);
+        // check that indent string is used at level
+        for (int i = 0; i < level; i++)
+        {
+            for (int j = indent.length() - 1; j >= 0 ; j--)
+            {
+                --pos;
+                if(pos < 0) {
+                    fail("not enough indent for "+printable(s)+" in "+printable(xml));
+                }
+                char indentCh = indent.charAt(j);
+                char ch = xml.charAt(pos);
+                assertEquals(
+                    "expected indentation character '"+printable(indent)+"'"
+                        +" pos="+pos+" s='"+printable(s)
+                        +"' xml="+printable(xml),
+                    printable(indentCh), printable(ch));
+            }
+        }
+        // check that indent is of exact size and line ending is as expected
+        if(pos > 0) {
+            --pos;
+            char ch = xml.charAt(pos);
+            if(lineSeparator != null) {
+                for (int i = lineSeparator.length() - 1; i >=0 ; i--)
+                {
+                    char lineSepCh = lineSeparator.charAt(i);
+                    assertEquals(
+                        "expected end of line at pos="+pos+" s='"+printable(s)
+                            +"' xml="+printable(xml),
+                        printable(lineSepCh), printable(ch));
+                    --pos;
+                    ch = xml.charAt(pos);
+
+                }
+            } else {
+                char indentCh = indent.charAt(indent.length() - 1);
+                assertTrue(
+                    "expected character that is different from '"+printable(indent)+"'"
+                        +" used for indentation "
+                        +"pos="+pos+" s="+printable(s)+" xml="+printable(xml),
+                    indentCh != ch);
+            }
+        }
+    }
+
+    public void testLineSeparator() throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+        try {
+            ser.setProperty(PROPERTY_SERIALIZER_LINE_SEPARATOR, "\n");
+        } catch(Exception ex) {
+            // ignore test if optional property not supported
+            return;
+        }
+        PackageTests.addNote("* property "+PROPERTY_SERIALIZER_LINE_SEPARATOR+" is supported\n");
+    }
+
     /** generate SOAP 1.2 envelope
      try to use indentation
 
@@ -365,12 +560,7 @@ public class TestSerializeWithNs extends UtilTestCase {
             try {
                 ser.setFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE,
                                attvalueUseApostrophe.booleanValue());
-                if(!serializerUseApostropheSupported) {
-                    PackageTests.addNote(
-                        "* feature "
-                            +FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported\n");
-                    serializerUseApostropheSupported = true;
-                }
+                serializerUseApostropheSupported = true;
             } catch(Exception ex) {
                 // ignore if optional feature not supported
             }
@@ -378,12 +568,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         if(indentation !=null) {
             try {
                 ser.setProperty(PROPERTY_SERIALIZER_INDENTATION, indentation);
-                if(!serializerIndentationSupported) {
-                    PackageTests.addNote(
-                        "* property "
-                            +PROPERTY_SERIALIZER_INDENTATION+" is supported\n");
-                    serializerIndentationSupported = true;
-                }
+                serializerIndentationSupported = true;
             } catch(Exception ex) {
                 // ignore if optional property not supported
             }
@@ -391,12 +576,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         if(lineSeparator !=null) {
             try {
                 ser.setProperty(PROPERTY_SERIALIZER_LINE_SEPARATOR, lineSeparator);
-                if(!serializerLineSeparatorSupported) {
-                    PackageTests.addNote(
-                        "* property "
-                            +PROPERTY_SERIALIZER_LINE_SEPARATOR+" is supported\n");
-                    serializerLineSeparatorSupported = true;
-                }
+                serializerLineSeparatorSupported = true;
             } catch(Exception ex) {
                 // ignore if optional property not supported
             }
@@ -452,7 +632,7 @@ public class TestSerializeWithNs extends UtilTestCase {
     //setPrefix check that prefix is not duplicated ...
 
     public void testSetPrefix() throws Exception {
-        //TODO      redeclaring defult namespace
+        //TODO check redeclaring defult namespace
 
 
         checkTestSetPrefixSoap(SOAP12);
@@ -465,32 +645,41 @@ public class TestSerializeWithNs extends UtilTestCase {
         String generated = generateSoapEnvelope("", "n", "m");
         //System.err.println(getClass()+" generated="+generated);
 
-        // 1 is for one extra namespace must be added to declare attrbute mustUnderstan in SOAP-ENV namespace
-        checkTestSetPrefixSoap(generated, 1);
+        // 1 is for one extra namespace must be added to declare xmlns namespace
+        //    for attrbute mustUnderstan in SOAP-ENV namespace
+        checkTestSetPrefixSoap(generated, 1,false);
 
 
-        checkTestSetPrefixSoap(generateSoapEnvelope("", null, "m"),1);
+        checkTestSetPrefixSoap(generateSoapEnvelope("", null, "m"),1,false);
 
         //check optional pretty printing
         checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", Boolean.FALSE, null, null));
         checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", Boolean.TRUE, null, null));
-        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, " ", null));
-        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, "\t", null));
-        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, "    ", null));
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, " ", null), true);
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, "\t", null), true);
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, "    ", null), true);
         String s = generateSoapEnvelope("env", "n", "m", Boolean.TRUE, " ", "\n");
         //System.out.println(getClass()+" envelope="+generateSoapEnvelope("", "n", "m"));
-        checkTestSetPrefixSoap(s);
+        checkTestSetPrefixSoap(s, true);
     }
 
     private void checkTestSetPrefixSoap(String soapEnvelope) throws Exception {
-        checkTestSetPrefixSoap(soapEnvelope, 0);
+        checkTestSetPrefixSoap(soapEnvelope, 0, false);
+    }
+
+    private void checkTestSetPrefixSoap(String soapEnvelope, boolean indented) throws Exception {
+        checkTestSetPrefixSoap(soapEnvelope, 0, indented);
     }
 
     // run test using checkParserStateNs()
-    private void checkTestSetPrefixSoap(String soapEnvelope, int extraNs) throws Exception {
+    private void checkTestSetPrefixSoap(String soapEnvelope, int extraNs, boolean indented)
+        throws Exception
+    {
 
         //compare that XML representation of soapEnvelope is as desired
-        assertXmlEquals(SOAP12, soapEnvelope);
+        if(!indented) {
+            assertXmlEquals(SOAP12, soapEnvelope);
+        }
 
         xpp.setInput(new StringReader(soapEnvelope));
 
