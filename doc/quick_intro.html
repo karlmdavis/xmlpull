@@ -19,31 +19,182 @@
 <li><b>simple interface</b> - parser consists of one interface, one exception 
 and one factory to create parser<li><b>implementation independent</b> - factory 
 class is modeled after JAXP and allows easily to switch to different XMLPULL V1 
-API implementaion without even modifying source code<li><b>ease of use</b> - 
+API implementation without even modifying source code<li><b>ease of use</b> - 
 there is only one key method <b><i>next()</i></b> that is used to retrieve next 
 event and there are only five events:
-<ul>
-<li>START_DOCUMENT, START_TAG, TEXT, END_TAG, END_DOCUMENT
-</ul>
-<li><b>versatile</b> -
-<li><b>performance</b>
-<li><b>minimal requirements</b> - designed to be compatible with J2ME (Java 2 Micro Editiin)
+<dl>
+<dt><b>START DOCUMENT</b> <dd>document start - parser has not yet read any input
+<dt><b>START_TAG</b> <dd> parser is on start tag
+<dt><b>TEXT</b> <dd> parser is on element content
+<dt><b>END_TAG</b> <dd> parser is on end tag
+<dt><b>END_DOCUMENT</b> <dd> document finished and no more parsing is allowed
+</dl>
+<li><b>versatility</b> - it is generic interface for XML parser and allows for
+multiple implementations and extensibility through features and properties
+<li><b>performance</b> - the interface is designed to allow implementing very fast XML parsers
+<li><b>minimal requirements</b> - designed to be compatible with J2ME (Java 2 Micro Edition)
 to work and on small devices and to allow create XMLPULL compliant parsers of  very small
 memory footprint.
 </ul>
 
 
+<H2>Requirements</H2>
+
+<p>XMLPULL is API and it requires implementation to run.
+
+See <a href="http://www.xmlpull.org/impls.shtml">list of implementations</a> 
+on XMLPULL website. After downloading one of implementations of XMLPULL API V1 (version 1.0.*)
+add jar file to your CLASSPATH. As XMLPULL uses factory there is no need to 
+explicitly state what is class with parser implementation: it will be picked up
+automatically from implementation jar file.
+
 <H2>Code step-by-step</H2>
 
+<p>First we need to create an instance of parser.
+To do this three steps are required:<ul>
+<li>get instance of XMLPULL facotry
+<li>(optional step) by default factory will produce parsers that are not 
+namespace aware; to change setNamespaceAware() function must be called
+<li>create an instance of the parser
+</ul>
 
+and the code to do this  may look similar ot this:
+
+<pre>        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+</pre>
+
+Next step is to set parser input:
+
+<pre>        xpp.setInput ( new FileReader ( args [i] ) );
+</pre> 
+
+and now we can start parsing!
+
+<p>Typical XMLPULL applicaition will repeatedly call 
+next() function to retrieve next event, process event 
+until the even is END_DOCUMENT:
+
+<pre>    public void processDocument(XmlPullParser xpp)
+        throws XmlPullParserException, IOException
+    {
+        int eventType = xpp.getType();
+        do {
+            if(eventType == xpp.START_DOCUMENT) {
+                System.out.println("Start document");
+            } else if(eventType == xpp.END_DOCUMENT) {
+                System.out.println("End document");
+            } else if(eventType == xpp.START_TAG) {
+                processStartElement(xpp);
+            } else if(eventType == xpp.END_TAG) {
+                processEndElement(xpp);
+            } else if(eventType == xpp.TEXT) {
+                processText(xpp);
+            }
+            eventType = xpp.next();
+        } while (eventType != xpp.END_DOCUMENT);
+    }
+</pre>
+
+
+<p>Let see how to process start tag. 
+Processing end tag is very similar - main difference is that the end tag has no attributes.
+
+<pre>    public void processStartElement (XmlPullParser xpp)
+    {
+        String name = xpp.getName();
+        String uri = xpp.getNamespace();
+        if ("".equals (uri)) {
+            System.out.println("Start element: " + name);
+        } else {
+            System.out.println("Start element: {" + uri + "}" + name);
+        }
+    }
+</pre>
+
+<p>And now let see how element content is retrieved and printed:
+
+<pre>    public void processText (XmlPullParser xpp) throws XmlPullParserException
+    {
+        char ch[] = xpp.getTextCharacters();
+        int start = xpp.getTextCharactersStart();
+        int length = xpp.getTextCharactersLength();
+        System.out.print("Characters:    \"");
+        for (int i = start; i < start + length; i++) {
+            switch (ch[i]) {
+                case '\\':
+                    System.out.print("\\\\");
+                    break;
+                case '"':
+                    System.out.print("\\\"");
+                    break;
+                case '\n':
+                    System.out.print("\\n");
+                    break;
+                case '\r':
+                    System.out.print("\\r");
+                    break;
+                case '\t':
+                    System.out.print("\\t");
+                    break;
+                default:
+                    System.out.print(ch[i]);
+                    break;
+            }
+        }
+        System.out.print("\"\n");
+    }
+</pre>
 
 <H2>Complete sample</H2>
 
 
+<dl>
+
+
+The finished working sample created that was described is in 
+<a href="../src/java/samples/MyXmlPull.java">MyXmlPull.java</a> file in 
+<a href="../src/java/samples/">src/java/samples</a> directory.
+
 <H2>Output</H2>
+
+
+<p>&nbsp;</p>
+
+
+<pre>java MyXmlPullApp
+parser implementation class is class org.xmlpull.xpp3.PullParser
+Parsing simple sample XML
+Start document
+Start element: {http://www.megginson.com/ns/exp/poetry}poem
+Characters:    "\n"
+Start element: {http://www.megginson.com/ns/exp/poetry}title
+Characters:    "Roses are Red"
+End element:   {http://www.megginson.com/ns/exp/poetry}title
+Characters:    "\n"
+Start element: {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "Roses are red,"
+End element:   {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "\n"
+Start element: {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "Violets are blue;"
+End element:   {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "\n"
+Start element: {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "Sugar is sweet,"
+End element:   {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "\n"
+Start element: {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "And I love you."
+End element:   {http://www.megginson.com/ns/exp/poetry}l
+Characters:    "\n"
+End element:   {http://www.megginson.com/ns/exp/poetry}poem
+</pre>
 
 <HR>
 <address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a><address>
 </address>
+</dl>
 </BODY>
 </HTML>

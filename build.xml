@@ -14,8 +14,8 @@ All generated files are created under ${build} directory
   <property name="version" value="1_0_2a"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
-  <property name="copyright" 
-    value="No warranty; no copyright -- use this as you will --  http://www.xmlpull.org/" />
+  <property name="copyright"
+    value="This XMLPULL V1 API is free, enjoy! &lt;a href='http://www.xmlpull.org/'>http://www.xmlpull.org/&lt;/a>" />
 
   <property name="debug" value="on"/>
   <property name="deprecation" value="off"/>
@@ -38,21 +38,21 @@ All generated files are created under ${build} directory
   <property name="build_javadoc" value="${doc}/api_impl"/>
   <property name="apidoc_packages" value="org.xmlpull.v1.*"/>
   <property name="api_sourcepath" value="${src_api}"/>
-  <property name="javadoc_packages" value="org.xmlpull.v1."/>
+  <property name="javadoc_packages" value="org.xmlpull.v1.*"/>
   <property name="dist" value="${build}/dist/${xmlpull_version}"/>
-  <property name="lite_suffix" value="src"/>  
-  <property name="full_suffix" value="all"/>  
-  <property name="dist_lite" value="${build}/dist/${xmlpull_version}_${lite_suffix}"/>  
-  <property name="dist_full" value="${build}/dist/${xmlpull_version}_${full_suffix}"/>  
-  <property name="dist_lite_zip" value="${dist_lite}.zip"/>  
-  <property name="dist_full_zip" value="${dist_full}.zip"/>  
-  <property name="dist_lite_tar" value="${dist_lite}.tar"/>  
-  <property name="dist_full_tar" value="${dist_full}.tar"/>  
-  <property name="dist_lite_tgz" value="${dist_lite}.tgz"/>  
-  <property name="dist_full_tgz" value="${dist_full}.tgz"/>  
-  <property name="jar"	value="${build_lib}/${xmlpull_version}.jar"/>
+  <property name="lite_suffix" value="src"/>
+  <property name="full_suffix" value="all"/>
+  <property name="dist_lite" value="${build}/dist/${xmlpull_version}_${lite_suffix}"/>
+  <property name="dist_full" value="${build}/dist/${xmlpull_version}_${full_suffix}"/>
+  <property name="dist_lite_zip" value="${dist_lite}.zip"/>
+  <property name="dist_full_zip" value="${dist_full}.zip"/>
+  <property name="dist_lite_tar" value="${dist_lite}.tar"/>
+  <property name="dist_full_tar" value="${dist_full}.tar"/>
+  <property name="dist_lite_tgz" value="${dist_lite}.tgz"/>
+  <property name="dist_full_tgz" value="${dist_full}.tgz"/>
+  <property name="jar"  value="${build_lib}/${xmlpull_version}.jar"/>
 
-  <property name="website"	value="../xmlpull-website/v1"/>
+  <property name="website"      value="../xmlpull-website/v1"/>
 
   <patternset id="all_source_files">
         <exclude name="**/*-"/>
@@ -73,16 +73,16 @@ All generated files are created under ${build} directory
     <delete file="${dist_tgz}"/>
   </target>
 
-  <target name="prepare">    
+  <target name="prepare">
     <mkdir dir="${build}"/>
     <mkdir dir="${build_dist}"/>
     <mkdir dir="${build_tests}"/>
     <mkdir dir="${build_classes}"/>
-    <touch file="${build_classes}/${xmlpull_tag}"/>
-    <available property="junit_present" classname="junit.framework.TestCase" />    
+    <touch file="${build_classes}/${xmlpull_tag}_VERSION"/>
+    <available property="junit_present" classname="junit.framework.TestCase" />
     <uptodate property="build_notRequired" targetfile="${jar}">
       <srcfiles dir="${src_api}" includes="**/*.java"/>
-    </uptodate>    
+    </uptodate>
   </target>
 
   <target name="check_junit" unless="junit_present" depends="prepare">
@@ -96,8 +96,8 @@ All generated files are created under ${build} directory
   <!-- =================================================================== -->
 
   <target name="api" depends="prepare">
-    <javac debug="${debug}" deprecation="${deprecation}" 
-       srcdir="${src_api}" destdir="${build_classes}" classpath="${build_classes}"/>   
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_api}" destdir="${build_classes}" classpath="${build_classes}"/>
   </target>
 
   <target name="jar" unless="build_notRequired" depends="api">
@@ -111,21 +111,21 @@ All generated files are created under ${build} directory
 
   <target name="samples" depends="xmlpull">
     <mkdir dir="${build_samples}"/>
-    <javac debug="${debug}" deprecation="${deprecation}" 
+    <javac debug="${debug}" deprecation="${deprecation}"
       srcdir="${src_samples}" destdir="${build_samples}"
       classpath="${build_classes}"/>
-    <javac debug="${debug}" deprecation="${deprecation}" 
+    <javac debug="${debug}" deprecation="${deprecation}"
       srcdir="${src_samples}" destdir="${build_samples}"
       classpath="${build_classes}"/>
   </target>
 
 
-  <target name="compile" depends="xmlpull,tests,samples"/> 
+  <target name="compile" depends="xmlpull,tests,samples"/>
 
   <target name="all" depends="clean,compile"/>
 
   <!-- =================================================================== -->
-  <!-- JUnit automatic tests 	                                           -->
+  <!-- JUnit automatic tests                                               -->
   <!-- =================================================================== -->
 
   <path id="test-classpath">
@@ -135,8 +135,8 @@ All generated files are created under ${build} directory
 
   <target name="tests_junit" if="junit_present" depends="xmlpull,check_junit">
     <mkdir dir="${build_tests}"/>
-    <javac debug="${debug}" deprecation="${deprecation}" 
-      srcdir="${src_tests}" 
+    <javac debug="${debug}" deprecation="${deprecation}"
+      srcdir="${src_tests}"
       destdir="${build_tests}">
         <classpath refid="test-classpath" />
     </javac>
@@ -168,7 +168,7 @@ All generated files are created under ${build} directory
     <delete dir="${build_apidoc}"/>
     <mkdir dir="${build_apidoc}"/>
     <javadoc packagenames="${apidoc_packages}"
-    	     public="yes"
+             public="yes"
              sourcepath="${api_sourcepath}"
              destdir="${build_apidoc}"
              author="true"
@@ -177,6 +177,7 @@ All generated files are created under ${build} directory
              windowtitle="${name} ${version} API"
              doctitle="${name}"
              bottom="${copyright}"
+             stylesheetfile="${doc}/javadoc_stylesheet.css"
     />
   </target>
 
@@ -187,14 +188,15 @@ All generated files are created under ${build} directory
     <delete dir="${build_javadoc}"/>
     <mkdir dir="${build_javadoc}"/>
     <javadoc packagenames="${javadoc_packages}"
-             sourcepath="${api_srcpath}"
-             destdir="${build.javadoc}"
+             sourcepath="${api_sourcepath}"
+             destdir="${build_javadoc}"
              author="true"
              version="true"
              use="true"
-             windowtitle="Implementation ${name} ${version} API"
+             windowtitle="${name} ${version} Implementation API"
              doctitle="Implementation ${name}"
              bottom="${copyright}"
+             stylesheetfile="${doc}/javadoc_stylesheet.css"
     />
   </target>
 
@@ -211,10 +213,10 @@ All generated files are created under ${build} directory
     <mkdir dir="${dist}/build"/>
     <copy todir="${dist}/build">
       <fileset dir="${build}">
-        <include name="lib/${xmlpull_version}*.jar"/>      
-        <!--include name="classes/**"/-->      
-        <include name="samples/**"/>      
-        <include name="tests/**"/>      
+        <include name="lib/${xmlpull_version}*.jar"/>
+        <!--include name="classes/**"/-->
+        <include name="samples/**"/>
+        <include name="tests/**"/>
       </fileset>
     </copy>
 
@@ -285,22 +287,22 @@ All generated files are created under ${build} directory
         </fileset>
       </copy>
 
-     <chmod perm="a+x" dir="${dist}" 
+     <chmod perm="a+x" dir="${dist}"
        includes="**/*.sh" />
      
-    <zip zipfile="${dist_lite_zip}" basedir="${build}/dist" 
-      includes="${xmlpull_version}/**" 
+    <zip zipfile="${dist_lite_zip}" basedir="${build}/dist"
+      includes="${xmlpull_version}/**"
       excludes="${xmlpull_version}/build/**,${xmlpull_version}/doc/api/**"/>
       
-     <tar tarfile="${dist_lite_tar}" 
-	 longfile="gnu">
+     <tar tarfile="${dist_lite_tar}"
+         longfile="gnu">
 
           <tarfileset dir="${build}/dist" mode="755" username="aslom" group="ewww">
               <include name="${xmlpull_version}/**/*.sh"/>
               <exclude name="${xmlpull_version}/build/**"/>
               <exclude name="${xmlpull_version}/doc/api/**"/>
-         </tarfileset> 
-         <tarfileset dir="${build}/dist" username="aslom" group="ewww"> 
+         </tarfileset>
+         <tarfileset dir="${build}/dist" username="aslom" group="ewww">
              <include name="${xmlpull_version}/**"/>
              <exclude name="${xmlpull_version}/**/*.sh"/>
               <exclude name="${xmlpull_version}/build/**"/>
@@ -310,7 +312,7 @@ All generated files are created under ${build} directory
      </tar>
 
 
-     <gzip zipfile="${dist_lite_tgz}" src="${dist_lite_tar}" />      
+     <gzip zipfile="${dist_lite_tgz}" src="${dist_lite_tar}" />
     <delete file="${dist_lite_tar}"/>
      
   </target>
@@ -324,27 +326,27 @@ All generated files are created under ${build} directory
       </copy>
   
     <delete file="${dist_full_zip}"/>
-    <zip zipfile="${dist_full_zip}" basedir="${build}/dist" 
+    <zip zipfile="${dist_full_zip}" basedir="${build}/dist"
       includes="${xmlpull_version}/**"/>
 
-     <!--tar tarfile="${dist_full_tar}" basedir="${build}/dist" 
-	 longfile="gnu"
-	 includes="${xmlpull_version}/**" /-->
+     <!--tar tarfile="${dist_full_tar}" basedir="${build}/dist"
+         longfile="gnu"
+         includes="${xmlpull_version}/**" /-->
 
-     <tar tarfile="${dist_full_tar}" 
-	 longfile="gnu">
+     <tar tarfile="${dist_full_tar}"
+         longfile="gnu">
 
           <tarfileset dir="${build}/dist" mode="755" username="aslom" group="ewww">
               <include name="${xmlpull_version}/**/*.sh"/>
-         </tarfileset> 
-         <tarfileset dir="${build}/dist" username="aslom" group="ewww"> 
+         </tarfileset>
+         <tarfileset dir="${build}/dist" username="aslom" group="ewww">
              <include name="${xmlpull_version}/**"/>
              <exclude name="${xmlpull_version}/**/*.sh"/>
          </tarfileset>
 
      </tar>
      
-     <gzip zipfile="${dist_full_tgz}" src="${dist_full_tar}" />      
+     <gzip zipfile="${dist_full_tgz}" src="${dist_full_tar}" />
     <delete file="${dist_full_tar}"/>
 
   </target>
@@ -375,12 +377,12 @@ All generated files are created under ${build} directory
     <mkdir dir="${website}/download"/>
     <copy todir="${website}/download">
       <fileset dir="${build}/dist">
-        <include name="${xmlpull_version}_*.*"/>      
+        <include name="${xmlpull_version}_*.*"/>
       </fileset>
     </copy>
 
     <!--gunzip src="${dist_full_tgz}" dest="${website}/download/unpacked.tar"/>
-    <untar src="${website}/download/unpacked.tar" dest="${website}/download"/> 
+    <untar src="${website}/download/unpacked.tar" dest="${website}/download"/>
     <delete file="${website}/unpacked.tar"/>
     <move file="${website}/download/${xmlpull_version}" todir="${website}/download/unpacked"/-->
     
@@ -407,3 +409,5 @@ All generated files are created under ${build} directory
 
 
 </project>
+
+

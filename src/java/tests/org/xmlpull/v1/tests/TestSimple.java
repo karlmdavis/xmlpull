@@ -66,7 +66,7 @@ public class TestSimple extends TestCase {
             } catch(XmlPullParserException ex) {
             }
         }
-        assertEquals("getAttributeCount()", attribCount, xpp.getAttributeCount());
+        assertEquals("getAttributeCount()", attribCount, xpp.getAttributesCount());
     }
 
 
