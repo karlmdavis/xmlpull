@@ -618,9 +618,9 @@ public interface XmlPullParser {
      * <p><b>NOTE:</b> empty element (such as &lt;tag/>) will be reported
      *  with  two separate events: START_TAG, END_TAG - it must be so to preserve
      *   parsing equivalency of empty element to &lt;tag>&lt;/tag>.
-     *  (see isEmptyElement ())
+     *  (see isEmptyElementTag ())
      *
-     * @see #isEmptyElement
+     * @see #isEmptyElementTag
      * @see #START_TAG
      * @see #TEXT
      * @see #END_TAG
@@ -633,7 +633,7 @@ public interface XmlPullParser {
 
     /**
      * This method works similarly to next() but will expose
-     * additional event types (COMMENT, DOCTYPE, PROCESSING_INSTRUCTION, ENTITY_REF or
+     * additional event types (COMMENT, DOCDECL, PROCESSING_INSTRUCTION, ENTITY_REF or
      * IGNORABLE_WHITESPACE) if they are available in input.
      *
      * @see #next
@@ -642,7 +642,7 @@ public interface XmlPullParser {
      * @see #END_TAG
      * @see #END_DOCUMENT
      * @see #COMMENT
-     * @see #DOCTYPE
+     * @see #DOCDECL
      * @see #PROCESSING_INSTRUCTION
      * @see #ENTITY_REF
      * @see #IGNORABLE_WHITESPACE
