@@ -4,12 +4,14 @@
 package org.xmlpull.v1.wrapper;
 
 import java.io.IOException;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 /**
  * Extensions to XmlSerialzier interface
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @author Naresh Bhatia
  */
 public interface XmlSerializerWrapper extends XmlSerializer {
     public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
@@ -22,5 +24,15 @@ public interface XmlSerializerWrapper extends XmlSerializer {
 
     public XmlSerializer endTag (String name)
         throws IOException, IllegalArgumentException, IllegalStateException;
+
+
+    /**
+     * Writes a simple element such as <username>johndoe</username>. The namespace
+     * and elementText are allowed to be null. If elementText is null, an xsi:nil="true"
+     * will be added as an attribute.
+     */
+    public void element(String namespace, String elementName, String elementText)
+        throws IOException, XmlPullParserException;
+
 }
 

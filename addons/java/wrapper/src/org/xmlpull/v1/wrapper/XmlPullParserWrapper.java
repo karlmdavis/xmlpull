@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
  * Extensions to XmlPullParser interface
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @author Naresh Bhatia
  */
 public interface XmlPullParserWrapper extends XmlPullParser {
 
@@ -35,7 +36,15 @@ public interface XmlPullParserWrapper extends XmlPullParser {
      */
     public String getPIData() throws IllegalStateException;
 
+    public String getRequiredElementText(String namespace, String name)
+        throws IOException, XmlPullParserException;
+
     /**
+     * Is the current tag nil? Checks for xsi:nil="true".
+     */
+    public boolean isNil() throws IOException, XmlPullParserException;
+
+        /**
      * Tests if the current event is of the given type and if the namespace and name match.
      * null will match any namespace and any name. If the test passes a true is returned
      * otherwise a false is returned.

@@ -14,6 +14,7 @@ import org.xmlpull.v1.wrapper.XmlSerializerWrapper;
  * (provided by XmlPullUtil) and delegating exisiting methods to parser implementation.
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @author Naresh Bhatia
  */
 public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
     implements XmlSerializerWrapper
@@ -40,13 +41,6 @@ public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
         return xs.endTag(defaultNs, name);
     }
 
-
-
-    /**
-     * Writes a simple element such as <username>johndoe</username>. The namespace
-     * and elementText are allowed to be null. If elementText is null, an xsi:nil="true"
-     * will be added as an attribute.
-     */
     public void element(String namespace, String elementName, String elementText)
         throws IOException, XmlPullParserException
     {

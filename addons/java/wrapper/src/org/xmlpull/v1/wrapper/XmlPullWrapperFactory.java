@@ -20,8 +20,8 @@ import org.xmlpull.v1.wrapper.classic.StaticXmlSerializerWrapper;
 public class XmlPullWrapperFactory {
     private final static boolean DEBUG = false;
     protected ClassLoader classLoader;
-    protected XmlPullParserFactory factory;
-    protected boolean useDynamic;
+    protected XmlPullParserFactory f;
+    //protected boolean useDynamic;
 
     public static XmlPullWrapperFactory newInstance() throws XmlPullParserException
     {
@@ -35,13 +35,21 @@ public class XmlPullWrapperFactory {
         return new XmlPullWrapperFactory(factory);
     }
 
+    public static XmlPullWrapperFactory newInstance (String classNames, Class context)
+                throws XmlPullParserException
+    {
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance(classNames, context);
+        return new XmlPullWrapperFactory(factory);
+    }
+
+
     // ------------ IMPLEMENTATION
 
     protected XmlPullWrapperFactory(XmlPullParserFactory factory) throws XmlPullParserException {
         if(factory != null) {
-            this.factory = factory;
+            this.f = factory;
         } else {
-            this.factory = XmlPullParserFactory.newInstance();
+            this.f = XmlPullParserFactory.newInstance();
         }
     }
 
@@ -49,34 +57,34 @@ public class XmlPullWrapperFactory {
     public void setFeature(String name,
                            boolean state) throws XmlPullParserException
     {
-        factory.setFeature(name, state);
+        f.setFeature(name, state);
     }
 
 
     public boolean getFeature (String name) {
-        return factory.getFeature(name);
+        return f.getFeature(name);
     }
 
     public void setNamespaceAware(boolean awareness) {
-        factory.setNamespaceAware(awareness);
+        f.setNamespaceAware(awareness);
     }
 
     public boolean isNamespaceAware() {
-        return factory.isNamespaceAware();
+        return f.isNamespaceAware();
     }
 
     public void setValidating(boolean validating) {
-        factory.setValidating(validating);
+        f.setValidating(validating);
     }
 
     public boolean isValidating() {
-        return factory.isValidating();
+        return f.isValidating();
     }
     //public void setUseDynamic(boolean enable) { useDynamic = enable; };
     //public boolean getUseDynamic() { return useDynamic; };
 
     public XmlPullParserWrapper newPullWrapper() throws XmlPullParserException {
-        XmlPullParser pp = factory.newPullParser();
+        XmlPullParser pp = f.newPullParser();
         //        if(useDynamic) {
         //            return (XmlPullParserWrapper) DynamicXmlPullParserWrapper.newProxy(pp, classLoader);
         //        } else {
@@ -88,7 +96,7 @@ public class XmlPullWrapperFactory {
     }
 
     public XmlSerializerWrapper newSerializerWrapper() throws XmlPullParserException {
-        XmlSerializer xs = factory.newSerializer();
+        XmlSerializer xs = f.newSerializer();
         return new StaticXmlSerializerWrapper(xs);
     }
 

@@ -14,6 +14,7 @@ import org.xmlpull.v1.util.XmlPullUtil;
  * (provided by XmlPullUtil) and delegating exisiting methods to parser implementation.
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @author Naresh Bhatia
  */
 public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     implements XmlPullParserWrapper
@@ -37,7 +38,8 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
      */
 
     public String getRequiredElementText(String namespace, String name)
-        throws IOException, XmlPullParserException {
+        throws IOException, XmlPullParserException
+    {
             if (name == null) {
                 throw new XmlPullParserException("name for element can not be null");
             }
@@ -54,11 +56,9 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
             return text;
     }
 
-    /**
-     * Is the current tag nil? Checks for xsi:nil="true".
-     */
     public boolean isNil()
-        throws IOException, XmlPullParserException {
+        throws IOException, XmlPullParserException
+    {
 
         boolean result = false;
         String value = pp.getAttributeValue(XSI_NS, "nil");
