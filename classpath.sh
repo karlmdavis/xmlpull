@@ -7,7 +7,7 @@
 #    . classpath.sh [build|run] [set] [quiet]
 #
 
-LOCALCLASSPATH=.
+LOCALCLASSPATH=.:/home/haustein/projects/kxml2/src
 if [ ! "`echo lib/junit/*.jar`" = "lib/junit/*.jar" ] ; then
     LOCALCLASSPATH=`echo lib/junit/*.jar | tr ' ' ':'`:$LOCALCLASSPATH
 fi
