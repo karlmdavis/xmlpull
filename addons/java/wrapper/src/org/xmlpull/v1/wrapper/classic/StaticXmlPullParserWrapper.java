@@ -199,5 +199,33 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         return pp.nextText();
     }
 
+    public double readDoubleElement(String namespace, String name)
+        throws XmlPullParserException, IOException
+    {
+        pp.require(XmlPullParser.START_TAG, namespace, name);
+        return readDouble();
+    }
+
+    public float readFloatElement(String namespace, String name)
+        throws XmlPullParserException, IOException
+    {
+        pp.require(XmlPullParser.START_TAG, namespace, name);
+        return readFloat();
+    }
+
+    public int readIntElement(String namespace, String name)
+        throws XmlPullParserException, IOException
+    {
+        pp.require(XmlPullParser.START_TAG, namespace, name);
+        return readInt();
+    }
+
+    public String readStringElemet(String namespace, String name)
+        throws XmlPullParserException, IOException
+    {
+        pp.require(XmlPullParser.START_TAG, namespace, name);
+        return readString();
+    }
+
 }
 

@@ -382,7 +382,7 @@ public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
         throws XmlPullParserException, IOException, IllegalArgumentException
     {
         if( s == null ) {
-            throws new IllegalArgumentException("null string can not be written");
+            throw new IllegalArgumentException("null string can not be written");
         }
         xs.text(s);
     }

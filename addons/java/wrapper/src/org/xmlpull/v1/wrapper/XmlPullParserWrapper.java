@@ -133,11 +133,27 @@ public interface XmlPullParserWrapper extends XmlPullParser {
         throws XmlPullParserException, IOException;
 
     // set of methods to read XSD types
+    /**
+     * Read string content of elment and try to convert it to double.
+     * Take special care of INF, Infinity and NaN.
+     */
     public double readDouble() throws XmlPullParserException, IOException;
     public float readFloat() throws XmlPullParserException, IOException;
     public int readInt() throws XmlPullParserException, IOException;
     public String readString() throws XmlPullParserException, IOException;
 
+    /**
+     * Check that parser is on START_TAG with given namespace and name
+     * and then callreadDouble().
+     */
+    public double readDoubleElement(String namespace, String name)
+        throws XmlPullParserException, IOException;
+    public float readFloatElement(String namespace, String name)
+        throws XmlPullParserException, IOException;
+    public int readIntElement(String namespace, String name)
+        throws XmlPullParserException, IOException;
+    public String readStringElemet(String namespace, String name)
+        throws XmlPullParserException, IOException;
 
 }
 
