@@ -18,12 +18,12 @@ public class EventList {
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput (reader);
         int eventType;
-        while ((eventType = xpp.next()) != xpp.END_DOCUMENT) {
-            if(eventType == xpp.START_TAG) {
+        while ((eventType = xpp.next()) != XmlPullParser.END_DOCUMENT) {
+            if(eventType == XmlPullParser.START_TAG) {
                 System.out.println("START_TAG "+xpp.getName());
-            } else if(eventType == xpp.END_TAG) {
+            } else if(eventType == XmlPullParser.END_TAG) {
                 System.out.println("END_TAG   "+xpp.getName());
-            } else if(eventType == xpp.TEXT) {
+            } else if(eventType == XmlPullParser.TEXT) {
                 System.out.println("TEXT      "+xpp.getText());
             }
         }
