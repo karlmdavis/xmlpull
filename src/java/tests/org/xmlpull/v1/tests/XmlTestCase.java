@@ -85,28 +85,29 @@ public class XmlTestCase extends UtilTestCase {
         InputStream is = null;
         if(is == null) {
             try {
-                is = getClass().getResourceAsStream (name);
-            } catch(Exception ex) {
-            }
-        }
-        if(is == null) {
-            try {
                 is = getClass().getResourceAsStream (RESOURCE_PREFIX+name);
             } catch(Exception ex) {
             }
         }
+/*        if(is == null) {   // this seems to causes loading of simple.xml in the kxml samples dir
+            try {
+                is = getClass().getResourceAsStream (name);
+            } catch(Exception ex) {
+            }
+        } 
         if(is == null) {
             try {
                 is = getClass().getResourceAsStream ("/"+name);
             } catch(Exception ex) {
             }
-        }
+        }  */
         if(is == null) {
             try {
                 is = new FileInputStream(name);
             } catch(Exception ex) {
             }
         }
+ 
 
         if (is == null) {
             throw new IOException("could not open XML test for '"+name+"'");
