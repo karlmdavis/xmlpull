@@ -245,7 +245,28 @@ public class TestAttributes extends UtilTestCase {
         }
     }
 
+    public void testAttribValueNormalization() throws IOException, XmlPullParserException
+    {
+        final String XML_ATTRS =
+            "<javadoc packagenames=\"${packages}\""+
+            " bottom=\"&lt;table width='80%%'&gt;&lt;tr&gt;&lt;td width='50%%'&gt;&lt;p "+
+            " align='center'&gt;&lt;a href='http://www.xmlpull.org/'&gt;\" "+
+            "/>";
 
+        XmlPullParser pp = factory.newPullParser();
+        pp.setInput(new StringReader(XML_ATTRS));
+
+        assertEquals(XmlPullParser.START_TAG, pp.next());
+        assertEquals("javadoc", pp.getName());
+        assertEquals("${packages}", pp.getAttributeValue(0));
+        assertEquals("${packages}", pp.getAttributeValue("", "packagenames"));
+        assertEquals(
+                "<table width='80%%'><tr><td width='50%%'><p  align='center'><a href='http://www.xmlpull.org/'>",
+                pp.getAttributeValue("", "bottom")
+        );
+
+        //System.out.println(pp.getAttributeValue("", "bottom"));
+    }
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestAttributes.class));
     }

@@ -31,7 +31,7 @@ public class TestSimpleToken extends UtilTestCase {
         "]>"+
         "<!--c-->  \r\n<foo attrName='attrVal'>bar<!--comment-->"+
         "&test;&test;&lt;&#32;"+
-        "&amp;&gt;&apos;&quot;&#x20;"+
+        "&amp;&gt;&apos;&quot;&#x20;&#x3C;"+
         "<?pi ds?><![CDATA[ vo<o ]]></foo> \r\n";
 
     public TestSimpleToken(String name) {
@@ -133,7 +133,7 @@ public class TestSimpleToken extends UtilTestCase {
         checkAttribNs(xpp, 0, null, "", "attrName", "attrVal");
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null,
-                           "barThis is test! Do NOT Panic!This is test! Do NOT Panic!< &>'\"  vo<o ",
+                           "barThis is test! Do NOT Panic!This is test! Do NOT Panic!< &>'\" < vo<o ",
                            false, -1);
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
@@ -272,6 +272,9 @@ public class TestSimpleToken extends UtilTestCase {
 
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, "#x20", " ", false, -1);
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, "#x3C", "<", false, -1);
 
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, "pi ds", false, -1);

@@ -31,7 +31,8 @@ public class MyXmlPullApp
     public static void main (String args[])
         throws XmlPullParserException, IOException
     {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
+            System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null);
         //factory.setNamespaceAware(true);
         factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
 
