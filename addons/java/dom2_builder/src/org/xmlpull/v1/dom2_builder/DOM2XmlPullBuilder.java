@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
-//import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -21,6 +20,7 @@ import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+import org.w3c.dom.DOMException;
 
 /**
  * <strong>Simplistic</strong> DOM2 builder that should be enough to do support most cases.
@@ -42,7 +42,7 @@ public class DOM2XmlPullBuilder {
 
         // create document
 
-        Document doc1 = builder.parse(reader);
+        Element el1 = builder.parse(reader);
         //System.out.println("doc="+doc);
 
 
@@ -68,11 +68,11 @@ public class DOM2XmlPullBuilder {
 
         // reparse
 
-        Document doc2 = builder.parse(reader);
+        Element el2 = builder.parse(reader);
 
         // check that what was written is OK
 
-        Element root = doc2.getDocumentElement();
+        Element root = el2; //doc2.getDocumentElement();
         //System.out.println("root="+root);
         System.out.println ("root ns=" + root.getNamespaceURI() + ", localName=" +root.getLocalName());
         assertEquals("uri1", root.getNamespaceURI());
@@ -111,88 +111,178 @@ public class DOM2XmlPullBuilder {
         }
     }
 
-    protected XmlPullParser pp;
-    protected Document doc;
+    //protected XmlPullParser pp;
+    protected XmlPullParserFactory factory;
 
     public DOM2XmlPullBuilder() throws XmlPullParserException {
-        pp = XmlPullParserFactory.newInstance().newPullParser();
-        pp.setFeature(pp.FEATURE_PROCESS_NAMESPACES, true);
+        factory = XmlPullParserFactory.newInstance();
     }
-    public DOM2XmlPullBuilder(XmlPullParser pp) throws XmlPullParserException {
-        this.pp = pp;
+    //public DOM2XmlPullBuilder(XmlPullParser pp) throws XmlPullParserException {
+    public DOM2XmlPullBuilder(XmlPullParserFactory factory)throws XmlPullParserException
+    {
+        this.factory = factory;
     }
 
-    public Document parse(Reader reader) throws XmlPullParserException, IOException {
+    protected Document newDoc() throws XmlPullParserException {
         try {
+            // if you see dreaded "java.lang.NoClassDefFoundError: org/w3c/dom/ranges/DocumentRange"
+            // add the newest xercesImpl and apis JAR file to JRE/lib/endorsed
+            // for more deatils see: http://java.sun.com/j2se/1.4.2/docs/guide/standards/index.html
             DocumentBuilderFactory factory
                 = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             DOMImplementation impl = builder.getDOMImplementation();
-            doc = builder.newDocument();
+            return builder.newDocument();
         } catch (FactoryConfigurationError ex) {
-            new XmlPullParserException(
+            throw new XmlPullParserException(
                 "could not configure factory JAXP DocumentBuilderFactory: "+ex, null, ex);
         } catch (ParserConfigurationException ex) {
-            new XmlPullParserException(
+            throw new XmlPullParserException(
                 "could not configure parser JAXP DocumentBuilderFactory: "+ex, null, ex);
         }
-        pp.setInput(reader);
-        pp.next();
-        pp.require( pp.START_TAG, null, null);
-        Element root = parseNode();
-        doc.appendChild(root);
-        return doc;
     }
 
-    protected Element parseNode() throws XmlPullParserException, IOException {
-        pp.require( pp.START_TAG, null, null);
-        String name = pp.getName();
-        String ns = pp.getNamespace(    );
-        String prefix = pp.getPrefix();
-        String qname = prefix != null ? prefix+":"+name : name;
-        Element parent = doc.createElementNS(ns, qname);
+    protected XmlPullParser newParser() throws XmlPullParserException {
+        return factory.newPullParser();
+    }
 
-        //declare namespaces - quite painful and easy to fail process in DOM2
-        for (int i = pp.getNamespaceCount(pp.getDepth()-1); i < pp.getNamespaceCount(pp.getDepth()); ++i)
+    public Element parse(Reader reader) throws XmlPullParserException, IOException {
+        Document docFactory = newDoc();
+        return parse(reader, docFactory);
+    }
+
+    public Element parse(Reader reader, Document docFactory)
+        throws XmlPullParserException, IOException
+    {
+        Document doc = newDoc();
+        XmlPullParser pp = newParser();
+        pp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        pp.setInput(reader);
+        pp.next();
+        Element root = parseSubTree(pp, doc);
+        //doc.appendChild(root);
+        return root;
+    }
+
+    public Element parse(XmlPullParser pp) throws XmlPullParserException, IOException {
+        Document doc = newDoc();
+        Element root = parseSubTree(pp, doc);
+        return root;
+    }
+
+    public Element parseSubTree(XmlPullParser pp, Document docFactory)
+        throws XmlPullParserException, IOException
+    {
+        BuildProcess process = new BuildProcess();
+        return process.parseSubTree(pp, docFactory);
+    }
+
+    static class BuildProcess {
+        private XmlPullParser pp;
+        private Document docFactory;
+        private boolean scanNamespaces = true;
+
+        BuildProcess() {
+        }
+
+        public Element parseSubTree(XmlPullParser pp, Document docFactory)
+            throws XmlPullParserException, IOException
         {
+            this.pp = pp;
+            this.docFactory = docFactory;
+            return parseSubTree();
+        }
+
+        private Element parseSubTree()
+            throws XmlPullParserException, IOException
+        {
+            pp.require( pp.START_TAG, null, null);
+            String name = pp.getName();
+            String ns = pp.getNamespace(    );
+            String prefix = pp.getPrefix();
+            String qname = prefix != null ? prefix+":"+name : name;
+            Element parent = docFactory.createElementNS(ns, qname);
+
+            //declare namespaces - quite painful and easy to fail process in DOM2
+            declareNamespaces(pp, parent);
+
+            // process attributes
+            for (int i = 0; i < pp.getAttributeCount(); i++)
+            {
+                String attrNs = pp.getAttributeNamespace(i);
+                String attrName = pp.getAttributeName(i);
+                String attrValue = pp.getAttributeValue(i);
+                if(attrNs == null || attrNs.length() == 0) {
+                    parent.setAttribute(attrName, attrValue);
+                } else {
+                    String attrPrefix = pp.getAttributePrefix(i);
+                    String attrQname = attrPrefix != null ? attrPrefix+":"+attrName : attrName;
+                    parent.setAttributeNS(attrNs, attrQname, attrValue);
+                }
+            }
+
+            // process children
+            while( pp.next() != pp.END_TAG ) {
+                if (pp.getEventType() == pp.START_TAG) {
+                    Element el = parseSubTree(pp, docFactory);
+                    parent.appendChild(el);
+                } else if (pp.getEventType() == pp.TEXT) {
+                    String text = pp.getText();
+                    Text textEl = docFactory.createTextNode(text);
+                    parent.appendChild(textEl);
+                } else {
+                    throw new XmlPullParserException(
+                        "unexpected event "+pp.TYPES[ pp.getEventType() ], pp, null);
+                }
+            }
+            pp.require( pp.END_TAG, ns, name);
+            return parent;
+        }
+
+        private void declareNamespaces(XmlPullParser pp, Element parent)
+            throws DOMException, XmlPullParserException
+
+
+        {
+            if(scanNamespaces) {
+                scanNamespaces = false;
+                int top = pp.getNamespaceCount(pp.getDepth()) - 1;
+                // this loop computes list of all in-scope prefixes
+                LOOP:
+                for (int i = top; i >= pp.getNamespaceCount(0); --i)
+                {
+                    // make sure that no prefix is duplicated
+                    String prefix = pp.getNamespacePrefix(i);
+                    for (int j = top; j > i; --j)
+                    {
+                        if(prefix.equals(pp.getNamespacePrefix(j))) {
+                            // prefix is already declared -- skip it
+                            continue LOOP;
+                        }
+                    }
+                    declareOneNamespace(pp, i, parent);
+                }
+            } else {
+                for (int i = pp.getNamespaceCount(pp.getDepth()-1);
+                     i < pp.getNamespaceCount(pp.getDepth());
+                     ++i)
+                {
+                    declareOneNamespace(pp, i, parent);
+                }
+            }
+        }
+
+        private void declareOneNamespace(XmlPullParser pp, int i, Element parent)
+            throws DOMException, XmlPullParserException {
             String xmlnsPrefix = pp.getNamespacePrefix(i);
             String xmlnsUri = pp.getNamespaceUri(i);
-            String xmlnsDecl = (prefix != null) ? "xmlns:"+xmlnsPrefix : "xmlns";
+            String xmlnsDecl = (xmlnsPrefix != null) ? "xmlns:"+xmlnsPrefix : "xmlns";
             parent.setAttributeNS("http://www.w3.org/2000/xmlns/", xmlnsDecl, xmlnsUri);
         }
 
-        // process attributes
-        for (int i = 0; i < pp.getAttributeCount(); i++)
-        {
-            String attrNs = pp.getAttributeNamespace(i);
-            String attrName = pp.getAttributeName(i);
-            String attrValue = pp.getAttributeValue(i);
-            if(attrNs == null || attrNs.length() == 0) {
-                parent.setAttribute(attrName, attrValue);
-            } else {
-                String attrPrefix = pp.getAttributePrefix(i);
-                String attrQname = attrPrefix != null ? attrPrefix+":"+attrName : attrName;
-                parent.setAttributeNS(attrNs, attrQname, attrValue);
-            }
-        }
 
-        // process children
-        while( pp.next() != pp.END_TAG ) {
-            if (pp.getEventType() == pp.START_TAG) {
-                Element el = parseNode();
-                parent.appendChild(el);
-            } else if (pp.getEventType() == pp.TEXT) {
-                String text = pp.getText();
-                Text textEl = doc.createTextNode(text);
-                parent.appendChild(textEl);
-            } else {
-                throw new XmlPullParserException(
-                    "unexpected event "+pp.TYPES[ pp.getEventType() ], pp, null);
-            }
-        }
-        pp.require( pp.END_TAG, ns, name);
-        return parent;
     }
 
 }
+
 
