@@ -7,12 +7,12 @@
 </HEAD>
 <BODY BGCOLOR="white">
 
-<H1>XMLPULL V1 API Features</H2>
+<H1>XmlPull v1 API Features</H2>
 
 <P>
 
 The feature defines a discoverable and possibly changeable characteristic of 
-XMLPULL parser.<p>Please note: the key words &quot;<b>MUST</b>&quot;, &quot;<b>MUST NOT</b>&quot;, &quot;<b>REQUIRED</b>&quot;, 
+XmlPull parser.<p>Please note: the key words &quot;<b>MUST</b>&quot;, &quot;<b>MUST NOT</b>&quot;, &quot;<b>REQUIRED</b>&quot;, 
 &quot;<b>SHALL</b>&quot;, &quot;<b>SHALL NOT</b>&quot;, &quot;<b>SHOULD</b>&quot;, &quot;<b>SHOULD NOT</b>&quot;, &quot;<b>RECOMMENDED</b>&quot;, 
 &quot;<b>MAY</b>&quot;, and &quot;<b>OPTIONAL</b>&quot; in this document are to be interpreted as 
 described in <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p><h2>
@@ -20,7 +20,8 @@ described in <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p><h2>
 Standard features</h2>
 <P>
 
-The semantics of of all standard features <b>MUST</b> be followed by every XMLPULL V1 API 
+The semantics of of all standard features <b>MUST</b> be followed by every 
+XmlPull v1 API 
 implementation.<P>
 
 All standard feature values <b>MUST NOT</b> change unless setFeature() is called 
@@ -99,7 +100,7 @@ START_DOCUMENT state i.e. this feature can not be changed during parsing.
 <h2>
 Optional features</h2>
 <p>
-They <b>MAY</b> be supported but are not part of XMLPULL API<p>
+They <b>MAY</b> be supported but are not part of XmlPull API<p>
 &nbsp;
 
 
@@ -171,6 +172,9 @@ Handling</a> is not applied)</li>
   <li>for PROCESSING INSTRUCTION event exact content of PI <b>MUST</b> be 
   returned: in &lt;?target&nbsp;&nbsp;&nbsp; data?&gt; white spaces between target and 
   data must be preserved</li>
+  <li>content of XMLDecl must be reported as not null by
+  <a href="http://xmlpull.org/v1/doc/features.html#xmldecl-content">XMLDECL 
+  CONTENT</a> property</li>
   <li>DOCDECL <b>MUST</b> be reported exactly as in input</li>
 </ul>
 <ul>

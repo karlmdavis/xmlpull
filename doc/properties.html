@@ -7,12 +7,12 @@
 </HEAD>
 <BODY BGCOLOR="white">
 
-<H1>XMLPULL V1 API Properties</H2>
+<H1>XmlPull v1 API Properties</H2>
 
 <P>
 
 The property mechanism allows to pass information to 
-XMLPULL parser implementation that is not part of API.<p>Please note: the key words &quot;<b>MUST</b>&quot;, &quot;<b>MUST NOT</b>&quot;, &quot;<b>REQUIRED</b>&quot;, 
+XmlPull parser implementation that is not part of API.<p>Please note: the key words &quot;<b>MUST</b>&quot;, &quot;<b>MUST NOT</b>&quot;, &quot;<b>REQUIRED</b>&quot;, 
 &quot;<b>SHALL</b>&quot;, &quot;<b>SHALL NOT</b>&quot;, &quot;<b>SHOULD</b>&quot;, &quot;<b>SHOULD NOT</b>&quot;, &quot;<b>RECOMMENDED</b>&quot;, 
 &quot;<b>MAY</b>&quot;, and &quot;<b>OPTIONAL</b>&quot; in this document are to be interpreted as 
 described in <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p><h2>
@@ -20,13 +20,73 @@ described in <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p><h2>
 Standard properties</h2>
 <P>
 
-Currently there is no standard properties defined.<hr>
+Currently there is no standard properties defined.<P>
+
+&nbsp;<hr>
 <h2>
 Optional properties</h2>
 <p>
-They <b>MAY</b> be supported but are not part of XMLPULL API<p>
-Please report them to XMLPULL discussion group so they can be added here and 
+They <b>MAY</b> be supported but are not part of 
+<a href="http://www.xmlpull.org/">XmlPull API</a>.<p>
+Please report them to XmlPull discussion group so they can be added here and 
 made easier to discover.<p>&nbsp;</p>
+
+<h3>
+<a name="xmldecl-version"></a>Optional property: XMLDECL VERSION</h3>
+<p>This property is identified by
+<a href="http://xmlpull.org/v1/doc/properties.html#xmldecl-version">
+http://xmlpull.org/v1/doc/properties.html#xmldecl-version</a> </p>
+<p>If <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">PROCESS 
+DOCDECL</a> feature is enabled it is REQUIRED property with String otherwise it 
+is optional.</p>
+
+<p>If supported and there was
+<a href="http://www.w3.org/TR/REC-xml#NT-VersionInfo">VersionInfo</a> version in
+<a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">XMLDecl</a> then it returns 
+its content if standalone='no' otherwise if there was no standalone declaration 
+or this property is not supported it returns null.</p>
+
+<p>For example if input XML stream contained &lt;?xml&nbsp; version='1.0' 
+standalone='true'?&gt; then this property will contain &quot;1.0&quot;.</p>
+
+<p>&nbsp;</p>
+
+
+<h3>
+<a name="xmldecl-standalone"></a>Optional property: XMLDECL STANDALONE</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#xmldecl-standalone">
+http://xmlpull.org/v1/doc/features.html#xmldecl-standalone</a> </p>
+<p>If <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">PROCESS 
+DOCDECL</a> feature is enabled it is REQUIRED property with Boolean otherwise it 
+is optional.</p>
+
+<p>If supported and there was <a href="http://www.w3.org/TR/REC-xml#NT-SDDecl">
+SDDecl</a> standalone in <a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">
+XMLDecl</a> then it returns Boolean(true) if standalone='yes' or Boolean(false) 
+if standalone='no' otherwise if there was no standalone declaration or this 
+property is not supported it returns null.</p>
+
+<p>&nbsp;</p>
+
+
+<h3>
+<a name="xmldecl-standalone"></a>Optional property: XMLDECL CONTENT</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#xmldecl-content">
+http://xmlpull.org/v1/doc/features.html#xmldecl-content</a> </p>
+<p>If <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML 
+ROUNDTRIP</a> feature is enabled it is REQUIRED property with String otherwise 
+it is optional.</p>
+
+<p>If XML ROUNDTRIP feature is true then this property MUST contain everything 
+after '&lt;?xml' and before final '?&gt;' if XML input contained XMLDecl (see section
+<a href="http://www.w3.org/TR/REC-xml#NT-XMLDecl">2.8 Prolog and Document Type 
+Declaration</a> in XML 1.0 ). For example if input XML stream contained &lt;?xml&nbsp; 
+version='1.0' standalone='true'?&gt; then this property will contain &quot; 
+version='1.0' standalone='true'&quot;.</p>
+
+<p>&nbsp;</p>
 
 <h3>
 <a name="serializer-indentation"></a>Optional property: SERIALIZER INDENTATION</h3>

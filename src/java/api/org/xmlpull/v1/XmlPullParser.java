@@ -51,6 +51,23 @@ import java.io.Reader;
  * <dt><a href="#END_DOCUMENT">END_DOCUMENT</a><dd> No more events are available
  * </dl>
  *
+ * <p>after first next() or nextToken() (or any other next*() method)
+ * is called user application can obtain
+ * XML version, standalone and encoding from XML declaration
+ * in following ways:<ul>
+ * <li><b>version</b>:
+ *  getProperty(&quot;<a href="http://xmlpull.org/v1/doc/properties.html#xmldecl-version">http://xmlpull.org/v1/doc/properties.html#xmldecl-version</a>&quot;)
+ *       returns String ("1.0") or null if XMLDecl was not read or if property is not supported
+ * <li><b>standalone</b>:
+ *  getProperty(&quot;<a href="http://xmlpull.org/v1/doc/features.html#xmldecl-standalone">http://xmlpull.org/v1/doc/features.html#xmldecl-standalone&quot;)
+ *       returns Boolean: null if there was no standalone declaration
+ *  or if property is not supported
+ *         otherwise returns Boolean(true) if standalon="yes" and Boolean(false) when standalone="no"
+ * <li><b>encoding</b>: obtained from getInputEncoding()
+ *       null if stream had unknown encoding (not set in setInputStream)
+ *           and it was not declared in XMLDecl
+ * </ul>
+ *
  * A minimal example for using this API may look as follows:
  * <pre>
  * import java.io.IOException;
@@ -966,6 +983,9 @@ public interface XmlPullParser {
      *
      * <p><strong>NOTE:</strong> whether returned text of token is end-of-line normalized
      *  is depending on FEATURE_XML_ROUNDTRIP.
+     *
+     * <p><strong>NOTE:</strong> XMLDecl (&lt;?xml ...?&gt;) is not reported but its content
+     * is available through optional properties (see class description above).
      *
      * @see #next
      * @see #START_TAG
