@@ -161,6 +161,9 @@ public class XmlPullParserFactory {
 
     public XmlPullParser newPullParser() throws XmlPullParserException {
 
+        if (parserClasses == null) throw new XmlPullParserException
+                ("Factory initialization was incomplete - has not tried "+classNamesLocation);
+
         if (parserClasses.size() == 0) throw new XmlPullParserException
                 ("No valid parser classes found in "+classNamesLocation);
 
@@ -203,7 +206,9 @@ public class XmlPullParserFactory {
 
     public XmlSerializer newSerializer() throws XmlPullParserException {
 
-        if (serializerClasses.size() == 0) throw new XmlPullParserException
+        if (serializerClasses == null) throw new XmlPullParserException
+                ("Factory initialization incomplete - has not tried "+classNamesLocation);
+        if(serializerClasses.size() == 0) throw new XmlPullParserException
                 ("No valid serializer classes found in "+classNamesLocation);
 
         StringBuffer issues = new StringBuffer ();
@@ -213,13 +218,13 @@ public class XmlPullParserFactory {
             try {
                 XmlSerializer ser = (XmlSerializer) ppClass.newInstance();
 
-//                for (Enumeration e = features.keys (); e.hasMoreElements ();) {
-//                    String key = (String) e.nextElement();
-//                    Boolean value = (Boolean) features.get(key);
-//                    if(value != null && value.booleanValue()) {
-//                        ser.setFeature(key, true);
-//                    }
-//                }
+                //                for (Enumeration e = features.keys (); e.hasMoreElements ();) {
+                //                    String key = (String) e.nextElement();
+                //                    Boolean value = (Boolean) features.get(key);
+                //                    if(value != null && value.booleanValue()) {
+                //                        ser.setFeature(key, true);
+                //                    }
+                //                }
                 return ser;
 
             } catch(Exception ex) {
@@ -302,15 +307,15 @@ public class XmlPullParserFactory {
 
             if (candidate != null) {
                 boolean recognized = false;
-                if (instance instanceof XmlPullParser) {
+                if (XmlPullParser.class.isAssignableFrom(candidate) ) {
                     parserClasses.addElement (candidate);
                     recognized = true;
                 }
-                if (instance instanceof XmlSerializer) {
+                if (XmlSerializer.class.isAssignableFrom(candidate)) {
                     serializerClasses.addElement (candidate);
                     recognized = true;
                 }
-                if (instance instanceof XmlPullParserFactory) {
+                if (XmlPullParserFactory.class.isAssignableFrom(candidate)) {
                     if (factory == null) {
                         factory = (XmlPullParserFactory) instance;
                     }
@@ -325,6 +330,7 @@ public class XmlPullParserFactory {
 
         if (factory == null) factory = new XmlPullParserFactory ();
         factory.parserClasses = parserClasses;
+        factory.serializerClasses = serializerClasses;
         factory.classNamesLocation = classNamesLocation;
         return factory;
     }
