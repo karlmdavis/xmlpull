@@ -4,12 +4,12 @@
 package org.xmlpull.v1.tests;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlSerializer;
 
 /**
  * TODO: add tests for
@@ -21,6 +21,10 @@ import org.xmlpull.v1.XmlPullParserFactory;
  */
 public class PackageTests extends TestRunner
 {
+    private static boolean runAll;
+
+    public static boolean runnigAllTests() { return runAll; }
+
     public PackageTests()
     {
         super();
@@ -39,11 +43,11 @@ public class PackageTests extends TestRunner
         suite.addTestSuite(TestAttributes.class);
         suite.addTestSuite(TestEolNormalization.class);
         suite.addTestSuite(TestEntityReplacement.class);
+        suite.addTestSuite(TestCdsect.class);
         suite.addTestSuite(TestEvent.class);
         suite.addTestSuite(TestToken.class);
         suite.addTestSuite(TestMisc.class);
         suite.addTestSuite(TestSetInput.class);
-
         suite.addTestSuite(TestSimpleProcessDocdecl.class);
         suite.addTestSuite(TestSimpleValidation.class);
         suite.addTestSuite(TestProcessDocdecl.class);
@@ -74,7 +78,7 @@ public class PackageTests extends TestRunner
 
     public void runPackageTests(String testFactoryName) {
         writer().println("Executing XMLPULL tests"
-                        +(testFactoryName != null ? " for '"+testFactoryName+"'" : ""));
+                             +(testFactoryName != null ? " for '"+testFactoryName+"'" : ""));
         notes.setLength(0);
         XmlPullParserFactory f = null;
         try {
@@ -87,8 +91,9 @@ public class PackageTests extends TestRunner
             ex.printStackTrace();
             System.exit(1);
         }
+        XmlPullParser parser = null;
         try {
-            f.newPullParser();
+            parser=f.newPullParser();
         } catch (Exception ex) {
             System.err.println(
                 "ERROR: tests aborted - could not create instance of XmlPullParser from factory "
@@ -97,8 +102,9 @@ public class PackageTests extends TestRunner
             System.exit(2);
         }
 
+        XmlSerializer serializer = null;
         try {
-            f.newSerializer();
+            serializer=f.newSerializer();
         } catch (Exception ex) {
             System.err.println(
                 "ERROR: tests aborted - could not create instance of XmlSerializer from factory "
@@ -106,6 +112,12 @@ public class PackageTests extends TestRunner
             ex.printStackTrace();
             System.exit(3);
         }
+        String name = getClass().getName();
+        name = name.substring(name.lastIndexOf('.')+1);
+        System.out.println(name+" uses factory="+f.getClass().getName()
+                               +" parser="+parser.getClass().getName()
+                               +" serializer="+serializer.getClass().getName()
+                          );
 
         // now run all tests ...
         //junit.textui.TestRunner.run(suite());
@@ -136,6 +148,7 @@ public class PackageTests extends TestRunner
         final String listOfTests = System.getProperty("org.xmlpull.v1.tests");
         final String name = XmlPullParserFactory.PROPERTY_NAME;
         final String oldValue = System.getProperty(name);
+        runAll = true;
         if(listOfTests != null) {
             int pos = 0;
             while (pos < listOfTests.length()) {

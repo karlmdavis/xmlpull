@@ -35,6 +35,7 @@ public class TestToken extends UtilTestCase {
     }
 
     protected void tearDown() {
+        factory = null;
     }
 
 
@@ -170,12 +171,19 @@ public class TestToken extends UtilTestCase {
         } else {
             xpp.nextToken();
         }
-        checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null,
-                               (roundtripSupported  ? " titlepage "+
-                                    //"SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
-                                    "[<!ENTITY % active.links \"INCLUDE\">"+
-                                    "  <!ENTITY   test \"This is test! Do NOT Panic!\" >]" : null)
-                               , false, -1);
+        checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null, false, -1);
+        String expectedDocdecl = " titlepage "+
+            //"SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
+            "[<!ENTITY % active.links \"INCLUDE\">"+
+            "  <!ENTITY   test \"This is test! Do NOT Panic!\" >]";
+        String gotDocdecl = xpp.getText();
+        if(roundtripSupported && gotDocdecl == null) {
+            fail("when roundtrip is enabled DOCDECL content must be reported");
+        }
+        if(gotDocdecl != null) {
+            assertEquals("DOCDECL content", expectedDocdecl, gotDocdecl);
+        }
+
         try {
             xpp.isWhitespace();
             fail("whitespace function must fail for DOCDECL");

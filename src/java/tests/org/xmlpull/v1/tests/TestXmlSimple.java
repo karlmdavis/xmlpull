@@ -17,14 +17,19 @@ public class TestXmlSimple extends XmlTestCase {
     }
 
     public TestXmlSimple(String name) {
-	super(name);
+        super(name);
     }
 
     public void testSimple()
-	throws IOException, XmlPullParserException
+        throws IOException, XmlPullParserException
     {
-	testXml("simple.xml");
+        testXml("simple.xml");
     }
 
+    public void testSimple2()
+        throws IOException, XmlPullParserException
+    {
+        testXml("simple2.xml");
+    }
 }
 

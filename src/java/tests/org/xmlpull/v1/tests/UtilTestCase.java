@@ -20,7 +20,8 @@ public class UtilTestCase extends TestCase {
     protected static final String FEATURE_XML_ROUNDTRIP=
         "http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
 
-    protected String TEST_XML =
+
+    protected final static String TEST_XML =
         "<root>\n"+
         "<foo>bar</foo>\r\n"+
         "<hugo xmlns=\"http://www.xmlpull.org/temp\"> \n\r \n"+
@@ -32,17 +33,26 @@ public class UtilTestCase extends TestCase {
         "<!-- an xml sample document without meaningful content -->\n";
 
     //private static XmlPullParserFactory factory;
+    private static boolean printedFactoryName;
 
     public UtilTestCase(String name) {
         super(name);
     }
 
     public static XmlPullParserFactory factoryNewInstance() throws XmlPullParserException {
+        String property = System.getProperty(XmlPullParserFactory.PROPERTY_NAME);
+        //"org.xmlpull.mxp1.MXParserFactory",
+        //"org.xmlpull.v1.xni2xmlpull1.X2ParserFactory",
+        //property = "org.xmlpull.mxp1.MXParser,org.xmlpull.mxp1_serializer.MXSerializer";
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
-            System.getProperty(XmlPullParserFactory.PROPERTY_NAME),
+            property,
             null //Thread.currentThread().getContextClassLoader().getClass(), //NOT ON JDK 1.1
         );
-        //System.out.println("factory="+factory);
+        //System.out.println("factory="+factory+" property="+property);
+        if(PackageTests.runnigAllTests() == false && printedFactoryName == false) {
+            System.out.println("factory="+factory+" property="+property);
+            printedFactoryName = true;
+        }
         return factory;
     }
 
@@ -269,7 +279,14 @@ public class UtilTestCase extends TestCase {
         } else if(ch == '\t') {
             return "\\t";
         } if(ch > 127 || ch < 32) {
-            return "\\u"+Integer.toHexString((int)ch);
+            StringBuffer buf = new StringBuffer("\\u");
+            String hex = Integer.toHexString((int)ch);
+            for (int i = 0; i < 4-hex.length(); i++)
+            {
+                buf.append('0');
+            }
+            buf.append(hex);
+            return buf.toString();
         }
         return ""+ch;
     }

@@ -3,10 +3,8 @@
 
 package org.xmlpull.v1.tests;
 
-import java.io.*;
-
+import java.io.IOException;
 import junit.framework.TestSuite;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 public class TestXmlCdsect extends XmlTestCase {
@@ -16,13 +14,32 @@ public class TestXmlCdsect extends XmlTestCase {
     }
 
     public TestXmlCdsect(String name) {
-	super(name);
+        super(name);
     }
 
     public void testCdsect()
-	throws IOException, XmlPullParserException
+        throws IOException, XmlPullParserException
     {
-	testXml("cdsect.xml");
+        testXml("cdsect.xml");
+    }
+
+
+    public void testCdsectEol()
+        throws IOException, XmlPullParserException
+    {
+        testXml("cdsect_eol.xml");
+    }
+
+    public void testCdsectMixed()
+        throws IOException, XmlPullParserException
+    {
+        testXml("cdsect_mixed.xml");
+    }
+
+    public void testCdsectMore()
+        throws IOException, XmlPullParserException
+    {
+        testXml("cdsect_more.xml");
     }
 
 }

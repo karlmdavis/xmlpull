@@ -52,7 +52,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
         if(textContent != null) {
             xpp.next();
-            checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "test", false, -1);
+            checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, textContent, false, -1);
         }
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
@@ -164,10 +164,16 @@ public class TestSerializeWithNs extends UtilTestCase {
     }
 
     public void testMisc() throws Exception {
-        // all comemnts etc
+        // all comments etc
     }
 
-    public void testIndneting() throws Exception {
+    public void testSetPrefix() throws Exception {
+        //setPrefix check that prefix is not duplicated ...
+
+    //TODO      redeclaring defult namespace
+    }
+
+    public void testIndenting() throws Exception {
         // generate SOAP envelope
         // try to use indentation
 
@@ -184,12 +190,6 @@ public class TestSerializeWithNs extends UtilTestCase {
         ser.endDocument();
     }
 
-    public void testSetPrefix() throws Exception {
-        //setPrefix check that prefix is not duplicated ...
-
-    }
-
-    //TODO      redeclaring defult namespace
 
     public void testMultipleOverlappingNamespaces() throws Exception {
         XmlSerializer ser = factory.newSerializer();

@@ -33,212 +33,217 @@
 
 package org.xmlpull.v1.tests;
 
-import java.io.*;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import org.xmlpull.v1.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 //import org.xmlpull.v1.util.XmlPullWrapper;
 
 //import org.xmlpull.v1.tests.UtilTestCase;
 
 public class XmlTestCase extends UtilTestCase {
     private static final String NS_URI = "http://xmlpull.org/v1/tests/2002-08.xsd";
-    private static boolean standalone = true;
-    boolean verbose = false;
-    XmlPullParser pp;
-    //XmlPullWrapper wrapper;
+    //private static boolean standalone = true;
+    private static final boolean verbose = false;
 
-    XmlPullParserFactory testFactory;
-    XmlPullParser testParser;
-
-
-    public static void main (String[] args) {
-        junit.textui.TestRunner.run (new TestSuite(XmlTestCase.class));
-    }
+    //public static void main (String[] args) {
+    //    junit.textui.TestRunner.run (new TestSuite(XmlTestCase.class));
+    //}
 
     public XmlTestCase(String name) {
-	super(name);
-	standalone = false;
+        super(name);
+        //standalone = false;
     }
 
     protected void verbose(String msg)
     {
-	if(verbose) {
-	    if(standalone) {
-		System.out.println(msg);
-	    } else {
-		PackageTests.addNote(msg+"\n");
-	    }
-	}
+        if(verbose) {
+            if(PackageTests.runnigAllTests()) {
+                //PackageTests.addNote(msg+"\n");
+                System.out.println(msg);
+            } else {
+                System.out.println(msg);
+            }
+        }
     }
 
     protected void info(String msg)
     {
-	if(standalone) {
-	    System.out.println(msg);
-	} else {
-	    PackageTests.addNote(msg+"\n");
-	}
+        if(PackageTests.runnigAllTests()) {
+            PackageTests.addNote(msg+"\n");
+        } else {
+            System.out.println(msg);
+        }
     }
 
     private final static String RESOURCE_PREFIX = "/org/xmlpull/v1/tests/xml/";
     private InputStream openStream(String name) throws IOException {
-	//String fullName = "src/xml/tests/"+testName;
-	InputStream is = null;
-	if(is == null) {
-	    try {
-		is = getClass().getResourceAsStream (name);
-	    } catch(Exception ex) {
-	    }
-	}
-	if(is == null) {
-	    try {
-		is = getClass().getResourceAsStream (RESOURCE_PREFIX+name);
-	    } catch(Exception ex) {
-	    }
-	}
-	if(is == null) {
-	    try {
-		is = getClass().getResourceAsStream ("/"+name);
-	    } catch(Exception ex) {
-	    }
-	}
-	if(is == null) {
-	    try {
-		is = new FileInputStream(name);
-	    } catch(Exception ex) {
-	    }
-	}
+        //String fullName = "src/xml/tests/"+testName;
+        InputStream is = null;
+        if(is == null) {
+            try {
+                is = getClass().getResourceAsStream (name);
+            } catch(Exception ex) {
+            }
+        }
+        if(is == null) {
+            try {
+                is = getClass().getResourceAsStream (RESOURCE_PREFIX+name);
+            } catch(Exception ex) {
+            }
+        }
+        if(is == null) {
+            try {
+                is = getClass().getResourceAsStream ("/"+name);
+            } catch(Exception ex) {
+            }
+        }
+        if(is == null) {
+            try {
+                is = new FileInputStream(name);
+            } catch(Exception ex) {
+            }
+        }
 
-	if (is == null) {
-	    throw new IOException("could not open stream for "+name);
-	}
-	return is;
+        if (is == null) {
+            throw new IOException("could not open XML test for '"+name+"'");
+        }
+        return is;
     }
     /**
      *
      */
     public void testXml(String testName)
-	throws IOException, XmlPullParserException
+        throws IOException, XmlPullParserException
     {
 
-	XmlPullParserFactory factory = factoryNewInstance();
-	factory.setNamespaceAware(true);
-	pp = factory.newPullParser();
-	//wrapper = new XmlPullWrapper(pp);
+        XmlPullParserFactory factory = factoryNewInstance();
+        factory.setNamespaceAware(true);
+        //XmlPullWrapper wrapper;
 
-	InputStream is = openStream(testName);
-	verbose("> LOADING TESTS '"+testName+"'");
-	pp.setInput(is, null);
-	executeTests();
-	is.close();
-	verbose("< FINISHED TESTS '"+testName+"'");
+
+        XmlPullParser pp = factory.newPullParser();
+        //wrapper = new XmlPullWrapper(pp);
+
+
+        InputStream is = openStream(testName);
+        verbose("> LOADING TESTS '"+testName+"'");
+        pp.setInput(is, null);
+        executeTests(pp);
+        is.close();
+        verbose("< FINISHED TESTS '"+testName+"'");
     }
 
 
-    protected void executeTests() throws IOException, XmlPullParserException
+    protected void executeTests(XmlPullParser pp) throws IOException, XmlPullParserException
     {
 
-	//wrapper.nextStartTag(NS_URI, "tests");
-	pp.nextTag();
-	pp.require(pp.START_TAG, NS_URI, "tests");
-	while(pp.nextTag() == pp.START_TAG) {
-	    executeTestParser();
-	}
-	pp.require(pp.END_TAG, NS_URI, "tests");
+        //wrapper.nextStartTag(NS_URI, "tests");
+        pp.nextTag();
+        pp.require(pp.START_TAG, NS_URI, "tests");
+        while(pp.nextTag() == pp.START_TAG) {
+            executeTestParser(pp);
+        }
+        pp.require(pp.END_TAG, NS_URI, "tests");
     }
 
-    protected void executeTestParser() throws IOException, XmlPullParserException
+    protected void executeTestParser(XmlPullParser pp) throws IOException, XmlPullParserException
     {
-	pp.require(pp.START_TAG, NS_URI, "test-parser");
-	String testName = pp.getAttributeValue("", "name");
-	verbose(">> START TEST '"+testName+"'");
-	testFactory = XmlPullParserFactory.newInstance();
-	boolean testInputReady = false;
-	while(pp.nextTag() == pp.START_TAG) {
-	    String action = pp.getName();
-	    if("create-parser".equals(action)) {
-		testParser = testFactory.newPullParser();
-		pp.nextText();
-	    } else if("input-inline".equals(action)) {
-		if(testInputReady) {
-		    throw new RuntimeException("input already set"+pp.getPositionDescription());
-		}
-		testInputReady = true;
-		String input = pp.nextText();
-		verbose(">>> "+action+" to '"+input+"'");
-		testParser.setInput(new StringReader( input ));
-	    } else if("expect".equals(action)) {
-		String type = pp.getAttributeValue("", "type");
-		String namespace = pp.getAttributeValue("", "namespace");
-		String name = pp.getAttributeValue("", "name");
-		String empty = pp.getAttributeValue("", "empty");
-		verbose(">>> "+action
-			    +" type="+type
-			    +(namespace != null ? " namespace="+namespace : "")
-			    +(name != null ? " name="+name : "")
-			    +(empty != null ? " empty="+empty : ""));
-		if(type != null) {
-		    int event = convertToEventType(type);
-		    // comapring string give better error messages
-		    assertEquals(pp.TYPES[ event ], pp.TYPES[ testParser.getEventType() ]);
-		    // now compare actual int values
-		    assertEquals(event, testParser.getEventType());
-		}
-		if(namespace != null) assertEquals(namespace, testParser.getNamespace());
-		if(name != null) assertEquals(name, testParser.getName());
-		if(empty != null) {
-		    boolean isEmpty = Boolean.valueOf( empty ).booleanValue();
-		    assertEquals(isEmpty, testParser.isEmptyElementTag());
-		}
-		pp.nextText();
-	    } else if("next".equals(action)) {
-		verbose(">>> "+action);
-		testParser.next();
-		pp.nextText();
-	    } else if("next-tag".equals(action)) {
-		verbose(">>> "+action);
-		testParser.nextTag();
-		pp.nextText();
-	    } else if("next-text".equals(action)) {
-		verbose(">>> "+action); //+" on "+testParser.getPositionDescription()+"");
-		String text = pp.getAttributeValue("", "text");
-		String testText = testParser.nextText();
-		if(text != null) {
-		    verbose(">>> "+action+" testParser="+testParser.getPositionDescription());
-		    assertEquals(printable(text), printable(testText));
-		    assertEquals(text, testText);
-		}
-		pp.nextText();
-	    } else if("set-feature".equals(action)) {
-		String feature = pp.nextText();
-		verbose(">>> "+action+" "+feature);
-		testParser.setFeature(feature, true);
-	    } else {
-		verbose(">>> UNKNONW ACTION '"+action+"' ("+pp.getPositionDescription()+")");
-		String content = pp.nextText();
-		if(content.length() > 0) {
-		    if(verbose) System.err.println(">>> CONTENT:"+content);
-		}
+        pp.require(pp.START_TAG, NS_URI, "test-parser");
+        String testName = pp.getAttributeValue("", "name");
+        verbose(">> START TEST '"+testName+"'");
+        //testFactory = XmlPullParserFactory.newInstance();
+        XmlPullParserFactory testFactory = factoryNewInstance();
+        verbose(">> using testFactory='"+testFactory.getClass()+"'");
+        XmlPullParser testParser = null;
+        boolean testInputReady = false;
+        while(pp.nextTag() == pp.START_TAG) {
+            String action = pp.getName();
+            if("create-parser".equals(action)) {
+                testParser = testFactory.newPullParser();
+                verbose(">> using testParser='"+testParser.getClass()+"'");
+                pp.nextText();
+            } else if("input-inline".equals(action)) {
+                if(testInputReady) {
+                    throw new RuntimeException("input already set"+pp.getPositionDescription());
+                }
+                testInputReady = true;
+                String input = pp.nextText();
+                verbose(">>> "+action+" to '"+printable(input)+"'");
+                verbose(">>> "+action+" to '"+input+"'");
+                testParser.setInput(new StringReader( input ));
+            } else if("expect".equals(action)) {
+                String type = pp.getAttributeValue("", "type");
+                String namespace = pp.getAttributeValue("", "namespace");
+                String name = pp.getAttributeValue("", "name");
+                String empty = pp.getAttributeValue("", "empty");
+                verbose(">>> "+action
+                            +" type="+type
+                            +(namespace != null ? " namespace="+namespace : "")
+                            +(name != null ? " name="+name : "")
+                            +(empty != null ? " empty="+empty : ""));
+                if(type != null) {
+                    int event = convertToEventType(pp,type);
+                    // comapring string give better error messages
+                    assertEquals(pp.TYPES[ event ], pp.TYPES[ testParser.getEventType() ]);
+                    // now compare actual int values
+                    assertEquals(event, testParser.getEventType());
+                }
+                if(namespace != null) assertEquals(namespace, testParser.getNamespace());
+                if(name != null) assertEquals(name, testParser.getName());
+                if(empty != null) {
+                    boolean isEmpty = Boolean.valueOf( empty ).booleanValue();
+                    assertEquals(isEmpty, testParser.isEmptyElementTag());
+                }
+                pp.nextText();
+            } else if("next".equals(action)) {
+                verbose(">>> "+action);
+                testParser.next();
+                pp.nextText();
+            } else if("next-tag".equals(action)) {
+                verbose(">>> "+action);
+                testParser.nextTag();
+                pp.nextText();
+            } else if("next-text".equals(action)) {
+                verbose(">>> "+action); //+" on "+testParser.getPositionDescription()+"");
+                String text = pp.getAttributeValue("", "text");
+                String testText = testParser.nextText();
+                if(text != null) {
+                    verbose(">>> "+action+" testParser="+testParser.getPositionDescription());
+                    assertEquals(testParser.getPositionDescription(), printable(text), printable(testText));
+                    assertEquals(text, testText);
+                }
+                pp.nextText();
+            } else if("set-feature".equals(action)) {
+                String feature = pp.nextText();
+                verbose(">>> "+action+" "+feature);
+                testParser.setFeature(feature, true);
+            } else {
+                verbose(">>> UNKNONW ACTION '"+action+"' ("+pp.getPositionDescription()+")");
+                String content = pp.nextText();
+                if(content.length() > 0) {
+                    if(verbose) System.err.println(">>> CONTENT:"+content);
+                }
 
-	    }
-	}
+            }
+        }
 
-	pp.require(pp.END_TAG, NS_URI, "test-parser");
-	verbose(">> END TEST '"+testName+"'");
+        pp.require(pp.END_TAG, NS_URI, "test-parser");
+        verbose(">> END TEST '"+testName+"'");
     }
 
 
-    private int convertToEventType(String eventName) {
-	for (int i = 0; i < pp.TYPES.length; i++)
-	{
-	    if( eventName.equals(pp.TYPES[ i ]) ) {
-		return i;
-	    }
-	}
-	throw new RuntimeException("unknown event type "+eventName+pp.getPositionDescription());
+    private int convertToEventType(XmlPullParser pp, String eventName) {
+        for (int i = 0; i < pp.TYPES.length; i++)
+        {
+            if( eventName.equals(pp.TYPES[ i ]) ) {
+                return i;
+            }
+        }
+        throw new RuntimeException("unknown event type "+eventName+pp.getPositionDescription());
     }
 
 }

@@ -19,23 +19,27 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestEvent extends UtilTestCase {
-    private XmlPullParserFactory factory;
+    public static void main (String[] args) {
+        junit.textui.TestRunner.run (new TestSuite(TestEvent.class));
+    }
 
     public TestEvent(String name) {
         super(name);
     }
 
-    protected void setUp() throws XmlPullParserException {
-        factory = factoryNewInstance();
+    protected XmlPullParserFactory newFactory() throws XmlPullParserException {
+        XmlPullParserFactory factory = factoryNewInstance();
         factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         assertEquals(true, factory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         assertEquals(false, factory.getFeature(XmlPullParser.FEATURE_VALIDATION));
+        return factory;
     }
 
     protected void tearDown() {
     }
 
     public void testEvent() throws Exception {
+        XmlPullParserFactory factory = newFactory();
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput(new StringReader(TEST_XML));
 
@@ -91,6 +95,7 @@ public class TestEvent extends UtilTestCase {
     }
 
     public void testMultiNs() throws Exception {
+        XmlPullParserFactory factory = newFactory();
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput(new StringReader("<foo><bar xmlns=''/><char xmlns=''></char></foo>"));
 
@@ -129,10 +134,6 @@ public class TestEvent extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
-    }
-
-    public static void main (String[] args) {
-        junit.textui.TestRunner.run (new TestSuite(TestEvent.class));
     }
 
 }
