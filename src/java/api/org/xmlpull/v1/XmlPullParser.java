@@ -432,7 +432,7 @@ public interface XmlPullParser {
      * @param inputEncoding if not null it MUST be used as encoding for inputStream
      */
     public void setInput(java.io.InputStream inputStream, String inputEncoding)
-        throws XmlPullParserException, IOException;
+        throws XmlPullParserException;
 
     /**
      * Return input encoding if known or null if unknown.

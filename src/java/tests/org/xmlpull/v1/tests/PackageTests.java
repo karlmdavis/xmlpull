@@ -5,7 +5,11 @@ package org.xmlpull.v1.tests;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  * TODO: add tests for
@@ -15,11 +19,11 @@ import junit.framework.TestSuite;
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
-public class PackageTests extends TestCase
+public class PackageTests extends TestRunner
 {
-    public PackageTests(String name)
+    public PackageTests()
     {
-        super(name);
+        super();
     }
 
     public static Test suite()
@@ -40,24 +44,94 @@ public class PackageTests extends TestCase
         return suite;
     }
 
+    public synchronized void startTest(Test test) {
+        writer().print(".");
+        //if (fColumn++ >= 40) {
+        //      writer().println();
+        //      fColumn= 0;
+        //}
+    }
+
     private static StringBuffer notes = new StringBuffer();
     public static void addNote(String note) {
         notes.append(note);
     }
 
-    public static void main (String[] args) {
+
+    public void runPackageTests() {
+        notes.setLength(0);
+        XmlPullParserFactory f = null;
         try {
-            Object o = UtilTestCase.factoryNewInstance();
-            addNote("* factory "+o.getClass()+"\n");
+            f = UtilTestCase.factoryNewInstance();
+            addNote("* factory "+f.getClass()+"\n");
         } catch (Exception ex) {
-            System.err.println(
+            System.out.println(
                 "ERROR: tests aborted - could not create instance of XmlPullParserFactory:");
             ex.printStackTrace();
             System.exit(1);
         }
-        junit.textui.TestRunner.run (suite());
+        try {
+            f.newPullParser();
+        } catch (Exception ex) {
+            System.out.println(
+                "ERROR: tests aborted - could not create instance of XmlPullParser from factory "
+                    +f.getClass());
+            ex.printStackTrace();
+            System.exit(2);
+        }
+
+        // now run all tests ...
+        //junit.textui.TestRunner.run(suite());
+        TestRunner aTestRunner= new TestRunner();
+        try {
+            TestResult r = doRun(suite(), false);
+            if (!r.wasSuccessful())
+                System.exit(-1);
+            //System.exit(0);
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            System.exit(-2);
+        }
+
         if(notes.length() > 0) {
-          System.out.println("Notes:\n"+notes);
+            writer().println("Notes:\n"+notes);
+        }
+    }
+
+    public void printFinalReport() {
+        writer().println("\nAll tests were passed.");
+    }
+
+    public static void main (String[] args) {
+        final PackageTests driver = new PackageTests();
+        final String listOfTests = System.getProperty("org.xmlpull.v1.tests");
+        final String name = XmlPullParserFactory.PROPERTY_NAME;
+        final String oldValue = System.getProperty(name);
+        if(listOfTests != null) {
+            int pos = 0;
+            while (pos < listOfTests.length()) {
+                int cut = listOfTests.indexOf(',', pos);
+                if (cut == -1) cut = listOfTests.length();
+                String testFactoryName = listOfTests.substring(pos, cut);
+                if("DEFAULT".equals(testFactoryName)) {
+                    if(oldValue != null) {
+                        System.setProperty(name, oldValue);
+                    } else {
+                        // overcoming limitation of System.setProperty not allowing
+                        //  null or empty values (who knows how to unset property ?!)
+                        System.setProperty(name, "DEFAULT");
+                    }
+                } else {
+                    System.setProperty(name, testFactoryName);
+                }
+                System.out.println("Running package tests for: "+testFactoryName);
+                driver.runPackageTests();
+                pos = cut + 1;
+            }
+            driver.printFinalReport();
+
+        } else {
+            driver.runPackageTests();
         }
         System.exit(0);
     }

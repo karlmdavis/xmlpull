@@ -23,7 +23,16 @@
 <li>method readText() was deprecated
 <li>modified tests to allow -1 for column or line number and updated javadoc to reflect it
 <li>
-updated all tests to check new functions</ul>
+updated all tests to check new functions<li>
+modified test driver PackageTest to accept list of XMLPULL factories or parsers 
+to check from system property <b>org.xmlpull.v1.test</b>, DEFAULT can be used to 
+indicate using of default parser factory (taken from system property or resource 
+from CLASSPATH), for example: <br>
+-Dorg.xmlpull.v1.tests=DEFAULT,org.xmlpull.xpp3.MXParser<li>
+modified XmlPullParserFactory to use resource from CLASSPATH when not only classNames is null 
+but also if classNames is empty String or if it is equal to &quot;DEFAULT&quot;<li>
+improved error messages in XmlPullParserFactory to better diagnose why new pull 
+parser can not be created</ul>
 
 <h3>2001-04-20 (XMLPULL_1_0_7_1)</h3>
 <ul>

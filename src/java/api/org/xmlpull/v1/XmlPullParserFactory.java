@@ -38,9 +38,9 @@ import java.util.Vector;
 public class XmlPullParserFactory {
 
     /** Name of the system or midlet property that should be used for
-        a system property containing a comma separated list of factory
-        or parser class names (value:
-        org.xmlpull.v1.XmlPullParserFactory). */
+     a system property containing a comma separated list of factory
+     or parser class names (value:
+     org.xmlpull.v1.XmlPullParserFactory). */
 
 
     public static final String PROPERTY_NAME =
@@ -55,6 +55,7 @@ public class XmlPullParserFactory {
 
 
     protected Vector parserClasses;
+    protected String parserClassesLocation;
 
     // features are kept there
     protected Hashtable features = new Hashtable();
@@ -158,7 +159,7 @@ public class XmlPullParserFactory {
     public XmlPullParser newPullParser() throws XmlPullParserException {
 
         if (parserClasses.size() == 0) throw new XmlPullParserException
-            ("No valid parser classes found in "+RESOURCE_NAME);
+                ("No valid parser classes found in "+parserClassesLocation);
 
         StringBuffer issues = new StringBuffer ();
 
@@ -205,12 +206,15 @@ public class XmlPullParserFactory {
 
         if (context == null) context = "".getClass ();
 
-        if (classNames == null) {
+        String  parserClassesLocation = null;
+
+
+        if (classNames == null || classNames.length() == 0 || "DEFAULT".equals(classNames)) {
             try {
                 InputStream is = context.getResourceAsStream (RESOURCE_NAME);
 
                 if (is == null) throw new XmlPullParserException
-                    ("Ressource not found: "+RESOURCE_NAME);
+                        ("Ressource not found: "+RESOURCE_NAME);
 
                 StringBuffer sb = new StringBuffer();
 
@@ -227,6 +231,10 @@ public class XmlPullParserFactory {
             catch (Exception e) {
                 throw new XmlPullParserException (null, null, e);
             }
+            parserClassesLocation = RESOURCE_NAME+" that contained '"+classNames+"'";
+        } else {
+            parserClassesLocation =
+                "parameter classNames to newInstance() that contained '"+classNames+"'";
         }
 
         XmlPullParserFactory factory = null;
@@ -264,7 +272,7 @@ public class XmlPullParserFactory {
 
         if (factory == null) factory = new XmlPullParserFactory ();
         factory.parserClasses = parserClasses;
-
+        factory.parserClassesLocation = parserClassesLocation;
         return factory;
     }
 }
