@@ -14,7 +14,11 @@
 <li>
 changed hard coded parser factory in XmlPullParserFactory name for KXML2 to 
 org.kxml2.io.KXmlParserFactory<li>
-clarified description of required semantics of <a href="features.html">features</a></ul>
+clarified description of required semantics of <a href="features.html">features</a><li>
+refactored XmlPullParserFactory: reduced in size as much as possible,&nbsp; 
+removed set/getNamespaceAware/Validation and resource can now specify both 
+factories and parsers; modified accordingly tests and samples to use 
+set/getFeature instead of set/getNamespaceAware/Validation </ul>
 
 <h3>2001-04-03 (XMLPULL_1_0_5)</h3>
 <ul>

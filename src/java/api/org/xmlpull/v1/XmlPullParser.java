@@ -632,7 +632,7 @@ public interface XmlPullParser {
      * Throws an IndexOutOfBoundsException if the index is out of range
      * or current event type is not START_TAG.
      *
-     * <p><strong>NOTE:</p> if FEATURE_REPORT_NAMESPACE_ATTRIBUTES is set
+     * <p><strong>NOTE:</strong> if FEATURE_REPORT_NAMESPACE_ATTRIBUTES is set
      * then namespace attributes (xmlns:ns='...') amust be reported
      * with namespace
      * <a href="http://www.w3.org/2000/xmlns/">http://www.w3.org/2000/xmlns/</a>
