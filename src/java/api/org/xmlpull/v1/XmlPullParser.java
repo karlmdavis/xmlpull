@@ -549,12 +549,14 @@ public interface XmlPullParser {
 
     /**
      * Read text content of the current event as String.
+     * <p><strong>NOTE:</stromg> in case of ENTITY_REF this methid returns
+     * entity replacement text (or null if not vailable) and it is the only case when
+     * getText() and getTextCharacters() returns different values.
      */
-
     public String getText ();
 
 
-    /**
+   /**
      * Get the buffer that contains text of the current event and
      * start offset of text is passed in first slot of input int array
      * and its length is in second slot.
@@ -562,8 +564,10 @@ public interface XmlPullParser {
      * <p><strong>NOTE:</strong> this buffer must not
      * be modified and its content MAY change after call to next() or nextToken().
      *
-     * <p><b>NOTE:</b> this methid must return always the same value as getText()
-     * and if getText() returns null then this methid returns null as well and
+     * <p><b>NOTE:</b> this method must return always the same value as getText()
+    *  except in case of ENTITY_REF (where getText() is replacement text and
+    * this method returns actual input buffer with entity name the same as getName()).
+     * and if getText() returns null then this method returns null as well and
      * values returned in holder MUST be -1 (both start and length).
      *
      * @see #getText
@@ -586,10 +590,10 @@ public interface XmlPullParser {
     public String getNamespace ();
 
     /**
-     * Returns the (local) name of the current element
-     * when namespaces are enabled
-     * or raw name when namespaces are disabled.
-     * The current event must be START_TAG or END_TAG, otherwise null is returned.
+     * For START_TAG or END_ATAG returns the (local) name of the current element
+     * when namespaces are enabled or raw name when namespaces are disabled.
+     * For ENTITY_REF it return eneity name.
+     * The current event must be START_TAG or END_TAG or ENTITY_REF, otherwise null is returned.
      * <p><b>NOTE:</b> to reconstruct raw element name
      *  when namespaces are enabled you will need to
      *  add prefix and colon to localName if prefix is not null.

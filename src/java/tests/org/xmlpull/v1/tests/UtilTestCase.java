@@ -121,7 +121,12 @@ public class UtilTestCase extends TestCase {
             char[] buf = xpp.getTextCharacters(holderForStartAndLength);
             if(buf != null) {
                 String s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-                assertEquals("getText(holder)", printable(text), printable(s));
+                // ENTITY_REF is a special case when getText != (getTextCharacters == getName)
+                if(xpp.getEventType() != xpp.ENTITY_REF) {
+                    assertEquals("getText(holder)", printable(text), printable(s));
+                } else {
+                    assertEquals("getText(holder) ENTITY_REF", printable(name), printable(s));
+                }
             } else {
                 assertEquals("getTextCharacters()", null, text);
             }
