@@ -494,11 +494,19 @@ public interface XmlPullParser {
      * Though these implementations may not be able to process the document type
      * declaration, they still can work with known DTDs by using this function.
      *
-     * <p><b>Please notes:</b> The given value is the replacement text and must not
-     * contain any other entity reference. The list of pre-defined entites will
+     * <p><b>Please notes:</b> The given value is used literally as replacement text
+     * and it corresponds to declaring entity in DTD that has all special characters
+     * escaped: left angle bracket is replaced with &amp;lt;, ampersnad with &amp;amp;
+     * and so on.
+     *
+     * <p><b>Note:</b> The given value is the literal replacement text and must not
+     * contain any other entity reference (if it contains any entity reference
+     * there will be no further replacement).
+     *
+     * <p><b>Note:</b> The list of pre-defined entity names will
      * always contain standard XML entities such as
-     * &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos;. Those
-     * cannot be replaced!
+     * amp (&amp;amp;), lt (&amp;lt;), gt (&amp;gt;), quot (&amp;quot;), and apos (&amp;apos;).
+     * Those cannot be redefined by this method!
      *
      * @see #setInput
      * @see #FEATURE_PROCESS_DOCDECL
@@ -926,13 +934,15 @@ public interface XmlPullParser {
      *   &lt;?target    data?> string &quot;target data&quot; may
      *       be returned if FEATURE_XML_ROUNDTRIP is false.
      * <dt>COMMENT<dd>return comment content ex. 'foo bar' from &lt;!--foo bar-->
-     * <dt>ENTITY_REF<dd>getText() returns entity replacement text
-     * and getTextCharacters() of entity_name (&amp;entity_name;)
+     * <dt>ENTITY_REF<dd>getText() MUST return entity replacement text if PROCESS_DOCDECL is false
+     * otherwise getText() MAY return null,
+     * additionally getTextCharacters() MUST return entity name
+     * (for example 'entity_name' for &amp;entity_name;).
      * <br><b>NOTE:</b> this is the only place where value returned from getText() and
      *   getTextCharacters() <b>are different</b>
      * <br><b>NOTE:</b> it is user responsibility to resolve entity reference
      *    if PROCESS_DOCDECL is false and there is no entity replacement text set in
-     *    defineEntityReplacementText() method
+     *    defineEntityReplacementText() method (getText() will be null)
      * <br><b>NOTE:</b> character entities (ex. &amp;#32;) and standard entities such as
      *  &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos; are reported as well
      *  and are <b>not</b> reported as TEXT tokens but as ENTITY_REF tokens!
