@@ -23,7 +23,7 @@ class CloneParser {
         public Object clone() throws CloneNotSupportedException
         {
             CloenableCharArrayReader cloned = (CloenableCharArrayReader) super.clone();
-            cloned.buf = buf.clone();
+            cloned.buf = (char[]) buf.clone();
             //UGLY UGLY UGLY ...
             cloned.lock = cloned;
             return cloned;
