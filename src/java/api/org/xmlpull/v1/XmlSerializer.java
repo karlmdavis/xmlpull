@@ -9,43 +9,73 @@ import java.io.Writer;
  * This interface abstracts away if serialized XML is XML 1.0 comaptible text or
  * other formats of XML 1.0 serializations (such as binary XML for example with WBXML).
  *
- * <p><b>PLEASE NOTE:</b> This interface is not part of the XmlPull 1.0 API (yet). It
- * is just included as basis for discussion. It may change in any way.
+ * <p><b>PLEASE NOTE:</b> This interface will be part of XmlPull 1.2 API.
+ * It is included as basis for discussion. It may change in any way.
  *
+ * <p>Exceptions that may be thrown are: IOException or runtime exception
+ * (more runtime exceptions can be thrown but are not declared and as such
+ * have no semantics defined for this interface):
+ * <ul>
+ * <li><em>IllegalArgumentException</em> - for almost all methods to signal that
+ *     argument is illegal
+ * <li><em>IllegalStateException</em> - to signal that call has good arguments but
+ *     is not expected here (violation of contract) and for features/properties
+ *    when requesting setting unimplemented feature/property
+ *    (UnsupportedOperationException would be better but it is not in MIDP)
+ *  </ul>
+ *
+ * <p><b>NOTE:</b> writing  CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,
+ *  PROCESSING_INSTRUCTION, COMMENT, and DOCDECL in some implementations
+ * may not be supported (for example when serializing to WBXML).
+ * In such case IllegalStateException will be thrown and it is recommened
+ * to use an optional feature to signal that implementation is not
+ * supporting this kind of output.
  */
 
 public interface XmlSerializer {
 
     /**
      * Set feature identified by name (recommended to be URI for uniqueness).
-     * If feature is not recocgnized then XmlPullParserException MUST be thrown.
+     * Some well known optional features are defined in
+     * <a href="http://www.xmlpull.org/v1/doc/features.html">
+     * http://www.xmlpull.org/v1/doc/features.html</a>.
+     *
+     * If feature is not recocgnized or can not be set
+     * then IllegalStateException MUST be thrown.
      *
      * @exception XmlPullParserException If the feature is not supported or can not be set
      */
     public void setFeature(String name,
-                           boolean state) throws XmlPullParserException;
+                           boolean state)
+        throws IllegalArgumentException, IllegalStateException;
+
 
     /**
      * Return the current value of the feature with given name.
-     * <p><strong>NOTE:</strong> unknown features are <string>always</strong> returned as false
+     * <p><strong>NOTE:</strong> unknown features are <string>always</strong> returned as false.
      *
      * @param name The name of feature to be retrieved.
      * @return The value of named feature.
      * @exception IllegalArgumentException if feature string is null
      */
-
     public boolean getFeature(String name);
 
 
     /**
      * Set the value of a property.
+     * (the property name is recommened to be URI for uniqueness).
+     * Some well known optional properties are defined in
+     * <a href="http://www.xmlpull.org/v1/doc/properties.html">
+     * http://www.xmlpull.org/v1/doc/features.html</a>.
      *
-     * The property name is any fully-qualified URI.
+     * If property is not recocgnized or can not be set
+     * then IllegalStateException MUST be thrown.
      *
-     * @exception XmlPullParserException if the property is not supported or can not be set
+     * @exception IllegalStateException if the property is not supported or can not be set
      */
     public void setProperty(String name,
-                            Object value) throws XmlPullParserException;
+                            Object value)
+        throws IllegalArgumentException, IllegalStateException;
 
     /**
      * Look up the value of a property.
@@ -63,25 +93,36 @@ public interface XmlSerializer {
      * Set to use binary output stream with given encoding.
      */
     public void setOutput (OutputStream os, String encoding)
-        throws IOException, XmlPullParserException;
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
-     * sets the output to the given writer;
-     * insert big warning here -- no information about encoding is available
+     * Set the output to the given writer;
+     * <p><b>WARNING</b> no information about encoding is available!
      */
-    public void setOutput (Writer writer) throws IOException, XmlPullParserException;
+    public void setOutput (Writer writer)
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
-
+    /**
+     * Write &lt;?xml declaration with encoding (if encoding not null)
+     * and standalone flag (if standalone not null)
+     * This method can only be called just after setOutput.
+     */
     public void startDocument (String encoding, Boolean standalone)
-        throws IOException, XmlPullParserException;
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
-    public void endDocument () throws IOException, XmlPullParserException;
+    /**
+     * Finish writing. All unclosed start tags will be closed and output
+     * will be flushed. After calling this method no more output can be
+     * serialized until next call to setOutput()
+     */
+    public void endDocument ()
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
      * Binds the given prefix to the given namespace.
      * This call is valid for the next element including child elements.
      * The prefix and namespace MUST be always declared even if prefix
-     * is not used in element (startTag() or attribute()) - for XML 1.0 infoset
+     * is not used in element (startTag() or attribute()) - for XML 1.0
      * it must result in declaring <code>xmlns:prefix='namespace'</code>
      * (or <code>xmlns:prefix="namespace"</code> depending what character is used
      * to quote attribute value).
@@ -91,9 +132,13 @@ public interface XmlSerializer {
      * <p><b>NOTE:</b> prefixes "xml" and "xmlns" are already bound
      *   and can not be redefined see:
      * <a href="http://www.w3.org/XML/xml-names-19990114-errata#NE05">Namespaces in XML Errata</a>.
+     * <p><b>NOTE:</b> to set default namespace use as prefix empty string.
+     *
+     * @argument prefix must be not null (or IllegalArgumentException is thrown)
+     * @argument namespace must be not null
      */
     public void setPrefix (String prefix, String namespace)
-        throws IOException, XmlPullParserException;
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
      * Return namespace that corresponds to given prefix
@@ -107,7 +152,8 @@ public interface XmlSerializer {
      *   will have values as defined
      * <a href="http://www.w3.org/TR/REC-xml-names/">Namespaces in XML specification</a>
      */
-    public String getPrefix (String namespace, boolean generatePrefix);
+    public String getPrefix (String namespace, boolean generatePrefix)
+        throws IllegalArgumentException;
 
     /**
      * Writes a start tag with the given namespace and name.
@@ -115,69 +161,66 @@ public interface XmlSerializer {
      * a prefix will be defined automatically.
      * The explicit prefixes for namespaces can be established by calling setPrefix()
      * immediately before this method.
-     * If namespace is empty string no namespace prefix is printed but just name.
+     * If namespace is null no namespace prefix is printed but just name.
+     * If namespace is empty string then serialzier will make sure that
+     * default empty namespace is declared (in XML 1.0 xmlns='').
      */
-
     public XmlSerializer startTag (String namespace, String name)
-        throws IOException, XmlPullParserException;
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
-     * Writes an attribute. calls to attribute must follow a call to
-     * startTag() immediately. if there is no prefix defined for the
+     * Write an attribute. Calls to attribute() MUST follow a call to
+     * startTag() immediately. If there is no prefix defined for the
      * given namespace, a prefix will be defined automatically.
-     * If namespace is nul no namespace prefix is printed but just name.
+     * If namespace is null or empty string
+     * no namespace prefix is printed but just name.
      */
-
-    public XmlSerializer attribute (String namespace, String name,
-                                    String value) throws IOException, XmlPullParserException;
+    public XmlSerializer attribute (String namespace, String name, String value)
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
-     * This method is called explicitly after startTag() and attribute()
-     * to close XML start tag. Can be called directly to enforce
-     * serializer to write completely start tag. No more attributes
-     * is allowed to be added after this call.
-     */
-    //public void closeStartTag () throws IOException;
-    // use text("") instead
-
-
-    /**
-     * Write end tag. Repetition of namespace and name is just for avoiding errors
-     * background: in kXML I just had endTag, and non matching tags were
+     * Write end tag. Repetition of namespace and name is just for avoiding errors.
+     * <p><b>Background:</b> in kXML endTag had no arguments, and non matching tags were
      *  very difficult to find...
-     * If namespace is nul no namespace prefix is printed but just name.
+     * If namespace is null no namespace prefix is printed but just name.
+     * If namespace is empty string then serialzier will make sure that
+     * default empty namespace is declared (in XML 1.0 xmlns='').
      */
     public XmlSerializer endTag (String namespace, String name)
-        throws IOException, XmlPullParserException;
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
-    /** Writes text, where special XML chars are escaped automatically */
+    /**
+     * Writes text, where special XML chars are escaped automatically
+     */
     public XmlSerializer text (String text)
-        throws IOException, XmlPullParserException;
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
+    /**
+     * Writes text, where special XML chars are escaped automatically
+     */
     public XmlSerializer text (char [] buf, int start, int len)
-        throws IOException, XmlPullParserException;
+        throws IOException, IllegalArgumentException, IllegalStateException;
+
+    public void cdsect (String text)
+        throws IOException, IllegalArgumentException, IllegalStateException;
+    public void entityRef (String text)  throws IOException,
+        IllegalArgumentException, IllegalStateException;
+    public void processingInstruction (String text)
+        throws IOException, IllegalArgumentException, IllegalStateException;
+    public void comment (String text)
+        throws IOException, IllegalArgumentException, IllegalStateException;
+    public void docdecl (String text)
+        throws IOException, IllegalArgumentException, IllegalStateException;
+    public void ignorableWhitespace (String text)
+        throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
-     * write  CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,
-     *  PROCESSING_INSTRUCTION, COMMENT, and DOCDECL Some types may be
-     * silently ignored in WBXML (XXX should we make a distinction
-     * here, which may be ignored, and which events cause an
-     * exception???? XXX)
+     * Write all pending output to the stream.
+     * If method startTag() or attribute() was called then start tag is closed (final &gt;)
+     * before flush() is called on underlying output stream.
      */
-
-    public void cdsect (String text)  throws IOException, XmlPullParserException;
-    public void entityRef (String text)  throws IOException, XmlPullParserException;
-    public void processingInstruction (String text)  throws IOException, XmlPullParserException;
-    public void comment (String text)  throws IOException, XmlPullParserException;
-    public void docdecl (String text)  throws IOException, XmlPullParserException;
-    public void ignorableWhitespace (String text)  throws IOException, XmlPullParserException;
-
-    /**
-     * writes all pending output to the stream,
-     * if  startTag() or attribute() was called then start tag is closed
-     * and flush() is called on underlying output stream.
-     */
-    public void flush () throws IOException;
+    public void flush ()
+        throws IOException;
 
 }
 
