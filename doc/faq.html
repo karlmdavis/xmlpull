@@ -8,7 +8,7 @@
 <BODY BGCOLOR="white">
 
 <H1>XMLPULL API FAQ</H2>
-<pre>Version $Id: faq.html,v 1.8 2002/07/25 16:15:33 aslom Exp $</pre>
+<pre>Version $Id: faq.html,v 1.9 2002/07/25 16:37:30 aslom Exp $</pre>
 
 
 <h2><a name="XML_COMP"></a>Is the XMLPULL API V1 compatible with XML 1.0?</h2>
@@ -33,7 +33,7 @@ is performing best in situation when the whole XML input must be processed and
 transformed (for example SOAP deserialization).</p>
 
 <p>It is important to notice that those two APIs are not overlapping but instead 
-they supplement each other. In the matter of fact it is possible to convert 
+they supplement each other. In the matter of fact it is possible to switch 
 easily from pull to push (a <a href="#SAX2_DRIVER">SAX2 driver</a> built on top of 
 XMLPULL is available), but opposite conversion is more difficult and requires 
 either to buffer all SAX events, making streaming impossible, or an extra 
@@ -108,7 +108,7 @@ access methods depending on the event type, avoiding the type
 cast. This would look like the next example:</p>
 
 <pre>if ( parser.getEventType() == parser.START_TAG ) {
-  StartTag st = getStartTag ();
+  StartTag st = parser.getStartTag ();
   // access tag via st
 }
 else ...
@@ -162,7 +162,7 @@ is thrown.
 tag. It reads text until the corresponding end tag is reached and stops on the
 end tag. The return value of <tt>nextText()</tt> is the text that was read. If
 <tT>nextText()</tT> observes an additional start tag while parsing text, an
-exception is thrown. The motivation behind this method is to provide an unique
+exception is thrown. The motivation behind this method is to provide an unified
 handling for the cases "&lt;tag&gt;&lt;/tag&gt;", "&lt;tag/&gt;", and
 &lt;/tag&gt;some text&lt;/tag&gt;". </li>
 
