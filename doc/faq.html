@@ -8,7 +8,7 @@
 <BODY BGCOLOR="white">
 
 <H1>XMLPULL API FAQ</H2>
-<pre>Version $Id: faq.html,v 1.7 2002/07/25 15:28:27 haustein Exp $</pre>
+<pre>Version $Id: faq.html,v 1.8 2002/07/25 16:15:33 aslom Exp $</pre>
 
 
 <h2><a name="XML_COMP"></a>Is the XMLPULL API V1 compatible with XML 1.0?</h2>
@@ -197,7 +197,7 @@ including white spaces and attribute formatting available to applications.
 However, this may not be possible for other than standard XML 1.0 
 representations of the XML&nbsp;infoset such as WBXML. But even when
 <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML ROUNDTRIP</a> 
-feature is not enabled, round-tripping at XML-Infoset level can be acomplished 
+feature is not enabled, round-tripping at XML-Infoset level can be accomplished 
 by using the 
 <a href="http://www.xmlpull.org/v1/doc/api/org/xmlpull/v1/XmlPullParser.html#nextToken()">
 nextToken()</a> method instead of next().
@@ -208,12 +208,12 @@ nextToken()</a> method instead of next().
 <p>This is currently not supported though one can always write custom method for 
 this purpose. For instance, one of internal JUnit tests shows an example how 
 to round-trip XML - this is used to test XMLPULL API. Also, a prototype of an
-XmlSerializer inteface can already be obtained from the CVS repository. 
+XmlSerializer interface can already be obtained from the CVS repository. 
 For details, please refer to the ongoing discussion on 
 the xmlpull-dev mailing list.<h2>
 
 
-<a name="FACTORY_ABSTRACT"></a>Why is the PullParserFactory class not abstract?</h2>
+<a name="FACTORY_ABSTRACT"></a>Why is the XmlPullParserFactory class not abstract?</h2>
 
 <p>The XmlPullParserFactory is not abstract to allow to use it "directly". 
 Typical XMLPULL V1 API implementation should provide its own factory that 
@@ -229,7 +229,7 @@ and allowing it to create parser instances directly allows to
 minimize size of XMLPULL implementations in J2ME environments - there 
 is no need to write a factory class since the default XmlPullParserFactory
 can be used. Of course, for really tight memory environments, it may
-be more appropriat to use the constructor of a 
+be more appropriate to use the constructor of a 
 parser implementation directly, trading of the need of a
 factory class for some flexibility.</p>
 
@@ -253,7 +253,7 @@ performance.</p>
 <p>The problem with modifiable entries in array is that user may by mistake modify 
 entries (there is no way in java to declare a read-only array). However, this array 
 is provided only to make conversion of parser event types to diagnostic text 
-description easier; it has no influence on the parsing process itsef. In the worst
+description easier; it has no influence on the parsing process itself. In the worst
 case, parser error messages using the TYPES array may be affected.</p>
 
 <p>It looks like a method would have been nicer - and would provide 
