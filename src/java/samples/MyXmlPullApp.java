@@ -6,6 +6,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+/**
+ * An example of an application that uses XMLPULL V1 API.
+ *
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ */
 public class MyXmlPullApp
 {
 

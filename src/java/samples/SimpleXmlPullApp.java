@@ -5,6 +5,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+/**
+ * Very simple application that demonstrates basics of XMLPULL V1 API.
+ *
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ */
 public class SimpleXmlPullApp
 {
 
