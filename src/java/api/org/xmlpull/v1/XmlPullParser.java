@@ -386,9 +386,9 @@ public interface XmlPullParser {
 
 
     /**
-     * Returns true if the current event is START_TAG or END_TAG and the
-     * tag is degenerated (e.g. &lt;foobar/&gt;).
-     * <p><b>NOTE:</b> if parser is not on START_TAG or END_TAG the exception will be thrown.
+     * Returns true if the current event is START_TAG and the tag is degenerated
+     * (e.g. &lt;foobar/&gt;).
+     * <p><b>NOTE:</b> if parser is not on START_TAG then the exception will be thrown.
      */
     public boolean isEmptyElementTag() throws XmlPullParserException;
 
