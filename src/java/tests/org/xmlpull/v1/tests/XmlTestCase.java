@@ -144,16 +144,16 @@ public class XmlTestCase extends UtilTestCase {
 
         //wrapper.nextStartTag(NS_URI, "tests");
         pp.nextTag();
-        pp.require(pp.START_TAG, NS_URI, "tests");
-        while(pp.nextTag() == pp.START_TAG) {
+        pp.require(XmlPullParser.START_TAG, NS_URI, "tests");
+        while(pp.nextTag() == XmlPullParser.START_TAG) {
             executeTestParser(pp);
         }
-        pp.require(pp.END_TAG, NS_URI, "tests");
+        pp.require(XmlPullParser.END_TAG, NS_URI, "tests");
     }
 
     protected void executeTestParser(XmlPullParser pp) throws IOException, XmlPullParserException
     {
-        pp.require(pp.START_TAG, NS_URI, "test-parser");
+        pp.require(XmlPullParser.START_TAG, NS_URI, "test-parser");
         String testName = pp.getAttributeValue("", "name");
         verbose(">> START TEST '"+testName+"'");
         //testFactory = XmlPullParserFactory.newInstance();
@@ -161,7 +161,7 @@ public class XmlTestCase extends UtilTestCase {
         verbose(">> using testFactory='"+testFactory.getClass()+"'");
         XmlPullParser testParser = null;
         boolean testInputReady = false;
-        while(pp.nextTag() == pp.START_TAG) {
+        while(pp.nextTag() == XmlPullParser.START_TAG) {
             String action = pp.getName();
             if("create-parser".equals(action)) {
                 testParser = testFactory.newPullParser();
@@ -233,7 +233,7 @@ public class XmlTestCase extends UtilTestCase {
             }
         }
 
-        pp.require(pp.END_TAG, NS_URI, "test-parser");
+        pp.require(XmlPullParser.END_TAG, NS_URI, "test-parser");
         verbose(">> END TEST '"+testName+"'");
     }
 

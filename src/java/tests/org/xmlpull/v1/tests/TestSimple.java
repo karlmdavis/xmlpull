@@ -4,7 +4,6 @@
 package org.xmlpull.v1.tests;
 
 //import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.ByteArrayInputStream;
@@ -42,11 +41,11 @@ public class TestSimple extends UtilTestCase {
         assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
 
         // this SHOULD always be OK
-        assertEquals("START_DOCUMENT", xpp.TYPES[xpp.START_DOCUMENT]);
-        assertEquals("END_DOCUMENT", xpp.TYPES[xpp.END_DOCUMENT]);
-        assertEquals("START_TAG", xpp.TYPES[xpp.START_TAG]);
-        assertEquals("END_TAG", xpp.TYPES[xpp.END_TAG]);
-        assertEquals("TEXT", xpp.TYPES[xpp.TEXT]);
+        assertEquals("START_DOCUMENT", xpp.TYPES[XmlPullParser.START_DOCUMENT]);
+        assertEquals("END_DOCUMENT", xpp.TYPES[XmlPullParser.END_DOCUMENT]);
+        assertEquals("START_TAG", xpp.TYPES[XmlPullParser.START_TAG]);
+        assertEquals("END_TAG", xpp.TYPES[XmlPullParser.END_TAG]);
+        assertEquals("TEXT", xpp.TYPES[XmlPullParser.TEXT]);
         assertEquals("CDSECT", xpp.TYPES[xpp.CDSECT]);
         assertEquals("ENTITY_REF", xpp.TYPES[xpp.ENTITY_REF]);
         assertEquals("IGNORABLE_WHITESPACE", xpp.TYPES[xpp.IGNORABLE_WHITESPACE]);
@@ -82,13 +81,13 @@ public class TestSimple extends UtilTestCase {
         // check the simplest possible XML document - just one root element
         xpp.setInput(new StringReader("<foo></foo>"));
         assertEquals(null, xpp.getInputEncoding());
-        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.START_DOCUMENT, null, null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 0);
+        checkParserState(xpp, 1, XmlPullParser.START_TAG, "foo", null, false /*empty*/, 0);
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.END_TAG, "foo", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.END_DOCUMENT, null, null, false, -1);
 
 
         //check taking input form input stream
@@ -96,34 +95,34 @@ public class TestSimple extends UtilTestCase {
         xpp.setInput(new ByteArrayInputStream( binput ), "UTF-8" );
         assertEquals("UTF-8", xpp.getInputEncoding());
         //xpp.setInput(new StringReader( "<foo/>" ) );
-        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.START_DOCUMENT, null, null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, true /*empty*/, 0);
+        checkParserState(xpp, 1, XmlPullParser.START_TAG, "foo", null, true /*empty*/, 0);
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.END_TAG, "foo", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.END_DOCUMENT, null, null, false, -1);
 
         // one step further - it has an attribute and content ...
         xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<p:t>\r\n\t </p:t></foo>"));
-        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.START_DOCUMENT, null, null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false, 1);
+        checkParserState(xpp, 1, XmlPullParser.START_TAG, "foo", null, false, 1);
         checkAttrib(xpp, 0, "attrName", "attrVal");
         xpp.next();
-        checkParserState(xpp, 1, xpp.TEXT, null, "bar", false, -1);
+        checkParserState(xpp, 1, XmlPullParser.TEXT, null, "bar", false, -1);
         assertEquals(false, xpp.isWhitespace());
         xpp.next();
-        checkParserState(xpp, 2, xpp.START_TAG, "p:t", null, false, 0);
+        checkParserState(xpp, 2, XmlPullParser.START_TAG, "p:t", null, false, 0);
         xpp.next();
-        checkParserState(xpp, 2, xpp.TEXT, null, "\n\t ", false, -1);
+        checkParserState(xpp, 2, XmlPullParser.TEXT, null, "\n\t ", false, -1);
         assertTrue(xpp.isWhitespace());
         xpp.next();
-        checkParserState(xpp, 2, xpp.END_TAG, "p:t", null, false, -1);
+        checkParserState(xpp, 2, XmlPullParser.END_TAG, "p:t", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.END_TAG, "foo", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.END_DOCUMENT, null, null, false, -1);
 
 
     }

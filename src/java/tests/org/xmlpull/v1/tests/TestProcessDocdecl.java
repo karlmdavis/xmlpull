@@ -4,10 +4,10 @@
 package org.xmlpull.v1.tests;
 
 //import junit.framework.Test;
-import junit.framework.TestCase;
+//import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.io.ByteArrayInputStream;
+//import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -44,16 +44,16 @@ public class TestProcessDocdecl extends UtilTestCase {
         throws XmlPullParserException
     {
         XmlPullParser xpp = factory.newPullParser();
-        xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, useNamespaces);
+        xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, useNamespaces);
         assertEquals(useNamespaces, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         try {
-            xpp.setFeature(xpp.FEATURE_PROCESS_DOCDECL, true);
+            xpp.setFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL, true);
         } catch(XmlPullParserException ex) {
             return null;
         }
         assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL));
         try {
-            xpp.setFeature(xpp.FEATURE_VALIDATION, useValidation);
+            xpp.setFeature(XmlPullParser.FEATURE_VALIDATION, useValidation);
         } catch(XmlPullParserException ex) {
             return null;
         }
@@ -113,16 +113,16 @@ public class TestProcessDocdecl extends UtilTestCase {
 
         //next
         xpp.setInput(new StringReader( XML_SIMPLE_ENT ));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "test", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "test", null, false/*empty*/, 0);
         xpp.next();
         String expectedContent = "Publication: "+PUB_ENTITY_REPLACEMENT+" ";
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, expectedContent, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, expectedContent, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "test", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "test", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
         //nextToken
     }
@@ -165,22 +165,22 @@ public class TestProcessDocdecl extends UtilTestCase {
 
         //next
         xpp.setInput(new StringReader( XML_REPLACE_ENT ));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "test", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "test", null, false/*empty*/, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 0, "", "p", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, null, 0, "", "p", null, false/*empty*/, 0);
         xpp.next();
         String expectedContent = EXAMPLE_ENTITY_TEXT_EVENT;
-        checkParserStateNs(xpp, 2, xpp.TEXT, null, 0, null, null, expectedContent, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.TEXT, null, 0, null, null, expectedContent, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 0, "", "p", null, false/*empty*/, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, null, 0, "", "p", null, false/*empty*/, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, " ", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, " ", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "test", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "test", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
 
     public void testTricky() throws Exception {
@@ -213,16 +213,16 @@ public class TestProcessDocdecl extends UtilTestCase {
 
         //next
         xpp.setInput(new StringReader( XML_TRICKY ));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "test", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "test", null, false/*empty*/, 0);
         xpp.next();
         String expectedContent = EXPECTED_XML_TRICKY;
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, expectedContent, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, expectedContent, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "test", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "test", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
         //TODO nextToken()
 

@@ -18,10 +18,7 @@ import org.xmlpull.v1.XmlSerializer;
 //  -Dorg.xmlpull.v1.tests=org.xmlpull.mxp1.MXParser,org.xmlpull.mxp1_serializer.MXSerializer
 
 /**
- * TODO: add tests for
- * <pre>
- * test mixed next() with nextToken()
- * </pre>
+ * TODO: add tests for mixed next() with nextToken()
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */

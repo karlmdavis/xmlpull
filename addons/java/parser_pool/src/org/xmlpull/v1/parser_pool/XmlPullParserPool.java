@@ -9,6 +9,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+// add aging so parser used more than X times is not resused ...
+
 /**
  * Very simple utility to make pooling of XmlPull parsers easy.
  *
@@ -39,7 +41,7 @@ public class XmlPullParserPool {
         if(pool.size() > 0) {
             synchronized(pool) {
                 if(pool.size() > 0) {
-                    pp = (XmlPullParser) pool.remove(pool.size() - 1 );
+                    pp = (XmlPullParser) pool.remove(pool.size() - 1);
                 }
             }
         }

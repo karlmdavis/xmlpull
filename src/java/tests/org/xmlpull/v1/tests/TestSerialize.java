@@ -3,7 +3,6 @@
 
 package org.xmlpull.v1.tests;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.ByteArrayOutputStream;
@@ -92,13 +91,13 @@ public class TestSerialize extends UtilTestCase {
         xpp.setInput(new StringReader(serialized));
         
         assertEquals(null, xpp.getInputEncoding());
-        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.START_DOCUMENT, null, null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
+        checkParserState(xpp, 1, XmlPullParser.START_TAG, "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.END_TAG, "foo", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.END_DOCUMENT, null, null, false, -1);
     }
     
     public void testSimpleStream() throws Exception {
@@ -121,16 +120,16 @@ public class TestSerialize extends UtilTestCase {
         assertEquals("UTF-8", xpp.getInputEncoding());
         
         //xpp.setInput(new StringReader( "<foo/>" ) );
-        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.START_DOCUMENT, null, null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 0);
+        checkParserState(xpp, 1, XmlPullParser.START_TAG, "foo", null, false /*empty*/, 0);
         xpp.next();
-        checkParserState(xpp, 1, xpp.TEXT, null, "test", false, -1);
+        checkParserState(xpp, 1, XmlPullParser.TEXT, null, "test", false, -1);
         assertEquals(false, xpp.isWhitespace());
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.END_TAG, "foo", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.END_DOCUMENT, null, null, false, -1);
     }
     
     public void testSimpleSerWithAttribute() throws Exception {
@@ -188,24 +187,24 @@ public class TestSerialize extends UtilTestCase {
         //xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<p:t>\r\n\t </p:t></foo>"));
         String serialized = sw.toString();
         xpp.setInput(new StringReader(serialized));
-        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.START_DOCUMENT, null, null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false, 1);
+        checkParserState(xpp, 1, XmlPullParser.START_TAG, "foo", null, false, 1);
         checkAttrib(xpp, 0, "attrName", "attrVal");
         xpp.next();
-        checkParserState(xpp, 1, xpp.TEXT, null, "bar", false, -1);
+        checkParserState(xpp, 1, XmlPullParser.TEXT, null, "bar", false, -1);
         assertEquals(false, xpp.isWhitespace());
         xpp.next();
-        checkParserState(xpp, 2, xpp.START_TAG, "p:t", null, false, 0);
+        checkParserState(xpp, 2, XmlPullParser.START_TAG, "p:t", null, false, 0);
         xpp.next();
-        checkParserState(xpp, 2, xpp.TEXT, null, "\n\t ", false, -1);
+        checkParserState(xpp, 2, XmlPullParser.TEXT, null, "\n\t ", false, -1);
         assertTrue(xpp.isWhitespace());
         xpp.next();
-        checkParserState(xpp, 2, xpp.END_TAG, "p:t", null, false, -1);
+        checkParserState(xpp, 2, XmlPullParser.END_TAG, "p:t", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.END_TAG, "foo", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.END_DOCUMENT, null, null, false, -1);
         
         
     }
@@ -259,17 +258,17 @@ public class TestSerialize extends UtilTestCase {
         assertEquals("UTF-8", xpp.getInputEncoding());
         
         //xpp.setInput(new StringReader( "<foo/>" ) );
-        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.START_DOCUMENT, null, null, false, -1);
         xpp.next();
-        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 1);
+        checkParserState(xpp, 1, XmlPullParser.START_TAG, "foo", null, false /*empty*/, 1);
         assertEquals(printable(s), printable(xpp.getAttributeValue(null, "att")));
         xpp.next();
-        checkParserState(xpp, 1, xpp.TEXT, null, expectedS, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.TEXT, null, expectedS, false, -1);
         assertEquals(false, xpp.isWhitespace());
         xpp.next();
-        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        checkParserState(xpp, 1, XmlPullParser.END_TAG, "foo", null, false, -1);
         xpp.next();
-        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+        checkParserState(xpp, 0, XmlPullParser.END_DOCUMENT, null, null, false, -1);
         
         baos = new ByteArrayOutputStream();
         ser.setOutput(baos, "UTF-8");

@@ -59,69 +59,69 @@ public class TestBootstrapXmlTests extends UtilTestCase {
         XmlPullParser pp = factory.newPullParser();
         pp.setInput( new StringReader( MINI_TEST_XML ) );
         pp.next();
-        pp.require( pp.START_TAG, TEST_NS, "tests");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "tests");
         pp.next();
-        pp.require( pp.TEXT, null, null);
+        pp.require( XmlPullParser.TEXT, null, null);
 	String text = pp.getText();
 	assertEquals("\n ", text);
         pp.next();
-        pp.require( pp.START_TAG, TEST_NS, "test-parser");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "test-parser");
 	// check name
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "create-parser");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "create-parser");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "create-parser");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "create-parser");
 
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "input-inline");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "input-inline");
 	text = "";
-	if(pp.next() == pp.TEXT) {
+	if(pp.next() == XmlPullParser.TEXT) {
 	    text = pp.getText();
 	    pp.next();
 	}
 	assertEquals("<foo/> ", text);
-        pp.require( pp.END_TAG, TEST_NS, "input-inline");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "input-inline");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "next");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "next");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "expect");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "expect");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "next");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "next");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "expect");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "expect");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "next");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "next");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "expect");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "expect");
 
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "test-parser");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "test-parser");
 
 	pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "tests");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "tests");
 
         pp.next();
-        pp.require( pp.END_DOCUMENT, null, null);
+        pp.require( XmlPullParser.END_DOCUMENT, null, null);
 
     }
 
@@ -145,75 +145,75 @@ public class TestBootstrapXmlTests extends UtilTestCase {
         XmlPullParser pp = factory.newPullParser();
         pp.setInput( new StringReader( TYPICAL_TEST_XML ) );
         pp.next();
-        pp.require( pp.START_TAG, TEST_NS, "tests");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "tests");
         pp.next();
-        pp.require( pp.TEXT, null, null);
+        pp.require( XmlPullParser.TEXT, null, null);
 	String text = pp.getText();
 	assertEquals("\n ", text);
         pp.next();
-        pp.require( pp.START_TAG, TEST_NS, "test-parser");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "test-parser");
 	// check name
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "create-parser");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "create-parser");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "create-parser");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "create-parser");
 
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "input-inline");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "input-inline");
 	text = "";
-	if(pp.next() == pp.TEXT) {
+	if(pp.next() == XmlPullParser.TEXT) {
 	    text = pp.getText();
 	    pp.next();
 	}
 	assertEquals("<foo att=\"t\" att2='a' > bar&baz &</foo>", text);
-        pp.require( pp.END_TAG, TEST_NS, "input-inline");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "input-inline");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "set-feature");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "set-feature");
         text = pp.nextText();
 	assertEquals("http://xmlpull.org/v1/doc/features.html#process-namespaces", text);
-        pp.require( pp.END_TAG, TEST_NS, "set-feature");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "set-feature");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "expect");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "expect");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "next");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "next");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "expect");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "expect");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "next-text");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "next-text");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "next-text");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "next-text");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "next");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "next");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "next");
 
         pp.nextTag();
-        pp.require( pp.START_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.START_TAG, TEST_NS, "expect");
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "expect");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "expect");
 
         pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "test-parser");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "test-parser");
 
 	pp.nextTag();
-        pp.require( pp.END_TAG, TEST_NS, "tests");
+        pp.require( XmlPullParser.END_TAG, TEST_NS, "tests");
 
         pp.next();
-        pp.require( pp.END_DOCUMENT, null, null);
+        pp.require( XmlPullParser.END_DOCUMENT, null, null);
 
     }
 

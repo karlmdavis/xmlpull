@@ -3,8 +3,6 @@
 
 package org.xmlpull.v1.tests;
 
-//import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.ByteArrayInputStream;
@@ -56,38 +54,38 @@ public class TestSimpleWithNs extends UtilTestCase {
 
         // check the simplest possible XML document - just one root element
         xpp.setInput(new StringReader("<foo></foo>"));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, false/*empty*/, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
         xpp.setInput(new StringReader("<foo/>"));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
 
         // one step further - it has content ...
 
 
         xpp.setInput(new StringReader("<foo attrName='attrVal'>bar</foo>"));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 1);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, false, 1);
         checkAttribNs(xpp, 0, null, "", "attrName", "attrVal");
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "bar", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, "bar", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
 
         byte[] binput = ("<foo xmlns='n' xmlns:ns1='n1' xmlns:ns2='n2'>"+
@@ -98,10 +96,10 @@ public class TestSimpleWithNs extends UtilTestCase {
         xpp.setInput(new ByteArrayInputStream( binput ), "US-ASCII" );
         assertEquals("US-ASCII", xpp.getInputEncoding());
 
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 3, "n", "foo", null, false, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 3, "n", "foo", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
         assertEquals(3, xpp.getNamespaceCount(1));
         checkNamespace(xpp, 0, null, "n", true);
@@ -109,7 +107,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkNamespace(xpp, 2, "ns2", "n2", true);
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, "ns1", 6, "x1", "bar", null, false, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, "ns1", 6, "x1", "bar", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
         assertEquals(3, xpp.getNamespaceCount(1));
         assertEquals(6, xpp.getNamespaceCount(2));
@@ -118,7 +116,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkNamespace(xpp, 5, null, "n1", true);
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 6, "n2", "gugu", null, true, 4);
+        checkParserStateNs(xpp, 3, XmlPullParser.START_TAG, "ns2", 6, "n2", "gugu", null, true, 4);
         assertEquals(6, xpp.getNamespaceCount(2));
         assertEquals(6, xpp.getNamespaceCount(3));
         assertEquals("x1", xpp.getNamespace("ns1"));
@@ -130,10 +128,10 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkAttribNs(xpp, 3, "ns1", "x1", "a3", "v3");
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.END_TAG, "ns2", 6, "n2", "gugu", null, false, -1);
+        checkParserStateNs(xpp, 3, XmlPullParser.END_TAG, "ns2", 6, "n2", "gugu", null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, null, 7, "n1", "baz", null, false, 0);
+        checkParserStateNs(xpp, 3, XmlPullParser.START_TAG, null, 7, "n1", "baz", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
         assertEquals(3, xpp.getNamespaceCount(1));
         assertEquals(6, xpp.getNamespaceCount(2));
@@ -144,7 +142,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         assertEquals("n3", xpp.getNamespace("ns3"));
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.END_TAG, null, 7, "n1", "baz", null, false, -1);
+        checkParserStateNs(xpp, 3, XmlPullParser.END_TAG, null, 7, "n1", "baz", null, false, -1);
         assertEquals("y1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals("n3", xpp.getNamespace("ns3"));
@@ -166,19 +164,19 @@ public class TestSimpleWithNs extends UtilTestCase {
 
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, "ns1", 6, "x1", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, "ns1", 6, "x1", "bar", null, false, -1);
         // check that namespace is undelcared
         assertEquals("x1", xpp.getNamespace("ns1"));
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 3, "n", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 3, "n", "foo", null, false, -1);
 
         assertEquals("n1", xpp.getNamespace("ns1"));
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals(null, xpp.getNamespace("ns3"));
 
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
         assertEquals(null, xpp.getNamespace("ns1"));
         assertEquals(null, xpp.getNamespace("ns2"));
         assertEquals(null, xpp.getNamespace("ns3"));

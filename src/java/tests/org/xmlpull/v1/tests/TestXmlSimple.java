@@ -5,7 +5,6 @@ package org.xmlpull.v1.tests;
 
 import java.io.*;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.xmlpull.v1.*;

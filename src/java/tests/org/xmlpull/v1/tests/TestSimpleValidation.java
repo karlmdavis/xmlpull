@@ -3,11 +3,8 @@
 
 package org.xmlpull.v1.tests;
 
-//import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -41,11 +38,11 @@ public class TestSimpleValidation extends UtilTestCase {
     public void testValidation() throws Exception {
         XmlPullParser xpp = factory.newPullParser();
         try {
-            xpp.setFeature(xpp.FEATURE_VALIDATION, true);
+            xpp.setFeature(XmlPullParser.FEATURE_VALIDATION, true);
         } catch(XmlPullParserException ex) {
             return;
         }
-        PackageTests.addNote("* feature "+xpp.FEATURE_VALIDATION+" is supported\n");
+        PackageTests.addNote("* feature "+XmlPullParser.FEATURE_VALIDATION+" is supported\n");
         // setting validation MUST enables also PROCESS_DOCDECL
         assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL));
 
@@ -62,24 +59,24 @@ public class TestSimpleValidation extends UtilTestCase {
             "<greeting>Hello, world!</greeting>\n";
 
         xpp.setInput(new StringReader( XML_MIN_VALID ));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         assertNull(xpp.getProperty(PROPERTY_XMLDECL_VERSION));
         assertNull(xpp.getProperty(PROPERTY_XMLDECL_STANDALONE));
         assertNull(xpp.getProperty(PROPERTY_XMLDECL_CONTENT));
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "greeting", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "greeting", null, false/*empty*/, 0);
 
         //XMLDecl support is required when PROCESS DOCDECL enabled
         assertEquals("1.0", xpp.getProperty(PROPERTY_XMLDECL_VERSION));
         assertEquals(null, xpp.getProperty(PROPERTY_XMLDECL_STANDALONE));
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "Hello, world!", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, "Hello, world!", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "greeting", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "greeting", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
 
 
@@ -87,7 +84,7 @@ public class TestSimpleValidation extends UtilTestCase {
         final String XML_MIN_INVALID = XML_MIN_PROLOG+
             "<greet>Hello, world!</greet>\n";
         xpp.setInput(new StringReader( XML_MIN_INVALID ));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         try {
             xpp.next();
             fail("exception was expected of next() for invalid document element root");

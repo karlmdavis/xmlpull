@@ -4,7 +4,7 @@
 package org.xmlpull.v1.tests;
 
 //import junit.framework.Test;
-import junit.framework.TestCase;
+//import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.StringReader;
@@ -43,55 +43,55 @@ public class TestEvent extends UtilTestCase {
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput(new StringReader(TEST_XML));
 
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "root", null, false, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "root", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "\n", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, "\n", false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 0, "", "foo", null, false, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, null, 0, "", "foo", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.TEXT, null, 0, null, null, "bar", false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.TEXT, null, 0, null, null, "bar", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "\n", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, "\n", false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG,
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG,
                            null, 1, "http://www.xmlpull.org/temp", "hugo", null, false, 0);
         checkNamespace(xpp, 0, null, "http://www.xmlpull.org/temp", true);
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.TEXT, null, 1, null, null, " \n\n \n  ", false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.TEXT, null, 1, null, null, " \n\n \n  ", false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG,
+        checkParserStateNs(xpp, 3, XmlPullParser.START_TAG,
                            null, 1, "http://www.xmlpull.org/temp", "hugochild", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.TEXT, null, 1, null, null,
+        checkParserStateNs(xpp, 3, XmlPullParser.TEXT, null, 1, null, null,
                            "This is in a new namespace", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.END_TAG,
+        checkParserStateNs(xpp, 3, XmlPullParser.END_TAG,
                            null, 1, "http://www.xmlpull.org/temp", "hugochild", null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG,
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG,
                            null, 1, "http://www.xmlpull.org/temp", "hugo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "\t\n", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, "\t\n", false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 0, "", "bar", null, true, 1);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, null, 0, "", "bar", null, true, 1);
         checkAttribNs(xpp, 0, null, "", "testattr", "123abc");
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 0, "", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, null, 0, "", "bar", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "root", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "root", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
 
     public void testMultiNs() throws Exception {
@@ -99,40 +99,40 @@ public class TestEvent extends UtilTestCase {
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput(new StringReader("<foo><bar xmlns=''/><char xmlns=''></char></foo>"));
 
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
 
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "bar", null, true, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, null, 1, "", "bar", null, true, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, null, 1, "", "bar", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "char", null, false, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, null, 1, "", "char", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "char", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, null, 1, "", "char", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
         xpp.setInput(new StringReader("<foo><bar xmlns=''></bar><char xmlns=''></char></foo>"));
 
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "bar", null, false, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, null, 1, "", "bar", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, null, 1, "", "bar", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "char", null, false, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, null, 1, "", "char", null, false, 0);
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, null, 1, "", "char", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, null, 1, "", "char", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
     }
 

@@ -3,7 +3,6 @@
 
 package org.xmlpull.v1.tests;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.ByteArrayOutputStream;
@@ -47,17 +46,17 @@ public class TestSerializeWithNs extends UtilTestCase {
     
     
     private void checkSimpleWriterResult(String textContent) throws Exception {
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
         if(textContent != null) {
             xpp.next();
-            checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, textContent, false, -1);
+            checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, textContent, false, -1);
         }
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
     
     public void testSimpleWriter() throws Exception {
@@ -281,7 +280,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         
         xpp.nextToken();
         if(xpp.getEventType() == XmlPullParser.IGNORABLE_WHITESPACE) {
-            String expectedIws = gatherTokenText(xpp, xpp.IGNORABLE_WHITESPACE, true);
+            String expectedIws = gatherTokenText(xpp, XmlPullParser.IGNORABLE_WHITESPACE, true);
             assertEquals(printable(iws), printable(expectedIws));
         }
         
@@ -415,10 +414,10 @@ public class TestSerializeWithNs extends UtilTestCase {
         XmlPullParser pp = factory.newPullParser();
         pp.setInput(new StringReader(s));
         pp.nextTag();
-        pp.require(pp.START_TAG, null, "test");
-        assertEquals("value", pp.getAttributeValue(pp.NO_NAMESPACE, "att"));
+        pp.require(XmlPullParser.START_TAG, null, "test");
+        assertEquals("value", pp.getAttributeValue(XmlPullParser.NO_NAMESPACE, "att"));
         pp.nextTag();
-        pp.require(pp.END_TAG, null, "test");
+        pp.require(XmlPullParser.END_TAG, null, "test");
     }
     
     /**
@@ -445,12 +444,12 @@ public class TestSerializeWithNs extends UtilTestCase {
         XmlPullParser pp = factory.newPullParser();
         pp.setInput(new StringReader(s));
         pp.nextTag();
-        pp.require(pp.START_TAG, null, "test");
-        assertEquals("value", pp.getAttributeValue(pp.NO_NAMESPACE, "att"));
-        assertEquals("valueA", pp.getAttributeValue(pp.NO_NAMESPACE, "attA"));
-        assertEquals("valueQ", pp.getAttributeValue(pp.NO_NAMESPACE, "attQ"));
+        pp.require(XmlPullParser.START_TAG, null, "test");
+        assertEquals("value", pp.getAttributeValue(XmlPullParser.NO_NAMESPACE, "att"));
+        assertEquals("valueA", pp.getAttributeValue(XmlPullParser.NO_NAMESPACE, "attA"));
+        assertEquals("valueQ", pp.getAttributeValue(XmlPullParser.NO_NAMESPACE, "attQ"));
         pp.nextTag();
-        pp.require(pp.END_TAG, null, "test");
+        pp.require(XmlPullParser.END_TAG, null, "test");
     }
     
     
@@ -658,10 +657,10 @@ public class TestSerializeWithNs extends UtilTestCase {
         //System.out.println(getClass()+" sw="+sw);
         xpp.setInput(new StringReader(serialized));
         
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
         String expectedPrefix = (prefix != null && prefix.length() == 0) ? null : prefix;
-        checkParserStateNs(xpp, 1, xpp.START_TAG, expectedPrefix, 1, NS, "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, expectedPrefix, 1, NS, "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
     }
     
     public void testSetPrefix() throws Exception {
@@ -789,48 +788,48 @@ public class TestSerializeWithNs extends UtilTestCase {
         
         xpp.setInput(new StringReader(soapEnvelope));
         
-        xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
+        xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, 1, ENV, "Envelope", false /*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, 1, ENV, "Envelope", false /*empty*/, 0);
         xpp.nextTag();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, 1, ENV, "Header", false /*empty*/, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, 1, ENV, "Header", false /*empty*/, 0);
         xpp.nextTag();
-        checkParserStateNs(xpp, 3, xpp.START_TAG,
+        checkParserStateNs(xpp, 3, XmlPullParser.START_TAG,
                            2+extraNs, ALERTCONTROL, "alertcontrol", false /*empty*/, 2);
         checkAttribNs(xpp, 0, ENV, "mustUnderstand", "true");
         checkAttribNs(xpp, 1, ENV, "role", ROLE);
         
         xpp.nextTag();
-        checkParserStateNs(xpp, 4, xpp.START_TAG, 2+extraNs, ALERTCONTROL, "priority", false /*empty*/, 0);
+        checkParserStateNs(xpp, 4, XmlPullParser.START_TAG, 2+extraNs, ALERTCONTROL, "priority", false /*empty*/, 0);
         String text = xpp.nextText();
         assertEquals("1", text);
         xpp.nextTag();
-        checkParserStateNs(xpp, 4, xpp.START_TAG, 2+extraNs, ALERTCONTROL, "expires", false /*empty*/, 0);
+        checkParserStateNs(xpp, 4, XmlPullParser.START_TAG, 2+extraNs, ALERTCONTROL, "expires", false /*empty*/, 0);
         text = xpp.nextText();
         assertEquals(EXPIRES, text);
         xpp.nextTag();
-        checkParserStateNs(xpp, 3, xpp.END_TAG, 2+extraNs, ALERTCONTROL, "alertcontrol", false, -1);
+        checkParserStateNs(xpp, 3, XmlPullParser.END_TAG, 2+extraNs, ALERTCONTROL, "alertcontrol", false, -1);
         xpp.nextTag();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, 1, ENV, "Header", false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, 1, ENV, "Header", false, -1);
         xpp.nextTag();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, 1, ENV, "Body", false /*empty*/, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, 1, ENV, "Body", false /*empty*/, 0);
         
         xpp.nextTag();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, 2, ALERT, "alert", false /*empty*/, 0);
+        checkParserStateNs(xpp, 3, XmlPullParser.START_TAG, 2, ALERT, "alert", false /*empty*/, 0);
         xpp.nextTag();
-        checkParserStateNs(xpp, 4, xpp.START_TAG, 2, ALERT, "msg", false /*empty*/, 0);
+        checkParserStateNs(xpp, 4, XmlPullParser.START_TAG, 2, ALERT, "msg", false /*empty*/, 0);
         text = xpp.nextText();
         assertEquals(MSG, text);
         xpp.nextTag();
-        checkParserStateNs(xpp, 3, xpp.END_TAG, 2, ALERT, "alert", false, -1);
+        checkParserStateNs(xpp, 3, XmlPullParser.END_TAG, 2, ALERT, "alert", false, -1);
         xpp.nextTag();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, 1, ENV, "Body", false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, 1, ENV, "Body", false, -1);
         xpp.nextTag();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, 1, ENV, "Envelope", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, 1, ENV, "Envelope", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
         
         checkTestSetPrefixSoap2(soapEnvelope);
     }
@@ -838,63 +837,63 @@ public class TestSerializeWithNs extends UtilTestCase {
     // run test using parser.require()
     private void checkTestSetPrefixSoap2(String soapEnvelope) throws Exception {
         xpp.setInput(new StringReader(soapEnvelope));
-        xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
+        xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         
-        xpp.require(xpp.START_DOCUMENT, null, null);
+        xpp.require(XmlPullParser.START_DOCUMENT, null, null);
         
         xpp.next(); // essentially moveToContent()
-        xpp.require(xpp.START_TAG, ENV, "Envelope");
+        xpp.require(XmlPullParser.START_TAG, ENV, "Envelope");
         
         xpp.nextTag();
-        xpp.require(xpp.START_TAG, ENV, "Header");
+        xpp.require(XmlPullParser.START_TAG, ENV, "Header");
         
         xpp.nextTag();
-        xpp.require(xpp.START_TAG, ALERTCONTROL, "alertcontrol");
+        xpp.require(XmlPullParser.START_TAG, ALERTCONTROL, "alertcontrol");
         String mustUderstand = xpp.getAttributeValue(ENV, "mustUnderstand");
         assertEquals("true", mustUderstand);
         String role = xpp.getAttributeValue(ENV, "role");
         assertEquals(ROLE, role);
         
         xpp.nextTag();
-        xpp.require(xpp.START_TAG, ALERTCONTROL, "priority");
+        xpp.require(XmlPullParser.START_TAG, ALERTCONTROL, "priority");
         String text = xpp.nextText();
         assertEquals("1", text);
         //Integer.parseInt(text);
         
         xpp.nextTag();
-        xpp.require(xpp.START_TAG, ALERTCONTROL, "expires");
+        xpp.require(XmlPullParser.START_TAG, ALERTCONTROL, "expires");
         text = xpp.nextText();
         assertEquals(EXPIRES, text);
         
         xpp.nextTag();
-        xpp.require(xpp.END_TAG, ALERTCONTROL, "alertcontrol");
+        xpp.require(XmlPullParser.END_TAG, ALERTCONTROL, "alertcontrol");
         
         xpp.nextTag();
-        xpp.require(xpp.END_TAG, ENV, "Header");
+        xpp.require(XmlPullParser.END_TAG, ENV, "Header");
         
         xpp.nextTag();
-        xpp.require(xpp.START_TAG, ENV, "Body");
+        xpp.require(XmlPullParser.START_TAG, ENV, "Body");
         
         xpp.nextTag();
-        xpp.require(xpp.START_TAG, ALERT, "alert");
+        xpp.require(XmlPullParser.START_TAG, ALERT, "alert");
         
         xpp.nextTag();
-        xpp.require(xpp.START_TAG, ALERT, "msg");
+        xpp.require(XmlPullParser.START_TAG, ALERT, "msg");
         
         text = xpp.nextText();
         assertEquals(MSG, text);
         
         xpp.nextTag();
-        xpp.require(xpp.END_TAG, ALERT, "alert");
+        xpp.require(XmlPullParser.END_TAG, ALERT, "alert");
         
         xpp.nextTag();
-        xpp.require(xpp.END_TAG, ENV, "Body");
+        xpp.require(XmlPullParser.END_TAG, ENV, "Body");
         
         xpp.nextTag();
-        xpp.require(xpp.END_TAG, ENV, "Envelope");
+        xpp.require(XmlPullParser.END_TAG, ENV, "Envelope");
         
         xpp.next();
-        xpp.require(xpp.END_DOCUMENT, null, null);
+        xpp.require(XmlPullParser.END_DOCUMENT, null, null);
     }
     
     
@@ -975,10 +974,10 @@ public class TestSerializeWithNs extends UtilTestCase {
         xpp.setInput(new ByteArrayInputStream( binput ), "US-ASCII" );
         assertEquals("US-ASCII", xpp.getInputEncoding());
         
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 3, "namesp", "foo", null, false, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 3, "namesp", "foo", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
         assertEquals(3, xpp.getNamespaceCount(1));
         checkNamespace(xpp, 0, null, "namesp", true);
@@ -986,7 +985,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         checkNamespace(xpp, 2, "ns2", "namesp2", true);
         
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, "ns1", 6, "x1", "bar", null, false, 0);
+        checkParserStateNs(xpp, 2, XmlPullParser.START_TAG, "ns1", 6, "x1", "bar", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
         assertEquals(3, xpp.getNamespaceCount(1));
         assertEquals(6, xpp.getNamespaceCount(2));
@@ -995,7 +994,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         checkNamespace(xpp, 5, null, "namesp1", true);
         
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 6, "namesp2", "gugu", null, true, 4);
+        checkParserStateNs(xpp, 3, XmlPullParser.START_TAG, "ns2", 6, "namesp2", "gugu", null, true, 4);
         assertEquals(6, xpp.getNamespaceCount(2));
         assertEquals(6, xpp.getNamespaceCount(3));
         assertEquals("x1", xpp.getNamespace("ns1"));
@@ -1007,10 +1006,10 @@ public class TestSerializeWithNs extends UtilTestCase {
         checkAttribNs(xpp, 3, "ns1", "x1", "a3", "v3");
         
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.END_TAG, "ns2", 6, "namesp2", "gugu", null, false, -1);
+        checkParserStateNs(xpp, 3, XmlPullParser.END_TAG, "ns2", 6, "namesp2", "gugu", null, false, -1);
         
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, null, 7, "namesp1", "baz", null, xpp.isEmptyElementTag(), 0);
+        checkParserStateNs(xpp, 3, XmlPullParser.START_TAG, null, 7, "namesp1", "baz", null, xpp.isEmptyElementTag(), 0);
         assertEquals(0, xpp.getNamespaceCount(0));
         assertEquals(3, xpp.getNamespaceCount(1));
         assertEquals(6, xpp.getNamespaceCount(2));
@@ -1021,7 +1020,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         assertEquals("namesp3", xpp.getNamespace("ns3"));
         
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.END_TAG, null, 7, "namesp1", "baz", null, false, -1);
+        checkParserStateNs(xpp, 3, XmlPullParser.END_TAG, null, 7, "namesp1", "baz", null, false, -1);
         assertEquals("y1", xpp.getNamespace("ns1"));
         assertEquals("namesp2", xpp.getNamespace("ns2"));
         assertEquals("namesp3", xpp.getNamespace("ns3"));
@@ -1043,19 +1042,19 @@ public class TestSerializeWithNs extends UtilTestCase {
         
         
         xpp.next();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, "ns1", 6, "x1", "bar", null, false, -1);
+        checkParserStateNs(xpp, 2, XmlPullParser.END_TAG, "ns1", 6, "x1", "bar", null, false, -1);
         // check that namespace is undelcared
         assertEquals("x1", xpp.getNamespace("ns1"));
         
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 3, "namesp", "foo", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 3, "namesp", "foo", null, false, -1);
         
         assertEquals("namesp1", xpp.getNamespace("ns1"));
         assertEquals("namesp2", xpp.getNamespace("ns2"));
         assertEquals(null, xpp.getNamespace("ns3"));
         
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
         assertEquals(null, xpp.getNamespace("ns1"));
         assertEquals(null, xpp.getNamespace("ns2"));
         assertEquals(null, xpp.getNamespace("ns3"));
@@ -1074,20 +1073,20 @@ public class TestSerializeWithNs extends UtilTestCase {
             expect.next();
             actual.next();
             assertXml("inconsistent event type", expect, actual,
-                      expect.TYPES[ expect.getEventType() ],
-                      actual.TYPES[ actual.getEventType() ]
+            		XmlPullParser.TYPES[ expect.getEventType() ],
+            		XmlPullParser.TYPES[ actual.getEventType() ]
                      );
-            if(expect.getEventType() == expect.END_DOCUMENT) {
+            if(expect.getEventType() == XmlPullParser.END_DOCUMENT) {
                 break;
             }
-            if(expect.getEventType() == expect.START_TAG
-                   || expect.getEventType() == expect.END_TAG )
+            if(expect.getEventType() == XmlPullParser.START_TAG
+                   || expect.getEventType() == XmlPullParser.END_TAG )
             {
                 assertXml("tag names", expect, actual,
                           expect.getName(), actual.getName());
                 assertXml("tag namespaces", expect, actual,
                           expect.getNamespace(), actual.getNamespace());
-                if(expect.getEventType() == expect.START_TAG) {
+                if(expect.getEventType() == XmlPullParser.START_TAG) {
                     // check consisteny of attributes -- allow them to be in any order
                     int expectAttrCount = expect.getAttributeCount();
                     assertXml("attributes count", expect, actual,
@@ -1113,6 +1112,8 @@ public class TestSerializeWithNs extends UtilTestCase {
                         }
                         String expectN = expectAttrNamespace+":"+expectAttrName;
                         if(actualPos == -1) {
+                            System.err.println("expected:\n"+expectedXml
+                                                   +"\nactual:\n"+actualXml);
                             fail("could not find expected attribute "+expectN
                                      +" actual parser "+actual.getPositionDescription());
                         }
@@ -1130,7 +1131,7 @@ public class TestSerializeWithNs extends UtilTestCase {
                                   ""+expectAttrDefault, ""+actual.isAttributeDefault(actualPos) );
                     }
                 }
-            } else if(expect.getEventType() == expect.TEXT) {
+            } else if(expect.getEventType() == XmlPullParser.TEXT) {
                 assertXml("text content", expect, actual,
                           expect.getText(), actual.getText());
             } else {

@@ -2,7 +2,6 @@
 // for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 

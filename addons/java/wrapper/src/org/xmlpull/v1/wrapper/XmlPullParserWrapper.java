@@ -3,9 +3,6 @@
 
 package org.xmlpull.v1.wrapper;
 
-import java.lang.reflect.Proxy;
-import java.lang.reflect.InvocationHandler;
-
 import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -87,13 +84,13 @@ public interface XmlPullParserWrapper extends XmlPullParser {
         throws XmlPullParserException, IOException;
 
     /**
-     * combine nextTag(); pp.require(pp.START_TAG, null, name);
+     * combine nextTag(); pp.require(XmlPullParser.START_TAG, null, name);
      */
     public void nextStartTag(String name)
         throws XmlPullParserException, IOException;
 
     /**
-     * combine nextTag(); pp.require(pp.START_TAG, namespace, name);
+     * combine nextTag(); pp.require(XmlPullParser.START_TAG, namespace, name);
      */
     public void nextStartTag(String namespace, String name)
         throws XmlPullParserException, IOException;
@@ -104,14 +101,14 @@ public interface XmlPullParserWrapper extends XmlPullParser {
     public void nextEndTag() throws XmlPullParserException, IOException;
 
     /**
-     * combine nextTag(); pp.require(pp.END_TAG, null, name);
+     * combine nextTag(); pp.require(XmlPullParser.END_TAG, null, name);
      */
     public void nextEndTag(String name)
         throws XmlPullParserException, IOException;
 
 
     /**
-     * combine nextTag(); pp.require(pp.END_TAG, namespace, name);
+     * combine nextTag(); pp.require(XmlPullParser.END_TAG, namespace, name);
      */
     public void nextEndTag(String namespace, String name)
         throws XmlPullParserException, IOException;

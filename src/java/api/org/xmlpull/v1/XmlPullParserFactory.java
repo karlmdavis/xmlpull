@@ -10,10 +10,10 @@ import java.util.Vector;
 
 /**
  * This class is used to create implementations of XML Pull Parser defined in XMPULL V1 API.
- * The name of actual facotry class will be determied based on several parameters.
+ * The name of actual factory class will be determined based on several parameters.
  * It works similar to JAXP but tailored to work in J2ME environments
  * (no access to system properties or file system) so name of parser class factory to use
- * and its class used for loading (no classloader - on J2ME no access to context class loaders)
+ * and its class used for loading (no class loader - on J2ME no access to context class loaders)
  * must be passed explicitly. If no name of parser factory was passed (or is null)
  * it will try to find name by searching in CLASSPATH for
  * META-INF/services/org.xmlpull.v1.XmlPullParserFactory resource that should contain

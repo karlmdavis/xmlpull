@@ -3,7 +3,6 @@
 
 package org.xmlpull.v1.tests;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.ByteArrayInputStream;
@@ -55,12 +54,12 @@ public class TestSetInput extends UtilTestCase {
         assertEquals("no read() called in just contructed reader", false, reader.calledRead());
 
         xpp.setInput(reader);
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         assertEquals("read() not called before next()", false, reader.calledRead());
 
         xpp.next();
         assertEquals("read() must be called after next()", true, reader.calledRead());
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
     }
 
     public void testSetInput() throws Exception {
@@ -76,7 +75,7 @@ public class TestSetInput extends UtilTestCase {
 
         xpp.setInput(isw, "UTF-8");
         assertEquals("UTF-8", xpp.getInputEncoding());
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         assertEquals("read() not called before next()", false, isw.calledRead());
 
         xpp.nextToken();
@@ -102,7 +101,7 @@ public class TestSetInput extends UtilTestCase {
         //        //xpp.setInput(isw, "UTF-16" ); //TODO why Xerces2 causes java Unicode decoder to fail ????
         //      xpp.setInput(isw, "UTF16" );
         //        //assertEquals("UTF-16", xpp.getInputEncoding());
-        //        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        //        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         //        assertEquals("read() not called before next()", false, isw.calledRead());
         //
         //        xpp.nextToken();
@@ -122,7 +121,7 @@ public class TestSetInput extends UtilTestCase {
             xpp.setInput(isw, null );
             assertEquals(null, xpp.getInputEncoding());
 
-            checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+            checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
             //assertEquals("read() not called before next()", false, isw.calledRead());
 
             xpp.nextToken();
@@ -140,12 +139,12 @@ public class TestSetInput extends UtilTestCase {
 
         xpp.setInput(isw, null );
         assertEquals(null, xpp.getInputEncoding());
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         //assertEquals("read() not called before next()", false, isw.calledRead());
 
         xpp.next();
         assertEquals("read() must be called after next()", true, isw.calledRead());
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
 
         if(xpp.getFeature(FEATURE_DETECT_ENCODING)) {
             assertEquals("ISO-8859-1", xpp.getInputEncoding());

@@ -3,8 +3,6 @@
 
 package org.xmlpull.v1.tests;
 
-//import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.StringReader;
@@ -91,7 +89,7 @@ public class TestMisc extends UtilTestCase {
     //        assertEquals( "", pp.readText() );
     //        pp.next();
     //        assertEquals( "foo", pp.readText() );
-    //        assertEquals( pp.TYPES[ pp.END_TAG ], pp.TYPES[ pp.getEventType() ]);
+    //        assertEquals( pp.TYPES[ XmlPullParser.END_TAG ], pp.TYPES[ pp.getEventType() ]);
     //    }
 
     public void testNextText() throws Exception {

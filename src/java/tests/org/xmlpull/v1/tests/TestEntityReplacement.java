@@ -124,7 +124,7 @@ public class TestEntityReplacement extends UtilTestCase {
         //assertEquals("UTF-8", pp.getCharacterEncodingScheme());
         //assertEquals("1.0", startdoc.getVersion());
         String c = pp.nextText();
-        assertEquals(expectedText,c); //FAILURE expected "<text>" but was "<text"
+        assertEquals(expectedText, c);
         assertEquals(XmlPullParser.END_TAG, pp.getEventType());
     }
     

@@ -136,7 +136,7 @@ public class XmlPullUtil {
     }
 
     /**
-     * combine nextTag(); pp.require(pp.START_TAG, null, name);
+     * combine nextTag(); pp.require(XmlPullParser.START_TAG, null, name);
      */
     public static void nextStartTag(XmlPullParser pp, String name)
         throws XmlPullParserException, IOException
@@ -146,7 +146,7 @@ public class XmlPullUtil {
     }
 
     /**
-     * combine nextTag(); pp.require(pp.START_TAG, namespace, name);
+     * combine nextTag(); pp.require(XmlPullParser.START_TAG, namespace, name);
      */
     public static void nextStartTag(XmlPullParser pp, String namespace, String name)
         throws XmlPullParserException, IOException
@@ -159,7 +159,7 @@ public class XmlPullUtil {
 
 
     /**
-     * combine nextTag(); pp.require(pp.END_TAG, namespace, name);
+     * combine nextTag(); pp.require(XmlPullParser.END_TAG, namespace, name);
      */
     public static void nextEndTag(XmlPullParser pp, String namespace, String name)
         throws XmlPullParserException, IOException

@@ -125,7 +125,7 @@ public class DOM2XmlPullBuilder {
         private Element parseSubTree()
             throws XmlPullParserException, IOException
         {
-            pp.require( pp.START_TAG, null, null);
+            pp.require( XmlPullParser.START_TAG, null, null);
             String name = pp.getName();
             String ns = pp.getNamespace(    );
             String prefix = pp.getPrefix();
@@ -151,20 +151,20 @@ public class DOM2XmlPullBuilder {
             }
 
             // process children
-            while( pp.next() != pp.END_TAG ) {
-                if (pp.getEventType() == pp.START_TAG) {
+            while( pp.next() != XmlPullParser.END_TAG ) {
+                if (pp.getEventType() == XmlPullParser.START_TAG) {
                     Element el = parseSubTree(pp, docFactory);
                     parent.appendChild(el);
-                } else if (pp.getEventType() == pp.TEXT) {
+                } else if (pp.getEventType() == XmlPullParser.TEXT) {
                     String text = pp.getText();
                     Text textEl = docFactory.createTextNode(text);
                     parent.appendChild(textEl);
                 } else {
                     throw new XmlPullParserException(
-                        "unexpected event "+pp.TYPES[ pp.getEventType() ], pp, null);
+                        "unexpected event "+XmlPullParser.TYPES[ pp.getEventType() ], pp, null);
                 }
             }
-            pp.require( pp.END_TAG, ns, name);
+            pp.require( XmlPullParser.END_TAG, ns, name);
             return parent;
         }
 

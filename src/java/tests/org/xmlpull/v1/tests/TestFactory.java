@@ -3,7 +3,6 @@
 
 package org.xmlpull.v1.tests;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.xmlpull.v1.XmlPullParser;
