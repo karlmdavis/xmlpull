@@ -5,7 +5,6 @@ package org.xmlpull.v1;
 
 import java.io.IOException;
 import java.io.Reader;
-//import java.util.Hashtable;
 
 // - START_DOCUMENT added (see below)
 // - reset removed because of redundancy with setInput(?)
