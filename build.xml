@@ -11,7 +11,7 @@ All generated files are created under ${build} directory
 
   <property name="name" value="XmlPull"/>
   <property name="year" value="2003"/>
-  <property name="version" value="1_1_3_4"/>
+  <property name="version" value="1_1_3_4a"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
   <property name="copyright"
@@ -142,7 +142,7 @@ All generated files are created under ${build} directory
   <!-- =================================================================== -->
 
   <target name="api" depends="prepare">
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_api}" destdir="${build_classes}" classpath="${build_classes}"/>
   </target>
 
@@ -157,10 +157,7 @@ All generated files are created under ${build} directory
 
   <target name="samples" depends="xmlpull">
     <mkdir dir="${build_samples}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
-      srcdir="${src_samples}" destdir="${build_samples}"
-      classpath="${build_classes}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
       srcdir="${src_samples}" destdir="${build_samples}"
       classpath="${build_classes}"/>
   </target>
@@ -177,7 +174,7 @@ All generated files are created under ${build} directory
 
   <target name="dom2_builder" depends="api">
     <mkdir dir="${build_dom2_builder}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_dom2_builder}" destdir="${build_dom2_builder}" 
        classpath="${build_classes}"/>
     <jar jarfile="${jar_dom2_builder}">
@@ -187,7 +184,7 @@ All generated files are created under ${build} directory
 
   <target name="parser_pool" depends="api">
     <mkdir dir="${build_parser_pool}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_parser_pool}" destdir="${build_parser_pool}" 
        classpath="${build_classes}"/>
     <jar jarfile="${jar_parser_pool}">
@@ -197,7 +194,7 @@ All generated files are created under ${build} directory
 
   <target name="sax2" depends="api">
     <mkdir dir="${build_sax2}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_sax2}" destdir="${build_sax2}">
        <classpath>
         <pathelement location="${build_classes}" />
@@ -213,7 +210,7 @@ All generated files are created under ${build} directory
 
   <target name="util" depends="api">
     <mkdir dir="${build_util}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_util}" destdir="${build_util}" classpath="${build_classes}"/>
     <jar jarfile="${jar_util}">
       <fileset dir="${build_util}"/>
@@ -222,7 +219,7 @@ All generated files are created under ${build} directory
 
   <target name="wrapper" depends="require_junit,util">
     <mkdir dir="${build_wrapper}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_wrapper}" destdir="${build_wrapper}" classpath="${build_classes}:${build_util}"/>
     <jar jarfile="${jar_wrapper}">
       <fileset dir="${build_wrapper}"/>
@@ -231,14 +228,14 @@ All generated files are created under ${build} directory
 
   <target name="wrapper_tests" depends="require_junit,wrapper">
     <mkdir dir="${build_addons_tests}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_wrapper_tests}" destdir="${build_wrapper}" 
        classpath="${build_classes}:${build_util}:${build_wrapper}"/>
   </target>
 
   <target name="xmlrpc" depends="api">
     <mkdir dir="${build_xmlrpc}"/>
-    <javac debug="${debug}" deprecation="${deprecation}"
+    <javac debug="${debug}" deprecation="${deprecation}" target="1.1"
        srcdir="${src_xmlrpc}" destdir="${build_xmlrpc}" classpath="${build_classes}"/>
     <jar jarfile="${jar_xmlrpc}">
       <fileset dir="${build_xmlrpc}"/>
