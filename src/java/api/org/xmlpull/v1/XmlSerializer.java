@@ -176,6 +176,13 @@ public interface XmlSerializer {
 
     /**
      * Returns the namespace URI of the current element as set by startTag().
+     *
+     * <p><b>NOTE:</b> that measn in particaulr that: <ul>
+     * <li>if there was startTag("", ...) then getNamespace() returns ""
+     * <li>if there was startTag(null, ...) then getNamespace() returns null
+     * </ul>
+     *
+     * @return namespace set by startTag() that is currently in scope
      */
     public String getNamespace ();
 
@@ -183,6 +190,8 @@ public interface XmlSerializer {
      * Returns the name of the current element as set by startTag().
      * It can only be null before first call to startTag()
      * or when last endTag() is called to close first startTag().
+     *
+     * @return namespace set by startTag() that is currently in scope
      */
     public String getName();
 
