@@ -157,7 +157,18 @@ All generated files are created under ${build} directory
   <target name="tests" depends="tests_jar"/>
 
   <target name="junit" if="junit_present" depends="tests">
-    <junit haltonfailure="yes" fork="yes">
+
+    <java classname="org.xmlpull.v1.tests.PackageTests" fork="yes">
+      <!--arg value="foo_argument_1" /-->
+      <!--arg value="samples/list.xml" /-->
+      <classpath>
+        <path refid="test-classpath" />
+        <pathelement location="${build_tests}" />
+      </classpath>
+    </java>
+
+
+    <!--junit haltonfailure="yes" fork="yes">
       <classpath>
         <path refid="test-classpath" />
         <pathelement location="${build_tests}" />
@@ -165,12 +176,8 @@ All generated files are created under ${build} directory
       <formatter type="plain" usefile="false" />
       <test name="org.xmlpull.v1.tests.PackageTests" />
 
-      <!--batchtest>
-        <fileset dir="${build_tests}">
-          <include name="**/PackageTest.class" />
-        </fileset>
-      </batchtest-->
-    </junit>
+    </junit-->
+
   </target>
 
   <!-- =================================================================== -->

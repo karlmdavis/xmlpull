@@ -12,6 +12,9 @@ rem
 set LOCALCLASSPATH=
 for %%i in (lib\junit\*.jar) do call lib\ant\lcp.bat %%i
 
+rem to allow execute junit tests
+for %%i in (lib\impl_xmlpull_v1_api\*.jar) do call lib\ant\lcp.bat %%i
+
 if "%1" == "build" goto build_classpath
 if "%1" == "run" goto run_classpath
 if "%1" == "clean" goto clean_classpath
@@ -47,7 +50,6 @@ goto extra_args
 
 :run_classpath
 set LOCALCLASSPATH=build\classes;build\samples;build\tests;%LOCALCLASSPATH%
-for %%i in (lib\impl_xmlpull_v1_api\*.jar) do call lib\impl_xmlpull_v1_api\lcp.bat %%i
 
 :extra_args
 

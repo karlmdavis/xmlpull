@@ -11,6 +11,12 @@ LOCALCLASSPATH=.
 if [ ! "`echo lib/junit/*.jar`" = "lib/junit/*.jar" ] ; then
     LOCALCLASSPATH=`echo lib/junit/*.jar | tr ' ' ':'`:$LOCALCLASSPATH
 fi
+
+# to aloow execute junit tests from ANT
+if [ ! "`echo lib/impl_xmlpull_v1_api/*.jar`" = "lib/impl_xmlpull_v1_api/*.jar" ] ; then
+       LOCALCLASSPATH=`echo lib/impl_xmlpull_v1_api/*.jar | tr ' ' ':'`:$LOCALCLASSPATH
+fi
+
 if [ "$1" = "build" ] ; then 
     LOCALCLASSPATH=`echo lib/ant/*.jar | tr ' ' ':'`:$LOCALCLASSPATH
     LOCALCLASSPATH=$JAVA_HOME/lib/tools.jar:$LOCALCLASSPATH
@@ -24,9 +30,6 @@ if [ "$1" = "build" ] ; then
     fi
 else 
     LOCALCLASSPATH=build/samples:build/classes:build/tests:$LOCALCLASSPATH
-    if [ ! "`echo lib/impl_xmlpull_v1_api/*.jar`" = "lib/impl_xmlpull_v1_api/*.jar" ] ; then
-       LOCALCLASSPATH=`echo lib/impl_xmlpull_v1_api/*.jar | tr ' ' ':'`:$LOCALCLASSPATH
-    fi
     if [ "$1" = "run" ] ; then
         if [ "$2" = "set" ] ; then
             CLASSPATH=$LOCALCLASSPATH
