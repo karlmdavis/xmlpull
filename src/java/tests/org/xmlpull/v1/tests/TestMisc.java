@@ -288,9 +288,12 @@ public class TestMisc extends UtilTestCase {
 
 
         pp.setInput( new StringReader(
-                        "<?xml  version=\"1.0\" \t encoding='UTF-8' \nstandalone='yes' ?><foo/>" ));
+                        "<?xml  version=\"1.0\" \t encoding='UTF-8' \nstandalone='yes' ?>"
+                            +"<!--comment--><foo/>" ));
         pp.require( pp.START_DOCUMENT, null, null);
         // make sure that XMLDecl is not reported
+        pp.nextToken();
+        pp.require( pp.COMMENT, null, null);
         pp.nextToken();
         pp.require( pp.START_TAG, null, "foo");
         pp.next();

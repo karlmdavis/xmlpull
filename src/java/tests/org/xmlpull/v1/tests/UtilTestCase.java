@@ -22,9 +22,9 @@ public class UtilTestCase extends TestCase {
     protected final static String PROPERTY_XMLDECL_VERSION =
         "http://xmlpull.org/v1/doc/properties.html#xmldecl-version";
     protected final static String PROPERTY_XMLDECL_STANDALONE =
-        "http://xmlpull.org/v1/doc/features.html#xmldecl-standalone";
+        "http://xmlpull.org/v1/doc/properties.html#xmldecl-standalone";
     protected final static String PROPERTY_XMLDECL_CONTENT =
-        "http://xmlpull.org/v1/doc/features.html#xmldecl-content";
+        "http://xmlpull.org/v1/doc/properties.html#xmldecl-content";
 
 
     protected final static String TEST_XML =
