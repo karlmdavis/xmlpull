@@ -7,35 +7,55 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Hashtable;
 
 /**
- * This class is used to create implementations of  XML Pull Parser.
- * Based on JAXP ideas but tailored to work in J2ME environments
- * (no access to system properties or file system) so it creates
- * only one kind of parser but souce code can be moved without any
- * changes to J2SE or J2EE environment.
+ * This class is used to create implementations of XML Pull Parser defined in XMPULL V1 API.
+ * The name of actual facotry class will be determied based on several parameters.
+ * It works similar to JAXP but tailored to work in J2ME environments
+ * (no access to system properties or file system) so name of parser class factory to use
+ * and its class used for loading (no classloader - on J2ME no access to context class loaders)
+ * must be passed explicitly. If no name of parser factory was passed (or is null)
+ * it will try to find name by searching in CLASSPATH for
+ * META-INF/services/org.xmlpull.v1.XmlPullParserFactory resource that should contain
+ * the name of parser facotry class. If none found it will try to create a default parser
+ * factory (if available) or throw exception.
+ *
+ * <p><strong>NOTE:</strong>In J2SE or J2EE environments to get best results use
+ * <code>newInstance(property, classLoaderCtx)</code>
+ * where first argument is
+ * <code>System.getProperty(XmlPullParserFactory.DEFAULT_PROPERTY_NAME)</code>
+ * and second is <code>Thread.getContextClassLoader().getClas()</code> .
  *
  * @see XmlPullParser
- * @author Aleksander Slominski [aslom@extreme.indiana.edu]
+ *
+ * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
  */
 
-public class XmlPullParserFactory
+public abstract class XmlPullParserFactory
 {
     private static final boolean DEBUG = false;
 
+    /** name of parser factory property that should be used for system property
+     * or in general to retrieve parser factory clas sname from configuration
+     * (currently name of peroperty is org.xmlpull.v1.XmlPullParserFactory)
+     */
     public static final String DEFAULT_PROPERTY_NAME =
         "org.xmlpull.v1.XmlPullParserFactory";
 
     //private static Class MY_CLASS;
-    private static Object MY_REF = new XmlPullParserFactory();
+    private static Object MY_REF = new XmlPullParserException();//new XmlPullParserFactory();
     private static final String DEFAULT_KXML_IMPL_FACTORY_CLASS_NAME =
-        "org.xmlpull.v1.kxml.KXmlPullParserFactoryImpl";
+        "org.kxml2.io.XmlReader";
     private static final String DEFAULT_XPP_IMPL_FACTORY_CLASS_NAME =
-        "org.xmlpull.v1.xpp.XppPullParserFactorySmallImpl";
+        "org.xmlpull.xpp3.factory.Xpp3Factory";
     private static final String DEFAULT_RESOURCE_NAME =
         "/META-INF/services/" + DEFAULT_PROPERTY_NAME;
     private static String foundFactoryClassName = null;
-    protected boolean namespaceAware;
+
+    // features are kept there
+    protected Hashtable features = new Hashtable();
+    //protected boolean namespaceAware;
 
     /**
      * Proteted constructor to be called by factory implementations.
@@ -45,7 +65,10 @@ public class XmlPullParserFactory
     }
 
     /**
-     * Get a new instance of a PullParserFactory used to create XML pull parser.
+     * Create a new instance of a PullParserFactory used to create XML pull parser
+     * (see description of class for more details).
+     *
+     * @return result of call to newInstance(null, null)
      */
     public static XmlPullParserFactory newInstance()
         throws XmlPullParserException
@@ -57,6 +80,7 @@ public class XmlPullParserFactory
      * Get a new instance of a PullParserFactory from given class name.
      *
      * @param factoryClassName use specified factory class if not null
+     * @return result of call to newInstance(null, factoryClassName)
      */
     public static XmlPullParserFactory newInstance(String factoryClassName)
         throws XmlPullParserException
@@ -67,12 +91,13 @@ public class XmlPullParserFactory
     /**
      * Get a new instance of a PullParserFactory used to create XML Pull Parser.
      * <p><b>NOTE:</b> passing classLoaderCtx is not very useful in ME
-     *    but can be useful in container environment where
-     *    multiple class loaders are used
+     *    but can be useful in J2SE, J2EE or in container environments (such as servlets)
+     *    where multiple class loaders are used
      *    (it is using Class as ClassLoader is not in ME profile).
      *
      * @param classLoaderCtx if not null it is used to find
      *    default factory and to create instance
+     * @return result of call to newInstance(classLoaderCtx, null)
      */
     public static XmlPullParserFactory newInstance(Class classLoaderCtx)
         throws XmlPullParserException
@@ -82,6 +107,7 @@ public class XmlPullParserFactory
 
     private final static String PREFIX = "DEBUG XMLPULL factory: ";
 
+    /** Private method for debugging */
     private static void debug(String msg) {
         if(!DEBUG)
             throw new RuntimeException(
@@ -92,15 +118,15 @@ public class XmlPullParserFactory
     /**
      * Get instance of XML pull parser factiry.
      *
-     * <p><b>NOTE:</b>  this allows to use elegantly -D system properties or
-     *    similar configuratin in ME environments..
+     * <p><b>NOTE:</b>  this allows to use -D system properties indirectly and still
+     *    to support flexible configuration in J2ME environments..
      *
      * @param classLoaderCtx if null Class.forName will be used instead
      *    - simple way to use class loaders and still have ME compatibility!
      * @param hint with name of parser factory to use -
      *   it is a hint and is ignored if factory is not available.
      */
-    private static XmlPullParserFactory newInstance(Class classLoaderCtx,
+    public static XmlPullParserFactory newInstance(Class classLoaderCtx,
                                                     String factoryClassName)
         throws XmlPullParserException
     {
@@ -121,10 +147,13 @@ public class XmlPullParserFactory
                 factoryImpl = (XmlPullParserFactory) clazz.newInstance();
                 //foundFactoryClassName = factoryClassName;
                 //*/
-                if(DEBUG) debug("loaded "+clazz);
+                if(DEBUG) debug("loaded factoryClassName "+clazz);
             } catch  (Exception ex) {
-                if(DEBUG) debug("failed to load "+factoryClassName);
+                if(DEBUG) debug("failed to load factoryClassName "+factoryClassName);
                 if(DEBUG) ex.printStackTrace();
+                throw new XmlPullParserException(
+                    "could not create instance of XMLPULL factory for class "+factoryClassName
+                        +" (root exception:"+ex+")", ex);
             }
         }
 
@@ -208,6 +237,9 @@ public class XmlPullParserFactory
 
     // --- private utility methods
 
+    /**
+     * Finds factory class name from CLASSPATH based on META-INF/service/... resource.
+     */
     private static void findFactoryClassName( Class classLoaderCtx )
     {
         if(foundFactoryClassName != null) //return; // foundFactoryClassName;
@@ -256,6 +288,16 @@ public class XmlPullParserFactory
         //return foundFactoryClassName;
     }
 
+    /**
+     * Utility to read just one line of input without any charset encoding.
+     *
+     * @param    input               an InputStream
+     *
+     * @return   a String
+     *
+     * @throws   IOException
+     *
+     */
     private static String readLine(InputStream input) throws IOException
     {
         StringBuffer sb = new StringBuffer();
@@ -279,54 +321,115 @@ public class XmlPullParserFactory
         return (sb.toString());
     }
 
-//    /**
-//     * Specifies that the parser produced by this factory will provide
-//     * support for XML namespaces.
-//     * By default the value of this is set to false.
-//     *
-//     * @param awareness true if the parser produced by this code
-//     *    will provide support for XML namespaces;  false otherwise.
-//     */
-//    public void setNamespaceAware(boolean awareness)
-//        throws XmlPullParserException
-//    {
-//        namespaceAware = awareness;
-//    }
-//
-//    /**
-//     * Indicates whether or not the factory is configured to produce
-//     * parsers which are namespace aware.
-//     *
-//     * @return  true if the factory is configured to produce parsers
-//     *    which are namespace aware; false otherwise.
-//     */
-//    public boolean isNamespaceAware()
-//    {
-//        return namespaceAware;
-//    }
-
     /**
-     * Create new XML pull parser with default setting.
+     * Set the features to be set when XML Pull Parser is created by this factory.
+     *
+     * @param name string with URI identifying feature
+     * @param state if true feature will be set; if false will be ignored
      */
-    public XmlPullParser newPullParser() throws XmlPullParserException {
-//        XmlPullParser pp = new org.xmlpull.v1.kxml.KXmlPullParserImpl();
-//        pp.setNamespaceAware(namespaceAware);
-//        return pp;
-        //throw new XmlPullParserException("not implemented");
-        throw new XmlPullParserException(
-            "newPullParser() must be implemented by other class");
-
+    public void setFeature(String name,
+                           boolean state) throws XmlPullParserException
+    {
+        features.put(name, new Boolean(state));
     }
 
     /**
-     * Create new XML pull parser with passed propertiesin binary flasgs
-     * @see XmlPullParser for list of supported flags
+     * Return the current value of the feature with given name.
+     *
+     * @param name The name of feature to be retrieved.
+     * @return The value of named feature.
+     *     Unknown features are <string>always</strong> returned as false
      */
-    public XmlPullParser newPullParser(int properties) throws XmlPullParserException {
-        throw new XmlPullParserException(
-            "newPullParser() must be implemented by other class");
-
+    public boolean getFeature (String name) {
+        Boolean value = (Boolean) features.get(name);
+        return value != null ? value.booleanValue() : false;
     }
+
+    /**
+     * Specifies that the parser produced by this factory will provide
+     * support for XML namespaces.
+     * By default the value of this is set to false.
+     *
+     * @param awareness true if the parser produced by this code
+     *    will provide support for XML namespaces;  false otherwise.
+     */
+    public void setNamespaceAware(boolean awareness)
+        throws XmlPullParserException
+    {
+        features.put(XmlPullParser.PROCESS_NAMESPACES, new Boolean(awareness));
+    }
+
+    /**
+     * Indicates whether or not the factory is configured to produce
+     * parsers which are namespace aware.
+     *
+     * @return  true if the factory is configured to produce parsers
+     *    which are namespace aware; false otherwise.
+     */
+    public boolean isNamespaceAware()
+    {
+        Boolean value = (Boolean) features.get(XmlPullParser.PROCESS_NAMESPACES);
+        return value != null ? value.booleanValue() : false;
+    }
+
+    /**
+     * Specifies that the parser produced by this factory will be validating
+     *
+     * By default the value of this is set to false.
+     *
+     * @param validating - if true the parsers created by this factory  must be validating.
+     */
+    public void setValidating(boolean validating)
+        throws XmlPullParserException
+    {
+        features.put(XmlPullParser.VALIDATION, new Boolean(validating));
+    }
+
+    /**
+     * Indicates whether or not the factory is configured to produce parsers
+     * which validate the XML content during parse.
+     *
+     * @return   true if the factory is configured to produce parsers
+     * which validate the XML content during parse; false otherwise.
+     */
+    public boolean isValidating()
+    {
+        Boolean value = (Boolean) features.get(XmlPullParser.VALIDATION);
+        return value != null ? value.booleanValue() : false;
+    }
+
+    /**
+     *
+     * Creates a new instance of a XML Pull Parser
+     * using the currently configured factory parameters.
+     *
+     * @return A new instance of a XML Pull Parser.
+     * @throws XmlPullParserException if a parser cannot be created which satisfies the
+     * requested configuration.
+     */
+    public abstract XmlPullParser newPullParser() throws XmlPullParserException;
+
+    //    public XmlPullParser newPullParser() throws XmlPullParserException {
+    ////        XmlPullParser pp = new org.xmlpull.v1.kxml.KXmlPullParserImpl();
+    ////        pp.setNamespaceAware(namespaceAware);
+    ////        return pp;
+    //        //throw new XmlPullParserException("not implemented");
+    //        throw new XmlPullParserException(
+    //            "newPullParser() must be implemented by other class");
+    //
+    //    }
+
+    //    /**
+    //     * Create new XML pull parser with passed propertiesin binary flasgs
+    //     * @see XmlPullParser for list of supported flags
+    //     */
+    //    public XmlPullParser newPullParser(int properties) throws XmlPullParserException {
+    //        //throw new XmlPullParserException(
+    //        //    "newPullParser() must be implemented by other class");
+    //        XmlPullParser xpp = newPullParser();
+    //        xpp.setProperty(properties, true);
+    //        return xpp;
+    //    }
 
 }
 

@@ -6,43 +6,43 @@ package org.xmlpull.v1;
 /**
  * This exception is thrown to signal XML Pull Parser related excepions.
  *
- * @author Aleksander Slominski [aslom@extreme.indiana.edu]
+ * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
  */
 public class XmlPullParserException extends Exception {
     protected Throwable detail;
     protected int row = -1;
     protected int column = -1;
-     
+
     public XmlPullParserException() {
     }
-    
+
     public XmlPullParserException(String s) {
         super(s);
     }
-    
+
     public XmlPullParserException(String s, Throwable thrwble) {
         super(s);
         this.detail = thrwble;
     }
-    
+
     public XmlPullParserException(String s, int row, int column) {
         super(s);
         this.row = row;
         this.column = column;
     }
-    
-    
+
+
     public XmlPullParserException(String msg, XmlPullParser parser) {
         super(msg + parser.getPositionDescription());
         this.row = parser.getLineNumber();
         this.column = parser.getColumnNumber();
     }
-    
+
     public Throwable getDetail() { return detail; }
     public void setDetail(Throwable cause) { this.detail = cause; }
     public int getLineNumber() { return row; }
     public int getColumnNumber() { return column; }
-    
+
     public String getMessage() {
         if(detail == null)
             return super.getMessage();
@@ -50,7 +50,7 @@ public class XmlPullParserException extends Exception {
             return super.getMessage() + "; nested exception is: \n\t"
                 + detail.getMessage();
     }
-    
+
     //NOTE: code that prints this and detail is difficult in J2ME
     public void printStackTrace() {
         if (detail == null) {
