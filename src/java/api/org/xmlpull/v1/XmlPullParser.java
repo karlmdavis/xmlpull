@@ -757,7 +757,7 @@ public interface XmlPullParser {
      * <br><b>NOTE:</b> it is user responsibility to resolve entity reference
      * <br><b>NOTE:</b> character entities and standard entities such as
      *  &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos; are reported as well
-     * and are not resolved and not reported as TEXT tokens!
+     * and are not resolved and not reported as TEXT tokens but as ENTITY_REF tokens!
      * This requirement is added to allow to do roundtrip of XML documents!
      * <dt>DOCDECL<dd>return inside part of DOCDECL ex. returns:<pre>
      * &quot; titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"

@@ -50,7 +50,6 @@ public class XmlPullParserFactory
     private static final String DEFAULT_PROPERTY =
         "org.xmlpull.xpp3.XmlPullParser,org.kxml2.io.KXmlParser";
 
-
     // features are kept there
     protected Hashtable features = new Hashtable();
 
@@ -187,7 +186,7 @@ public class XmlPullParserFactory
             return pp;
         } catch(Exception ex) {
             throw new XmlPullParserException(
-                "could not create parser "+foundParserClass+" : "+ex, ex);
+                "could not create parser "+foundParserClass+" : "+ex, null, ex);
         }
     }
 
