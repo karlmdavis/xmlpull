@@ -12,8 +12,8 @@ public class BestDeal {
 
     protected static final String MESSAGE =
         "The best deal is proposed by {0}. "
-	+ "A(n) {1} delivered in {2,number,integer} days for "
-	+ "{3,number,currency}";
+        + "A(n) {1} delivered in {2,number,integer} days for "
+        + "{3,number,currency}";
 
     protected static final String NAMESPACE_URI =
         "http://www.psol.com/xbe2/listing8.3";
@@ -58,7 +58,7 @@ public class BestDeal {
 
 
         while (parser.nextTag() == parser.START_TAG) {
-	    checkVendor(parser);
+            checkVendor(parser);
         }
 
         parser.require(parser.END_TAG, NAMESPACE_URI, "price-list");
@@ -74,26 +74,26 @@ public class BestDeal {
         String currentVendor = null;
 
         while (parser.nextTag() == parser.START_TAG) {
-	    parser.require(parser.START_TAG, NAMESPACE_URI, null);
-	    String name = parser.getName();
-	    if (name.equals("name")) {
-		currentVendor = parser.nextText();
-	    } else if (name.equals("price-quote")) {
-		int currentDelivery =
-		    Integer.parseInt(parser.getAttributeValue("", "delivery"));
-		double currentPrice = Double.parseDouble(parser.nextText());
+            parser.require(parser.START_TAG, NAMESPACE_URI, null);
+            String name = parser.getName();
+            if (name.equals("name")) {
+                currentVendor = parser.nextText();
+            } else if (name.equals("price-quote")) {
+                int currentDelivery =
+                    Integer.parseInt(parser.getAttributeValue("", "delivery"));
+                double currentPrice = Double.parseDouble(parser.nextText());
 
-		if (currentDelivery < targetDelivery && currentPrice < price) {
-		    vendor = currentVendor;
-		    price = currentPrice;
-		    delivery = currentDelivery;
-		}
-	    } else {
-		System.out.println("trying to skip unknwon element: "+ name);
-		String content = parser.nextText();
-		System.out.println("skipped element content:" + content);
-	    }
-	    parser.require(parser.END_TAG, NAMESPACE_URI, name);
+                if (currentDelivery < targetDelivery && currentPrice < price) {
+                    vendor = currentVendor;
+                    price = currentPrice;
+                    delivery = currentDelivery;
+                }
+            } else {
+                System.out.println("trying to skip unknwon element: "+ name);
+                String content = parser.nextText();
+                System.out.println("skipped element content:" + content);
+            }
+            parser.require(parser.END_TAG, NAMESPACE_URI, name);
         }
         parser.require(parser.END_TAG, NAMESPACE_URI, "vendor");
     }
@@ -108,14 +108,14 @@ public class BestDeal {
         throws IOException, XmlPullParserException {
 
         if (args.length < 2) {
-	    System.out.println("BestDeal <file> <delivery>");
-	    return;
+            System.out.println("BestDeal <file> <delivery>");
+            return;
         }
 
         BestDeal bestDeal = new BestDeal(Integer.parseInt(args[1]));
 
-	XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-	factory.setNamespaceAware(true);
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
         XmlPullParser parser = factory.newPullParser();
 
         InputStream is = new FileInputStream(args[0]);
@@ -124,11 +124,11 @@ public class BestDeal {
         is.close();
 
         Object[] objects =
-	    new Object[] {
-	    bestDeal.vendor,
-		bestDeal.product,
-		new Integer(bestDeal.delivery),
-		new Double(bestDeal.price)};
+            new Object[] {
+            bestDeal.vendor,
+                bestDeal.product,
+                new Integer(bestDeal.delivery),
+                new Double(bestDeal.price)};
 
         System.out.println(MessageFormat.format(MESSAGE, objects));
     }
