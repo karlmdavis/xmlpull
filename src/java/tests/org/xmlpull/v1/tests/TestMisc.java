@@ -407,9 +407,14 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         pp.require( XmlPullParser.END_TAG, null, "foo");
 
-        testContentMerging(pp, "<foo><? this is PI ?></foo>", null);
-        testContentMerging(pp, "<foo>\n<? this is PI ?>\n</foo>", "\n\n");
-        testContentMerging(pp, "<foo><? this is PI ?>\n</foo>", "\n");
+        testContentMerging(pp, "<foo><?this is PI ?></foo>", null);
+        testContentMerging(pp, "<foo>\n<?this is PI ?>\n</foo>", "\n\n");
+        testContentMerging(pp, "<foo><?this is PI ?>\n</foo>", "\n");
+        try {
+            testContentMerging(pp, "<foo><? this is PI ?>\n</foo>", "\n");
+            fail("expected parser to fail as there is space in PI between <? and target");
+        } catch(org.xmlpull.v1.XmlPullParserException e) {
+        }
 
     }
 
