@@ -259,14 +259,12 @@ public class UtilTestCase extends TestCase {
     public void checkAttribNs(
         XmlPullParser xpp,
         int pos,
-        String prefix,
         String namespace,
         String name,
         String value
     ) throws XmlPullParserException, IOException
     {
         assertEquals("must be on START_TAG", xpp.START_TAG, xpp.getEventType());
-        assertEquals("getAttributePrefix()",prefix, xpp.getAttributePrefix(pos));
         assertEquals("getAttributeNamespace()",namespace, xpp.getAttributeNamespace(pos));
         assertEquals("getAttributeName()",name, xpp.getAttributeName(pos));
         assertEquals("getAttributeValue()",printable(value), printable(xpp.getAttributeValue(pos)));
@@ -274,6 +272,19 @@ public class UtilTestCase extends TestCase {
                      printable(value), printable(xpp.getAttributeValue(namespace, name)));
         assertEquals("getAttributeType()","CDATA", xpp.getAttributeType(pos));
         assertEquals("isAttributeDefault()",false, xpp.isAttributeDefault(pos));
+    }
+
+    public void checkAttribNs(
+        XmlPullParser xpp,
+        int pos,
+        String prefix,
+        String namespace,
+        String name,
+        String value
+    ) throws XmlPullParserException, IOException
+    {
+        checkAttribNs(xpp, pos, namespace, name, value);
+        assertEquals("getAttributePrefix()",prefix, xpp.getAttributePrefix(pos));
     }
 
     public void checkNamespace(

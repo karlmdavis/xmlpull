@@ -180,7 +180,8 @@ public class TestSerializeWithNs extends UtilTestCase {
         final String iws = "\n\t";
         ser.ignorableWhitespace(iws);
         ser.startTag(null, "foo");
-        final String attrVal = "attrVal&<>&amp;";
+        //check escaping & < > " '
+        final String attrVal = "attrVal&<>\"&amp;";
         //final String attrVal = "attrVal&;";
         ser.attribute(null, "attrName", attrVal);
         ser.entityRef("amp");
@@ -197,7 +198,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         // -- now check that we get back what we serialized ...
 
         String serialized = sw.toString();
-        System.out.println(getClass()+" serialized="+serialized);
+        //System.out.println(getClass()+" serialized="+serialized);
         xpp.setInput(new StringReader(serialized));
         xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
 
@@ -247,27 +248,294 @@ public class TestSerializeWithNs extends UtilTestCase {
 
     }
 
-    public void testSetPrefix() throws Exception {
-        //setPrefix check that prefix is not duplicated ...
+    private final String ENV = "http://www.w3.org/2002/06/soap-envelope";
+    private final String ALERTCONTROL = "http://example.org/alertcontrol";
+    private final String ALERT = "http://example.org/alert";
+    private final String EXPIRES = "2001-06-22T14:00:00-05:00";
+    private final String MSG = "Pick up Mary at school at 2pm";
+    private final String ROLE = "http://www.w3.org/2002/06/soap-envelope/role/ultimateReceiver";
 
+    //setPrefix check that prefix is not duplicated ...
+
+    public void testSetPrefix() throws Exception {
         //TODO      redeclaring defult namespace
+
+        // based on example from SOAP 1.2 spec http://www.w3.org/TR/soap12-part1/
+        final String SOAP12 =
+            "<env:Envelope xmlns:env=\""+ENV+"\">"+
+            "<env:Header>"+
+            "<n:alertcontrol xmlns:n=\""+ALERTCONTROL+"\""+
+            " env:mustUnderstand=\"true\""+
+            " env:role=\""+ROLE+"\">"+
+            "<n:priority>1</n:priority>"+
+            "<n:expires>"+EXPIRES+"</n:expires>"+
+            "</n:alertcontrol>"+
+            "</env:Header>"+
+            "<env:Body>"+
+            "<m:alert xmlns:m=\""+ALERT+"\"  >"+
+            "<m:msg>"+MSG+"</m:msg>"+
+            "</m:alert>"+
+            "</env:Body>"+
+            "</env:Envelope>";
+
+
+        checkTestSetPrefix(SOAP12);
+        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m"));
+        checkTestSetPrefix(generateSoapEnvelope(null, null, "m"));
+        checkTestSetPrefix(generateSoapEnvelope("env", null, "m"));
+        checkTestSetPrefix(generateSoapEnvelope("env", "", ""));
+        checkTestSetPrefix(generateSoapEnvelope("", "n", "m"),1);
+        checkTestSetPrefix(generateSoapEnvelope("", null, "m"),1);
+
+        //check optional pretty printing
+        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", Boolean.FALSE, null, null));
+        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", Boolean.TRUE, null, null));
+        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", null, " ", null));
+        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", null, "\t", null));
+        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", null, "    ", null));
+        String s = generateSoapEnvelope("env", "n", "m", Boolean.TRUE, " ", "\n");
+        //System.out.println(getClass()+" envelope="+generateSoapEnvelope("", "n", "m"));
+        checkTestSetPrefix(s);
     }
 
-    public void testIndenting() throws Exception {
-        // generate SOAP envelope
-        // try to use indentation
+    private String generateSoapEnvelope(String envPrefix,
+                                        String alertcontrolPrefix,
+                                        String alertPrefix) throws Exception
+    {
+        return generateSoapEnvelope(envPrefix, alertcontrolPrefix, alertPrefix,
+                                    null, null, null);
+    }
 
-        //check automtic namespace prefix declaration
-        //test auto-generation of prefixes
+    private final String PROPERTY_SERIALIZER_INDENTATION =
+        "http://xmlpull.org/v1/doc/properties.html#serializer-indentation";
+    private final String PROPERTY_SERIALIZER_LINE_SEPARATOR =
+        "http://xmlpull.org/v1/doc/properties.html#serializer-line-separator";
+    private final String FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE =
+        "http://xmlpull.org/v1/doc/features.html#serializer-attvalue-use-apostrophe";
 
-        //check escaping & < > " '
+    private boolean serializerIndentationSupported;
+    private boolean serializerLineSeparatorSupported;
+    private boolean serializerUseApostropheSupported;
 
-        // close all unclosed tag;
+    /** generate SOAP 1.2 envelope
+     try to use indentation
+
+     and check automtic namespace prefix declaration
+     and auto-generation of prefixes
+
+     */
+    private String generateSoapEnvelope(String envPrefix,
+                                        String alertcontrolPrefix,
+                                        String alertPrefix,
+                                        Boolean attvalueUseApostrophe,
+                                        String indentation,
+                                        String lineSeparator
+                                       )
+        throws Exception
+    {
         XmlSerializer ser = factory.newSerializer();
-
         StringWriter sw = new StringWriter();
         ser.setOutput(sw);
+
+        if(attvalueUseApostrophe !=null) {
+            try {
+                ser.setFeature(FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE,
+                               attvalueUseApostrophe.booleanValue());
+                if(!serializerUseApostropheSupported) {
+                    PackageTests.addNote(
+                        "* optional feature "
+                            +FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported");
+                    serializerUseApostropheSupported = true;
+                }
+            } catch(Exception ex) {
+                // ignore if optional feature not supported
+            }
+        }
+        if(indentation !=null) {
+            try {
+                ser.setProperty(PROPERTY_SERIALIZER_INDENTATION, indentation);
+                if(!serializerIndentationSupported) {
+                    PackageTests.addNote(
+                        "* optional property "
+                            +PROPERTY_SERIALIZER_INDENTATION+" is supported");
+                    serializerIndentationSupported = true;
+                }
+            } catch(Exception ex) {
+                // ignore if optional property not supported
+            }
+        }
+        if(lineSeparator !=null) {
+            try {
+                ser.setProperty(PROPERTY_SERIALIZER_LINE_SEPARATOR, lineSeparator);
+                if(!serializerLineSeparatorSupported) {
+                    PackageTests.addNote(
+                        "* optional property "
+                            +PROPERTY_SERIALIZER_LINE_SEPARATOR+" is supported");
+                    serializerLineSeparatorSupported = true;
+                }
+            } catch(Exception ex) {
+                // ignore if optional property not supported
+            }
+        }
+
+        // all comments etc
+        ser.startDocument(null, Boolean.TRUE);
+
+        if(envPrefix != null) ser.setPrefix(envPrefix, ENV);
+        ser.startTag(ENV, "Envelope");
+        ser.startTag(ENV, "Header");
+
+        if(alertcontrolPrefix != null) ser.setPrefix(alertcontrolPrefix, ALERTCONTROL);
+        ser.startTag(ALERTCONTROL, "alertcontrol");
+        ser.attribute(ENV, "mustUnderstand", "true");
+        ser.attribute(ENV, "role", ROLE);
+
+        ser.startTag(ALERTCONTROL, "priority");
+        ser.text("1");
+        ser.endTag(ALERTCONTROL, "priority");
+
+        ser.startTag(ALERTCONTROL, "expires");
+        ser.text(EXPIRES);
+        ser.endTag(ALERTCONTROL, "expires");
+
+        ser.endTag(ALERTCONTROL, "alertcontrol");
+
+        ser.endTag(ENV, "Header");
+
+        ser.startTag(ENV, "Body");
+
+        if(alertPrefix != null) ser.setPrefix(alertPrefix, ALERT);
+        ser.startTag(ALERT, "alert");
+
+        ser.startTag(ALERT, "msg");
+        ser.text(MSG);
+        ser.endTag(ALERT, "msg");
+
+        ser.endTag(ALERT, "alert");
+
+
+        ser.endTag(ENV, "Body");
+
+        ser.endTag(ENV, "Envelope");
+
         ser.endDocument();
+
+        String s = sw.toString();
+
+        return s;
+    }
+
+    private void checkTestSetPrefix(String soapEnvelope) throws Exception {
+        checkTestSetPrefix(soapEnvelope, 0);
+    }
+
+    private void checkTestSetPrefix(String soapEnvelope, int extraNs) throws Exception {
+        xpp.setInput(new StringReader(soapEnvelope));
+
+        xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
+
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, 1, ENV, "Envelope", false /*empty*/, 0);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 2, xpp.START_TAG, 1, ENV, "Header", false /*empty*/, 0);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 3, xpp.START_TAG, 2+extraNs, ALERTCONTROL, "alertcontrol", false /*empty*/, 2);
+        checkAttribNs(xpp, 0, ENV, "mustUnderstand", "true");
+        checkAttribNs(xpp, 1, ENV, "role", ROLE);
+
+        xpp.nextTag();
+        checkParserStateNs(xpp, 4, xpp.START_TAG, 2+extraNs, ALERTCONTROL, "priority", false /*empty*/, 0);
+        String text = xpp.nextText();
+        assertEquals("1", text);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 4, xpp.START_TAG, 2+extraNs, ALERTCONTROL, "expires", false /*empty*/, 0);
+        text = xpp.nextText();
+        assertEquals(EXPIRES, text);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 3, xpp.END_TAG, 2+extraNs, ALERTCONTROL, "alertcontrol", false, -1);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 2, xpp.END_TAG, 1, ENV, "Header", false, -1);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 2, xpp.START_TAG, 1, ENV, "Body", false /*empty*/, 0);
+
+        xpp.nextTag();
+        checkParserStateNs(xpp, 3, xpp.START_TAG, 2, ALERT, "alert", false /*empty*/, 0);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 4, xpp.START_TAG, 2, ALERT, "msg", false /*empty*/, 0);
+        text = xpp.nextText();
+        assertEquals(MSG, text);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 3, xpp.END_TAG, 2, ALERT, "alert", false, -1);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 2, xpp.END_TAG, 1, ENV, "Body", false, -1);
+        xpp.nextTag();
+        checkParserStateNs(xpp, 1, xpp.END_TAG, 1, ENV, "Envelope", false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+
+        checkTestSetPrefix2(soapEnvelope);
+    }
+
+    private void checkTestSetPrefix2(String soapEnvelope) throws Exception {
+        xpp.setInput(new StringReader(soapEnvelope));
+        xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
+
+        xpp.require(xpp.START_DOCUMENT, null, null);
+
+        xpp.next(); // essentially moveToContent()
+        xpp.require(xpp.START_TAG, ENV, "Envelope");
+
+        xpp.nextTag();
+        xpp.require(xpp.START_TAG, ENV, "Header");
+
+        xpp.nextTag();
+        xpp.require(xpp.START_TAG, ALERTCONTROL, "alertcontrol");
+        String mustUderstand = xpp.getAttributeValue(ENV, "mustUnderstand");
+        assertEquals("true", mustUderstand);
+        String role = xpp.getAttributeValue(ENV, "role");
+        assertEquals(ROLE, role);
+
+        xpp.nextTag();
+        xpp.require(xpp.START_TAG, ALERTCONTROL, "priority");
+        String text = xpp.nextText();
+        assertEquals("1", text);
+        //Integer.parseInt(text);
+
+        xpp.nextTag();
+        xpp.require(xpp.START_TAG, ALERTCONTROL, "expires");
+        text = xpp.nextText();
+        assertEquals(EXPIRES, text);
+
+        xpp.nextTag();
+        xpp.require(xpp.END_TAG, ALERTCONTROL, "alertcontrol");
+
+        xpp.nextTag();
+        xpp.require(xpp.END_TAG, ENV, "Header");
+
+        xpp.nextTag();
+        xpp.require(xpp.START_TAG, ENV, "Body");
+
+        xpp.nextTag();
+        xpp.require(xpp.START_TAG, ALERT, "alert");
+
+        xpp.nextTag();
+        xpp.require(xpp.START_TAG, ALERT, "msg");
+
+        text = xpp.nextText();
+        assertEquals(MSG, text);
+
+        xpp.nextTag();
+        xpp.require(xpp.END_TAG, ALERT, "alert");
+
+        xpp.nextTag();
+        xpp.require(xpp.END_TAG, ENV, "Body");
+
+        xpp.nextTag();
+        xpp.require(xpp.END_TAG, ENV, "Envelope");
+
+        xpp.next();
+        xpp.require(xpp.END_DOCUMENT, null, null);
     }
 
 
