@@ -61,8 +61,8 @@ public class Driver implements Locator, XMLReader, Attributes
     protected static final String APACHE_DYNAMIC_VALIDATION_FEATURE =
         "http://apache.org/xml/features/validation/dynamic";
 
-    protected ContentHandler contentHandler;
-    protected ErrorHandler errorHandler;
+    protected ContentHandler contentHandler = new DefaultHandler();
+    protected ErrorHandler errorHandler = new DefaultHandler();;
 
     protected String systemId;
 
@@ -78,12 +78,13 @@ public class Driver implements Locator, XMLReader, Attributes
     /**
      */
     public Driver() throws XmlPullParserException {
-        contentHandler = new DefaultHandler();
-        errorHandler = new DefaultHandler();
-
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         pp = factory.newPullParser();
+    }
+
+    public Driver(XmlPullParser pp) throws XmlPullParserException {
+        this.pp = pp;
     }
 
     // -- Attributes interface
