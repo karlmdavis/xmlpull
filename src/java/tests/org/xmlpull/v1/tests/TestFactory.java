@@ -22,8 +22,9 @@ public class TestFactory extends TestCase {
 
     public void testFactory() throws Exception {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
-            //Thread.currentThread().getContextClassLoader().getClass(), //NOT ON JDK 1.1
-            System.getProperty(XmlPullParserFactory.PROPERTY_NAME));
+            System.getProperty(XmlPullParserFactory.PROPERTY_NAME),
+            null //Thread.currentThread().getContextClassLoader().getClass(), //NOT ON JDK 1.1
+        );
         //System.out.println("factory = "+factory);
         XmlPullParser xpp = factory.newPullParser();
         assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
