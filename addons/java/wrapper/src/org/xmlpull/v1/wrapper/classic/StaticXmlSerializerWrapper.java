@@ -19,26 +19,33 @@ import org.xmlpull.v1.wrapper.XmlSerializerWrapper;
 public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
     implements XmlSerializerWrapper
 {
-    protected String defaultNs;
+    protected String currentNs;
 
     public StaticXmlSerializerWrapper(XmlSerializer xs) {
         super(xs);
     }
 
-    public String getDefaultNamespace() { return defaultNs; }
-    public void setDefaultNamespace(String value) { defaultNs = value; }
+    public String getCurrentNamespace() { return currentNs; }
+    public void setCurrentNamespace(String value) { currentNs = value; }
 
 
     public XmlSerializer startTag (String name)
         throws IOException, IllegalArgumentException, IllegalStateException
     {
-        return xs.startTag(defaultNs, name);
+        return xs.startTag(currentNs, name);
     }
 
     public XmlSerializer endTag (String name)
         throws IOException, IllegalArgumentException, IllegalStateException
     {
-        return xs.endTag(defaultNs, name);
+        return xs.endTag(currentNs, name);
+    }
+
+    /** Write simple text element in current namespace */
+    public void element(String elementName, String elementText)
+        throws IOException, XmlPullParserException
+    {
+        element(currentNs, elementName, elementText);
     }
 
     public void element(String namespace, String elementName, String elementText)

@@ -16,22 +16,28 @@ import org.xmlpull.v1.XmlSerializer;
 public interface XmlSerializerWrapper extends XmlSerializer {
     public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
 
-    public String getDefaultNamespace();
-    public void setDefaultNamespace(String value);
+    public String getCurrentNamespace();
+    public void setCurrentNamespace(String value);
 
+    /** Write start tag in current namespace with name given as argument. */
     public XmlSerializer startTag (String name)
         throws IOException, IllegalArgumentException, IllegalStateException;
 
+    /** Write end tag in current namespace with name given as argument. */
     public XmlSerializer endTag (String name)
         throws IOException, IllegalArgumentException, IllegalStateException;
 
 
     /**
-     * Writes a simple element such as <username>johndoe</username>. The namespace
+     * Writes a simple element such as &lt;username>johndoe&lt;/username>. The namespace
      * and elementText are allowed to be null. If elementText is null, an xsi:nil="true"
      * will be added as an attribute.
      */
     public void element(String namespace, String elementName, String elementText)
+        throws IOException, XmlPullParserException;
+
+    /** Write simple text element in current namespace */
+    public void element(String elementName, String elementText)
         throws IOException, XmlPullParserException;
 
 }
