@@ -481,6 +481,9 @@ public interface XmlPullParser {
      *  is available by using null string as in getNamespace(null)
      * (it may return null if xmlns="..." is not present)
      * and as well by calling getNamespace() (that will never return null but "").
+     * <p><b>NOTE:</b> when parser is on END_TAG then it is allowed to call
+     *  this function with getDepth()+1 argument to retrieve position of namespace
+     *  prefixes and URIs that were declared on corresponding START_TAG.
      *
      * @see #getNamespacePrefix
      * @see #getNamespaceUri
@@ -491,12 +494,17 @@ public interface XmlPullParser {
 
     /**
      * Return namespace prefixes for position pos in namespace stack
+     * If pos is out of range it throw exception.
+     * <p><b>NOTE:</b> when parser is on END_TAG then namespace prefixes that were declared
+     *  in corresponding START_TAG are still accessible even though they are not in scope.
      */
     public String getNamespacePrefix(int pos) throws XmlPullParserException;
 
     /**
      * Return namespace URIs for position pos in namespace stack
      * If pos is out of range it throw exception.
+     * <p><b>NOTE:</b> when parser is on END_TAG then namespace prefixes that were declared
+     *  in corresponding START_TAG are still accessible even though they are not in scope
      */
     public String getNamespaceUri(int pos) throws XmlPullParserException;
 

@@ -149,6 +149,24 @@ public class TestSimpleWithNs extends UtilTestCase {
         assertEquals("n2", xpp.getNamespace("ns2"));
         assertEquals("n3", xpp.getNamespace("ns3"));
 
+        // check that declared namespaces can be accessed for current end tag
+        assertEquals(2, xpp.getDepth());
+        assertEquals(6, xpp.getNamespaceCount(2));
+        assertEquals(7, xpp.getNamespaceCount(3));
+
+        // chekc that namespace is accessible by direct addresssing
+        assertEquals(null, xpp.getNamespacePrefix(0));
+        assertEquals("n", xpp.getNamespaceUri(0));
+        assertEquals("ns1", xpp.getNamespacePrefix(1));
+        assertEquals("n1", xpp.getNamespaceUri(1));
+        assertEquals("ns1", xpp.getNamespacePrefix(3));
+        assertEquals("x1", xpp.getNamespaceUri(3));
+        assertEquals("ns1", xpp.getNamespacePrefix(6));
+        assertEquals("y1", xpp.getNamespaceUri(6));
+
+        // check that namespace is undelcared
+        assertEquals("x1", xpp.getNamespace("ns1"));
+
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.END_TAG, "ns1", 3, "x1", "bar", null, false, -1);
         assertEquals("n1", xpp.getNamespace("ns1"));

@@ -32,7 +32,9 @@ from CLASSPATH), for example: <br>
 modified XmlPullParserFactory to use resource from CLASSPATH when not only classNames is null 
 but also if classNames is empty String or if it is equal to &quot;DEFAULT&quot;<li>
 improved error messages in XmlPullParserFactory to better diagnose why new pull 
-parser can not be created</ul>
+parser can not be created<li>
+added test to check that when on END_TAG namespaces that were declared in 
+corresponding START_TAG are still accessible even though they are not in scope</ul>
 
 <h3>2001-04-20 (XMLPULL_1_0_7_1)</h3>
 <ul>
