@@ -316,15 +316,15 @@ public class XmlPullParserFactory {
 
             if (candidate != null) {
                 boolean recognized = false;
-                if (XmlPullParser.class.isAssignableFrom(candidate) ) {
+                if (instance instanceof XmlPullParser) {
                     parserClasses.addElement (candidate);
                     recognized = true;
                 }
-                if (XmlSerializer.class.isAssignableFrom(candidate)) {
+                if (instance instanceof XmlSerializer) {
                     serializerClasses.addElement (candidate);
                     recognized = true;
                 }
-                if (XmlPullParserFactory.class.isAssignableFrom(candidate)) {
+                if (instance instanceof XmlPullParserFactory) {
                     if (factory == null) {
                         factory = (XmlPullParserFactory) instance;
                     }
