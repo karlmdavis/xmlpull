@@ -11,7 +11,7 @@ All generated files are created under ${build} directory
 
   <property name="name" value="XMLPULL"/>
   <property name="year" value="2002"/>
-  <property name="version" value="1_1_1_DEV1"/>
+  <property name="version" value="1_1_1"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
   <property name="copyright"
@@ -247,6 +247,11 @@ All generated files are created under ${build} directory
         <include name="tests/**"/>
       </fileset>
     </copy>
+    <copy todir="${dist}">
+      <fileset dir="${build}/lib">
+        <include name="${xmlpull_version}*.jar"/>
+      </fileset>
+    </copy>
 
     <!-- sources should be copied after build to make it newer -->
     <mkdir dir="${dist}/src"/>
@@ -262,6 +267,14 @@ All generated files are created under ${build} directory
     <mkdir dir="${dist}/${src_tests}"/>
     <copy todir="${dist}/${src_tests}">
       <fileset dir="${src_tests}">
+        <!--include name="**"/-->
+        <!--exclude name="**/stuff/**"/-->
+      </fileset>
+    </copy>
+
+    <mkdir dir="${dist}/${src_tests_xml}"/>
+    <copy todir="${dist}/${src_tests_xml}">
+      <fileset dir="${src_tests_xml}">
         <!--include name="**"/-->
         <!--exclude name="**/stuff/**"/-->
       </fileset>

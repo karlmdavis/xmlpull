@@ -43,7 +43,7 @@ public interface XmlSerializer {
      * If feature is not recocgnized or can not be set
      * then IllegalStateException MUST be thrown.
      *
-     * @exception XmlPullParserException If the feature is not supported or can not be set
+     * @exception IllegalStateException If the feature is not supported or can not be set
      */
     public void setFeature(String name,
                            boolean state)

@@ -26,6 +26,11 @@ public class TestSerialize extends UtilTestCase {
     private XmlPullParserFactory factory;
     private XmlPullParser xpp;
 
+
+    public static void main (String[] args) {
+        junit.textui.TestRunner.run (new TestSuite(TestSerialize.class));
+    }
+
     public TestSerialize(String name) {
         super(name);
     }
@@ -47,7 +52,7 @@ public class TestSerialize extends UtilTestCase {
 
         //assert there is error if trying to write
         try {
-            ser.startTag("", "foo");
+            ser.startTag(null, "foo");
             fail("exception was expected of serializer if no input was set on parser");
         } catch(Exception ex) {}
 
@@ -55,7 +60,7 @@ public class TestSerialize extends UtilTestCase {
 
         //assert there is error if trying to write
         try {
-            ser.startTag("", "foo");
+            ser.startTag(null, "foo");
             fail("exception was expected of serializer if no input was set on parser");
         } catch(Exception ex) {}
 
@@ -75,18 +80,12 @@ public class TestSerialize extends UtilTestCase {
         //assertEquals(null, ser.getOutputEncoding());
 
         ser.startDocument("ISO-8859-1", Boolean.TRUE);
-        ser.startTag("", "foo");
+        ser.startTag(null, "foo");
 
-        //TODO: check that startTag(null, ...) is not allowed
-
-        ser.endTag("", "foo");
+        ser.endTag(null, "foo");
         ser.endDocument();
 
-
-
         // now validate that can be deserialzied
-
-
 
         //xpp.setInput(new StringReader("<foo></foo>"));
         String serialized = sw.toString();
@@ -141,13 +140,13 @@ public class TestSerialize extends UtilTestCase {
         StringWriter sw = new StringWriter();
         ser.setOutput(sw);
         ser.startDocument(null, null);
-        ser.startTag("", "foo");
-        ser.attribute("", "attrName", "attrVal");
+        ser.startTag(null, "foo");
+        ser.attribute(null, "attrName", "attrVal");
         ser.text("bar");
         ser.startTag("", "p:t");
         ser.text("\n\t ");
         ser.endTag("", "p:t");
-        ser.endTag("", "foo");
+        ser.endTag(null, "foo");
         ser.endDocument();
 
         //xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<p:t>\r\n\t </p:t></foo>"));
@@ -173,10 +172,6 @@ public class TestSerialize extends UtilTestCase {
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
 
 
-    }
-
-    public static void main (String[] args) {
-        junit.textui.TestRunner.run (new TestSuite(TestSerialize.class));
     }
 
 }
