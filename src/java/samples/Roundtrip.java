@@ -37,7 +37,7 @@ public class Roundtrip {
         //TODO: how to do pass through string with actual start tag in getText()
         //return;
         //}
-        if (!parser.getFeature (parser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES)) {
+        if (!parser.getFeature (XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES)) {
             for (int i = parser.getNamespaceCount (parser.getDepth ()-1);
                  i < parser.getNamespaceCount (parser.getDepth ())-1; i++) {
                 serializer.setPrefix
@@ -111,12 +111,12 @@ public class Roundtrip {
 
     public void roundTrip () throws XmlPullParserException, IOException {
         parser.nextToken(); // read first token
-        writeToken (parser.START_DOCUMENT);  // write optional XMLDecl if present
-        while (parser.getEventType () != parser.END_DOCUMENT) {
+        writeToken (XmlPullParser.START_DOCUMENT);  // write optional XMLDecl if present
+        while (parser.getEventType () != XmlPullParser.END_DOCUMENT) {
             writeToken ( parser.getEventType () );
             parser.nextToken ();
         }
-        writeToken (parser.END_DOCUMENT);
+        writeToken (XmlPullParser.END_DOCUMENT);
     }
 
     public static void main(String[] args) throws Exception {

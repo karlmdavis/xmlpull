@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 
 
 import org.xmlpull.v1.XmlPullParser;
@@ -66,19 +64,19 @@ public class MyXmlPullApp
     {
         int eventType = xpp.getEventType();
         do {
-            if(eventType == xpp.START_DOCUMENT) {
+            if(eventType == XmlPullParser.START_DOCUMENT) {
                 System.out.println("Start document");
-            } else if(eventType == xpp.END_DOCUMENT) {
+            } else if(eventType == XmlPullParser.END_DOCUMENT) {
                 System.out.println("End document");
-            } else if(eventType == xpp.START_TAG) {
+            } else if(eventType == XmlPullParser.START_TAG) {
                 processStartElement(xpp);
-            } else if(eventType == xpp.END_TAG) {
+            } else if(eventType == XmlPullParser.END_TAG) {
                 processEndElement(xpp);
-            } else if(eventType == xpp.TEXT) {
+            } else if(eventType == XmlPullParser.TEXT) {
                 processText(xpp);
             }
             eventType = xpp.next();
-        } while (eventType != xpp.END_DOCUMENT);
+        } while (eventType != XmlPullParser.END_DOCUMENT);
     }
 
 

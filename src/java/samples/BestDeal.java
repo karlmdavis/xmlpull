@@ -2,8 +2,8 @@
 // for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
 
 import org.xmlpull.v1.*;
+
 import java.io.*;
-import java.util.*;
 import java.text.MessageFormat;
 
 /**
@@ -49,35 +49,35 @@ public class BestDeal {
     public void update(XmlPullParser parser)
         throws IOException, XmlPullParserException {
 
-        parser.require(parser.START_DOCUMENT, null, null);
+        parser.require(XmlPullParser.START_DOCUMENT, null, null);
 
         parser.nextTag();
-        parser.require(parser.START_TAG, NAMESPACE_URI, "price-list");
+        parser.require(XmlPullParser.START_TAG, NAMESPACE_URI, "price-list");
 
         parser.nextTag();
-        parser.require(parser.START_TAG, NAMESPACE_URI, "name");
+        parser.require(XmlPullParser.START_TAG, NAMESPACE_URI, "name");
         product = parser.nextText();
-        parser.require(parser.END_TAG, NAMESPACE_URI, "name");
+        parser.require(XmlPullParser.END_TAG, NAMESPACE_URI, "name");
 
 
-        while (parser.nextTag() == parser.START_TAG) {
+        while (parser.nextTag() == XmlPullParser.START_TAG) {
             checkVendor(parser);
         }
 
-        parser.require(parser.END_TAG, NAMESPACE_URI, "price-list");
+        parser.require(XmlPullParser.END_TAG, NAMESPACE_URI, "price-list");
 
         parser.next();
-        parser.require(parser.END_DOCUMENT, null, null);
+        parser.require(XmlPullParser.END_DOCUMENT, null, null);
     }
 
     /** subroutine handling a single vendor */
     public void checkVendor(XmlPullParser parser)
         throws IOException, XmlPullParserException {
-        parser.require(parser.START_TAG, NAMESPACE_URI, "vendor");
+        parser.require(XmlPullParser.START_TAG, NAMESPACE_URI, "vendor");
         String currentVendor = null;
 
-        while (parser.nextTag() == parser.START_TAG) {
-            parser.require(parser.START_TAG, NAMESPACE_URI, null);
+        while (parser.nextTag() == XmlPullParser.START_TAG) {
+            parser.require(XmlPullParser.START_TAG, NAMESPACE_URI, null);
             String name = parser.getName();
             if (name.equals("name")) {
                 currentVendor = parser.nextText();
@@ -96,9 +96,9 @@ public class BestDeal {
                 String content = parser.nextText();
                 System.out.println("skipped element content:" + content);
             }
-            parser.require(parser.END_TAG, NAMESPACE_URI, name);
+            parser.require(XmlPullParser.END_TAG, NAMESPACE_URI, name);
         }
-        parser.require(parser.END_TAG, NAMESPACE_URI, "vendor");
+        parser.require(XmlPullParser.END_TAG, NAMESPACE_URI, "vendor");
     }
 
     /**

@@ -4,7 +4,6 @@
 package org.xmlpull.v1.sax2;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -16,9 +15,6 @@ import java.net.MalformedURLException;
 // not J2ME classes
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.DTDHandler;
@@ -174,11 +170,11 @@ public class Driver implements Locator, XMLReader, Attributes
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
         if(NAMESPACES_FEATURE.equals(name)) {
-            return pp.getFeature(pp.FEATURE_PROCESS_NAMESPACES);
+            return pp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES);
         } else if(NAMESPACE_PREFIXES_FEATURE.equals(name)) {
-            return pp.getFeature(pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES);
+            return pp.getFeature(XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES);
         } else if(VALIDATION_FEATURE.equals(name)) {
-            return pp.getFeature(pp.FEATURE_VALIDATION);
+            return pp.getFeature(XmlPullParser.FEATURE_VALIDATION);
             //        } else if(APACHE_SCHEMA_VALIDATION_FEATURE.equals(name)) {
             //            return false;  //TODO
             //        } else if(APACHE_DYNAMIC_VALIDATION_FEATURE.equals(name)) {
@@ -194,13 +190,13 @@ public class Driver implements Locator, XMLReader, Attributes
     {
         try {
             if(NAMESPACES_FEATURE.equals(name)) {
-                pp.setFeature(pp.FEATURE_PROCESS_NAMESPACES, value);
+                pp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, value);
             } else if(NAMESPACE_PREFIXES_FEATURE.equals(name)) {
-                if(pp.getFeature(pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES) != value) {
-                    pp.setFeature(pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES, value);
+                if(pp.getFeature(XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES) != value) {
+                    pp.setFeature(XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES, value);
                 }
             } else if(VALIDATION_FEATURE.equals(name)) {
-                pp.setFeature(pp.FEATURE_VALIDATION, value);
+                pp.setFeature(XmlPullParser.FEATURE_VALIDATION, value);
                 //          } else if(APACHE_SCHEMA_VALIDATION_FEATURE.equals(name)) {
                 //              // can ignore as validation must be false ...
                 //              //              if(true == value) {
@@ -323,7 +319,7 @@ public class Driver implements Locator, XMLReader, Attributes
             // get first event
             pp.next();
             // it should be start tag...
-            if(pp.getEventType() != pp.START_TAG) {
+            if(pp.getEventType() != XmlPullParser.START_TAG) {
                 SAXParseException saxException = new SAXParseException(
                     "expected start tag not"+pp.getPositionDescription(), this);
                 //throw saxException;
@@ -354,9 +350,9 @@ public class Driver implements Locator, XMLReader, Attributes
 
     public void parseSubTree(XmlPullParser pp) throws SAXException, IOException {
         this.pp = pp;
-        boolean namespaceAware = pp.getFeature(pp.FEATURE_PROCESS_NAMESPACES);
+        boolean namespaceAware = pp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES);
         try {
-            if(pp.getEventType() != pp.START_TAG) {
+            if(pp.getEventType() != XmlPullParser.START_TAG) {
                 throw new SAXException(
                     "start tag must be read before skiping subtree"+pp.getPositionDescription());
             }
@@ -365,7 +361,7 @@ public class Driver implements Locator, XMLReader, Attributes
             String prefix = null;
             String name = null;
             int level = pp.getDepth() - 1;
-            int type = pp.START_TAG;
+            int type = XmlPullParser.START_TAG;
 
             LOOP:
             do {

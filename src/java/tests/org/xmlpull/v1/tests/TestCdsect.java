@@ -4,10 +4,8 @@
 package org.xmlpull.v1.tests;
 
 //import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -48,15 +46,15 @@ public class TestCdsect extends UtilTestCase {
             "<t><![CDATA[ f]]>o<![CDATA[o ]]></t>";
 
         xpp.setInput(new StringReader(XML));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "t", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "t", null, false/*empty*/, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, " foo ", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, " foo ", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "t", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "t", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
 
     public void testCdsectWithEol() throws Exception {
@@ -67,15 +65,15 @@ public class TestCdsect extends UtilTestCase {
             "<t> \n<![CDATA[fo]]>o<![CDATA[ \r\n\r]]>\n</t>";
 
         xpp.setInput(new StringReader(XML));
-        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "t", null, false/*empty*/, 0);
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "t", null, false/*empty*/, 0);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, " \nfoo \n\n\n", false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, " \nfoo \n\n\n", false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "t", null, false, -1);
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "t", null, false, -1);
         xpp.next();
-        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
 
 

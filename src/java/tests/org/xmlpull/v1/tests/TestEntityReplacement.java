@@ -4,7 +4,6 @@
 package org.xmlpull.v1.tests;
 
 //import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.io.StringReader;
@@ -53,7 +52,7 @@ public class TestEntityReplacement extends UtilTestCase {
         XmlPullParser pp = factory.newPullParser();
         // default parser must work!!!!
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
-        if(pp.getFeature( pp.FEATURE_PROCESS_DOCDECL ) == false) {
+        if(pp.getFeature( XmlPullParser.FEATURE_PROCESS_DOCDECL ) == false) {
             pp.defineEntityReplacementText("tricky", "error-prone");
         }
         testEntityReplacement(pp);
@@ -61,10 +60,10 @@ public class TestEntityReplacement extends UtilTestCase {
         // now we try for no FEATURE_PROCESS_DOCDECL
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
-            pp.setFeature( pp.FEATURE_PROCESS_DOCDECL, false );
+            pp.setFeature( XmlPullParser.FEATURE_PROCESS_DOCDECL, false );
         } catch( Exception ex ){
         }
-        if( pp.getFeature( pp.FEATURE_PROCESS_DOCDECL ) == false ) {
+        if( pp.getFeature( XmlPullParser.FEATURE_PROCESS_DOCDECL ) == false ) {
             pp.defineEntityReplacementText("tricky", "error-prone");
             testEntityReplacement(pp);
         }
@@ -72,22 +71,22 @@ public class TestEntityReplacement extends UtilTestCase {
         // try to use FEATURE_PROCESS_DOCDECL if supported
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
-            pp.setFeature( pp.FEATURE_PROCESS_DOCDECL, true );
+            pp.setFeature( XmlPullParser.FEATURE_PROCESS_DOCDECL, true );
             //PackageTests.addNote("* feature "+pp.FEATURE_PROCESS_DOCDECL+" is supported\n");
         } catch( Exception ex ){
         }
-        if( pp.getFeature( pp.FEATURE_PROCESS_DOCDECL ) ) {
+        if( pp.getFeature( XmlPullParser.FEATURE_PROCESS_DOCDECL ) ) {
             testEntityReplacement(pp);
         }
 
         // try to use FEATURE_VALIDATION if supported
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
-            pp.setFeature( pp.FEATURE_VALIDATION, true );
+            pp.setFeature( XmlPullParser.FEATURE_VALIDATION, true );
             //PackageTests.addNote("* feature "+pp.FEATURE_VALIDATION+" is supported\n");
         } catch( Exception ex ){
         }
-        if( pp.getFeature( pp.FEATURE_VALIDATION ) ) {
+        if( pp.getFeature( XmlPullParser.FEATURE_VALIDATION ) ) {
             testEntityReplacement(pp);
         }
 
@@ -96,16 +95,16 @@ public class TestEntityReplacement extends UtilTestCase {
     public void testEntityReplacement(XmlPullParser pp) throws IOException, XmlPullParserException
     {
         pp.next();
-        checkParserStateNs(pp, 1, pp.START_TAG,
+        checkParserStateNs(pp, 1, XmlPullParser.START_TAG,
                            null, 0, "", "test", null, false, 0);
         pp.next();
-        checkParserStateNs(pp, 1, pp.TEXT, null, 0, null, null,
+        checkParserStateNs(pp, 1, XmlPullParser.TEXT, null, 0, null, null,
                            "This sample shows a error-prone method.", false, -1);
         pp.next();
-        checkParserStateNs(pp, 1, pp.END_TAG,
+        checkParserStateNs(pp, 1, XmlPullParser.END_TAG,
                            null, 0, "", "test", null, false, -1);
         pp.nextToken();
-        checkParserStateNs(pp, 0, pp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(pp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
     }
 

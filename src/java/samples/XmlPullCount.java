@@ -84,15 +84,15 @@ public class XmlPullCount
 
 
         int eventType = xpp.getEventType();
-        if(eventType == xpp.START_DOCUMENT) {
+        if(eventType == XmlPullParser.START_DOCUMENT) {
             eventType = xpp.next();
         }
-        while (eventType != xpp.END_DOCUMENT) {
+        while (eventType != XmlPullParser.END_DOCUMENT) {
             //System.out.println("pos="+xpp.getPositionDescription());
-            if(eventType == xpp.START_TAG) {
+            if(eventType == XmlPullParser.START_TAG) {
                 ++countSTags;
                 countAttribs += xpp.getAttributeCount();
-            } else if(eventType == xpp.TEXT) {
+            } else if(eventType == XmlPullParser.TEXT) {
                 //char ch[] = xpp.getTextCharacters(holderForStartAndLength);
                 xpp.getTextCharacters(holderForStartAndLength);
                 //int start = holderForStartAndLength[0];
