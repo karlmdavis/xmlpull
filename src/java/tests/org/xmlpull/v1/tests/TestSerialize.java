@@ -210,5 +210,40 @@ public class TestSerialize extends UtilTestCase {
 
     }
 
+  public void testEscaping() throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ser.setOutput(baos, "UTF-8");
+        ser.startDocument("UTF-8", null);
+        ser.startTag("", "foo");
+        String s = "test\u0008\t\r\n";
+        ser.attribute(null, "att", s);
+        ser.text(s);
+        ser.endTag("", "foo");
+        ser.endDocument();
+
+        //check taking input form input stream
+        //byte[] binput = "<foo>test</foo>".getBytes("UTF8");
+
+        byte[] binput = baos.toByteArray();
+        System.out.println(getClass()+" binput="+printable(new String(binput)));
+        
+        xpp.setInput(new ByteArrayInputStream( binput ), "UTF-8" );
+        assertEquals("UTF-8", xpp.getInputEncoding());
+
+        //xpp.setInput(new StringReader( "<foo/>" ) );
+        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 1);
+        assertEquals(printable(s), printable(xpp.getAttributeValue(null, "att")));
+        xpp.next();
+        checkParserState(xpp, 1, xpp.TEXT, null, s, false, -1);
+        assertEquals(false, xpp.isWhitespace());
+        xpp.next();
+        checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+    }
 }
 
