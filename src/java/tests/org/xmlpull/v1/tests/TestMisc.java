@@ -34,7 +34,30 @@ public class TestMisc extends UtilTestCase {
     protected void tearDown() {
     }
 
-    public void testNextTag() throws Exception {
+    public void testCharactersLegacy() throws Exception {
+        // [14]         CharData         ::=    [^<&]* - ([^<&]* ']]>' [^<&]*)
+        // SGML "legacy" in XML 1.0 as described in http://www.w3.org/TR/REC-xml#syntax
+        // that XML parsers are required to throw error if they encounter ']]>'
+        final String INPUT_XML = "<t>  <test1>d] ]] > ]> fd</test1>\n<test2>]]>  </test2>\n </t>";
+        XmlPullParser pp = factory.newPullParser();
+        pp.setInput( new StringReader( INPUT_XML ) );
+        pp.nextTag();
+        pp.require( XmlPullParser.START_TAG, null, "t");
+        pp.nextTag();
+        pp.require( XmlPullParser.START_TAG, null, "test1");
+        assertEquals( "d] ]] > ]> fd", pp.nextText() );
+        pp.require( XmlPullParser.END_TAG, null, "test1");
+
+        pp.nextTag();
+        pp.require( XmlPullParser.START_TAG, null, "test2");
+        try {
+            pp.nextText();
+            fail("if TEXT contains ]]> parser must fail");
+        } catch(XmlPullParserException ex) {}
+    }
+
+
+   public void testNextTag() throws Exception {
         final String INPUT_XML = "<t>  <test1>foo</test1>\n<test2>  </test2>\n </t>";
         XmlPullParser pp = factory.newPullParser();
         pp.setInput( new StringReader( INPUT_XML ) );
@@ -57,6 +80,7 @@ public class TestMisc extends UtilTestCase {
         pp.require( XmlPullParser.END_DOCUMENT, null, null);
 
     }
+
 
     //    public void testReadText() throws Exception {
     //        final String INPUT_XML = "<test>foo</test>";

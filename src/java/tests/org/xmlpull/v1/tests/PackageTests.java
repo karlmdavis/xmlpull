@@ -163,8 +163,8 @@ public class PackageTests extends TestRunner {
         driver.setPrinter(resultPrinter);
 
         final String listOfTests = System.getProperty("org.xmlpull.v1.tests");
-        final String name = XmlPullParserFactory.PROPERTY_NAME;
-        final String oldValue = System.getProperty(name);
+        final String FACTORY_PROPERTY = XmlPullParserFactory.PROPERTY_NAME;
+        final String DEFAULT_FACTORY_PROPERTY = System.getProperty(FACTORY_PROPERTY);
         runAll = true;
         if(listOfTests != null) {
             int pos = 0;
@@ -173,15 +173,15 @@ public class PackageTests extends TestRunner {
                 if (cut == -1) cut = listOfTests.length();
                 String testFactoryName = listOfTests.substring(pos, cut);
                 if("DEFAULT".equals(testFactoryName)) {
-                    if(oldValue != null) {
-                        System.setProperty(name, oldValue);
+                    if(DEFAULT_FACTORY_PROPERTY != null) {
+                        System.setProperty(FACTORY_PROPERTY, DEFAULT_FACTORY_PROPERTY);
                     } else {
                         // overcoming limitation of System.setProperty not allowing
                         //  null or empty values (who knows how to unset property ?!)
-                        System.setProperty(name, "DEFAULT");
+                        System.setProperty(FACTORY_PROPERTY, "DEFAULT");
                     }
                 } else {
-                    System.setProperty(name, testFactoryName);
+                    System.setProperty(FACTORY_PROPERTY, testFactoryName);
                 }
                 driver.runPackageTests(testFactoryName);
                 pos = cut + 1;

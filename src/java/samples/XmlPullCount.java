@@ -9,6 +9,7 @@ import java.io.StringReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+import java.io.FileInputStream;
 
 /**
  * Simple example that counts XML elements, characters and attributes.
@@ -39,7 +40,7 @@ public class XmlPullCount
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
             System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null);
-        factory.setNamespaceAware(true);
+        factory.setNamespaceAware(false);
         System.err.println("using factory "+factory.getClass());
 
         XmlPullParser xpp = factory.newPullParser();
@@ -47,7 +48,7 @@ public class XmlPullCount
 
         XmlPullCount app = new XmlPullCount();
 
-        app.verbose = false;
+        app.verbose = true;
         for(int c = 0; c < 2; ++c) {
             System.err.println("run#"+c);
             app.resetCounters();
@@ -60,7 +61,8 @@ public class XmlPullCount
 
                 File f = new File(args[0]);
                 System.err.println("Parsing file: "+args[0]+" length="+f.length());
-                xpp.setInput ( new FileReader ( args [0] ) );
+                //xpp.setInput ( new FileReader ( args [0] ) );
+                xpp.setInput ( new FileInputStream ( args [0] ), "UTF8" );
                 app.countXml(xpp);
                 //
             }
@@ -104,8 +106,10 @@ public class XmlPullCount
                 if(verbose) {
                     System.err.println("TEXT '"+printable(xpp.getText())+"'");
                 }
-            } else if(verbose && eventType == XmlPullParser.TEXT) {
+            } else if(eventType == XmlPullParser.END_TAG) {
+                if(verbose) {
                     System.err.println("END_TAG "+xpp.getName());
+                }
             }
             eventType = xpp.next();
         }

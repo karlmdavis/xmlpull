@@ -9,23 +9,28 @@
 
 <H1>Changes to XmlPull v1 API</H1><P>
 
-<h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2003-06-... (XMLPULL_1_2_1)</h3>
+<h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2004-02-... (XMLPULL_1_2_1)</h3>
 <ul>
 <li>this will be next official stable release (based on last of 1.1.x) to
 incorporate all changes since 1.0.x in stable version </ul>
 
 <h3>IN PROGRESS INTERIM RELEASE: </h3>
 
-<h3><a name="XMLPULL_1_1_3_*"></a>2003-08- (XMLPULL_1_1_3_*)</h3>
+<h3><a name="XMLPULL_1_1_3_*"></a>2004-01- (XMLPULL_1_1_3_*)</h3>
 <ul>
+<li>added test to check that workaround from issue &quot;unable to select prefix to 
+use when writing startTag, endTag, and attribute&quot; &quot; (<a href="http://www.extreme.indiana.edu/bugzilla/show_bug.cgi?id=169">bug 
+169</a>) is tested</li>
+<li>updated unit test to check for disallowed &quot;]]&gt;&quot; in character content, more 
+tests for CDSECT</li>
 <li>changed DOM2 builder addon to be completely stateless factory
-and made factory contructor empty
+and made factory constructor empty
 </li>
 <li>improved DOM2 builder addon to allow building DOM tree from only part of
 XML pull even stream and still have all namespaces declared
 </li>
 <li>IN PROGRESS (currently code is commented out):
-added methods to wrapper to encapsulate need ot read some of XSD simple types
+added methods to wrapper to encapsulate need to read some of XSD simple types
 (partially based on <a href="http://jibx.sourceforge.net/">JiBX</a>)
 </li>
 </ul>

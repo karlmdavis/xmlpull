@@ -95,6 +95,25 @@ public class TestCdsect extends UtilTestCase {
         checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
 
+    public void testCdsectSoleContent() throws Exception {
+        XmlPullParser xpp = factory.newPullParser();
+        assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+
+        final String XML =
+            "<t><![CDATA[foo<![CDATA[ \r\n\r]]-->]]></t>";
+
+        xpp.setInput(new StringReader(XML));
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, null, 0, "", "t", null, false/*empty*/, 0);
+        xpp.next();
+        //System.err.println(getClass()+" text="+printable(xpp.getText()));
+        checkParserStateNs(xpp, 1, XmlPullParser.TEXT, null, 0, null, null, "foo<![CDATA[ \n\n]]-->", false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 1, XmlPullParser.END_TAG, null, 0, "", "t", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
+    }
 
 
 }
