@@ -1,3 +1,6 @@
+/* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
+// for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
+
 package org.xmkpull.v1.xmlrpc;
 
 /**
@@ -6,7 +9,7 @@ package org.xmkpull.v1.xmlrpc;
  * <p>A simple XML RPC parser based on the XML PULL API,
  * intended to show the XMLPULL and KXml2 API usage with
  * a real application example.</p>
- * 
+ *
  * <ul>
  * <li>For the XML RPC specification, please refer to
  * <a href="http://www.xmlrpc.com/spec">http://www.xmlrpc.com/spec</a></li>
@@ -25,7 +28,7 @@ public class XmlRpcParser {
 
     XmlPullParser parser;
 
-    /** 
+    /**
      * Creates a new XmlRpcParser, using the given XmlPullParser.
      */
 
@@ -33,10 +36,10 @@ public class XmlRpcParser {
         this.parser = parser;
     }
 
-    /** 
+    /**
      * Parses an XML RPC method call response.
      * The return values are collected in a Vector.
-     * 
+     *
      * @return The return values collected in a Vector.
      */
 
@@ -66,9 +69,9 @@ public class XmlRpcParser {
         return result;
     }
 
-    /** 
+    /**
      * Parses an XML-RPC value element. Returns the
-     * content of the element as a corresponding Java object. 
+     * content of the element as a corresponding Java object.
      * <p>
      * <b>precondition:</b> parser is on a "value" start tag<br />
      * <b>postcondition:</b> parser is on a "value" end tag</p>
@@ -111,7 +114,7 @@ public class XmlRpcParser {
     }
 
     /** Parses an XML-RPC array and returns it as a Java Vector
-     *  
+     *
      *  <p>
      *  <b>Precondition:</b> On "array" start tag<br />
      *  <b>Postcondition:</b> On "array" end tag
@@ -120,7 +123,7 @@ public class XmlRpcParser {
 
     Vector parseArray() throws IOException, XmlPullParserException {
         Vector v = new Vector();
-        
+
         parser.require(parser.START_TAG, "", "array");
         parser.nextTag();
         parser.require(parser.START_TAG, "", "data");
@@ -130,7 +133,7 @@ public class XmlRpcParser {
 
 
         parser.require(parser.END_TAG, "", "data");
-        parser.nextTag();   
+        parser.nextTag();
         parser.require(parser.START_TAG, "", "array");
 
         return v;
@@ -154,7 +157,7 @@ public class XmlRpcParser {
         return struct;
     }
 
-    /*main method, temporarily included for simple testing only 
+    /*main method, temporarily included for simple testing only
 
 
     public static void main(String[] argv)

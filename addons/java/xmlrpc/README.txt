@@ -1,2 +1,2 @@
-placeholder for XML-RPC implementation that uses XmlPull API
+XML-RPC implementation that uses XmlPull API
 
