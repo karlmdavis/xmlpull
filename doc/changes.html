@@ -9,7 +9,14 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
-<h3>2001-04 (XMLPULL_1_0_6)</h3>
+<h3>2001-04 (XMLPULL_1_0_7)</h3>
+<ul>
+<li>
+changed default namespace semantics: the prefix must be reported as null and not 
+empty string from getNamespacePrefix(depth) and getNamespace(null) must return 
+default namespace if declared in XML</ul>
+
+<h3>2001-04-06 (XMLPULL_1_0_6)</h3>
 <ul>
 <li>
 changed hard coded parser factory in XmlPullParserFactory name for KXML2 to 

@@ -427,8 +427,9 @@ public interface XmlPullParser {
      * Return position in stack of first namespace slot for element at passed depth.
      * If namespaces are not enabled it returns always 0.
      * <p><b>NOTE:</b> default namespace is included in namespace table and
-     *  is available by unsing empty string in getNamespace("") (it may return null if xmlns="..."
-     *  is not present) and as well by calling getNamespace() (that will never return null but "")
+     *  is available by using null string as in getNamespace(null)
+     * (it may return null if xmlns="..." is not present)
+     * and as well by calling getNamespace() (that will never return null but "").
      *
      * @see #getNamespacePrefix
      * @see #getNamespaceUri

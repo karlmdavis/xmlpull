@@ -96,7 +96,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkParserStateNs(xpp, 1, xpp.START_TAG, null, 3, "n", "foo", null, false, 0);
         assertEquals(0, xpp.getNamespaceCount(0));
         assertEquals(3, xpp.getNamespaceCount(1));
-        checkNamespace(xpp, 0, "", "n", true);
+        checkNamespace(xpp, 0, null, "n", true);
         checkNamespace(xpp, 1, "ns1", "n1", true);
         checkNamespace(xpp, 2, "ns2", "n2", true);
 
@@ -107,7 +107,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         assertEquals(6, xpp.getNamespaceCount(2));
         checkNamespace(xpp, 3, "ns1", "x1", true);
         checkNamespace(xpp, 4, "ns3", "n3", true);
-        checkNamespace(xpp, 5, "", "n1", true);
+        checkNamespace(xpp, 5, null, "n1", true);
 
         xpp.next();
         checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 6, "n2", "gugu", null, true, 4);

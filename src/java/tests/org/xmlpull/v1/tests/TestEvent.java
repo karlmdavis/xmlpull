@@ -58,7 +58,7 @@ public class TestEvent extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.START_TAG,
                            null, 1, "http://www.xmlpull.org/temp", "hugo", null, false, 0);
-        checkNamespace(xpp, 0, "", "http://www.xmlpull.org/temp", true);
+        checkNamespace(xpp, 0, null, "http://www.xmlpull.org/temp", true);
 
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.TEXT, null, 1, null, null, " \n\n \n  ", false, -1);
