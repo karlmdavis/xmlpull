@@ -9,6 +9,21 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
+<h3>2001-04 (XMLPULL_1_0_5)</h3>
+<ul>
+<li>
+changed defineCharacterEntity() to defineEntityReplacementText() and described 
+semantics of this function and its motivation in J2ME environments<li>
+clarified how nextToken() works: return un-normalized (no end-of-line 
+normalization) parts of XML input<li>
+if additional feature i set then XML text of START_TAG and END_TAG token is 
+available allowing to do full XML document roundtrip: reproduce on output 
+exactly what was in input. However this works on level of UNICODE characters 
+(UTF16 char in Java) and output will need to be converted into required encoding 
+(like UTF8 or UTF16).<li>
+getNamespacesCount changed to getNamespaceCount for consistency<li>
+getAttributesCount changed to getAttributeCount for consistency</ul>
+
 <h3>2001-03-30 (XMLPULL_1_0_4)</h3>
 <ul>
 <li>
@@ -19,8 +34,9 @@ declarations (xmlns='...')<li>
 specified that attributes if has no namespace declared will have &quot;&quot; namespace 
 (empty string)<li>
 clarified that when getTextCharacters&nbsp; returns null then holder MUST 
-contain start and length will be set to -1<li>
-<font SIZE="2">added more comprehensive JUnit tests for API conformance</font></ul>
+contain start and length will be set to -1]
+<li>added more comprehensive JUnit tests for API conformance
+</ul>
 
 <h3>2001-03-29 (XMLPULL_1_0_3)</h3>
 <ul>
