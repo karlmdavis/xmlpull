@@ -529,6 +529,35 @@ public class TestMisc extends UtilTestCase {
 
     }
 
+
+    public void testEntities() throws Exception {
+        XmlPullParser pp = factory.newPullParser();
+        final String XML = "<root><foo>&amp;</foo>\n<foo>&lt;&amp;</foo></root>";
+        pp.setInput( new StringReader( XML ) );
+        pp.require( XmlPullParser.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( XmlPullParser.START_TAG, null, "root");
+
+        pp.next();
+        pp.require( XmlPullParser.START_TAG, null, "foo");
+        pp.next();
+        pp.require( XmlPullParser.TEXT, null, null);
+        assertEquals("&", pp.getText());
+        pp.nextTag();
+        pp.require( XmlPullParser.END_TAG, null, "foo");
+
+        pp.nextTag();
+        pp.require( XmlPullParser.START_TAG, null, "foo");
+        pp.next();
+        pp.require( XmlPullParser.TEXT, null, null);
+        assertEquals("<&", pp.getText());
+        pp.nextToken();
+        pp.require( XmlPullParser.END_TAG, null, "foo");
+
+        pp.nextToken();
+        pp.require( XmlPullParser.END_TAG, null, "root");
+    }
+
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestMisc.class));
     }
