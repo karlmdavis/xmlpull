@@ -9,23 +9,30 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
-<h3>IN PROGRESS: <a name="XMLPULL_1_0_9"></a>2002-00 (XMLPULL_1_0_9)</h3>
+<h3>IN PROGRESS: <a name="XMLPULL_1_0_9"></a>2002-08 (XMLPULL_1_1_1)</h3>
+<ul>
+<li>this will be next official stable release (based on last of 1.0.x) to 
+incorporate all changes especially XmlSerailizer</ul>
+
+<h3>&nbsp;</h3>
+
+<h3>IN PROGRESS INTERIM RELEASE: <a name="XMLPULL_1_0_9"></a>2002-08 (XMLPULL_1_0_9)</h3>
 <ul>
 <li><strong>NEW! XmlSerializer API</strong> that is now required part of
 XMLPULL API on J2SE (on J2ME typically factory is not used and only implementation of
 serializer or parser interface may be available).
 
-<li><b>NOTE:</b> backward incompatible change to reporting IGNORABLE_WHITESPACE 
-for content outside element root - such content is now only reported when 
-optional <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML 
-ROUNDTRIP feature</a> is true. This change is made to keep consistency with XML 
+<li><b>NOTE:</b> <b>backward incompatible change to nextToken</b>(): IGNORABLE_WHITESPACE 
+for content outside element root and end-of-line unnormalized content for 
+elements is only reported by nextToken() when 
+optional <a href="http://xmlpull.org/v1/doc/features.html#unnormalized-content">
+UNNORMALIZED CONTENT feature</a> is true. This change is made to keep consistency with XML 
 infoset <a href="http://www.w3.org/TR/xml-infoset/#infoitem.document">Document 
 Information Item properties</a> which only contain comments and processing 
 instructions but not white space content.<li>conformance tests can be now described in XML allowing to keep tests in 
 format independent from Java (and potentially to use the same XML tests with 
-other XmlPull API bindings such as C++ or PHP)
-
-<li>added newSerializer() method to XmlPullParserFactory
+other XmlPull API bindings such as C++ or PHP) XML files with tests are read 
+from CLASSPATH<li>added newSerializer() method to XmlPullParserFactory
 
 <li>added new FAQ entries:
 
