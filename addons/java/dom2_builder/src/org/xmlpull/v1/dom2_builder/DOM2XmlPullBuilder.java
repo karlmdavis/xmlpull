@@ -164,7 +164,7 @@ public class DOM2XmlPullBuilder {
         return root;
     }
 
-    public Element parse(XmlPullParser pp) throws XmlPullParserException, IOException {
+    public Element parseSubTree(XmlPullParser pp) throws XmlPullParserException, IOException {
         Document doc = newDoc();
         Element root = parseSubTree(pp, doc);
         return root;
