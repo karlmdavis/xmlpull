@@ -24,7 +24,9 @@ The semantics of of all standard features <b>MUST</b> be followed by every XMLPU
 implementation.<P>
 
 All standard feature values <b>MUST NOT</b> change unless setFeature() is called 
-(even when setInput() is called!)<h3>
+(even when setInput() is called!)<P>
+
+&nbsp;<h3>
 
 <a name="process-namespaces"></a>Standard feature: PROCESS NAMESPACES</h3>
 
@@ -104,11 +106,44 @@ They <b>MAY</b> be supported but are not part of XMLPULL API<p>
 <p>This feature is identified by
 <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">
 http://xmlpull.org/v1/doc/features.html#xml-roundtrip</a> </p>
-<p>If set to true then XMLPULL parser <b>MUST</b> must make available original XML value for 
+<p>If set to true then XMLPULL parser <b>MUST</b> make available original XML value for 
 START_TAG and END_TAG events with getText() and getTextCharacters() functions.<br>
 &nbsp;</p>
 
-<p>&nbsp;</p>
+<h3>
+<a name="detect-encoding"></a>Optional feature: DETECT ENCODING<br>
+&nbsp;</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#detect-encoding">
+http://xmlpull.org/v1/doc/features.html#detect-encoding</a> </p>
+<p>If this feature is true it means that XMLPULL parser <b>MUST</b> detect 
+encoding from input stream when inputEncoding is null
+in call setInput(InputStream inputStream, String inputEncoding).</p>
+
+<p>Parameter
+inputStream from setInput(InputStream inputStream, String inputEncoding)
+contains raw byte input stream of possibly
+unknown encoding (when inputEncoding is null) and in such case the parser
+must derive encoding from &lt;?xml declaration or assume UTF8 or UTF16 as
+described in <a href="http://www.w3.org/TR/REC-xml#sec-guessing-no-ext-info">XML 1.0
+Appendix F.1 Detection Without External Encoding Information</a>
+otherwise if inputEncoding is present then it must be used
+(this is consistent with
+<a href="http://www.w3.org/TR/REC-xml#sec-guessing-with-ext-info">XML 1.0
+Appendix F.2 Priorities in the Presence of External Encoding Information</a>
+that allows for exception only for files and in such cases inputEncoding should
+be null to trigger auto detecting.
+
+</p>
+
+<h3>
+<a name="immutable-set-input"></a>Optional feature: IMMUTABLE SET INPUT</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#immutable-set-input">
+http://xmlpull.org/v1/doc/features.html#immutable-set-input</a> </p>
+<p>If set to true then XMLPULL parser <b>MUST</b> not read any bytes from input 
+stream when user calls setInput() and instead wait until first next() is called.<br>
+&nbsp;</p>
 
 <p>&nbsp;</p>
 

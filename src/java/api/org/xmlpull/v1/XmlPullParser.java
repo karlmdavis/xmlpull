@@ -409,10 +409,18 @@ public interface XmlPullParser {
      * Using null for input stream parameter will not set parser input but will still reset parser
      * state and will allow parser to free internal resources (such as parsing buffers).
      *
+     * <p><strong>NOTE:</strong> calling this function MAY result in reading few input
+     * bytes when parser will try to determine input encoding
+     * including byte order marks and detection <? xml encoding even if inputEncoding is null.
+     * However some implementation may postpone reading of input bytes until
+     * first next() is called and in such case they should set feature
+     *  http://xmlpull.org/v1/doc/features.html#immutable-set-input
+     *
      * <p><strong>NOTE:</strong> if inputEncoding is passed it MUST be used otherwise
      *  if inputEncoding is null the parser SHOULD try to determine input encoding
      *  following XML 1.0 specification (see below) but it is not required
      *  (for example when parser is constrained by memory footprint such as in J2ME environments)
+     *
      * <p><strong>NOTE:</strong> if encoding detection is supported then following feature
      *   http://xmlpull.org/v1/doc/features.html#detect-encoding MUST be true
      *   otherwise it must be false
