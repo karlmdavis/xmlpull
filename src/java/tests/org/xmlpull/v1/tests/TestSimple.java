@@ -26,9 +26,7 @@ public class TestSimple extends UtilTestCase {
     }
 
     protected void setUp() throws XmlPullParserException {
-        factory = XmlPullParserFactory.newInstance(
-            System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null
-        );
+        factory = factoryNewInstance();
         //assertEquals(false, factory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         //assertEquals(false, factory.getFeature(XmlPullParser.FEATURE_VALIDATION));
         assertEquals(false, factory.isNamespaceAware());

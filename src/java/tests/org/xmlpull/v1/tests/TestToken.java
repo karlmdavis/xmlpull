@@ -26,9 +26,7 @@ public class TestToken extends UtilTestCase {
     }
 
     protected void setUp() throws XmlPullParserException {
-        factory = XmlPullParserFactory.newInstance(
-            System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null
-        );
+        factory = factoryNewInstance();
         factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         assertEquals(true, factory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         assertEquals(false, factory.getFeature(XmlPullParser.FEATURE_VALIDATION));

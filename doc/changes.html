@@ -22,13 +22,13 @@ refactored XmlPullParserFactory: <ul>
 in newInstance() can now specify both 
 factories and parsers
 <li>removed method newInstance(String classNames) the same can be done with newInstance(classNames, 
-null)<li>modified accordingly tests and samples to use 
-set/getFeature instead of set/getNamespaceAware/Validation&nbsp; and to use 
-newInstance(*,null) instead of one argument version</ul>
+null)<li>modified  tests  use newInstance(*,null) instead of one argument version</ul>
 <li>
 removed constructor with line numbers and Throwable from XmlPullParserException<li>
 changed API to add default namespace declaration to be counted in 
-getNamespaceCount() and available from getNamesapce...(...) methods</ul>
+getNamespaceCount() and available from getNamespace...(...) methods<li>
+refactored tests for common problem: check if no XMLPULL implementation 
+available and print just one error message (instead of dozen...)</ul>
 
 <h3>2001-04-03 (XMLPULL_1_0_5)</h3>
 <ul>

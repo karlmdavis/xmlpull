@@ -14,17 +14,14 @@ import org.xmlpull.v1.XmlPullParserFactory;
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
-public class TestFactory extends TestCase {
+public class TestFactory extends UtilTestCase {
 
     public TestFactory(String name) {
         super(name);
     }
 
     public void testFactory() throws Exception {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
-            System.getProperty(XmlPullParserFactory.PROPERTY_NAME),
-            null //Thread.currentThread().getContextClassLoader().getClass(), //NOT ON JDK 1.1
-        );
+        XmlPullParserFactory factory = factoryNewInstance();
         //System.out.println("factory = "+factory);
         XmlPullParser xpp = factory.newPullParser();
         assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));

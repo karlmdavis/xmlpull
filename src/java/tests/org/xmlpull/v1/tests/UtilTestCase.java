@@ -17,7 +17,6 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class UtilTestCase extends TestCase {
-    private XmlPullParserFactory factory;
 
     protected String TEST_XML =
         "<root>\n"+
@@ -30,12 +29,19 @@ public class UtilTestCase extends TestCase {
         "\n"+
         "<!-- an xml sample document without meaningful content -->\n";
 
+    //private static XmlPullParserFactory factory;
 
     public UtilTestCase(String name) {
         super(name);
     }
 
-
+    public static XmlPullParserFactory factoryNewInstance() throws XmlPullParserException {
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
+            System.getProperty(XmlPullParserFactory.PROPERTY_NAME),
+            null //Thread.currentThread().getContextClassLoader().getClass(), //NOT ON JDK 1.1
+        );
+        return factory;
+    }
 
     public void checkParserState(
         XmlPullParser xpp,
