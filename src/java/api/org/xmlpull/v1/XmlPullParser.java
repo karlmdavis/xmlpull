@@ -270,8 +270,14 @@ public interface XmlPullParser {
 
 
     /**
-     * Use this array to convert evebt type number (such as START_TAG) to
+     * Use this array to convert event type number (such as START_TAG) to
      * to string giving event name, ex: "START_TAG" == TYPES[START_TAG]
+     *
+     * This array contains all event types and token types and represents them
+     * as concise strings. However due to limitations in Java it is possible
+     * to do modify table, ex: TYPES[START_TAG] = "foo" but it should not be done
+     * as it will impede diagnostic messages that uses TYPES[],
+     * such as getPositionDescription().
      */
     public static final String [] TYPES = {
         "START_DOCUMENT",
