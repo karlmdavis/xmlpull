@@ -932,7 +932,7 @@ public interface XmlPullParser {
      *   getTextCharacters() <b>are different</b>
      * <br><b>NOTE:</b> it is user responsibility to resolve entity reference
      *    if PROCESS_DOCDECL is false and there is no entity replacement text set in
-     *    defineEntityReplacementText() methos
+     *    defineEntityReplacementText() method
      * <br><b>NOTE:</b> character entities (ex. &amp;#32;) and standard entities such as
      *  &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos; are reported as well
      *  and are <b>not</b> reported as TEXT tokens but as ENTITY_REF tokens!
