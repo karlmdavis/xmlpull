@@ -18,10 +18,12 @@ public interface XmlSerializer {
 
     /**
      * Set feature identified by name (recommended to be URI for uniqueness).
-     * If feature is not recocgnized then IllegalArgumentException MUST be thrown.
+     * If feature is not recocgnized then XmlPullParserException MUST be thrown.
+     *
+     * @exception XmlPullParserException If the feature is not supported or can not be set
      */
     public void setFeature(String name,
-                           boolean state) throws IllegalArgumentException;
+                           boolean state) throws XmlPullParserException;
 
     /**
      * Return the current value of the feature with given name.
@@ -39,9 +41,11 @@ public interface XmlSerializer {
      * Set the value of a property.
      *
      * The property name is any fully-qualified URI.
+     *
+     * @exception XmlPullParserException if the property is not supported or can not be set
      */
     public void setProperty(String name,
-                            Object value) throws IllegalArgumentException;
+                            Object value) throws XmlPullParserException;
 
     /**
      * Look up the value of a property.
@@ -58,18 +62,20 @@ public interface XmlSerializer {
     /**
      * Set to use binary output stream with given encoding.
      */
-    public void setOutput (OutputStream os, String encoding) throws IOException;
+    public void setOutput (OutputStream os, String encoding)
+        throws IOException, XmlPullParserException;
 
     /**
      * sets the output to the given writer;
      * insert big warning here -- no information about encoding is available
      */
-    public void setOutput (Writer writer) throws IOException;
+    public void setOutput (Writer writer) throws IOException, XmlPullParserException;
 
 
-    public void startDocument (String encoding, Boolean standalone) throws IOException;
+    public void startDocument (String encoding, Boolean standalone)
+        throws IOException, XmlPullParserException;
 
-    public void endDocument () throws IOException;
+    public void endDocument () throws IOException, XmlPullParserException;
 
     /**
      * Binds the given prefix to the given namespace.
@@ -86,7 +92,8 @@ public interface XmlSerializer {
      *   and can not be redefined see:
      * <a href="http://www.w3.org/XML/xml-names-19990114-errata#NE05">Namespaces in XML Errata</a>.
      */
-    public void setPrefix (String prefix, String namespace) throws IOException;
+    public void setPrefix (String prefix, String namespace)
+        throws IOException, XmlPullParserException;
 
     /**
      * Return namespace that corresponds to given prefix
@@ -111,7 +118,8 @@ public interface XmlSerializer {
      * If namespace is empty string no namespace prefix is printed but just name.
      */
 
-    public XmlSerializer startTag (String namespace, String name) throws IOException;
+    public XmlSerializer startTag (String namespace, String name)
+        throws IOException, XmlPullParserException;
 
     /**
      * Writes an attribute. calls to attribute must follow a call to
@@ -121,7 +129,7 @@ public interface XmlSerializer {
      */
 
     public XmlSerializer attribute (String namespace, String name,
-                           String value) throws IOException;
+                                    String value) throws IOException, XmlPullParserException;
 
     /**
      * This method is called explicitly after startTag() and attribute()
@@ -139,12 +147,15 @@ public interface XmlSerializer {
      *  very difficult to find...
      * If namespace is nul no namespace prefix is printed but just name.
      */
-    public XmlSerializer endTag (String namespace, String name) throws IOException;
+    public XmlSerializer endTag (String namespace, String name)
+        throws IOException, XmlPullParserException;
 
     /** Writes text, where special XML chars are escaped automatically */
-    public XmlSerializer text (String text) throws IOException;
+    public XmlSerializer text (String text)
+        throws IOException, XmlPullParserException;
 
-    public XmlSerializer text (char [] buf, int start, int len) throws IOException;
+    public XmlSerializer text (char [] buf, int start, int len)
+        throws IOException, XmlPullParserException;
 
     /**
      * write  CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,
@@ -154,20 +165,19 @@ public interface XmlSerializer {
      * exception???? XXX)
      */
 
-    public void cdsect (String text)  throws IOException;
-    public void entityRef (String text)  throws IOException;
-    public void processingInstruction (String text)  throws IOException;
-    public void comment (String text)  throws IOException;
-    public void docdecl (String text)  throws IOException;
-    public void ignorableWhitespace (String text)  throws IOException;
+    public void cdsect (String text)  throws IOException, XmlPullParserException;
+    public void entityRef (String text)  throws IOException, XmlPullParserException;
+    public void processingInstruction (String text)  throws IOException, XmlPullParserException;
+    public void comment (String text)  throws IOException, XmlPullParserException;
+    public void docdecl (String text)  throws IOException, XmlPullParserException;
+    public void ignorableWhitespace (String text)  throws IOException, XmlPullParserException;
 
     /**
      * writes all pending output to the stream,
-     * if  startTag() or attribute() was caled then start tag is closed
+     * if  startTag() or attribute() was called then start tag is closed
      * and flush() is called on underlying output stream.
      */
     public void flush () throws IOException;
-
 
 }
 
