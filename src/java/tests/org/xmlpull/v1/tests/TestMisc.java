@@ -58,20 +58,21 @@ public class TestMisc extends UtilTestCase {
 
     }
 
-    public void testReadText() throws Exception {
-        final String INPUT_XML = "<test>foo</test>";
-        XmlPullParser pp = factory.newPullParser();
-        pp.setInput( new StringReader( INPUT_XML ) );
-        assertEquals( "", pp.readText() );
-        pp.next();
-        assertEquals( "", pp.readText() );
-        pp.next();
-        assertEquals( "foo", pp.readText() );
-        assertEquals( pp.TYPES[ pp.END_TAG ], pp.TYPES[ pp.getEventType() ]);
-    }
+//    public void testReadText() throws Exception {
+//        final String INPUT_XML = "<test>foo</test>";
+//        XmlPullParser pp = factory.newPullParser();
+//        pp.setInput( new StringReader( INPUT_XML ) );
+//        assertEquals( "", pp.readText() );
+//        pp.next();
+//        assertEquals( "", pp.readText() );
+//        pp.next();
+//        assertEquals( "foo", pp.readText() );
+//        assertEquals( pp.TYPES[ pp.END_TAG ], pp.TYPES[ pp.getEventType() ]);
+//    }
 
     public void testNextText() throws Exception {
-        final String INPUT_XML = "<t><test1>foo</test1><test2></test2><test3/><test4>bar</test4></t>";
+        final String INPUT_XML =
+            "<t><test1>foo</test1><test2></test2><test3/><test4>bar</test4></t>";
         XmlPullParser pp = factory.newPullParser();
         pp.setInput( new StringReader( INPUT_XML ) );
         pp.next();
@@ -93,8 +94,8 @@ public class TestMisc extends UtilTestCase {
 
         pp.next();
         pp.require( pp.START_TAG, null, "test4");
-        pp.next();
-        pp.require( pp.TEXT, null, null);
+        //pp.next();
+        //pp.require( pp.TEXT, null, null);
         assertEquals( "bar", pp.nextText() );
         pp.require( pp.END_TAG, null, "test4");
 
@@ -104,6 +105,18 @@ public class TestMisc extends UtilTestCase {
         pp.require( pp.END_DOCUMENT, null, null);
 
         // now check for error conditions
+        pp.setInput( new StringReader( INPUT_XML ) );
+        pp.next();
+        pp.require( pp.START_TAG, null, "t");
+        pp.next();
+        pp.require( pp.START_TAG, null, "test1");
+        pp.next();
+        pp.require( pp.TEXT, null, null);
+        try {
+            pp.nextText();
+            fail("if current tag is TEXT no next text content can be returned!");
+        } catch(XmlPullParserException ex) {}
+
         pp.setInput( new StringReader( INPUT_XML ) );
         pp.next();
         pp.require( pp.START_TAG, null, "t");
@@ -148,13 +161,27 @@ public class TestMisc extends UtilTestCase {
         pp.require( pp.START_TAG, "URI", "s");
 
         pp.next();
-        // this call will skip white spaces
+        pp.require( pp.TEXT, null, null);
+        assertEquals("\t", pp.getText());
+        pp.next();
         pp.require( pp.END_TAG, "URI", "s");
 
         pp.next();
         pp.require( pp.END_TAG, "", "test");
         pp.next();
         pp.require( pp.END_DOCUMENT, null, null);
+
+        //now check that require will NOT skip white space
+        pp = factory.newPullParser();
+        pp.setInput( new StringReader( "<m:s xmlns:m='URI'>\t</m:s>" ) );
+        pp.require( pp.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( pp.START_TAG, "URI", "s");
+        pp.next();
+        try {
+        pp.require( pp.END_TAG, "URI", "s");
+            fail("require() MUST NOT skip white spaces");
+        } catch(XmlPullParserException ex){}
 
     }
 

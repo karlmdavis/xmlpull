@@ -906,20 +906,15 @@ public interface XmlPullParser {
     // utility methods to mak XML parsing easier ...
 
     /**
-     * test if the current event is of the given type and if the
+     * Test if the current event is of the given type and if the
      * namespace and name do match. null will match any namespace
-     * and any name. If the current event is TEXT with isWhitespace()=
-     * true, and the required type is not TEXT, next () is called prior
-     * to the test. If the test is not passed, an exception is
+     * and any name. If the test is not passed, an exception is
      * thrown. The exception text indicates the parser position,
-     * the expected event and the current event (not meeting the
+     * the expected event and the current event that is not meeting the
      * requirement.
      *
-     * <p>essentially it does this
+     * <p>Essentially it does this
      * <pre>
-     *  if (getEventType() == TEXT && type != TEXT && isWhitespace ())
-     *    next ();
-     *
      *  if (type != getEventType()
      *  || (namespace != null && !namespace.equals( getNamespace () ) )
      *  || (name != null && !name.equals( getName() ) ) )
@@ -931,33 +926,31 @@ public interface XmlPullParser {
 
 
 
+//    /**
+//     * If the current event is text, the value of getText is
+//     * returned and next() is called. Otherwise, an empty
+//     * String ("") is returned. Useful for reading element
+//     * content without needing to performing an additional
+//     * check if the element is empty.
+//     *
+//     * <p>essentially it does this
+//     * <pre>
+//     *   if (getEventType() != TEXT) return "";
+//     *   String result = getText();
+//     *   next();
+//     *   return result;
+//     * </pre>
+//     *
+//     * @deprecated Replaced by nextText(), this method was too liberal.
+//     * @see #nextText()
+//     */
+//    public String readText() throws XmlPullParserException, IOException;
+
+
     /**
-     * If the current event is text, the value of getText is
-     * returned and next() is called. Otherwise, an empty
-     * String ("") is returned. Useful for reading element
-     * content without needing to performing an additional
-     * check if the element is empty.
-     *
-     * <p>essentially it does this
-     * <pre>
-     *   if (getEventType() != TEXT) return "";
-     *   String result = getText();
-     *   next();
-     *   return result;
-     * </pre>
-     *
-     * @deprecated Replaced by nextText(), this method was too liberal.
-     * @see #nextText()
-     */
-    public String readText() throws XmlPullParserException, IOException;
-
-
-
-    /**
-     * If current event is TEXT and next event is END_TAG then text is returned and
-     * parser is on END_TAG. If current event is START_TAG then if next element is TEXT
-     * then element content is returned or if next is END_TAG then emoty string is returned.
-     * Otherwise exception is thrown.
+     * If current event is START_TAG then if next element is TEXT then element content is returned
+     * or if next event is END_TAG then empty string is returned, otherwise exception is thrown.
+     * After calling this function successfully parser will be positioned on END_TAG.
      *
      * <p>The motivation for this function is to allow to parse consistently both
      * empty elements and elements that has non empty content, for example for input: <ol>
@@ -970,33 +963,34 @@ public interface XmlPullParser {
      *   String content = p.nextText();
      *   p.requireEvent(p.END_TAG, "", "tag");
      * </pre>
+     * This function together with nextTag make it very easy to parse XML that has
+     * no mixed content.
      *
-     * <p>essentially it does this
+     *
+     * <p>Essentially it does this
      * <pre>
-     *  String result = null;
-     *  boolean onStartTag = false;
-     *  if(eventType == START_TAG) {
-     *     onStartTag = true;
-     *     next();
+     *  if(getEventType() != START_TAG) {
+     *     throw new XmlPullParserException(
+     *       "parser must be on START_TAG to read next text", this, null);
      *  }
+     *  int eventType = next();
      *  if(eventType == TEXT) {
-     *     result = getText();
-     *     next();
-     *  } else if(onStartTag && eventType == END_TAG) {
-     *     result = "";
+     *     String result = getText();
+     *     eventType = next();
+     *     if(eventType != END_TAG) {
+     *       throw new XmlPullParserException(
+     *          "event TEXT it must be immediately followed by END_TAG", this, null);
+     *      }
+     *      return result;
+     *  } else if(eventType == END_TAG) {
+     *     return "";
      *  } else {
      *     throw new XmlPullParserException(
-     *  "parser must be on START_TAG or TEXT to read text", this, null);
+     *       "parser must be on START_TAG or TEXT to read text", this, null);
      *  }
-     *  if(eventType != END_TAG) {
-     *     throw new XmlPullParserException(
-     *  "event TEXT it must be immediately followed by END_TAG", this, null);
-     *  }
-     *  return result;
      * </pre>
      */
-    public String nextText () throws XmlPullParserException, IOException;
-
+    public String nextText() throws XmlPullParserException, IOException;
 
     /**
      * Call next() and return event if it is START_TAG or END_TAG
