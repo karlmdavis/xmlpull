@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This class is used to create implementations of XML Pull Parser defined in XMPULL V1 API.
@@ -19,69 +20,57 @@ import java.util.Hashtable;
  * must be passed explicitly. If no name of parser factory was passed (or is null)
  * it will try to find name by searching in CLASSPATH for
  * META-INF/services/org.xmlpull.v1.XmlPullParserFactory resource that should contain
- * comma separated list of class names of factories or parsers to try (in order from
- * left to the right). If none found it will try to create a default parser
- * factory (if available) or throw exception if it can not be created in case when
- * no ddefault parser implementaion is available.
+ * a comma separated list of class names of factories or parsers to try (in order from
+ * left to the right). If none found, it will throw an exception.
  *
- * <p><strong>NOTE:</strong>In J2SE or J2EE environments to get best results use
+ * <p><strong>NOTE:</strong>In J2SE or J2EE environments, you may want to use
  * <code>newInstance(property, classLoaderCtx)</code>
  * where first argument is
  * <code>System.getProperty(XmlPullParserFactory.PROPERTY_NAME)</code>
- * and second is <code>Thread.getContextClassLoader().getClas()</code> .
+ * and second is <code>Thread.getContextClassLoader().getClass()</code> .
  *
  * @see XmlPullParser
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/], Stefan Haustein
  */
 
-public class XmlPullParserFactory
-{
+public class XmlPullParserFactory {
 
-    /** name of parser factory property that should be used for system property
-     * or in general to retrieve parser factory clas sname from configuration
-     * (currently name of peroperty is org.xmlpull.v1.XmlPullParserFactory)
-     */
-    public static final String PROPERTY_NAME =
+    /** Name of the system or midlet property that should be used for
+        a system property containing a comma separated list of factory
+        or parser class names (value:
+        org.xmlpull.v1.XmlPullParserFactory). */
+
+
+    public static final String PROPERTY_NAME = 
         "org.xmlpull.v1.XmlPullParserFactory";
-    private static final String RESOURCE_NAME =
+
+    private static final String RESOURCE_NAME = 
         "/META-INF/services/" + PROPERTY_NAME;
 
-    private static final String DEFAULT_PROPERTY =
-        "org.xmlpull.xpp3.XmlPullParser,org.kxml2.io.KXmlParser";
+    //    "org.xmlpull.xpp3.XmlPullParser,org.kxml2.io.KXmlParser";
 
     // features are kept there
     protected Hashtable features = new Hashtable();
 
-    private static final boolean DEBUG = false;
-
-    private static final String DEBUG_PREFIX = "DEBUG XMLPULL factory: ";
-
-    /** Private method for debugging */
-    private static void debug(String msg) {
-        if(!DEBUG)
-            throw new RuntimeException(
-                "only when DEBUG enabled can print messages");
-        System.err.println(DEBUG_PREFIX+msg);
-    }
+    // public static final String DEFAULT_PROPERTY =
+    //    "org.xmlpull.xpp3.XmlPullParser,org.kxml2.io.KXmlParser";
 
 
-    private Class foundParserClass;
+    protected Vector parserClasses;
+
+    // features are kept there
+    protected Hashtable features = new Hashtable();
+
 
     /**
      * Protected constructor to be called by factory implementations.
      */
-    protected XmlPullParserFactory()
-    {
+
+    protected XmlPullParserFactory() {
     }
 
-    /**
-     * Protected constructor to be called by factory implementations.
-     */
-    protected XmlPullParserFactory(Class foundParserClass)
-    {
-        this.foundParserClass = foundParserClass;
-    }
+
 
     /**
      * Set the features to be set when XML Pull Parser is created by this factory.
@@ -89,11 +78,13 @@ public class XmlPullParserFactory
      * @param name string with URI identifying feature
      * @param state if true feature will be set; if false will be ignored
      */
+
     public void setFeature(String name,
-                           boolean state) throws XmlPullParserException
-    {
+                           boolean state) throws XmlPullParserException {
+        
         features.put(name, new Boolean(state));
     }
+
 
     /**
      * Return the current value of the feature with given name.
@@ -102,66 +93,63 @@ public class XmlPullParserFactory
      * @return The value of named feature.
      *     Unknown features are <string>always</strong> returned as false
      */
+
     public boolean getFeature (String name) {
         Boolean value = (Boolean) features.get(name);
         return value != null ? value.booleanValue() : false;
     }
 
-//    /**
-//     * Specifies that the parser produced by this factory will provide
-//     * support for XML namespaces.
-//     * By default the value of this is set to false.
-//     *
-//     * @param awareness true if the parser produced by this code
-//     *    will provide support for XML namespaces;  false otherwise.
-//     */
-//    public void setNamespaceAware(boolean awareness)
-//        throws XmlPullParserException
-//    {
-//        features.put(XmlPullParser.FEATURE_PROCESS_NAMESPACES, new Boolean(awareness));
-//    }
-//
-//    /**
-//     * Indicates whether or not the factory is configured to produce
-//     * parsers which are namespace aware.
-//     *
-//     * @return  true if the factory is configured to produce parsers
-//     *    which are namespace aware; false otherwise.
-//     */
-//    public boolean isNamespaceAware()
-//    {
-//        Boolean value = (Boolean) features.get(XmlPullParser.FEATURE_PROCESS_NAMESPACES);
-//        return value != null ? value.booleanValue() : false;
-//    }
-//
-//    /**
-//     * Specifies that the parser produced by this factory will be validating
-//     *
-//     * By default the value of this is set to false.
-//     *
-//     * @param validating - if true the parsers created by this factory  must be validating.
-//     */
-//    public void setValidating(boolean validating)
-//        throws XmlPullParserException
-//    {
-//        features.put(XmlPullParser.FEATURE_VALIDATION, new Boolean(validating));
-//    }
-//
-//    /**
-//     * Indicates whether or not the factory is configured to produce parsers
-//     * which validate the XML content during parse.
-//     *
-//     * @return   true if the factory is configured to produce parsers
-//     * which validate the XML content during parse; false otherwise.
-//     */
-//    public boolean isValidating()
-//    {
-//        Boolean value = (Boolean) features.get(XmlPullParser.FEATURE_VALIDATION);
-//        return value != null ? value.booleanValue() : false;
-//    }
+    /**
+     * Specifies that the parser produced by this factory will provide
+     * support for XML namespaces.
+     * By default the value of this is set to false.
+     *
+     * @param awareness true if the parser produced by this code
+     *    will provide support for XML namespaces;  false otherwise.
+     */
+
+    public void setNamespaceAware(boolean awareness) {
+        features.put (XmlPullParser.FEATURE_PROCESS_NAMESPACES, new Boolean (awareness));
+    }
 
     /**
+     * Indicates whether or not the factory is configured to produce
+     * parsers which are namespace aware.
      *
+     * @return  true if the factory is configured to produce parsers
+     *    which are namespace aware; false otherwise.
+     */
+
+    public boolean isNamespaceAware() {
+        return getFeature (XmlPullParser.FEATURE_PROCESS_NAMESPACES);
+    }
+
+
+    /**
+     * Specifies that the parser produced by this factory will be validating
+     *
+     * By default the value of this is set to false.
+     *
+     * @param validating - if true the parsers created by this factory  must be validating.
+     */
+
+    public void setValidating(boolean validating) {
+        features.put (XmlPullParser.FEATURE_VALIDATION, new Boolean (validating));
+    }
+
+    /**
+     * Indicates whether or not the factory is configured to produce parsers
+     * which validate the XML content during parse.
+     *
+     * @return   true if the factory is configured to produce parsers
+     * which validate the XML content during parse; false otherwise.
+     */
+
+    public boolean isValidating() {
+        return getFeature (XmlPullParser.FEATURE_VALIDATION);
+    }
+
+    /**
      * Creates a new instance of a XML Pull Parser
      * using the currently configured factory parameters.
      *
@@ -169,130 +157,126 @@ public class XmlPullParserFactory
      * @throws XmlPullParserException if a parser cannot be created which satisfies the
      * requested configuration.
      */
-    public XmlPullParser newPullParser() throws XmlPullParserException
-    {
-        try {
-            XmlPullParser pp =  (XmlPullParser) foundParserClass.newInstance();
-            if( ! features.isEmpty() ) {
-                Enumeration keys = features.keys();
-                while(keys.hasMoreElements()) {
-                    String key = (String) keys.nextElement();
+
+    public XmlPullParser newPullParser() throws XmlPullParserException {
+        
+        if (parserClasses.size () == 0) throw new XmlPullParserException 
+            ("No valid parser classes found in "+RESOURCE_NAME);
+
+        StringBuffer issues = new StringBuffer ();
+
+        for (int i = 0; i < parserClasses.size (); i++) {
+            Class ppClass = (Class) parserClasses.elementAt (i);
+            try {
+                XmlPullParser pp = (XmlPullParser) ppClass.newInstance();
+                //            if( ! features.isEmpty() ) {
+                //Enumeration keys = features.keys();
+                // while(keys.hasMoreElements()) {
+
+                for (Enumeration e = features.keys (); e.hasMoreElements ();) {
+                    String key = (String) e.nextElement();
                     Boolean value = (Boolean) features.get(key);
-                    if(value != null && value.booleanValue() == true) {
+                    if(value != null && value.booleanValue()) {
                         pp.setFeature(key, true);
                     }
                 }
+                return pp;
+
+            } catch(Exception ex) {
+                issues.append (ppClass.getName () + ": "+ ex.toString ()+"; ");
             }
+<<<<<<< XmlPullParserFactory.java
+=======
             return pp;
         } catch(Exception ex) {
             throw new XmlPullParserException(
                 "could not create parser "+foundParserClass+" : "+ex, null, ex);
+>>>>>>> 1.8
         }
-    }
 
+        throw new XmlPullParserException ("could not create parser: "+issues);
+    }
+    
     /**
-     * Create a new instance of a PullParserFactory used to create XML pull parser
-     * (see description of class for more details).
+     * Create a new instance of a PullParserFactory that can be used
+     * to create XML pull parsers (see class description for more
+     * details).
      *
-     * @return result of call to newInstance(null, null)
-     */
-    public static XmlPullParserFactory newInstance()
-        throws XmlPullParserException
-    {
+     * @return a new instance of a PullParserFactory, as returned by newInstance (null, null); */
+    
+    public static XmlPullParserFactory newInstance () throws XmlPullParserException {
         return newInstance(null, null);
     }
 
-    /**
-     * Get a new instance of a PullParserFactory from given class name.
-     *
-     * @param property use specified factory class if not null
-     * @return result of call to newInstance(null, property)
-     */
-    public static XmlPullParserFactory newInstance(String property)
-        throws XmlPullParserException
-    {
-        return newInstance( null, property );
-    }
 
 
-    /**
-     * Get instance of XML pull parser factiry.
-     *
-     * <p><b>NOTE:</b>  this allows to use -D system properties indirectly and still
-     *    to support flexible configuration in J2ME environments..
-     *
-     * @param classLoaderCtx if null Class.forName will be used instead
-     *    - simple way to use class loaders and still have ME compatibility!
-     * @param property list of comma separated class names of factories or parsers to use -
-     *   if null then it will try load list form JAR file and if none available
-     *   wll use some hardcoded defaults.
-     */
-    public static XmlPullParserFactory newInstance(Class classLoaderCtx,
-                                                   String property)
-        throws XmlPullParserException
-    {
+    public static XmlPullParserFactory newInstance (String classNames, Class context)
+        throws XmlPullParserException {
 
-        if(classLoaderCtx == null) classLoaderCtx = XmlPullParserFactory.class;
-        if(property == null) {
+        if (context == null) context = "".getClass ();
+
+        if (classNames == null) {
             try {
-                InputStream is = classLoaderCtx.getResourceAsStream( RESOURCE_NAME );
+                InputStream is = context.getResourceAsStream (RESOURCE_NAME);
 
-                if( is != null ) {
-
-                    StringBuffer sb = new StringBuffer();
-
-                    while (true) {
-                        int ch = is.read();
-                        if (ch < 0) {
-                            break;
-                        } else if (ch == '\n') {
-                            break;
-                        }
+                if (is == null) throw new XmlPullParserException 
+                    ("Ressource not found: "+RESOURCE_NAME);
+                
+                StringBuffer sb = new StringBuffer();
+                
+                while (true) {
+                    int ch = is.read();
+                    if (ch < 0) break;  
+                    else if (ch > ' ') 
                         sb.append((char) ch);
-                    }
-
-                    // strip end-of-line \r\n if necessary
-                    int n = sb.length();
-                    if ((n > 0) && (sb.charAt(n - 1) == '\r')) {
-                        sb.setLength(n - 1);
-                    }
-
-                    property = sb.toString();
                 }
-            } catch(Exception ex) {}
-        }
-        if(property == null) property = DEFAULT_PROPERTY;
+                is.close ();
 
-        String name = null;
-        int start = 0;
-        Class parserClass = null;
-        for (int i = 0; i <= property.length(); i++)
-        {
-            // tricky: first check if passed last character and only check for comma at i!!!
-            if((i == property.length() || property.charAt(i) == ',' ) && i > start )  {
-                name = property.substring(start, i);
-                start = i + 1;
-                try {
-                    Class klass = classLoaderCtx.forName(name);
-                    Object o =klass.newInstance();
-                    if( o instanceof XmlPullParserFactory ) {
-                        return (XmlPullParserFactory) o;
-                    } else if( o instanceof XmlPullParser ) {
-                        parserClass = klass;
-                        break;
-                    }
-                } catch  (Exception ex) {
-                    if(DEBUG) {
-                        debug("failed to load class "+name);
-                        ex.printStackTrace();
-                    }
-                }
+                classNames = sb.toString ();
             }
-        }
-        if(parserClass != null) return new XmlPullParserFactory(parserClass);
-        throw new XmlPullParserException(
-            "could not create parser or factory from '"+property+"'");
-    }
+            catch (Exception e) {
+                throw new XmlPullParserException (null, null, e);
+            }        
+        }            
 
+        XmlPullParserFactory factory = null;
+        Vector parserClasses = new Vector ();
+        int pos = 0;
+
+        while (pos < classNames.length ()) {
+            int cut = classNames.indexOf (',', pos);
+
+            if (cut == -1) cut = classNames.length ();
+            String name = classNames.substring (pos, cut);
+
+            Class candidate = null;
+            Object instance = null;
+                        
+            try {
+                candidate = Class.forName (name);
+                // neccessary because of J2ME .class issue
+                instance = candidate.newInstance (); 
+            }
+            catch (Exception e) {}
+                        
+            if (candidate != null) { 
+                if (instance instanceof XmlPullParser)
+                    parserClasses.addElement (candidate);
+                else if (instance instanceof XmlPullParserFactory) {
+                    if (factory == null) 
+                        factory = (XmlPullParserFactory) instance;
+                }
+                else throw new XmlPullParserException ("incompatible class: "+name);
+            }
+        }                        
+        
+        if (factory == null) factory = new XmlPullParserFactory ();
+        factory.parserClasses = parserClasses; 
+
+        return factory;
+    }
 }
+
+
+
 
