@@ -1,1 +1,1 @@
-place for samples demonstrating use of API
+place for samples demonstrating use of XMLPULL API
