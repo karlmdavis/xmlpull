@@ -147,24 +147,18 @@ public interface XmlPullParser {
 
     /**
      * Processing of DOCDECL is by default set to false
-     * and if DOCDECL is encountred an exception will be thrown.
+     * and if DOCDECL is encountred it is reported by nextToken()
+     * and ignored by next().
+     *
      * If processing is set to true then DOCDECL must be processed by parser.
+     *
+     * <p><strong>NOTE:</strong> if the DOCDECL was ignored
+     * further in parsing there may be fatal exception when undeclared
+     * entity is encountered!
      * <p><strong>NOTE:</strong> can not be changed during parsing!
      */
     public static final String PROCESS_DOCDECL =
         "http://xmlpull.org/v1/features/process-docdecl";
-
-    /**
-     * Reports the DOCDECL from call to nextToken().
-     * If REPORT_DOCDECL is true then DOCDECL is reported by nextToken()
-     * (even if DOCDECL was processed when PROCESS_DOCDECL is true).
-     * If REPORT_DOCDECL is false then an exception is thrown if PROCESS_DOCDECL is not true
-     * and DOCDECL is not reported by nextToken().
-     * <p><strong>NOTE:</strong> can not be changed during parsing!
-     */
-    public static final String REPORT_DOCDECL =
-        "http://xmlpull.org/v1/features/report-docdecl";
-
 
     /**
      * Report all validation errors as defined by XML 1.0 sepcification
@@ -343,14 +337,13 @@ public interface XmlPullParser {
     public boolean isWhitespace() throws XmlPullParserException;
 
     /**
-     * Read current content as String.
+     * Read text content of the current event as String.
      *
-     * <p><b>NOTE:</b> parser must be on TEXT, COMMENT, PROCESSING_INSTRUCTION
-     * or DOCDECL event;
-     * otherwise, null is returned.
+     * <p><strong>NOTE:</strng> parser must be on TEXT, COMMENT, PROCESSING_INSTRUCTION
+     * or DOCDECL event; otherwise, null is returned.
      */
 
-    public String getText () throws XmlPullParserException;
+    public String getText ();
 
 
     // --------------------------------------------------------------------------

@@ -16,8 +16,16 @@
 
 
 <P>Java version of XMLPULL V1 API provides:<ul>
-<li><b>simple interface</b>
-<li><b>ease of use</b>
+<li><b>simple interface</b> - parser consists of one interface, one exception 
+and one factory to create parser<li><b>implementation independent</b> - factory 
+class is modeled after JAXP and allows easily to switch to different XMLPULL V1 
+API implementaion without even modifying source code<li><b>ease of use</b> - 
+there is only one key method <b><i>next()</i></b> that is used to retrieve next 
+event and there are only five events:
+<ul>
+<li>START_DOCUMENT, START_TAG, TEXT, END_TAG, END_DOCUMENT
+</ul>
+<li><b>versatile</b> -
 <li><b>performance</b>
 <li><b>minimal requirements</b> - designed to be compatible with J2ME (Java 2 Micro Editiin)
 to work and on small devices and to allow create XMLPULL compliant parsers of  very small
@@ -36,5 +44,6 @@ memory footprint.
 
 <HR>
 <address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a><address>
+</address>
 </BODY>
 </HTML>
