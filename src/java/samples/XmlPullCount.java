@@ -30,6 +30,7 @@ public class XmlPullCount
     int countChars;
     int countAttribs;
     int countSTags;
+    boolean verbose;
 
     public static void main (String args[])
         throws XmlPullParserException, IOException
@@ -46,6 +47,7 @@ public class XmlPullCount
 
         XmlPullCount app = new XmlPullCount();
 
+        app.verbose = false;
         for(int c = 0; c < 2; ++c) {
             System.err.println("run#"+c);
             app.resetCounters();
@@ -90,14 +92,55 @@ public class XmlPullCount
             if(eventType == XmlPullParser.START_TAG) {
                 ++countSTags;
                 countAttribs += xpp.getAttributeCount();
+                if(verbose) {
+                    System.err.println("START_TAG "+xpp.getName());
+                }
             } else if(eventType == XmlPullParser.TEXT) {
                 //char ch[] = xpp.getTextCharacters(holderForStartAndLength);
                 xpp.getTextCharacters(holderForStartAndLength);
                 //int start = holderForStartAndLength[0];
                 int length = holderForStartAndLength[1];
                 countChars += length;
+                if(verbose) {
+                    System.err.println("TEXT '"+printable(xpp.getText())+"'");
+                }
+            } else if(verbose && eventType == XmlPullParser.TEXT) {
+                    System.err.println("END_TAG "+xpp.getName());
             }
             eventType = xpp.next();
         }
     }
+
+
+    protected String printable(char ch) {
+        if(ch == '\n') {
+            return "\\n";
+        } else if(ch == '\r') {
+            return "\\r";
+        } else if(ch == '\t') {
+            return "\\t";
+        } if(ch > 127 || ch < 32) {
+            StringBuffer buf = new StringBuffer("\\u");
+            String hex = Integer.toHexString((int)ch);
+            for (int i = 0; i < 4-hex.length(); i++)
+            {
+                buf.append('0');
+            }
+            buf.append(hex);
+            return buf.toString();
+        }
+        return ""+ch;
+    }
+
+    protected String printable(String s) {
+        if(s == null) return null;
+        StringBuffer buf = new StringBuffer();
+        for(int i = 0; i < s.length(); ++i) {
+            buf.append(printable(s.charAt(i)));
+        }
+        s = buf.toString();
+        return s;
+    }
+
 }
+
