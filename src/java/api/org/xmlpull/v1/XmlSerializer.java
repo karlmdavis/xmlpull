@@ -106,8 +106,12 @@ public interface XmlSerializer {
 
     /**
      * Return namespace that corresponds to given prefix
-     * If there is no prefix bound to this namespace return null if
-     * generatePrefix is false otherwise return generated prefix.
+     * If there is no prefix bound to this namespace return null
+     * but if generatePrefix is false then return generated prefix.
+     *
+     * <p><b>NOTE:</b> if the prefix is empty string "" and defualt namespace is bound
+     * to this prefix then empty string ("") is returned.
+     *
      * <p><b>NOTE:</b> prefixes "xml" and "xmlns" are already bound
      *   will have values as defined
      * <a href="http://www.w3.org/TR/REC-xml-names/">Namespaces in XML specification</a>
