@@ -58,21 +58,21 @@ public class TestMisc extends UtilTestCase {
 
     }
 
-//    public void testReadText() throws Exception {
-//        final String INPUT_XML = "<test>foo</test>";
-//        XmlPullParser pp = factory.newPullParser();
-//        pp.setInput( new StringReader( INPUT_XML ) );
-//        assertEquals( "", pp.readText() );
-//        pp.next();
-//        assertEquals( "", pp.readText() );
-//        pp.next();
-//        assertEquals( "foo", pp.readText() );
-//        assertEquals( pp.TYPES[ pp.END_TAG ], pp.TYPES[ pp.getEventType() ]);
-//    }
+    //    public void testReadText() throws Exception {
+    //        final String INPUT_XML = "<test>foo</test>";
+    //        XmlPullParser pp = factory.newPullParser();
+    //        pp.setInput( new StringReader( INPUT_XML ) );
+    //        assertEquals( "", pp.readText() );
+    //        pp.next();
+    //        assertEquals( "", pp.readText() );
+    //        pp.next();
+    //        assertEquals( "foo", pp.readText() );
+    //        assertEquals( pp.TYPES[ pp.END_TAG ], pp.TYPES[ pp.getEventType() ]);
+    //    }
 
     public void testNextText() throws Exception {
         final String INPUT_XML =
-            "<t><test1>foo</test1><test2></test2><test3/><test4>bar</test4></t>";
+	    "<t><test1>foo</test1><test2></test2><test3/><test4>bar</test4></t>";
         XmlPullParser pp = factory.newPullParser();
         pp.setInput( new StringReader( INPUT_XML ) );
         pp.next();
@@ -113,16 +113,16 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         pp.require( pp.TEXT, null, null);
         try {
-            pp.nextText();
-            fail("if current tag is TEXT no next text content can be returned!");
+	    pp.nextText();
+	    fail("if current tag is TEXT no next text content can be returned!");
         } catch(XmlPullParserException ex) {}
 
         pp.setInput( new StringReader( INPUT_XML ) );
         pp.next();
         pp.require( pp.START_TAG, null, "t");
         try {
-            pp.nextText();
-            fail("if next tag is START_TAG no text content can be returned!");
+	    pp.nextText();
+	    fail("if next tag is START_TAG no text content can be returned!");
         } catch(XmlPullParserException ex) {}
 
         pp.setInput( new StringReader( INPUT_XML ) );
@@ -134,8 +134,8 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         pp.require( pp.END_TAG, null, "test1");
         try {
-            pp.nextText();
-            fail("if current tag is END_TAG no text content can be returned!");
+	    pp.nextText();
+	    fail("if current tag is END_TAG no text content can be returned!");
         } catch(XmlPullParserException ex) {}
 
     }
@@ -179,8 +179,8 @@ public class TestMisc extends UtilTestCase {
         pp.require( pp.START_TAG, "URI", "s");
         pp.next();
         try {
-        pp.require( pp.END_TAG, "URI", "s");
-            fail("require() MUST NOT skip white spaces");
+	    pp.require( pp.END_TAG, "URI", "s");
+	    fail("require() MUST NOT skip white spaces");
         } catch(XmlPullParserException ex){}
 
     }
@@ -191,10 +191,10 @@ public class TestMisc extends UtilTestCase {
         assertEquals(true, pp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
 
         try {
-            pp.setFeature(XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES, true);
+	    pp.setFeature(XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES, true);
         }catch(XmlPullParserException ex) {
-            // skip rest of test if parser does nto support reporting
-            return;
+	    // skip rest of test if parser does nto support reporting
+	    return;
         }
         PackageTests.addNote("* feature "+pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES+" is supported\n");
         // see XML Namespaces spec for namespace URIs for 'xml' and 'xmlns'
@@ -205,10 +205,10 @@ public class TestMisc extends UtilTestCase {
         //   in some contexts such as DOM
         // http://www.w3.org/TR/REC-xml-names/#ns-using
         final String XML_MISC_ATTR =
-            "<test xmlns='Some-Namespace-URI' xmlns:n='Some-Other-URI'"+
-            " a='a' b='b' xmlns:m='Another-URI' m:a='c' n:b='d' n:x='e' xml:lang='en'"+
-            "/>\n"+
-            "";
+	    "<test xmlns='Some-Namespace-URI' xmlns:n='Some-Other-URI'"+
+	    " a='a' b='b' xmlns:m='Another-URI' m:a='c' n:b='d' n:x='e' xml:lang='en'"+
+	    "/>\n"+
+	    "";
         pp.setInput(new StringReader(XML_MISC_ATTR));
         pp.next();
         //pp.readStartTag(stag);

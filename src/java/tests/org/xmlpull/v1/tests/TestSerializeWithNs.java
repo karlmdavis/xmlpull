@@ -104,8 +104,8 @@ public class TestSerializeWithNs extends UtilTestCase {
 
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ser.setOutput(baos, "UTF8");
-        ser.startDocument("UTF8", null);
+        ser.setOutput(baos, "UTF-8");
+        ser.startDocument("UTF-8", null);
         ser.startTag("", "foo");
         ser.text("test");
         ser.endTag("", "foo");
@@ -116,8 +116,8 @@ public class TestSerializeWithNs extends UtilTestCase {
 
         byte[] binput = baos.toByteArray();
 
-        xpp.setInput(new ByteArrayInputStream( binput ), "UTF8" );
-        assertEquals("UTF8", xpp.getInputEncoding());
+        xpp.setInput(new ByteArrayInputStream( binput ), "UTF-8" );
+        assertEquals("UTF-8", xpp.getInputEncoding());
 
         //xpp.setInput(new StringReader( "<foo/>" ) );
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);

@@ -80,7 +80,7 @@ public class TestEntityReplacement extends UtilTestCase {
             testEntityReplacement(pp);
         }
 
-        // try to use FEATURE_PROCESS_DOCDECL if supported
+        // try to use FEATURE_VALIDATION if supported
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
             pp.setFeature( pp.FEATURE_VALIDATION, true );

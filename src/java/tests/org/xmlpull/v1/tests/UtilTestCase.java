@@ -201,8 +201,8 @@ public class UtilTestCase extends TestCase {
         boolean checkMapping
     ) throws XmlPullParserException, IOException
     {
-        assertEquals("getNamespacePrefix()",prefix, xpp.getNamespacePrefix(pos));
-        assertEquals("getNamespaceUri()",uri, xpp.getNamespaceUri(pos));
+        assertEquals("getNamespacePrefix(pos)",prefix, xpp.getNamespacePrefix(pos));
+        assertEquals("getNamespaceUri(pos)",uri, xpp.getNamespaceUri(pos));
         if(checkMapping) {
             assertEquals("getNamespace(prefix)", uri, xpp.getNamespace (prefix));
         }

@@ -28,7 +28,7 @@ public class PackageTests extends TestRunner
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("XMLPULL V1 API TESTS");
+        TestSuite suite = new TestSuite("XmlPull V1 API TESTS");
 
         suite.addTestSuite(TestFactory.class);
         suite.addTestSuite(TestSimple.class);
@@ -43,6 +43,13 @@ public class PackageTests extends TestRunner
         suite.addTestSuite(TestToken.class);
         suite.addTestSuite(TestMisc.class);
         suite.addTestSuite(TestSetInput.class);
+
+	// finally run tests based on XML input files
+        suite.addTestSuite(TestBootstrapXmlTests.class);
+        suite.addTestSuite(TestXmlSimple.class);
+        suite.addTestSuite(TestXmlTypical.class);
+        suite.addTestSuite(TestXmlCdsect.class);
+
 
         return suite;
     }

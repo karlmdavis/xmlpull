@@ -25,7 +25,11 @@ public class TestSimpleToken extends UtilTestCase {
     private static final String FEATURE_XML_ROUNDTRIP=
         "http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
     private static final String MISC_XML =
-        "\n \r\n \n\r<!DOCTYPE titlepage SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
+        //"\n \r\n \n\r<!DOCTYPE titlepage SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
+	"<!--c2-->"+
+	"<?xml version='1.0'?><!--c-->"+
+	"   \r\n <?c x?>"+
+	"\n \r\n \n\r<!DOCTYPE titlepage "+
         "[<!ENTITY % active.links \"INCLUDE\">"+
         "  <!ENTITY   test \"This is test! Do NOT Panic!\" >"+
         "]>"+

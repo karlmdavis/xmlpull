@@ -92,9 +92,9 @@ public class TestSimple extends UtilTestCase {
 
 
         //check taking input form input stream
-        byte[] binput = "<foo/>".getBytes("UTF8");
-        xpp.setInput(new ByteArrayInputStream( binput ), "UTF8" );
-        assertEquals("UTF8", xpp.getInputEncoding());
+        byte[] binput = "<foo/>".getBytes("UTF-8"); //Xerces2 doe snot like UTF8 ...
+        xpp.setInput(new ByteArrayInputStream( binput ), "UTF-8" );
+        assertEquals("UTF-8", xpp.getInputEncoding());
         //xpp.setInput(new StringReader( "<foo/>" ) );
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
