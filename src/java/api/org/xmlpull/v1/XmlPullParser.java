@@ -219,7 +219,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String PROCESS_NAMESPACES =
+    public static final String FEATURE_PROCESS_NAMESPACES =
         "http://xmlpull.org/v1/features/process-namespaces";
 
     /**
@@ -231,7 +231,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String REPORT_NAMESPACE_ATTRIBUTES =
+    public static final String FEATURE_REPORT_NAMESPACE_ATTRIBUTES =
         "http://xmlpull.org/v1/features/report-namespace-prefixes";
 
     /**
@@ -249,7 +249,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String PROCESS_DOCDECL =
+    public static final String FEATURE_PROCESS_DOCDECL =
         "http://xmlpull.org/v1/features/process-docdecl";
 
     /**
@@ -261,7 +261,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String VALIDATION =
+    public static final String FEATURE_VALIDATION =
         "http://xmlpull.org/v1/features/validation";
 
     /**
@@ -317,7 +317,7 @@ public interface XmlPullParser {
     /**
      * Set new value for entity.
      * <p><b>NOTE:</b> list of entites will be reset to standard XML
-     * entities such as &amp; &lt; &gt;) after each call to setInput
+     * entities (such as &amp;amp; &amp;lt; &amp;gt;) after each call to setInput
      *
      * @see #setInput
      */
@@ -481,8 +481,7 @@ public interface XmlPullParser {
 
     /**
      * Returns the namespace URI of the current element.
-     * If namespaces are NOT enabled, an empty String ("")
-     * is returned.
+     * If namespaces are NOT enabled, an empty String ("") always is returned.
      * The current event must be START_TAG or END_TAG, otherwise, null is returned.
      */
     public String getNamespace ();
@@ -595,7 +594,7 @@ public interface XmlPullParser {
      * @see #next()
      * @see #nextToken()
      */
-    public int getType()
+    public int getEventType()
         throws XmlPullParserException;
 
 

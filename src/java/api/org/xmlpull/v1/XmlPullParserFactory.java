@@ -356,7 +356,7 @@ public abstract class XmlPullParserFactory
     public void setNamespaceAware(boolean awareness)
         throws XmlPullParserException
     {
-        features.put(XmlPullParser.PROCESS_NAMESPACES, new Boolean(awareness));
+        features.put(XmlPullParser.FEATURE_PROCESS_NAMESPACES, new Boolean(awareness));
     }
 
     /**
@@ -368,7 +368,7 @@ public abstract class XmlPullParserFactory
      */
     public boolean isNamespaceAware()
     {
-        Boolean value = (Boolean) features.get(XmlPullParser.PROCESS_NAMESPACES);
+        Boolean value = (Boolean) features.get(XmlPullParser.FEATURE_PROCESS_NAMESPACES);
         return value != null ? value.booleanValue() : false;
     }
 
@@ -382,7 +382,7 @@ public abstract class XmlPullParserFactory
     public void setValidating(boolean validating)
         throws XmlPullParserException
     {
-        features.put(XmlPullParser.VALIDATION, new Boolean(validating));
+        features.put(XmlPullParser.FEATURE_VALIDATION, new Boolean(validating));
     }
 
     /**
@@ -394,7 +394,7 @@ public abstract class XmlPullParserFactory
      */
     public boolean isValidating()
     {
-        Boolean value = (Boolean) features.get(XmlPullParser.VALIDATION);
+        Boolean value = (Boolean) features.get(XmlPullParser.FEATURE_VALIDATION);
         return value != null ? value.booleanValue() : false;
     }
 
