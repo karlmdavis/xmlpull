@@ -1,6 +1,10 @@
 package org.xmlpull.v1.serializer;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
+
+//ISSUE: how to write efficiently unescaped XML --> use flush() and write inot stream ...
 
 /** PLEASE NOTE: This interface is not part of the XmlPull 1.0 API (yet). It
     is just included as basis for discussion. It may change in any way.
@@ -26,7 +30,7 @@ public interface XmlSerializer {
         "http://xmlpull.org/v1/doc/features.html#indent-output";
 
    public void setFeature(String name,
-                           boolean state) throws IOException;
+                           boolean state) throws IllegalArgumentException;
 
     /**
      * Return the current value of the feature with given name.
@@ -40,12 +44,12 @@ public interface XmlSerializer {
     public boolean getFeature(String name);
 
 
-    public void setOutput (OutputStream os, String encoding);
+    public void setOutput (OutputStream os, String encoding) throws IOException;
 
     /** sets the output to the given writer;
         insert big warning here */
 
-    public void setOutput (Writer writer);
+    public void setOutput (Writer writer) throws IOException;
 
     /** binds the given prefix to the given namespace.
         valid for the next element including child elements */
@@ -55,27 +59,28 @@ public interface XmlSerializer {
     /** writes a start tag with the given namespace and name.
         if the indent flag is set, a \r\n and getDepth () spaces
         are written. If there is no prefix defined for the given namespace,
-        a prefix will be defined automatically. */
+        a prefix will be defined automatically.
+     If namespace is nul no namespace prefix is printed but just name.
+     */
 
     public void startTag (String namespace, String name) throws IOException;
 
     /** writes an attribute. calls to attribute must follow a call to
         startTag() immediately. if there is no prefix defined for the
-        given namespace, a prefix will be defined automatically. */
+        given namespace, a prefix will be defined automatically.
+     If namespace is nul no namespace prefix is printed but just name.
+     */
 
     public void attribute (String namespace, String name,
                     String value) throws IOException;
 
 
-    // indent must be set separately f. end: <!-- indented --> <tag>xxx</tag>
     // repetition of namespace and name is just for avoiding errors
     // background: in kXML I just had endTag, and non matching tags were
     // very difficult to find...
-
     public void endTag (String namespace, String name) throws IOException;
 
     /** Writes text, where special XML chars are escaped automatically */
-
     public void text (String text) throws IOException;
 
     public void text (char [] buf, int start, int len) throws IOException;
