@@ -37,6 +37,14 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+/**
+ * SAX2 Driver that puslls events from XmlPullParser
+ * and comverts them into SAX2 callbacks.
+ *
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @author <a href="mailto:hkrug@rationalizer.com">Holger Krug</a>
+ */
+
 public class Driver implements Locator, XMLReader, Attributes
 {
 
@@ -69,11 +77,6 @@ public class Driver implements Locator, XMLReader, Attributes
     protected XmlPullParser pp;
 
     //private final static boolean DEBUG = false;
-
-    // use in parse sub-tree - exposed to resue more efficiently
-    //private char[] buf = new char[1024];
-    //private String[] namespaces = new String[5];
-    //private String[] prefixes = new String[5];
 
     /**
      */
@@ -197,9 +200,6 @@ public class Driver implements Locator, XMLReader, Attributes
                     pp.setFeature(pp.FEATURE_REPORT_NAMESPACE_ATTRIBUTES, value);
                 }
             } else if(VALIDATION_FEATURE.equals(name)) {
-                //              if(true == value) {
-                //                  throw new SAXNotSupportedException("validation is not supported");
-                //              }
                 pp.setFeature(pp.FEATURE_VALIDATION, value);
                 //          } else if(APACHE_SCHEMA_VALIDATION_FEATURE.equals(name)) {
                 //              // can ignore as validation must be false ...
@@ -244,7 +244,7 @@ public class Driver implements Locator, XMLReader, Attributes
             try {
                 pp.setProperty(name, value);
             } catch(XmlPullParserException ex) {
-                throw new SAXNotRecognizedException("not recognized set property "+name+" : "+ ex);
+                throw new SAXNotSupportedException("not supported set property "+name+": "+ ex);
             }
             //throw new SAXNotRecognizedException("not recognized set property "+name);
         }
@@ -392,15 +392,13 @@ public class Driver implements Locator, XMLReader, Attributes
                                 rawName.append(':');
                                 rawName.append(name);
                             }
-                            contentHandler.startElement(pp.getNamespace(),
-                                                        name,
-                                                        prefix != null ? name : rawName.toString(),
-                                                        this);
+                            startElement(pp.getNamespace(),
+                                         name,
+                                         prefix != null ? name : rawName.toString());
                         } else {
-                            contentHandler.startElement(pp.getNamespace(),
-                                                        pp.getName(),
-                                                        pp.getName(),
-                                                        this);
+                            startElement(pp.getNamespace(),
+                                         pp.getName(),
+                                         pp.getName());
                         }
                         //++level;
 
@@ -431,7 +429,7 @@ public class Driver implements Locator, XMLReader, Attributes
                             int depth = pp.getDepth();
                             int countPrev =
                                 (level > depth) ? pp.getNamespaceCount(pp.getDepth()) : 0;
-                            int count = pp.getNamespaceCount(pp.getDepth() + 1);
+                            int count = pp.getNamespaceCount(pp.getDepth() - 1);
                             // undeclare them in reverse order
                             for (int i = count - 1; i >= countPrev; i--)
                             {
@@ -459,5 +457,18 @@ public class Driver implements Locator, XMLReader, Attributes
         }
     }
 
+    /**
+     * Calls {@link ContentHandler.startElement(String, String, String, Attributes) startElement}
+     * on the <code>ContentHandler</code> with <code>this</code> driver object as the
+     * {@link Attributes} implementation. In default implementation
+     * {@link Attributes} object is valid only during this method call and may not
+     * be stored. Sub-classes can overwrite this method to cache attributes.
+     */
+    protected void startElement(String namespace, String localName, String qName) throws SAXException {
+        contentHandler.startElement(namespace, localName, qName, this);
+    }
+
 }
+
+
 
