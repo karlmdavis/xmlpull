@@ -487,8 +487,7 @@ public interface XmlPullParser {
      */
 
 
-    public String getNamespace (String prefix)
-        throws XmlPullParserException;
+    public String getNamespace (String prefix);
 
 
     // --------------------------------------------------------------------------

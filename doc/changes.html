@@ -13,7 +13,10 @@
 <ul>
 <li>
 fixed Quick Introduction to use correct API for getTextCharacters and 
-getEventType (instead of getType)</ul>
+getEventType (instead of getType)<li>
+added requirement to getNamespace(prefix) to have 'xml' and 'xmlns' pre-declared<li>
+removed from getNamespace(prefiix) exception XmlPullParserException as this 
+function simply retunrs null when namespace is not declared ...</ul>
 
 <h3>2001-04-08 (XMLPULL_1_0_7)</h3>
 <ul>
