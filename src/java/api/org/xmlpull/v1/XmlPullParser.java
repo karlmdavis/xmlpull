@@ -1060,7 +1060,7 @@ public interface XmlPullParser {
      * <p>The motivation for this function is to allow to parse consistently both
      * empty elements and elements that has non empty content, for example for input: <ol>
      * <li>&lt;tag&gt;foo&lt;/tag&gt;
-     * <li>&lt;tag&gt;lt;/tag&gt; (which is equivalent to &lt;tag/&gt;
+     * <li>&lt;tag&gt;&lt;/tag&gt; (which is equivalent to &lt;tag/&gt;
      * both input can be parsed with the same code:
      * <pre>
      *   p.nextTag()
