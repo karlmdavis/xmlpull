@@ -75,6 +75,7 @@ public class XmlPullParserFactory {
 
     /**
      * Set the features to be set when XML Pull Parser is created by this factory.
+     * <p><b>NOTE:</b> factory features are not used for XML Serializer.
      *
      * @param name string with URI identifying feature
      * @param state if true feature will be set; if false will be ignored
@@ -89,6 +90,7 @@ public class XmlPullParserFactory {
 
     /**
      * Return the current value of the feature with given name.
+     * <p><b>NOTE:</b> factory features are not used for XML Serializer.
      *
      * @param name The name of feature to be retrieved.
      * @return The value of named feature.
@@ -115,7 +117,8 @@ public class XmlPullParserFactory {
 
     /**
      * Indicates whether or not the factory is configured to produce
-     * parsers which are namespace aware.
+     * parsers which are namespace aware
+     * (it simply set feature XmlPullParser.FEATURE_PROCESS_NAMESPACES to true or false).
      *
      * @return  true if the factory is configured to produce parsers
      *    which are namespace aware; false otherwise.
@@ -128,6 +131,7 @@ public class XmlPullParserFactory {
 
     /**
      * Specifies that the parser produced by this factory will be validating
+     * (it simply set feature XmlPullParser.FEATURE_VALIDATION to true or false).
      *
      * By default the value of this is set to false.
      *
@@ -152,7 +156,7 @@ public class XmlPullParserFactory {
 
     /**
      * Creates a new instance of a XML Pull Parser
-     * using the currently configured factory parameters.
+     * using the currently configured factory features.
      *
      * @return A new instance of a XML Pull Parser.
      * @throws XmlPullParserException if a parser cannot be created which satisfies the
@@ -196,8 +200,9 @@ public class XmlPullParserFactory {
 
 
     /**
-     * Creates a new instance of a XML Serializer
-     * using the currently configured factory parameters.
+     * Creates a new instance of a XML Serializer.
+     *
+     * <p><b>NOTE:</b> factory features are not used for XML Serializer.
      *
      * @return A new instance of a XML Serializer.
      * @throws XmlPullParserException if a parser cannot be created which satisfies the
