@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE.txt in distribution for copyright and license information
+// for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
 
 package org.xmlpull.v1;
 
@@ -29,7 +29,7 @@ import java.io.Reader;
  *
  * <p>The parser is always in some event state and type of the current event
  * can be determined by calling
- * <a href="#next()">getEventType()</a> mehod.
+ * <a href="#getEventType()">getEventType()</a> mehod.
  * Initially parser is in <a href="#START_DOCUMENT">START_DOCUMENT</a> state.
  *
  * <p>Method <a href="#next()">next()</a> return int that contains identifier of parsing event.
@@ -46,8 +46,8 @@ import java.io.Reader;
  * import java.io.StringReader;
  *
  * import org.xmlpull.v1.XmlPullParser;
- * import org.xmlpull.v1.XmlPullParserException;
- * import org.xmlpull.v1.XmlPullParserFactory;
+ * import org.xmlpull.v1.<a href="XmlPullParserException.html">XmlPullParserException.html</a>;
+ * import org.xmlpull.v1.<a href="XmlPullParserFactory.html">XmlPullParserFactory</a>;
  *
  * public class SimpleXmlPullApp
  * {
@@ -59,7 +59,7 @@ import java.io.Reader;
  *         factory.setNamespaceAware(true);
  *         XmlPullParser xpp = factory.newPullParser();
  *
- *         xpp.setInput ( new StringReader ( "&lt;foo>Hello World!&lt;/foo>" ) );
+ *         xpp.<a href="#setInput">setInput</a>( new StringReader ( "&lt;foo>Hello World!&lt;/foo>" ) );
  *         int eventType = xpp.getEventType();
  *         while (eventType != xpp.END_DOCUMENT) {
  *          if(eventType == xpp.START_DOCUMENT) {
@@ -67,11 +67,11 @@ import java.io.Reader;
  *          } else if(eventType == xpp.END_DOCUMENT) {
  *              System.out.println("End document");
  *          } else if(eventType == xpp.START_TAG) {
- *              System.out.println("Start tag "+xpp.getName());
+ *              System.out.println("Start tag "+xpp.<a href="#getName()">getName()</a>);
  *          } else if(eventType == xpp.END_TAG) {
  *              System.out.println("End tag "+xpp.getName());
  *          } else if(eventType == xpp.TEXT) {
- *              System.out.println("Text "+xpp.getText());
+ *              System.out.println("Text "+xpp.<a href="#getText()">getText()</a>);
  *          }
  *          eventType = xpp.next();
  *         }
@@ -92,8 +92,12 @@ import java.io.Reader;
  *
  * @see XmlPullParserFactory
  * @see #defineEntityReplacementText
+ * @see #getName
+ * @see #getNamespace
+ * @see #getText
  * @see #next
  * @see #nextToken
+ * @see #setInput
  * @see #FEATURE_PROCESS_DOCDECL
  * @see #FEATURE_VALIDATION
  * @see #START_DOCUMENT
@@ -394,6 +398,36 @@ public interface XmlPullParser {
     public void setInput(Reader in) throws XmlPullParserException;
 
     /**
+     * Set the input stream for parser. Parser event state is set to START_DOCUMENT.
+     * This call will stop parsing and reset parser state.
+     * Using null for input stream parameter will not set parser input but will still reset parser
+     * state and will allow parser to free internal resources (such as parsing buffers).
+     *
+     * <p><strong>NOTE:</strong> if inputEncoding is passed it MUST be used otherwise
+     *  if inputEncoding is null the parser SHOULD try to determine input encoding
+     *  following XML 1.0 specification (see below) but it is not required
+     *  (for example when parser is constrained by memory footprint such as in J2ME environments)
+     * <p><strong>NOTE:</strong> if encoding detection is supported then following feature
+     *   http://xmlpull.org/v1/doc/features.html#detect-encoding MUST be true
+     *   otherwise it must be false
+     *
+     * @param inputStream if not null it contains raw byte input stream of possibly
+     *     unknown encoding (when inputEncoding is null) and in such case the parser
+     *     must derive encoding from &lt;?xml declaration or assume UTF8 or UTF16 as
+     *     described in <a href="http://www.w3.org/TR/REC-xml#sec-guessing-no-ext-info">XML 1.0
+     *                      Appendix F.1 Detection Without External Encoding Information</a>
+     *     otherwise if inputEncoding is present then it must be used
+     *     (this is consistent with
+     *     <a href="http://www.w3.org/TR/REC-xml#sec-guessing-with-ext-info">XML 1.0
+     *             Appendix F.2 Priorities in the Presence of External Encoding Information</a>
+     *      that allows for exception only for files and in such cases inputEncoding should
+     *      be null to trigger autodetecting.
+     * @param inputEncoding if not null it MUST be used as encoding for inputStream
+     */
+    //public void setInput(java.io.InputStream inputStream, String inputEncoding)
+    //    throws XmlPullParserException, IOException;
+
+    /**
      * Set new value for entity replacement text as defined in
      * <a href="http://www.w3.org/TR/REC-xml#intern-replacement">XML 1.0 Section 4.5
      * Construction of Internal Entity Replacement Text</a>.
@@ -550,7 +584,7 @@ public interface XmlPullParser {
      * via nextToken only.
      *
      * <p><b>NOTE:</b> this function can be only called for element content related events
-     * such as TEXT, CDSECT or IGNORABLE_WHITESPACE otherwise
+     * (TEXT, CDSECT or IGNORABLE_WHITESPACE) otherwise
      * exception will be thrown!
      */
 
@@ -687,6 +721,25 @@ public interface XmlPullParser {
      * @return attribute prefix or null if namespaces processing is not enabled.
      */
     public String getAttributePrefix(int index);
+
+    /**
+     * Returns the type of the specified attribute
+     * If parser is non-validating it MUST return CDATA.
+     *
+     * @param zero based index of attribute
+     * @return attribute type (null is never returned)
+     */
+    //public String getAttributeType(int index);
+
+
+    /**
+     * Returns if the specified attribute was not in input was declared in XML.
+     * If parser is non-validating it MUST always return false.
+     *
+     * @param zero based index of attribute
+     * @return false if attribute was in input
+     */
+    //public boolean isAttributeDefault(int index);
 
     /**
      * Returns the given attributes value.

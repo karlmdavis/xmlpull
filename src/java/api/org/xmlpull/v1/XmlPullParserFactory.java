@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE.txt in distribution for copyright and license information
+// for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
 
 package org.xmlpull.v1;
 
@@ -31,7 +31,8 @@ import java.util.Vector;
  *
  * @see XmlPullParser
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/], Stefan Haustein
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @author Stefan Haustein
  */
 
 public class XmlPullParserFactory {
@@ -42,10 +43,10 @@ public class XmlPullParserFactory {
         org.xmlpull.v1.XmlPullParserFactory). */
 
 
-    public static final String PROPERTY_NAME = 
+    public static final String PROPERTY_NAME =
         "org.xmlpull.v1.XmlPullParserFactory";
 
-    private static final String RESOURCE_NAME = 
+    private static final String RESOURCE_NAME =
         "/META-INF/services/" + PROPERTY_NAME;
 
 
@@ -77,7 +78,7 @@ public class XmlPullParserFactory {
 
     public void setFeature(String name,
                            boolean state) throws XmlPullParserException {
-        
+
         features.put(name, new Boolean(state));
     }
 
@@ -155,8 +156,8 @@ public class XmlPullParserFactory {
      */
 
     public XmlPullParser newPullParser() throws XmlPullParserException {
-        
-        if (parserClasses.size () == 0) throw new XmlPullParserException 
+
+        if (parserClasses.size() == 0) throw new XmlPullParserException
             ("No valid parser classes found in "+RESOURCE_NAME);
 
         StringBuffer issues = new StringBuffer ();
@@ -185,14 +186,14 @@ public class XmlPullParserFactory {
 
         throw new XmlPullParserException ("could not create parser: "+issues);
     }
-    
+
     /**
      * Create a new instance of a PullParserFactory that can be used
      * to create XML pull parsers (see class description for more
      * details).
      *
      * @return a new instance of a PullParserFactory, as returned by newInstance (null, null); */
-    
+
     public static XmlPullParserFactory newInstance () throws XmlPullParserException {
         return newInstance(null, null);
     }
@@ -208,15 +209,15 @@ public class XmlPullParserFactory {
             try {
                 InputStream is = context.getResourceAsStream (RESOURCE_NAME);
 
-                if (is == null) throw new XmlPullParserException 
+                if (is == null) throw new XmlPullParserException
                     ("Ressource not found: "+RESOURCE_NAME);
-                
+
                 StringBuffer sb = new StringBuffer();
-                
+
                 while (true) {
                     int ch = is.read();
-                    if (ch < 0) break;  
-                    else if (ch > ' ') 
+                    if (ch < 0) break;
+                    else if (ch > ' ')
                         sb.append((char) ch);
                 }
                 is.close ();
@@ -225,8 +226,8 @@ public class XmlPullParserFactory {
             }
             catch (Exception e) {
                 throw new XmlPullParserException (null, null, e);
-            }        
-        }            
+            }
+        }
 
         XmlPullParserFactory factory = null;
         Vector parserClasses = new Vector ();
@@ -240,29 +241,29 @@ public class XmlPullParserFactory {
 
             Class candidate = null;
             Object instance = null;
-                        
+
             try {
                 candidate = Class.forName (name);
                 // neccessary because of J2ME .class issue
-                instance = candidate.newInstance (); 
+                instance = candidate.newInstance ();
             }
             catch (Exception e) {}
-                        
-            if (candidate != null) { 
+
+            if (candidate != null) {
                 if (instance instanceof XmlPullParser)
                     parserClasses.addElement (candidate);
                 else if (instance instanceof XmlPullParserFactory) {
-                    if (factory == null) 
+                    if (factory == null)
                         factory = (XmlPullParserFactory) instance;
                 }
                 else throw new XmlPullParserException ("incompatible class: "+name);
             }
 
             pos = cut + 1;
-        }                        
-        
+        }
+
         if (factory == null) factory = new XmlPullParserFactory ();
-        factory.parserClasses = parserClasses; 
+        factory.parserClasses = parserClasses;
 
         return factory;
     }

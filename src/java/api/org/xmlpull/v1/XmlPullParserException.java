@@ -1,12 +1,12 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE.txt in distribution for copyright and license information
+// for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
 
 package org.xmlpull.v1;
 
 /**
  * This exception is thrown to signal XML Pull Parser related faults.
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class XmlPullParserException extends Exception {
     protected Throwable detail;
