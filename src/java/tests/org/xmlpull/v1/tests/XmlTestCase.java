@@ -83,6 +83,40 @@ public class XmlTestCase extends UtilTestCase {
 	}
     }
 
+    private final static String RESOURCE_PREFIX = "/org/xmlpull/v1/tests/xml/";
+    private InputStream openStream(String name) throws IOException {
+	//String fullName = "src/xml/tests/"+testName;
+	InputStream is = null;
+	if(is == null) {
+	    try {
+		is = getClass().getResourceAsStream (name);
+	    } catch(Exception ex) {
+	    }
+	}
+	if(is == null) {
+	    try {
+		is = getClass().getResourceAsStream (RESOURCE_PREFIX+name);
+	    } catch(Exception ex) {
+	    }
+	}
+	if(is == null) {
+	    try {
+		is = getClass().getResourceAsStream ("/"+name);
+	    } catch(Exception ex) {
+	    }
+	}
+	if(is == null) {
+	    try {
+		is = new FileInputStream(name);
+	    } catch(Exception ex) {
+	    }
+	}
+
+	if (is == null) {
+	    throw new IOException("could not open stream for "+name);
+	}
+	return is;
+    }
     /**
      *
      */
@@ -95,8 +129,7 @@ public class XmlTestCase extends UtilTestCase {
 	pp = factory.newPullParser();
 	//wrapper = new XmlPullWrapper(pp);
 
-	String fullName = "/forge/xmlpull-api-v1/src/xml/tests/"+testName;
-	InputStream is = new FileInputStream(fullName);
+	InputStream is = openStream(testName);
 	verbose("> LOADING TESTS '"+testName+"'");
 	pp.setInput(is, null);
 	executeTests();
