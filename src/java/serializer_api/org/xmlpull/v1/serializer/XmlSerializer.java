@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-//ISSUE: how t write epilog?
+//ISSUE: how to write epilog?
+
+//ISSUE: how to avoid possibility that user will call setPrefx and may override automatic prefix ...
+//ISSUE: if namespace set in setPrefix was not used shoul dit still result in xmlns:ns='' declaration?
 
 //ISSUE: is flush doing anything but call closeStartTag()?
 //ISSUE: maybe replace flush() with closeStartTag() (if not used it is still called implicitly ...)
@@ -15,7 +18,7 @@ import java.io.Writer;
 // RESOLVED: left flush() with exact description what it does but also added closeTag()
 
 //ISSUE: where setPrefix() should or not be called (before first startTag(), between attribute() ...
-
+// RESOLVED: setPrefix() is affecting only
 
 //ISSUE: add close() that validates if XML document was writent correctly (finsihed depth == 0, etc.)
 //RESOLVED: instead provides endDocument() (and startDoument())
@@ -149,7 +152,7 @@ public interface XmlSerializer {
      * serializer to write completely start tag. No more attributes
      * is allowed to be added after this call.
      */
-    public void closeStartTag (String namespace, String name) throws IOException;
+    public void closeStartTag () throws IOException;
 
 
     /**
