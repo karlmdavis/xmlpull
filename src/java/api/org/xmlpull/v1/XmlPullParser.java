@@ -11,6 +11,17 @@ import java.io.Reader;
  * in <a href="http://www.xmlpull.org/">XMLPULL V1 API</a> (visit this website to
  * learn more about API and its implementations).
  *
+ * <p>There are following different
+ * kinds of parser depending on which features are set:<ul>
+ * <li>behaves like XML 1.0 comliant non-validating parser
+ *  <em>if no DOCDECL is present</em> in XML documents when
+ *   FEATURE_PROCESS_DOCDECL is false (this is <b>default</b>)
+ * <li>non-validating parser as defined in XML 1.0 spec when
+ *   FEATURE_PROCESS_DOCDECL is true
+ * <li>validating parser as defined in XML 1.0 spec when
+ *   FEATURE_VALIDATION is true (and that implies that FEATURE_PROCESS_DOCDECL is true)
+ * </ul>
+ *
  * <p>There are only two key methods: next() and nextToken() that provides
  * access to high level parsing events and to lower level tokens.
  *
@@ -78,6 +89,8 @@ import java.io.Reader;
  * Quick Introduction available at <a href="http://www.xmlpull.org">http://www.xmlpull.org</a>
  *
  * @see XmlPullParserFactory
+ * @see #FEATURE_PROCESS_DOCDECL
+ * @see #FEATURE_VALIDATION
  *
  * @author Stefan Haustein
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
