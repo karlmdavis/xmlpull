@@ -208,7 +208,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public final static byte CDSECT = 5;
+    public final static int CDSECT = 5;
 
     /**
      * TOKEN: Entity reference was just read
@@ -219,7 +219,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public final static byte ENTITY_REF = 6;
+    public final static int ENTITY_REF = 6;
 
     /**
      * TOKEN: Ignorable whitespace was just read
@@ -237,7 +237,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public static final byte IGNORABLE_WHITESPACE = 7;
+    public static final int IGNORABLE_WHITESPACE = 7;
 
     /**
      * TOKEN: XML processing instruction declaration was just read
@@ -247,7 +247,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public static final byte PROCESSING_INSTRUCTION = 8;
+    public static final int PROCESSING_INSTRUCTION = 8;
 
     /**
      * TOKEN: XML comment was just read and getText() will return value inside comment
