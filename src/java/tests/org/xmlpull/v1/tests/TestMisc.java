@@ -283,6 +283,8 @@ public class TestMisc extends UtilTestCase {
         testContentMerging(pp, "<foo><!-- this is a comment --></foo>", null);
         testContentMerging(pp, "<foo>\n<!-- this is a comment -->\n</foo>", "\n\n");
         testContentMerging(pp, "<foo><!-- this is a comment -->\n</foo>", "\n");
+        testContentMerging(pp, "<foo>al<!-- this is a comment -->ek\n</foo>", "alek\n");
+        testContentMerging(pp, "<foo>a<!-- sdds \n>-->l\n<!-- this is a comment -->ek\n</foo>", "al\nek\n");
     }
 
     public void testContentMerging(final XmlPullParser pp, final String xml, final String expected)
@@ -298,6 +300,56 @@ public class TestMisc extends UtilTestCase {
         }
         pp.next();
         pp.require( pp.END_TAG, null, "foo");
+    }
+
+    public void testComments2() throws Exception {
+         testComments2(" <b>\r\n</b>\n ", " <b>\n</b>\n ");
+         testComments2(" <b>\r\n</b>\r\n ", " <b>\n</b>\n ");
+         testComments2(" <b>\r\n</b>\r\n", " <b>\n</b>\n");
+         testComments2(" <b>\r\n</b>\r\n\r\n", " <b>\n</b>\n\n");
+         testComments2("\r\n<b>\n</b>\n ", "\n<b>\n</b>\n ");
+         testComments2("<b>\r</b>\n ", "<b>\n</b>\n ");
+         testComments2("<b>\n</b>\r", "<b>\n</b>\n");
+         testComments2("<b>\r\n</b>","<b>\n</b>");
+         testComments2("<b>\r\n ? </b>","<b>\n ? </b>");
+
+         testComments2("\n <b>\n</b>\n ");
+         testComments2("\n<b>\n</b>\n ");
+         testComments2(" <b>\n</b>\n ");
+         testComments2("<b>\n</b>\n ");
+         testComments2("<b>\n</b>\n");
+         testComments2("<b>\n</b>");
+         testComments2("<b>- -</b>");
+         testComments2("<b>/b>");
+         testComments2("<b>?? ?/b>");
+         testComments2("<?po <b>?? ?/b ?>");
+    }
+
+    public void testComments2(String value) throws Exception {
+        testComments2(value, value);
+    }
+
+    public void testComments2(String value, String expected) throws Exception {
+        XmlPullParser pp = factory.newPullParser();
+        final String XML = "<foo>\n<!--"+value+"-->\n</foo>";
+        testContentMerging(pp, XML, "\n\n");
+        pp.setInput( new StringReader( XML ) );
+        pp.require( XmlPullParser.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( XmlPullParser.START_TAG, null, "foo");
+        pp.nextToken();
+        pp.require( XmlPullParser.TEXT, null, null);
+        assertEquals("\n", pp.getText());
+        pp.nextToken();
+        pp.require( XmlPullParser.COMMENT, null, null);
+        //System.err.println(getClass()+" expected="+printable(expected)+" text="+printable(pp.getText()));
+        assertEquals(printable(expected), printable(pp.getText()));
+        assertEquals(expected, pp.getText());
+        pp.nextToken();
+        pp.require( XmlPullParser.TEXT, null, null);
+        assertEquals("\n", pp.getText());
+        pp.nextToken();
+        pp.require( XmlPullParser.END_TAG, null, "foo");
     }
 
 
@@ -337,6 +389,62 @@ public class TestMisc extends UtilTestCase {
 
     }
 
+    public void testPi2() throws Exception {
+         testPi2("<b>\r\n</b>\n ", "<b>\n</b>\n ");
+         testPi2("<b>\r\n</b>\r\n ", "<b>\n</b>\n ");
+         testPi2("<b>\r\n</b>\r\n", "<b>\n</b>\n");
+         testPi2("<b>\r\n</b>\r\n\r\n", "<b>\n</b>\n\n");
+         testPi2("\r\n<b>\n</b>\n ", "\n<b>\n</b>\n ");
+         testPi2("<b>\r</b>\n ", "<b>\n</b>\n ");
+         testPi2("<b>\n</b>\r", "<b>\n</b>\n");
+         testPi2("<b>\r\n</b>","<b>\n</b>");
+
+         testPi2("\n <b>\n</b>\n ");
+         testPi2("\n<b>\n</b>\n ");
+         testPi2(" <b>\n</b>\n ");
+         testPi2("<b>\n</b>\n ");
+         testPi2("<b>\n</b>\n");
+         testPi2("<b>\n</b>");
+         testPi2("<b>- -</b>");
+         testPi2("<b>/b>");
+         testPi2("<b><!-- -->cx-</b>");
+         testPi2("<b><!-- --? ?- ?? ? ></b>");
+    }
+
+    public void testPi2(String value) throws Exception {
+        testPi2("pi", value, value);
+    }
+
+    public void testPi2(String value, String expected) throws Exception {
+        testPi2("pi", value, expected);
+    }
+
+    public void testPi2(String target, String value, String expected) throws Exception {
+        XmlPullParser pp = factory.newPullParser();
+        if(target != null) {
+            value = "pi "+value;
+            expected = "pi "+expected;
+        }
+        final String XML = "<foo>\n<?"+value+"?>\n</foo>";
+        testContentMerging(pp, XML, "\n\n");
+        pp.setInput( new StringReader( XML ) );
+        pp.require( XmlPullParser.START_DOCUMENT, null, null);
+        pp.next();
+        pp.require( XmlPullParser.START_TAG, null, "foo");
+        pp.nextToken();
+        pp.require( XmlPullParser.TEXT, null, null);
+        assertEquals("\n", pp.getText());
+        pp.nextToken();
+        pp.require( XmlPullParser.PROCESSING_INSTRUCTION, null, null);
+        //System.err.println(getClass()+" expected="+printable(expected)+" text="+printable(pp.getText()));
+        assertEquals(printable(expected), printable(pp.getText()));
+        assertEquals(expected, pp.getText());
+        pp.nextToken();
+        pp.require( XmlPullParser.TEXT, null, null);
+        assertEquals("\n", pp.getText());
+        pp.nextToken();
+        pp.require( XmlPullParser.END_TAG, null, "foo");
+    }
 
     public void testReportNamespaceAttributes() throws Exception {
         XmlPullParser pp = factory.newPullParser();
