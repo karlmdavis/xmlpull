@@ -242,6 +242,7 @@ public class TestSerialize extends UtilTestCase {
         ser.startDocument("UTF-8", null);
         ser.startTag("", "foo");
         s = "test\u0009\t\r\n";
+        String expectedS = "test\u0009\t\n";
         ser.attribute(null, "att", s);
         ser.text(s);
         
@@ -263,7 +264,7 @@ public class TestSerialize extends UtilTestCase {
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 1);
         assertEquals(printable(s), printable(xpp.getAttributeValue(null, "att")));
         xpp.next();
-        checkParserState(xpp, 1, xpp.TEXT, null, s, false, -1);
+        checkParserState(xpp, 1, xpp.TEXT, null, expectedS, false, -1);
         assertEquals(false, xpp.isWhitespace());
         xpp.next();
         checkParserState(xpp, 1, xpp.END_TAG, "foo", null, false, -1);
