@@ -16,6 +16,8 @@ import org.xmlpull.v1.XmlSerializer;
 public class Roundtrip {
     //private static final String FEATURE_XML_ROUNDTRIP=
     //    "http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
+    protected final static String PROPERTY_XMLDECL_STANDALONE =
+        "http://xmlpull.org/v1/doc/features.html#xmldecl-standalone";
 
     XmlPullParser parser;
     XmlSerializer serializer;
@@ -51,10 +53,12 @@ public class Roundtrip {
     }
 
 
-    public void writeToken () throws XmlPullParserException, IOException {
-        switch (parser.getEventType ()) {
+    public void writeToken (int eventType) throws XmlPullParserException, IOException {
+        switch (eventType) {
             case XmlPullParser.START_DOCUMENT:
-                //serializer.startDocument(null, null); //use Boolean.TRUE); to make it standalone
+                //use Boolean.TRUE to make it standalone
+                Boolean standalone = (Boolean) parser.getProperty(PROPERTY_XMLDECL_STANDALONE);
+                serializer.startDocument(parser.getInputEncoding(), standalone);
                 break;
 
             case XmlPullParser.END_DOCUMENT:
@@ -71,7 +75,8 @@ public class Roundtrip {
 
             case XmlPullParser.IGNORABLE_WHITESPACE:
                 //comment it to remove ignorable whtespaces from XML infoset
-                serializer.ignorableWhitespace (parser.getText ());
+                String s = parser.getText ();
+                serializer.ignorableWhitespace (s);
                 break;
 
             case XmlPullParser.TEXT:
@@ -101,11 +106,13 @@ public class Roundtrip {
     }
 
     public void roundTrip () throws XmlPullParserException, IOException {
+        parser.nextToken(); // read first token
+        writeToken (parser.START_DOCUMENT);  // write optional XMLDecl if present
         while (parser.getEventType () != parser.END_DOCUMENT) {
-            writeToken ();
+            writeToken ( parser.getEventType () );
             parser.nextToken ();
         }
-        writeToken ();
+        writeToken (parser.END_DOCUMENT);
     }
 
     public static void main(String[] args) throws Exception {
