@@ -52,11 +52,19 @@ automatically from implementation jar file.
 
 <p>First we need to create an instance of parser.
 To do this three steps are required:<ul>
-<li>get instance of XMLPULL facotry
+<li>get instance of XMLPULL factory
 <li>(optional step) by default factory will produce parsers that are not 
 namespace aware; to change setNamespaceAware() function must be called
 <li>create an instance of the parser
 </ul>
+
+Bfore doing anything make sure to import XMLPULL V1 API classses:
+
+<pre>import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+</pre>
+
 
 and the code to do this  may look similar ot this:
 
@@ -79,7 +87,7 @@ until the even is END_DOCUMENT:
 <pre>    public void processDocument(XmlPullParser xpp)
         throws XmlPullParserException, IOException
     {
-        int eventType = xpp.getType();
+        int eventType = xpp.getEventType();
         do {
             if(eventType == xpp.START_DOCUMENT) {
                 System.out.println("Start document");
@@ -115,11 +123,12 @@ Processing end tag is very similar - main difference is that the end tag has no 
 
 <p>And now let see how element content is retrieved and printed:
 
-<pre>    public void processText (XmlPullParser xpp) throws XmlPullParserException
+<pre>    int holderForStartAndLength[] = new int[2];
+    public void processText (XmlPullParser xpp) throws XmlPullParserException
     {
-        char ch[] = xpp.getTextCharacters();
-        int start = xpp.getTextCharactersStart();
-        int length = xpp.getTextCharactersLength();
+        char ch[] = xpp.getTextCharacters(holderForStartAndLength);
+        int start = holderForStartAndLength[0];
+        int length = holderForStartAndLength[1];
         System.out.print("Characters:    \"");
         for (int i = start; i < start + length; i++) {
             switch (ch[i]) {

@@ -73,23 +73,30 @@ public class TestSimple extends UtilTestCase {
 
 
         // check the simplest possible XML document - just one root element
-        for(int i = 1; i <= 2; ++i) {
-            xpp.setInput(new StringReader(i == 1 ? "<foo/>" : "<foo></foo>"));
-            assertEquals(1, xpp.getLineNumber());
-            assertEquals(0, xpp.getColumnNumber());
-            boolean empty = (i == 1);
-            checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
-            xpp.next();
-            checkParserState(xpp, 1, xpp.START_TAG, "foo", null, empty, 0);
-            xpp.next();
-            checkParserState(xpp, 0, xpp.END_TAG, "foo", null, false, -1);
-            xpp.next();
-            checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
-        }
-
-        // one step further - it has content ...
+        xpp.setInput(new StringReader("<foo></foo>"));
+        assertEquals(1, xpp.getLineNumber());
+        assertEquals(0, xpp.getColumnNumber());
+        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 0);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_TAG, "foo", null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
 
 
+        xpp.setInput(new StringReader( "<foo/>" ) );
+        assertEquals(1, xpp.getLineNumber());
+        assertEquals(0, xpp.getColumnNumber());
+        checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 1, xpp.START_TAG, "foo", null, true /*empty*/, 0);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_TAG, "foo", null, false, -1);
+        xpp.next();
+        checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
+
+        // one step further - it has an attribute and content ...
         xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<p:t>\r\n\t </p:t></foo>"));
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();

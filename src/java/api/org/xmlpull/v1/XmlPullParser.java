@@ -590,7 +590,7 @@ public interface XmlPullParser {
     public String getNamespace ();
 
     /**
-     * For START_TAG or END_ATAG returns the (local) name of the current element
+     * For START_TAG or END_TAG returns the (local) name of the current element
      * when namespaces are enabled or raw name when namespaces are disabled.
      * For ENTITY_REF it returns entity name.
      * The current event must be START_TAG or END_TAG or ENTITY_REF, otherwise null is returned.
