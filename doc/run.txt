@@ -1,0 +1,42 @@
+Running XMLPULL samples
+------------------------
+
+Make sure that API and (optionally) all automatic tests are build,
+see build.txt file in the same directory for details
+
+To run samples please use provided run script (on Windows run.bat and on UNIX run.sh).
+Samples can be run without run script but CLASSPATH needs to be 
+
+Before running make sure that JAVA_HOME environment variable points
+to your installation of JDK version 1.3 or above.
+
+Before running samples ...
+--------------------------
+
+
+Before running samples automatic tests should be executed using run script
+to verify that you have properly installed and running XMLPULL implementation,
+
+NOTE: Make sure to have a jar file with XML PULL API V1 implementation 
+in lib/impl_xmlpull_v1_api directory (and see build.txt instructions 
+on how to build tests and then execute) then execute:
+
+	run junit
+
+and you should see output similar to:
+
+	..............
+	Time: 3.091
+
+	OK (14 tests)
+
+
+
+Running eventtypes sample:
+-------------------------------------
+
+NOTE: Make sure to have a jar file with XML PULL API V1 implementation 
+in lib/impl_xmlpull_v1_api directory and follow build.txt instructions
+on how to build samples.
+
+...
