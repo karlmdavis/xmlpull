@@ -5,13 +5,13 @@ All generated files are created under ${build} directory
 
 -->
 
-<project name="XMLPULL_V1" default="compile" basedir=".">
+<project name="XmlPull_V1" default="compile" basedir=".">
 
   <!-- set global properties for this build -->
 
-  <property name="name" value="XMLPULL"/>
+  <property name="name" value="XmlPull"/>
   <property name="year" value="2003"/>
-  <property name="version" value="1_1_2_1"/>
+  <property name="version" value="1_1_3"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
   <property name="copyright"
@@ -55,16 +55,36 @@ All generated files are created under ${build} directory
   <property name="jar"  value="${build_lib}/${xmlpull_version}.jar"/>
   <property name="tests_jar"  value="${build_lib}/xmlpull-tests_${version}.jar"/>
 
+  <!-- ======================================== -->
   <!-- ADDONS -->
   <property name="build_addons" value="${build}/addons"/>
-  <property name="build_sax2" value="${build_addons}/sax2_driver"/>
-  <property name="build_xmlrpc" value="${build_addons}/xmlrpc"/>
+
   <property name="src_addons" value="addons/java"/>
-  <property name="src_sax2" value="${src_addons}/sax2_driver/src"/>
-  <property name="src_xmlrpc" value="${src_addons}/xmlrpc/src"/>
+
+  <property name="build_dom2_builder" value="${build_addons}/dom2_builder"/>
+  <property name="src_dom2_builder" value="${src_addons}/dom2_builder/src"/>
+  <property name="jar_dom2_builder"  value="${build_lib}/${xmlpull_version}-dom2_builder.jar"/>
+
+  <property name="build_sax2" value="${build_addons}/sax2_driver"/>
   <property name="lib_sax2" value="${src_addons}/sax2_driver/lib"/>
-  <property name="sax2_jar"  value="${build_lib}/${xmlpull_version}-sax2.jar"/>
-  <property name="xmlrpc_jar"  value="${build_lib}/${xmlpull_version}-xmlrpc.jar"/>
+  <property name="jar_sax2"  value="${build_lib}/${xmlpull_version}-sax2.jar"/>
+  <property name="src_sax2" value="${src_addons}/sax2_driver/src"/>
+
+  <property name="build_parser_pool" value="${build_addons}/parser_pool"/>
+  <property name="src_parser_pool" value="${src_addons}/parser_pool/src"/>
+  <property name="jar_parser_pool"  value="${build_lib}/${xmlpull_version}-parser_pool.jar"/>
+
+  <property name="build_util" value="${build_addons}/util"/>
+  <property name="src_util" value="${src_addons}/util/src"/>
+  <property name="jar_util"  value="${build_lib}/${xmlpull_version}-util.jar"/>
+
+  <property name="build_wrapper" value="${build_addons}/wrapper"/>
+  <property name="src_wrapper" value="${src_addons}/util/wrapper"/>
+  <property name="jar_wrapper"  value="${build_lib}/${xmlpull_version}-wrapper.jar"/>
+
+  <property name="build_xmlrpc" value="${build_addons}/xmlrpc"/>
+  <property name="src_xmlrpc" value="${src_addons}/xmlrpc/src"/>
+  <property name="jar_xmlrpc"  value="${build_lib}/${xmlpull_version}-xmlrpc.jar"/>
 
   <property name="website"      value="../xmlpull-website/v1"/>
 
@@ -91,6 +111,7 @@ All generated files are created under ${build} directory
   <target name="prepare">
     <mkdir dir="${build}"/>
     <mkdir dir="${build_dist}"/>
+    <mkdir dir="${build_lib}"/>
     <mkdir dir="${build_tests}"/>
     <mkdir dir="${build_classes}"/>
     <touch file="${build_classes}/${xmlpull_tag}_VERSION"/>
@@ -148,6 +169,26 @@ All generated files are created under ${build} directory
   <!-- =================================================================== -->
 
 
+  <target name="dom2_builder" depends="api">
+    <mkdir dir="${build_dom2_builder}"/>
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_dom2_builder}" destdir="${build_dom2_builder}" 
+       classpath="${build_classes}"/>
+    <jar jarfile="${jar_dom2_builder}">
+      <fileset dir="${build_dom2_builder}"/>
+    </jar>       
+  </target>
+
+  <target name="parser_pool" depends="api">
+    <mkdir dir="${build_parser_pool}"/>
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_parser_pool}" destdir="${build_parser_pool}" 
+       classpath="${build_classes}"/>
+    <jar jarfile="${jar_parser_pool}">
+      <fileset dir="${build_parser_pool}"/>
+    </jar>       
+  </target>
+
   <target name="sax2" depends="api">
     <mkdir dir="${build_sax2}"/>
     <javac debug="${debug}" deprecation="${deprecation}"
@@ -159,9 +200,17 @@ All generated files are created under ${build} directory
         </fileset>
       </classpath>
     </javac>    
-    <mkdir dir="${build_lib}"/>
-    <jar jarfile="${sax2_jar}">
+    <jar jarfile="${jar_sax2}">
       <fileset dir="${build_sax2}"/>
+    </jar>       
+  </target>
+
+  <target name="util" depends="api">
+    <mkdir dir="${build_util}"/>
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_util}" destdir="${build_util}" classpath="${build_classes}"/>
+    <jar jarfile="${jar_util}">
+      <fileset dir="${build_util}"/>
     </jar>       
   </target>
 
@@ -169,13 +218,13 @@ All generated files are created under ${build} directory
     <mkdir dir="${build_xmlrpc}"/>
     <javac debug="${debug}" deprecation="${deprecation}"
        srcdir="${src_xmlrpc}" destdir="${build_xmlrpc}" classpath="${build_classes}"/>
-    <mkdir dir="${build_lib}"/>
-    <jar jarfile="${xmlrpc_jar}">
+    <jar jarfile="${jar_xmlrpc}">
       <fileset dir="${build_xmlrpc}"/>
     </jar>       
   </target>
       
-  <target name="addons" depends="prepare,sax2,xmlrpc"/>
+
+  <target name="addons" depends="prepare,sax2,util,xmlrpc,parser_pool,dom2_builder"/>
 
   <!-- =================================================================== -->
   <!-- JUnit automatic tests                                               -->
