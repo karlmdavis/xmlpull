@@ -45,6 +45,33 @@ public class XmlPullWrapperFactory {
         }
     }
 
+
+    public void setFeature(String name,
+                           boolean state) throws XmlPullParserException
+    {
+        factory.setFeature(name, state);
+    }
+
+
+    public boolean getFeature (String name) {
+        return factory.getFeature(name);
+    }
+
+    public void setNamespaceAware(boolean awareness) {
+        factory.setNamespaceAware(awareness);
+    }
+
+    public boolean isNamespaceAware() {
+        return factory.isNamespaceAware();
+    }
+
+    public void setValidating(boolean validating) {
+        factory.setValidating(validating);
+    }
+
+    public boolean isValidating() {
+        return factory.isValidating();
+    }
     //public void setUseDynamic(boolean enable) { useDynamic = enable; };
     //public boolean getUseDynamic() { return useDynamic; };
 

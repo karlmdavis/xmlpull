@@ -7,7 +7,7 @@ import org.xmlpull.v1.wrapper.XmlPullParserWrapper;
 import org.xmlpull.v1.wrapper.XmlPullWrapperFactory;
 
 /**
- * Example how to use wrapper addon to XmlPullApi
+ * Example how to use wrapper addon to XmlPull API
  *
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */

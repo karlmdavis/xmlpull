@@ -10,8 +10,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-import org.xmlpull.v1.util.XmlPullWrapper;
+import org.xmlpull.v1.wrapper.XmlPullParserWrapper;
+import org.xmlpull.v1.wrapper.XmlPullWrapperFactory;
 
 /**
  * Test some wrapper utility operations.
@@ -19,7 +19,7 @@ import org.xmlpull.v1.util.XmlPullWrapper;
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestXmlPullWrapper extends TestCase {
-    private XmlPullParserFactory factory;
+    private XmlPullWrapperFactory wrappedFactory;
 
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestXmlPullWrapper.class));
@@ -31,10 +31,10 @@ public class TestXmlPullWrapper extends TestCase {
     }
 
     protected void setUp() throws XmlPullParserException {
-        factory = factory.newInstance();
-        factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-        assertEquals(true, factory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
-        assertEquals(false, factory.getFeature(XmlPullParser.FEATURE_VALIDATION));
+        wrappedFactory = wrappedFactory.newInstance();
+        wrappedFactory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        assertEquals(true, wrappedFactory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        assertEquals(false, wrappedFactory.getFeature(XmlPullParser.FEATURE_VALIDATION));
     }
 
     public void testPI() throws IOException, XmlPullParserException {
@@ -61,25 +61,24 @@ public class TestXmlPullWrapper extends TestCase {
             "<tag><?"+PI+"?></tag>";
         final String PI_NORMALIZED = normalized(PI);
 
-        XmlPullParser pp = factory.newPullParser();
-        XmlPullWrapper pw = new XmlPullWrapper(pp);
-        pp.setInput(new StringReader(XML_TEST_PI));
+        XmlPullParserWrapper pw = wrappedFactory.newPullWrapper();
+        pw.setInput(new StringReader(XML_TEST_PI));
 
-        assertEquals(XmlPullParser.START_TAG, pp.next());
-        assertEquals("tag", pp.getName());
-        assertEquals(XmlPullParser.PROCESSING_INSTRUCTION, pp.nextToken());
-        assertEquals(printable(PI_NORMALIZED), printable(pp.getText()));
-        assertEquals(PI_NORMALIZED, pp.getText());
+        assertEquals(XmlPullParser.START_TAG, pw.next());
+        assertEquals("tag", pw.getName());
+        assertEquals(XmlPullParser.PROCESSING_INSTRUCTION, pw.nextToken());
+        assertEquals(printable(PI_NORMALIZED), printable(pw.getText()));
+        assertEquals(PI_NORMALIZED, pw.getText());
         assertEquals(printable(piTarget), printable(pw.getPITarget()));
         assertEquals(piTarget, pw.getPITarget());
         if(piData != null) {
             assertEquals(printable(piData), printable(pw.getPIData()));
             assertEquals(piData, pw.getPIData());
         }
-        assertEquals(pp.next(), XmlPullParser.END_TAG);
-        assertEquals("tag", pp.getName());
+        assertEquals(pw.next(), XmlPullParser.END_TAG);
+        assertEquals("tag", pw.getName());
 
-        assertEquals(pp.next(), XmlPullParser.END_DOCUMENT);
+        assertEquals(pw.next(), XmlPullParser.END_DOCUMENT);
     }
 
     private static String printable(char ch) {
