@@ -14,14 +14,16 @@ import java.io.Reader;
  *
  * <p>There are following different
  * kinds of parser depending on which features are set:<ul>
- * <li>behaves like XML 1.0 comliant non-validating parser
- *  <em>if no DOCDECL is present</em> in XML documents when
- *   FEATURE_PROCESS_DOCDECL is false (this is <b>default parser</b>
- *   and internal enetites can still be defiend with defineEntityReplacementText())
- * <li>non-validating parser as defined in XML 1.0 spec when
- *   FEATURE_PROCESS_DOCDECL is true
- * <li>validating parser as defined in XML 1.0 spec when
+ * <li><b>non-validating</b> parser as defined in XML 1.0 spec when
+ *   FEATURE_PROCESS_DOCDECL is set to true
+ * <li><b>validating parser</b> as defined in XML 1.0 spec when
  *   FEATURE_VALIDATION is true (and that implies that FEATURE_PROCESS_DOCDECL is true)
+ * <li>when FEATURE_PROCESS_DOCDECL is false (this is default and
+ *   if different value is required necessary must be changed before parsing is started)
+ *   then parser behaves like XML 1.0 compliant non-validating parser under condition that
+ *  <em>no DOCDECL is present</em> in XML documents
+ *   (internal entites can still be defined with defineEntityReplacementText()).
+ *   This mode of operation is intened <b>for operation in constrained environments</b> such as J2ME.
  * </ul>
  *
  *
@@ -44,6 +46,7 @@ import java.io.Reader;
  * <dt><a href="#START_TAG">START_TAG</a><dd> An XML start tag was read.
  * <dt><a href="#TEXT">TEXT</a><dd> Text content was read;
  * the text content can be retreived using the getText() method.
+ *  (when in validating mode next() will not report ignorable whitespaces, use nextToken() instead)
  * <dt><a href="#END_TAG">END_TAG</a><dd> An end tag was read
  * <dt><a href="#END_DOCUMENT">END_DOCUMENT</a><dd> No more events are available
  * </dl>
@@ -442,7 +445,6 @@ public interface XmlPullParser {
      * allowing the parser to free internal resources
      * such as parsing buffers.
      */
-
     public void setInput(Reader in) throws XmlPullParserException;
 
 
@@ -464,7 +466,6 @@ public interface XmlPullParser {
      *
      * @param inputEncoding if not null it MUST be used as encoding for inputStream
      */
-
     public void setInput(InputStream inputStream, String inputEncoding)
         throws XmlPullParserException;
 
@@ -531,7 +532,6 @@ public interface XmlPullParser {
      * in the corresponding START_TAG are still accessible
      * although they are no longer in scope.
      */
-
     public String getNamespacePrefix(int pos) throws XmlPullParserException;
 
     /**
@@ -850,7 +850,6 @@ public interface XmlPullParser {
     public String getAttributeValue(String namespace,
                                     String name);
 
-
     // --------------------------------------------------------------------------
     // actual parsing methods
 
@@ -862,7 +861,6 @@ public interface XmlPullParser {
      */
     public int getEventType()
         throws XmlPullParserException;
-
 
     /**
      * Get next parsing event - element content wil be coalesced and only one
@@ -893,18 +891,15 @@ public interface XmlPullParser {
      * IGNORABLE_WHITESPACE) if they are available in input.
      *
      * <p>If special feature
-     * <a href="http://xmlpull.org/v1/doc/features.html#unnormalized-xml">FEATURE_UNNORMALIZED_XML</a>
-     * (identified by URI: http://xmlpull.org/v1/doc/features.html#unnormalized-xml)
-     * is enabled returned content is laways unnormalized (exactly as in input).
-     * Otherwise returned content is end-of-line normalized as described
-     * <a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line Handling</a>
-     *
-     * <p>If special feature
      * <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">FEATURE_XML_ROUNDTRIP</a>
      * (identified by URI: http://xmlpull.org/v1/doc/features.html#xml-roundtrip)
-     * is true then it is possible to do XML document round trip ie. reproduce
-     * exectly on output the XML input using getText(). When enabled this feature implies
-     * enabling FEATURE_UNNORMALIZED_XML.
+     * is enabled it is possible to do XML document round trip ie. reproduce
+     * exectly on output the XML input using getText():
+     * returned content is always unnormalized (exactly as in input).
+     * Otherwise returned content is end-of-line normalized as described
+     * <a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line Handling</a>
+     * and. Also when this feature is enabled exact content of START_TAG, END_TAG,
+     * DOCDECL and PROCESSING_INSTRUCTION is available.
      *
      * <p>Here is the list of tokens that can be  returned from nextToken()
      * and what getText() and getTextCharacters() returns:<dl>
@@ -915,39 +910,43 @@ public interface XmlPullParser {
      * <dt>END_TAG<dd>null unless FEATURE_XML_ROUNDTRIP
      *  id enabled and then returns XML tag, ex: &lt;/tag>
      * <dt>TEXT<dd>return element content.
-     *  Note that element content may be delevered in multiple consecutive TEXT events.
+     *  <br>Note: that element content may be delevered in multiple consecutive TEXT events.
      * <dt>IGNORABLE_WHITESPACE<dd>return characters that are determined to be ignorable white
-     * space. If is FEATURE_UNNORMALIZED_XML enabled all whitespace content outside root
-     * element will be also reported as IGNORABLE_WHITESPACE.
-     *  Note that element content may be delevered in multiple consecutive IGNORABLE_WHITESPACE events.
+     * space. If the FEATURE_XML_ROUNDTRIP is enabled all whitespace content outside root
+     * element will always reported as IGNORABLE_WHITESPACE otherise rteporting is optional.
+     *  <br>Note: that element content may be delevered in multiple consecutive IGNORABLE_WHITESPACE events.
      * <dt>CDSECT<dd>
      * return text <em>inside</em> CDATA
      *  (ex. 'fo&lt;o' from &lt;!CDATA[fo&lt;o]]>)
-     * otherwise content returned will be end-of-line normalized
      * <dt>PROCESSING_INSTRUCTION<dd>
      *  if FEATURE_XML_ROUNDTRIP is true
-     *  return PI content ex: 'pi foo' from &lt;?pi foo?>
-     *  otherwise return concatenation of PI target, space and data so for example for
-     *   &lt;?target    data?> string &quot;target data&quot; will be returned
+     *  return exact PI content ex: 'pi foo' from &lt;?pi foo?>
+     *  otherwise it may be exact PI content or concatenation of PI target,
+     * space and data so for example for
+     *   &lt;?target    data?> string &quot;target data&quot; may
+     *       be returned if FEATURE_XML_ROUNDTRIP is false.
      * <dt>COMMENT<dd>return comment content ex. 'foo bar' from &lt;!--foo bar-->
      * <dt>ENTITY_REF<dd>getText() returns entity replacement text
      * and getTextCharacters() of entity_name (&amp;entity_name;)
      * <br><b>NOTE:</b> this is the only place where value returned from getText() and
      *   getTextCharacters() <b>are different</b>
      * <br><b>NOTE:</b> it is user responsibility to resolve entity reference
-     * <br><b>NOTE:</b> character entities and standard entities such as
+     *    if PROCESS_DOCDECL is false and there is no entity replacement text set in
+     *    defineEntityReplacementText() methos
+     * <br><b>NOTE:</b> character entities (ex. &amp;#32;) and standard entities such as
      *  &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos; are reported as well
-     *  and are not resolved and not reported as TEXT tokens but as ENTITY_REF tokens!
+     *  and are <b>not</b> reported as TEXT tokens but as ENTITY_REF tokens!
      *  This requirement is added to allow to do roundtrip of XML documents!
      * <dt>DOCDECL<dd>
-     * if FEATURE_XML_ROUNDTRIP is true
+     * if FEATURE_XML_ROUNDTRIP is true or PROCESS_DOCDECL is false
      * return inside part of DOCDECL ex. returns:<pre>
      * &quot; titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
      * [&lt;!ENTITY % active.links "INCLUDE">]&quot;</pre>
      * <p>for input document that contained:<pre>
      * &lt;!DOCTYPE titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
      * [&lt;!ENTITY % active.links "INCLUDE">]></pre>
-     * otherwise of FEATURE_XML_ROUNDTRIP is false then what is returned is undefined
+     * otherwise of FEATURE_XML_ROUNDTRIP is false and PROCESS_DOCDECL is true
+     *    then what is returned is undefined (it may be evn null)
      * </dd>
      * </dl>
      *
@@ -955,8 +954,8 @@ public interface XmlPullParser {
      * IGNORABLE_WHITESPACE event from nextToken() as parser may chose to deliver element content in
      * multiple tokens (dividing element content into chunks)
      *
-     * <p><strong>NOTE:</strong> returned text of token MAY or MAY NOT be end-of-line normalized
-     *  (depending on FEATURE_UNNORMIZED_XML).
+     * <p><strong>NOTE:</strong> whether returned text of token is end-of-line normalized
+     *  is depending on FEATURE_XML_ROUNDTRIP.
      *
      * @see #next
      * @see #START_TAG
@@ -994,29 +993,6 @@ public interface XmlPullParser {
      */
     public void require(int type, String namespace, String name)
         throws XmlPullParserException, IOException;
-
-
-
-//    /**
-//     * If the current event is text, the value of getText is
-//     * returned and next() is called. Otherwise, an empty
-//     * String ("") is returned. Useful for reading element
-//     * content without needing to performing an additional
-//     * check if the element is empty.
-//     *
-//     * <p>essentially it does this
-//     * <pre>
-//     *   if (getEventType() != TEXT) return "";
-//     *   String result = getText();
-//     *   next();
-//     *   return result;
-//     * </pre>
-//     *
-//     * @deprecated Replaced by nextText(), this method was too liberal.
-//     * @see #nextText()
-//     */
-//    public String readText() throws XmlPullParserException, IOException;
-
 
     /**
      * If current event is START_TAG then if next element is TEXT then element content is returned
