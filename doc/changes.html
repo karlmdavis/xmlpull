@@ -16,9 +16,12 @@ incorporate all changes since 1.0.x in stable version </ul>
 
 <h3>IN PROGRESS INTERIM RELEASE: </h3>
 
-<h3><a name="XMLPULL_1_1_3_*"></a>2004-01- (XMLPULL_1_1_3_*)</h3>
+<h3><a name="XMLPULL_1_1_3_*"></a>2004-02- (XMLPULL_1_1_3_*)</h3>
 <ul>
 
+<li>2004-02-01: fixed style issue raised by Max Gilead related to unnecessary 
+use of public modifier in interfaces (<a href="http://www.extreme.indiana.edu/bugzilla/show_bug.cgi?id=174">bug 
+174</a>)</li>
 <li>2004-01-20: stronger serializer tests for case when char values &lt; 32&quot; (TestSerialize.java)</li>
 <li>added <code>target="1.1"</code> to make sure that compiled code can work with JDK 1.1
 (as described in <a href="http://ant.apache.org/manual/CoreTasks/javac.html">ANT Javac Task documentation</a>: (...)
@@ -65,12 +68,12 @@ find /META-INF/services/org.xmlpull.v1.XmlPullParserFactory resource ...
 <h3><a name="XMLPULL_1_1_2_1"></a>2003-02-26 (XMLPULL_1_1_2_1)</h3>
 
 <ul>
-<li>minor release to make available the latest tests and documentation chnages
+<li>minor release to make available the latest tests and documentation changes
 
 <li>added <a href="quick_write.html">quick introduction to using XmlSerializer</a>
 
-<li>added test to check that generating namespae prefix for attributes is allowed
-(method getPrefix(uri, true) called after startTag() shoul dadd new prefix to
+<li>added test to check that generating namespace prefix for attributes is allowed
+(method getPrefix(uri, true) called after startTag() should add new prefix to
 current start tag elements and not next start tag)
 
 <li>added tests to check optional support for formatting XML output from XML serializer
@@ -113,7 +116,7 @@ of how Attributes in startElement() are kept. Added also AttributesCachingDriver
 that extends SAX2 Driver to create a new copy of Attributes for each startElement()
 so Attributes provided in startTag() will not change during parsing and can be kept
 indefinitely (not that Attributes object is created for each startTag() and this
-is expensive both perfromance and memory wise and is not required by SAX2.
+is expensive both performance and memory wise and is not required by SAX2.
 
 <li>more tests to check for CDATA end-of-line normalization
 

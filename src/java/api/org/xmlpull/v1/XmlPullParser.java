@@ -141,7 +141,7 @@ import java.io.Reader;
 public interface XmlPullParser {
 
     /** This constant represents the default namespace (empty string "") */
-    public static final String NO_NAMESPACE = "";
+    String NO_NAMESPACE = "";
 
     // ----------------------------------------------------------------------------
     // EVENT TYPES as reported by next()
@@ -155,7 +155,7 @@ public interface XmlPullParser {
      * @see #next
      * @see #nextToken
      */
-    public final static int START_DOCUMENT = 0;
+    int START_DOCUMENT = 0;
 
     /**
      * Logical end of the xml document. Returned from getEventType, next()
@@ -168,7 +168,7 @@ public interface XmlPullParser {
      * @see #next
      * @see #nextToken
      */
-    public final static int END_DOCUMENT = 1;
+    int END_DOCUMENT = 1;
 
     /**
      * Returned from getEventType(),
@@ -191,7 +191,7 @@ public interface XmlPullParser {
      * @see #getNamespace
      * @see #FEATURE_PROCESS_NAMESPACES
      */
-    public final static int START_TAG = 2;
+    int START_TAG = 2;
 
     /**
      * Returned from getEventType(), <a href="#next()">next()</a>, or
@@ -207,7 +207,7 @@ public interface XmlPullParser {
      * @see #getNamespace
      * @see #FEATURE_PROCESS_NAMESPACES
      */
-    public final static int END_TAG = 3;
+    int END_TAG = 3;
 
 
     /**
@@ -229,7 +229,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public final static int TEXT = 4;
+    int TEXT = 4;
 
     // ----------------------------------------------------------------------------
     // additional events exposed by lower level nextToken()
@@ -244,7 +244,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public final static int CDSECT = 5;
+    int CDSECT = 5;
 
     /**
      * An entity reference was just read;
@@ -259,7 +259,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public final static int ENTITY_REF = 6;
+    int ENTITY_REF = 6;
 
     /**
      * Ignorable whitespace was just read.
@@ -281,7 +281,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public static final int IGNORABLE_WHITESPACE = 7;
+    int IGNORABLE_WHITESPACE = 7;
 
     /**
      * An XML processing instruction declaration was just read. This
@@ -291,7 +291,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public static final int PROCESSING_INSTRUCTION = 8;
+    int PROCESSING_INSTRUCTION = 8;
 
     /**
      * An XML comment was just read. This event type is this token is
@@ -303,7 +303,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public static final int COMMENT = 9;
+    int COMMENT = 9;
 
     /**
      * An XML document type declaration was just read. This token is
@@ -314,7 +314,7 @@ public interface XmlPullParser {
      * @see #nextToken
      * @see #getText
      */
-    public static final int DOCDECL = 10;
+    int DOCDECL = 10;
 
     /**
      * This array can be used to convert the event type integer constants
@@ -327,7 +327,7 @@ public interface XmlPullParser {
      * applications may alter the array, although it is final, due
      * to limitations of the Java language.
      */
-    public static final String [] TYPES = {
+    String [] TYPES = {
         "START_DOCUMENT",
             "END_DOCUMENT",
             "START_TAG",
@@ -354,7 +354,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String FEATURE_PROCESS_NAMESPACES =
+    String FEATURE_PROCESS_NAMESPACES =
         "http://xmlpull.org/v1/doc/features.html#process-namespaces";
 
     /**
@@ -366,7 +366,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String FEATURE_REPORT_NAMESPACE_ATTRIBUTES =
+    String FEATURE_REPORT_NAMESPACE_ATTRIBUTES =
         "http://xmlpull.org/v1/doc/features.html#report-namespace-prefixes";
 
     /**
@@ -387,7 +387,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String FEATURE_PROCESS_DOCDECL =
+    String FEATURE_PROCESS_DOCDECL =
         "http://xmlpull.org/v1/doc/features.html#process-docdecl";
 
     /**
@@ -401,7 +401,7 @@ public interface XmlPullParser {
      * @see #getFeature
      * @see #setFeature
      */
-    public static final String FEATURE_VALIDATION =
+    String FEATURE_VALIDATION =
         "http://xmlpull.org/v1/doc/features.html#validation";
 
     /**
@@ -417,7 +417,7 @@ public interface XmlPullParser {
      * @exception XmlPullParserException If the feature is not supported or can not be set
      * @exception IllegalArgumentException If string with the feature name is null
      */
-    public void setFeature(String name,
+    void setFeature(String name,
                            boolean state) throws XmlPullParserException;
 
     /**
@@ -430,7 +430,7 @@ public interface XmlPullParser {
      * @exception IllegalArgumentException if string the feature name is null
      */
 
-    public boolean getFeature(String name);
+    boolean getFeature(String name);
 
     /**
      * Set the value of a property.
@@ -440,7 +440,7 @@ public interface XmlPullParser {
      * @exception XmlPullParserException If the property is not supported or can not be set
      * @exception IllegalArgumentException If string with the property name is null
      */
-    public void setProperty(String name,
+    void setProperty(String name,
                             Object value) throws XmlPullParserException;
 
     /**
@@ -453,7 +453,7 @@ public interface XmlPullParser {
      * @param name The name of property to be retrieved.
      * @return The value of named property.
      */
-    public Object getProperty(String name);
+    Object getProperty(String name);
 
 
     /**
@@ -465,7 +465,7 @@ public interface XmlPullParser {
      * allowing the parser to free internal resources
      * such as parsing buffers.
      */
-    public void setInput(Reader in) throws XmlPullParserException;
+    void setInput(Reader in) throws XmlPullParserException;
 
 
     /**
@@ -486,7 +486,7 @@ public interface XmlPullParser {
      *
      * @param inputEncoding if not null it MUST be used as encoding for inputStream
      */
-    public void setInput(InputStream inputStream, String inputEncoding)
+    void setInput(InputStream inputStream, String inputEncoding)
         throws XmlPullParserException;
 
     /**
@@ -501,7 +501,7 @@ public interface XmlPullParser {
      * After first call to next if XML declaration was present this method
      * will return encoding declared.
      */
-    public String getInputEncoding();
+    String getInputEncoding();
 
     /**
      * Set new value for entity replacement text as defined in
@@ -534,7 +534,7 @@ public interface XmlPullParser {
      * @see #FEATURE_PROCESS_DOCDECL
      * @see #FEATURE_VALIDATION
      */
-    public void defineEntityReplacementText( String entityName,
+    void defineEntityReplacementText( String entityName,
                                             String replacementText ) throws XmlPullParserException;
 
     /**
@@ -561,7 +561,7 @@ public interface XmlPullParser {
      * @see #getNamespace()
      * @see #getNamespace(String)
      */
-    public int getNamespaceCount(int depth) throws XmlPullParserException;
+    int getNamespaceCount(int depth) throws XmlPullParserException;
 
     /**
      * Returns the namespace prefixe for the given position
@@ -573,7 +573,7 @@ public interface XmlPullParser {
      * in the corresponding START_TAG are still accessible
      * although they are no longer in scope.
      */
-    public String getNamespacePrefix(int pos) throws XmlPullParserException;
+    String getNamespacePrefix(int pos) throws XmlPullParserException;
 
     /**
      * Returns the namespace URI for the given position in the
@@ -582,7 +582,7 @@ public interface XmlPullParser {
      * <p><b>NOTE:</b> when parser is on END_TAG then namespace prefixes that were declared
      *  in corresponding START_TAG are still accessible even though they are not in scope
      */
-    public String getNamespaceUri(int pos) throws XmlPullParserException;
+    String getNamespaceUri(int pos) throws XmlPullParserException;
 
     /**
      * Returns the URI corresponding to the given prefix,
@@ -616,7 +616,7 @@ public interface XmlPullParser {
      * @see #getNamespacePrefix
      * @see #getNamespaceUri
      */
-    public String getNamespace (String prefix);
+    String getNamespace (String prefix);
 
 
     // --------------------------------------------------------------------------
@@ -639,7 +639,7 @@ public interface XmlPullParser {
      * &lt;!-- outside --&gt;     0
      * </pre>
      */
-    public int getDepth();
+    int getDepth();
 
     /**
      * Returns a short text describing the current parser state, including
@@ -648,8 +648,7 @@ public interface XmlPullParser {
      * This method is especially useful to provide meaningful
      * error messages and for debugging purposes.
      */
-
-    public String getPositionDescription ();
+    String getPositionDescription ();
 
 
     /**
@@ -659,7 +658,7 @@ public interface XmlPullParser {
      *
      * @return current line number or -1 if unknown.
      */
-    public int getLineNumber();
+    int getLineNumber();
 
     /**
      * Returns the current column number, starting from 0.
@@ -668,7 +667,7 @@ public interface XmlPullParser {
      *
      * @return current column number or -1 if unknown.
      */
-    public int getColumnNumber();
+    int getColumnNumber();
 
 
     // --------------------------------------------------------------------------
@@ -689,8 +688,7 @@ public interface XmlPullParser {
      * via nextToken only.
      *
      */
-
-    public boolean isWhitespace() throws XmlPullParserException;
+    boolean isWhitespace() throws XmlPullParserException;
 
     /**
      * Returns the text content of the current event as String.
@@ -710,7 +708,7 @@ public interface XmlPullParser {
      * @see #next
      * @see #nextToken
      */
-    public String getText ();
+    String getText ();
 
 
     /**
@@ -738,7 +736,7 @@ public interface XmlPullParser {
      * @return char buffer that contains the text of the current event
      *  (null if the current event has no text associated).
      */
-    public char[] getTextCharacters(int [] holderForStartAndLength);
+    char[] getTextCharacters(int [] holderForStartAndLength);
 
     // --------------------------------------------------------------------------
     // START_TAG / END_TAG shared methods
@@ -751,7 +749,7 @@ public interface XmlPullParser {
      * The current event must be START_TAG or END_TAG; otherwise,
      * null is returned.
      */
-    public String getNamespace ();
+    String getNamespace ();
 
     /**
      * For START_TAG or END_TAG events, the (local) name of the current
@@ -765,7 +763,7 @@ public interface XmlPullParser {
      * you will need to  add the prefix and a colon to localName..
      *
      */
-    public String getName();
+    String getName();
 
     /**
      * Returns the prefix of the current element.
@@ -774,8 +772,7 @@ public interface XmlPullParser {
      * If namespaces are not enabled, or the current event
      * is not  START_TAG or END_TAG, null is returned.
      */
-
-    public String getPrefix();
+    String getPrefix();
 
     /**
      * Returns true if the current event is START_TAG and the tag
@@ -784,7 +781,7 @@ public interface XmlPullParser {
      * <p><b>NOTE:</b> if the parser is not on START_TAG, an exception
      * will be thrown.
      */
-    public boolean isEmptyElementTag() throws XmlPullParserException;
+    boolean isEmptyElementTag() throws XmlPullParserException;
 
     // --------------------------------------------------------------------------
     // START_TAG Attributes retrieval methods
@@ -798,7 +795,7 @@ public interface XmlPullParser {
      * @see #getAttributePrefix
      * @see #getAttributeValue
      */
-    public int getAttributeCount();
+    int getAttributeCount();
 
     /**
      * Returns the namespace URI of the attribute
@@ -823,7 +820,7 @@ public interface XmlPullParser {
      *   empty string ("") is returned  if namesapces processing is not enabled or
      *   namespaces processing is enabled but attribute has no namespace (it has no prefix).
      */
-    public String getAttributeNamespace (int index);
+    String getAttributeNamespace (int index);
 
     /**
      * Returns the local name of the specified attribute
@@ -834,7 +831,7 @@ public interface XmlPullParser {
      * @param zero based index of attribute
      * @return attribute name (null is never returned)
      */
-    public String getAttributeName (int index);
+    String getAttributeName (int index);
 
     /**
      * Returns the prefix of the specified attribute
@@ -846,7 +843,7 @@ public interface XmlPullParser {
      * @param zero based index of attribute
      * @return attribute prefix or null if namespaces processing is not enabled.
      */
-    public String getAttributePrefix(int index);
+    String getAttributePrefix(int index);
 
     /**
      * Returns the type of the specified attribute
@@ -855,7 +852,7 @@ public interface XmlPullParser {
      * @param zero based index of attribute
      * @return attribute type (null is never returned)
      */
-    public String getAttributeType(int index);
+    String getAttributeType(int index);
 
     /**
      * Returns if the specified attribute was not in input was declared in XML.
@@ -865,7 +862,7 @@ public interface XmlPullParser {
      * @param zero based index of attribute
      * @return false if attribute was in input
      */
-    public boolean isAttributeDefault(int index);
+    boolean isAttributeDefault(int index);
 
     /**
      * Returns the given attributes value.
@@ -882,7 +879,7 @@ public interface XmlPullParser {
      * @param zero based index of attribute
      * @return value of attribute (null is never returned)
      */
-    public String getAttributeValue(int index);
+    String getAttributeValue(int index);
 
     /**
      * Returns the attributes value identified by namespace URI and namespace localName.
@@ -900,7 +897,7 @@ public interface XmlPullParser {
      * @param name If namespaces enabled local name of attribute otherwise just attribute name
      * @return value of attribute or null if attribute with given name does not exist
      */
-    public String getAttributeValue(String namespace,
+    String getAttributeValue(String namespace,
                                     String name);
 
     // --------------------------------------------------------------------------
@@ -912,7 +909,7 @@ public interface XmlPullParser {
      * @see #next()
      * @see #nextToken()
      */
-    public int getEventType()
+    int getEventType()
         throws XmlPullParserException;
 
     /**
@@ -934,7 +931,7 @@ public interface XmlPullParser {
      * @see #END_DOCUMENT
      */
 
-    public int next()
+    int next()
         throws XmlPullParserException, IOException;
 
 
@@ -1026,8 +1023,7 @@ public interface XmlPullParser {
      * @see #ENTITY_REF
      * @see #IGNORABLE_WHITESPACE
      */
-
-    public int nextToken()
+    int nextToken()
         throws XmlPullParserException, IOException;
 
     //-----------------------------------------------------------------------------
@@ -1049,7 +1045,7 @@ public interface XmlPullParser {
      *     throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
      * </pre>
      */
-    public void require(int type, String namespace, String name)
+    void require(int type, String namespace, String name)
         throws XmlPullParserException, IOException;
 
     /**
@@ -1095,7 +1091,7 @@ public interface XmlPullParser {
      *  }
      * </pre>
      */
-    public String nextText() throws XmlPullParserException, IOException;
+    String nextText() throws XmlPullParserException, IOException;
 
     /**
      * Call next() and return event if it is START_TAG or END_TAG
@@ -1114,7 +1110,7 @@ public interface XmlPullParser {
      *   return eventType;
      * </pre>
      */
-    public int nextTag() throws XmlPullParserException, IOException;
+    int nextTag() throws XmlPullParserException, IOException;
 
 }
 
