@@ -18,13 +18,13 @@ clarified required semantics in <a href="features.html">features</a> description
 <li>
 refactored XmlPullParserFactory: <ul>
 <li>reduced in size as much as possible,&nbsp; 
-<li>removed methods <b>setNamespaceAware</b>(), <b>isNamespaceAware()</b>, <b>setValidation()</b>, 
-<b>isValidation() </b>(the same effect can be achieved with set/getFeature()<li>property 
+<li>String classNames 
 in newInstance() can now specify both 
 factories and parsers
-<li>modified accordingly tests and samples to use 
-set/getFeature instead of set/getNamespaceAware/Validation 
-</ul>
+<li>removed method newInstance(String classNames) the same can be done with newInstance(classNames, 
+null)<li>modified accordingly tests and samples to use 
+set/getFeature instead of set/getNamespaceAware/Validation&nbsp; and to use 
+newInstance(*,null) instead of one argument version</ul>
 <li>
 removed constructor with line numbers and Throwable from XmlPullParserException</ul>
 
