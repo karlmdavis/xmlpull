@@ -14,10 +14,32 @@ import org.xmlpull.v1.XmlSerializer;
  * @author Naresh Bhatia
  */
 public interface XmlSerializerWrapper extends XmlSerializer {
+    public static final String NO_NAMESPACE = "";
     public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
 
-    public String getCurrentNamespace();
-    public void setCurrentNamespace(String value);
+    /**
+     * Get namespace that is used as default when no namespace parameter is used for
+     * startTag(), endTag() and element()
+     */
+    public String getCurrentNamespaceForElements();
+
+    /**
+     * Set namespace to use in startTag(), endTag() and element()
+     * when methods called are those without namespace parameter.
+     */
+    public String setCurrentNamespaceForElements(String value);
+
+    /**
+     * Write an attribute without namespace.
+     * Calls to attribute() MUST follow a call to
+     * startTag() immediately. If there is no prefix defined for the
+     * given namespace, a prefix will be defined automatically.
+     * NOTE: current element namespace is not used attribute and attributre has no namespace.
+     */
+    public XmlSerializer attribute (String name, String value)
+        throws IOException, IllegalArgumentException, IllegalStateException;
+
+
 
     /** Write start tag in current namespace with name given as argument. */
     public XmlSerializer startTag (String name)
@@ -26,7 +48,6 @@ public interface XmlSerializerWrapper extends XmlSerializer {
     /** Write end tag in current namespace with name given as argument. */
     public XmlSerializer endTag (String name)
         throws IOException, IllegalArgumentException, IllegalStateException;
-
 
     /**
      * Writes a simple element such as &lt;username>johndoe&lt;/username>. The namespace

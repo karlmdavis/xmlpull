@@ -101,7 +101,7 @@ public class XmlSerializerDelegate implements XmlSerializer {
     }
 
     public XmlSerializer attribute(String namespace, String name, String value) throws IOException, IllegalArgumentException, IllegalStateException {
-        return attribute(namespace, name, value);
+        return xs.attribute(namespace, name, value);
     }
 
     public void startDocument(String encoding, Boolean standalone) throws IOException, IllegalArgumentException, IllegalStateException {

@@ -10,8 +10,11 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.wrapper.XmlPullParserWrapper;
 import org.xmlpull.v1.wrapper.XmlPullWrapperFactory;
+import org.xmlpull.v1.wrapper.XmlSerializerWrapper;
+import java.io.StringWriter;
 
 /**
  * Test some wrapper utility operations.
@@ -35,6 +38,38 @@ public class TestXmlPullWrapper extends TestCase {
         wrappedFactory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         assertEquals(true, wrappedFactory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         assertEquals(false, wrappedFactory.getFeature(XmlPullParser.FEATURE_VALIDATION));
+    }
+
+    public void testSimple() throws IOException, XmlPullParserException {
+        XmlPullWrapperFactory wrapperFactory = XmlPullWrapperFactory.newInstance(
+            System.getProperty(XmlPullParserFactory.PROPERTY_NAME),
+            XmlPullParserFactory.class);
+        wrapperFactory.setNamespaceAware(true);
+        XmlSerializerWrapper xs = wrapperFactory.newSerializerWrapper();
+        StringWriter sw = new StringWriter();
+        xs.setOutput(sw);
+        xs.startDocument("UTF-8", Boolean.TRUE);
+        xs.startTag("test");
+        xs.attribute("fooAttr", "fooValue");
+        final String NS = "http://tempuri.org/xmlpull-test";
+        xs.setCurrentNamespaceForElements(NS);
+        final String MSG = "World & Universe!";
+        xs.element("hello", MSG);
+        xs.setCurrentNamespaceForElements(null);
+        xs.endTag("test");
+        xs.endDocument();
+
+        String s = sw.toString();
+        System.out.println(getClass()+" s="+s);
+        XmlPullParserWrapper pw = wrapperFactory.newPullWrapper();
+        pw.setInput(new StringReader(s));
+        pw.nextStartTag("test");
+        assertEquals(pw.getAttributeValue("fooAttr"), "fooValue");
+        pw.nextTag();
+        assertTrue(pw.matches(XmlPullParser.START_TAG, NS, "hello"));
+        assertEquals(pw.nextText(NS, "hello"), MSG);
+        assertTrue(pw.matches(XmlPullParser.END_TAG, null, "hello"));
+        pw.nextEndTag("test");
     }
 
     public void testPI() throws IOException, XmlPullParserException {

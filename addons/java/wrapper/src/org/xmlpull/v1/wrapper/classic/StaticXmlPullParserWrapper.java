@@ -28,6 +28,19 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         return XmlPullUtil.getAttributeValue(pp, name);
     }
 
+    public String getRequiredAttributeValue(String name)
+        throws IOException, XmlPullParserException
+    {
+        return XmlPullUtil.getRequiredAttributeValue(pp, null, name);
+    }
+
+
+    public String getRequiredAttributeValue(String namespace, String name)
+        throws IOException, XmlPullParserException
+    {
+        return XmlPullUtil.getRequiredAttributeValue(pp, namespace, name);
+    }
+
 
   /**
      * Read the text of a required element and return it or throw exception if
@@ -83,58 +96,49 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         return XmlPullUtil.matches(pp, type, namespace, name);
     }
 
-    /**
-     * call parser nextTag() and check that it is START_TAG, throw exception if not.
-     */
     public void nextStartTag()
         throws XmlPullParserException, IOException
     {
-        XmlPullUtil.nextStartTag(pp);
+        if(pp.nextTag() != XmlPullParser.START_TAG) {
+            throw new XmlPullParserException(
+                "expected START_TAG and not "+pp.getPositionDescription());
+        }
     }
 
-    /**
-     * combine nextTag(); pp.require(pp.START_TAG, namespace, name);
-     */
+    public void nextStartTag(String name)
+        throws XmlPullParserException, IOException
+    {
+        pp.nextTag();
+        pp.require(XmlPullParser.START_TAG, null, name);
+    }
+
     public void nextStartTag(String namespace, String name)
         throws XmlPullParserException, IOException
     {
-        XmlPullUtil.nextStartTag(pp, namespace, name);
+        pp.nextTag();
+        pp.require(XmlPullParser.START_TAG, namespace, name);
     }
 
-    /**
-     * combine nextTag(); pp.require(pp.END_TAG, namespace, name);
-     */
+    public void nextEndTag() throws XmlPullParserException, IOException {
+        XmlPullUtil.nextEndTag(pp);
+    }
+
+    public void nextEndTag(String name)
+        throws XmlPullParserException, IOException
+    {
+        XmlPullUtil.nextEndTag(pp, null, name);
+    }
+
     public void nextEndTag(String namespace, String name)
         throws XmlPullParserException, IOException
     {
         XmlPullUtil.nextEndTag(pp, namespace, name);
     }
 
-
-    /**
-     * Read text content of element with given namespace and name
-     * (use null namespace do indicate that nemspace should not be checked)
-     */
-
     public String nextText(String namespace, String name)
         throws IOException, XmlPullParserException
     {
         return XmlPullUtil.nextText(pp, namespace, name);
-    }
-
-    /**
-     * Read attribute value and return it or throw exception if
-     * current element does not have such attribute.
-     */
-
-    public String getRequiredAttributeValue(String namespace, String name)
-        throws IOException, XmlPullParserException
-    {
-        return XmlPullUtil.getRequiredAttributeValue(pp, namespace, name);
-    }
-
-    public void nextEndTag() throws XmlPullParserException, IOException {
-        XmlPullUtil.nextEndTag(pp);
     }
 
 

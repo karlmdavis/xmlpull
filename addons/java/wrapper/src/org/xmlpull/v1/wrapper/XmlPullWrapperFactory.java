@@ -19,7 +19,7 @@ import org.xmlpull.v1.wrapper.classic.StaticXmlSerializerWrapper;
 
 public class XmlPullWrapperFactory {
     private final static boolean DEBUG = false;
-    protected ClassLoader classLoader;
+    //protected ClassLoader classLoader;
     protected XmlPullParserFactory f;
     //protected boolean useDynamic;
 

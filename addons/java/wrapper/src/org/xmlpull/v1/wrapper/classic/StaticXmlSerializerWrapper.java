@@ -25,9 +25,19 @@ public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
         super(xs);
     }
 
-    public String getCurrentNamespace() { return currentNs; }
-    public void setCurrentNamespace(String value) { currentNs = value; }
+    public String getCurrentNamespaceForElements() { return currentNs; }
+    public String setCurrentNamespaceForElements(String value)
+    {
+        String old = currentNs;
+        currentNs = value;
+        return old;
+    }
 
+   public XmlSerializer attribute (String name, String value)
+        throws IOException, IllegalArgumentException, IllegalStateException
+    {
+        return xs.attribute(null, name, value);
+    }
 
     public XmlSerializer startTag (String name)
         throws IOException, IllegalArgumentException, IllegalStateException

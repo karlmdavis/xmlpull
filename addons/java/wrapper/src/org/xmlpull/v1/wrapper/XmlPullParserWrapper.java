@@ -17,8 +17,13 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author Naresh Bhatia
  */
 public interface XmlPullParserWrapper extends XmlPullParser {
-
+    public static final String NO_NAMESPACE = "";
     public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
+
+    /**
+     * Return value of attribute with given name and no namespace.
+     */
+    public String getAttributeValue(String name);
 
     /**
      * Return PITarget from Processing Instruction (PI) as defined in
@@ -36,6 +41,28 @@ public interface XmlPullParserWrapper extends XmlPullParser {
      */
     public String getPIData() throws IllegalStateException;
 
+
+    /**
+     * Read attribute value and return it or throw exception if
+     * current element does not have such attribute.
+     */
+    public String getRequiredAttributeValue(String name)
+        throws IOException, XmlPullParserException;
+
+    /**
+     * Read attribute value and return it or throw exception if
+     * current element does not have such attribute.
+     */
+    public String getRequiredAttributeValue(String namespace, String name)
+        throws IOException, XmlPullParserException;
+
+    /**
+     * Read the text of a required element and return it or throw exception if
+     * required element is not found. Useful for getting the text of simple
+     * elements such as <username>johndoe</username>. Assumes that parser is
+     * just before the start tag and leaves the parser at the end tag. If the
+     * text is nil (e.g. <username xsi:nil="true"/>), then a null will be returned.
+     */
     public String getRequiredElementText(String namespace, String name)
         throws IOException, XmlPullParserException;
 
@@ -54,14 +81,15 @@ public interface XmlPullParserWrapper extends XmlPullParser {
 
 
     /**
-     * Return value of attribute with given name and no namespace.
-     */
-    public String getAttributeValue(String name);
-
-    /**
      * call parser nextTag() and check that it is START_TAG, throw exception if not.
      */
     public void nextStartTag()
+        throws XmlPullParserException, IOException;
+
+    /**
+     * combine nextTag(); pp.require(pp.START_TAG, null, name);
+     */
+    public void nextStartTag(String name)
         throws XmlPullParserException, IOException;
 
     /**
@@ -71,6 +99,16 @@ public interface XmlPullParserWrapper extends XmlPullParser {
         throws XmlPullParserException, IOException;
 
 
+    /**
+     * Call parser nextTag() and check that it is END_TAG, throw exception if not.
+     */
+    public void nextEndTag() throws XmlPullParserException, IOException;
+
+    /**
+     * combine nextTag(); pp.require(pp.END_TAG, null, name);
+     */
+    public void nextEndTag(String name)
+        throws XmlPullParserException, IOException;
 
 
     /**
@@ -87,20 +125,6 @@ public interface XmlPullParserWrapper extends XmlPullParser {
 
     public String nextText(String namespace, String name)
         throws IOException, XmlPullParserException;
-
-    /**
-     * Read attribute value and return it or throw exception if
-     * current element does not have such attribute.
-     */
-
-    public String getRequiredAttributeValue(String namespace, String name)
-        throws IOException, XmlPullParserException;
-
-    /**
-     * Call parser nextTag() and check that it is END_TAG, throw exception if not.
-     */
-    public void nextEndTag() throws XmlPullParserException, IOException;
-
 
     /**
      * Skip sub tree that is currently porser positioned on.

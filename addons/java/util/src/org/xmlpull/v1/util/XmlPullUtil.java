@@ -136,6 +136,16 @@ public class XmlPullUtil {
     }
 
     /**
+     * combine nextTag(); pp.require(pp.START_TAG, null, name);
+     */
+    public static void nextStartTag(XmlPullParser pp, String name)
+        throws XmlPullParserException, IOException
+    {
+        pp.nextTag();
+        pp.require(XmlPullParser.START_TAG, null, name);
+    }
+
+    /**
      * combine nextTag(); pp.require(pp.START_TAG, namespace, name);
      */
     public static void nextStartTag(XmlPullParser pp, String namespace, String name)
@@ -210,9 +220,9 @@ public class XmlPullUtil {
     public static boolean matches(XmlPullParser pp, int type, String namespace, String name)
         throws XmlPullParserException
     {
-        boolean matches = type != pp.getEventType()
-            || (namespace != null && !namespace.equals (pp.getNamespace()))
-            || (name != null && !name.equals (pp.getName ()));
+        boolean matches = type == pp.getEventType()
+            && (namespace == null || namespace.equals (pp.getNamespace()))
+            && (name == null || name.equals (pp.getName ()));
 
         return matches;
     }
