@@ -33,6 +33,8 @@ import java.util.Vector;
  */
 
 public class XmlPullParserFactory {
+    /** used as default class to server as context class in newInstance() */
+    static XmlPullParserFactory referenceContextClass = new XmlPullParserFactory();
 
     /** Name of the system or midlet property that should be used for
      a system property containing a comma separated list of factory
@@ -252,15 +254,14 @@ public class XmlPullParserFactory {
         return newInstance(null, null);
     }
 
-
-
     public static XmlPullParserFactory newInstance (String classNames, Class context)
         throws XmlPullParserException {
 
         if (context == null) {
-            //make sure context uses the smae class loader as API classes
-            XmlPullParserFactory f = new XmlPullParserFactory();
-            context = f.getClass ();
+            //NOTE: make sure context uses the same class loader as API classes
+            //      this is the best we can do and if API is in the same clasloader
+            //      as implementation then this will work succesfully
+            context = referenceContextClass.getClass ();
         }
 
         String  classNamesLocation = null;
