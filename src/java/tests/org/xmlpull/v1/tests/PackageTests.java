@@ -33,6 +33,8 @@ public class PackageTests extends TestRunner
         suite.addTestSuite(TestFactory.class);
         suite.addTestSuite(TestSimple.class);
         suite.addTestSuite(TestSimpleWithNs.class);
+        suite.addTestSuite(TestSerialize.class);
+        suite.addTestSuite(TestSerializeWithNs.class);
         suite.addTestSuite(TestSimpleToken.class);
         suite.addTestSuite(TestAttributes.class);
         suite.addTestSuite(TestEolNormalization.class);
@@ -59,14 +61,17 @@ public class PackageTests extends TestRunner
     }
 
 
-    public void runPackageTests() {
+    public void runPackageTests(String testFactoryName) {
+        writer().println("Executing XMLPULL tests"
+                        +(testFactoryName != null ? " for '"+testFactoryName+"'" : ""));
         notes.setLength(0);
         XmlPullParserFactory f = null;
         try {
             f = UtilTestCase.factoryNewInstance();
-            addNote("* factory "+f.getClass()+"\n");
+            addNote("* factory "+f.getClass()+"\n");//+" created from property "
+            //+System.getProperty(XmlPullParserFactory.PROPERTY_NAME)+"\n");
         } catch (Exception ex) {
-            System.out.println(
+            System.err.println(
                 "ERROR: tests aborted - could not create instance of XmlPullParserFactory:");
             ex.printStackTrace();
             System.exit(1);
@@ -74,11 +79,21 @@ public class PackageTests extends TestRunner
         try {
             f.newPullParser();
         } catch (Exception ex) {
-            System.out.println(
+            System.err.println(
                 "ERROR: tests aborted - could not create instance of XmlPullParser from factory "
                     +f.getClass());
             ex.printStackTrace();
             System.exit(2);
+        }
+
+        try {
+            f.newSerializer();
+        } catch (Exception ex) {
+            System.err.println(
+                "ERROR: tests aborted - could not create instance of XmlSerializer from factory "
+                    +f.getClass());
+            ex.printStackTrace();
+            System.exit(3);
         }
 
         // now run all tests ...
@@ -95,7 +110,9 @@ public class PackageTests extends TestRunner
         }
 
         if(notes.length() > 0) {
-            writer().println("Notes:\n"+notes);
+            writer().println("Test results "
+                                 +(testFactoryName != null ? "for '"+testFactoryName+"'" : "")
+                                 +"\n"+notes+"\n");
         }
     }
 
@@ -111,7 +128,7 @@ public class PackageTests extends TestRunner
         if(listOfTests != null) {
             int pos = 0;
             while (pos < listOfTests.length()) {
-                int cut = listOfTests.indexOf(',', pos);
+                int cut = listOfTests.indexOf(':', pos);
                 if (cut == -1) cut = listOfTests.length();
                 String testFactoryName = listOfTests.substring(pos, cut);
                 if("DEFAULT".equals(testFactoryName)) {
@@ -125,14 +142,13 @@ public class PackageTests extends TestRunner
                 } else {
                     System.setProperty(name, testFactoryName);
                 }
-                System.out.println("Running package tests for: "+testFactoryName);
-                driver.runPackageTests();
+                driver.runPackageTests(testFactoryName);
                 pos = cut + 1;
             }
             driver.printFinalReport();
 
         } else {
-            driver.runPackageTests();
+            driver.runPackageTests(null);
         }
         System.exit(0);
     }
