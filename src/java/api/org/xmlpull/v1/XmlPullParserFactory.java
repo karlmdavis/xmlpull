@@ -46,7 +46,7 @@ public abstract class XmlPullParserFactory
     //private static Class MY_CLASS;
     private static Object MY_REF = new XmlPullParserException();//new XmlPullParserFactory();
     private static final String DEFAULT_KXML_IMPL_FACTORY_CLASS_NAME =
-        "org.kxml2.io.XmlReader";
+        "org.kxml2.io.KXmlParserFactory";
     private static final String DEFAULT_XPP_IMPL_FACTORY_CLASS_NAME =
         "org.xmlpull.xpp3.factory.Xpp3Factory";
     private static final String DEFAULT_RESOURCE_NAME =
@@ -224,7 +224,7 @@ public abstract class XmlPullParserFactory
                 } catch( Exception ex3) {
                     throw new XmlPullParserException(
                         "could not load any factory class "+
-                            "(even small or full default implementation)", ex3);
+                            "(even small or full default implementation): "+ex3, ex3);
                 }
             }
         }
