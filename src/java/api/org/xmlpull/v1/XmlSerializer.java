@@ -52,7 +52,7 @@ public interface XmlSerializer {
 
     /**
      * Return the current value of the feature with given name.
-     * <p><strong>NOTE:</strong> unknown features are <string>always</strong> returned as false.
+     * <p><strong>NOTE:</strong> unknown properties are <strong>always</strong> returned as null
      *
      * @param name The name of feature to be retrieved.
      * @return The value of named feature.
@@ -88,7 +88,6 @@ public interface XmlSerializer {
      */
     public Object getProperty(String name);
 
-
     /**
      * Set to use binary output stream with given encoding.
      */
@@ -96,14 +95,14 @@ public interface XmlSerializer {
         throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
-     * Set the output to the given writer;
+     * Set the output to the given writer.
      * <p><b>WARNING</b> no information about encoding is available!
      */
     public void setOutput (Writer writer)
         throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
-     * Write &lt;?xml declaration with encoding (if encoding not null)
+     * Write &lt;&#63;xml declaration with encoding (if encoding not null)
      * and standalone flag (if standalone not null)
      * This method can only be called just after setOutput.
      */
@@ -134,8 +133,8 @@ public interface XmlSerializer {
      * <a href="http://www.w3.org/XML/xml-names-19990114-errata#NE05">Namespaces in XML Errata</a>.
      * <p><b>NOTE:</b> to set default namespace use as prefix empty string.
      *
-     * @argument prefix must be not null (or IllegalArgumentException is thrown)
-     * @argument namespace must be not null
+     * @param prefix must be not null (or IllegalArgumentException is thrown)
+     * @param namespace must be not null
      */
     public void setPrefix (String prefix, String namespace)
         throws IOException, IllegalArgumentException, IllegalStateException;
@@ -164,7 +163,7 @@ public interface XmlSerializer {
      *
      * <pre>
      * &lt;!-- outside --&gt;     0
-     * &lt;root>                  1
+     * &lt;root&gt;               1
      *   sometext                 1
      *     &lt;foobar&gt;         2
      *     &lt;/foobar&gt;        2

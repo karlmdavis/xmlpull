@@ -261,7 +261,6 @@ public class XmlPullParserFactory {
 
         String  classNamesLocation = null;
 
-
         if (classNames == null || classNames.length() == 0 || "DEFAULT".equals(classNames)) {
             try {
                 InputStream is = context.getResourceAsStream (RESOURCE_NAME);

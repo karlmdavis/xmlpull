@@ -1028,8 +1028,8 @@ public interface XmlPullParser {
      * <p>Essentially it does this
      * <pre>
      *  if (type != getEventType()
-     *  || (namespace != null && !namespace.equals( getNamespace () ) )
-     *  || (name != null && !name.equals( getName() ) ) )
+     *  || (namespace != null &amp;&amp;  !namespace.equals( getNamespace () ) )
+     *  || (name != null &amp;&amp;  !name.equals( getName() ) ) )
      *     throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
      * </pre>
      */
@@ -1043,8 +1043,8 @@ public interface XmlPullParser {
      *
      * <p>The motivation for this function is to allow to parse consistently both
      * empty elements and elements that has non empty content, for example for input: <ol>
-     * <li>&lt;tag>foo&lt;/tag>
-     * <li>&lt;tag>&lt;/tag> (which is equivalent to &lt;tag/>) </ol>
+     * <li>&lt;tag&gt;foo&lt;/tag&gt;
+     * <li>&lt;tag&gt;lt;/tag&gt; (which is equivalent to &lt;tag/&gt;
      * both input can be parsed with the same code:
      * <pre>
      *   p.nextTag()
@@ -1089,10 +1089,10 @@ public interface XmlPullParser {
      * <p>essentially it does this
      * <pre>
      *   int eventType = next();
-     *   if(eventType == TEXT && isWhitespace()) {   // skip whitespace
+     *   if(eventType == TEXT &amp;&amp;  isWhitespace()) {   // skip whitespace
      *      eventType = next();
      *   }
-     *   if (eventType != START_TAG && eventType != END_TAG) {
+     *   if (eventType != START_TAG &amp;&amp;  eventType != END_TAG) {
      *      throw new XmlPullParserException("expected start or end tag", this, null);
      *   }
      *   return eventType;
