@@ -3,16 +3,32 @@ package org.xmlpull.v1.serializer;
 import java.io.*;
 
 /** PLEASE NOTE: This interface is not part of the XmlPull 1.0 API (yet). It
-    is just included as basis for discussion. It may change in any way */
+    is just included as basis for discussion. It may change in any way. 
+
+    The type constants match PER DEFINITION those defined in the
+    XmlPullParser API.  They are repeated here for interface
+    independency. */
 
 public interface XmlSerializer {
+
+    public static final int CDSECT = 5;
+    public static final int ENTITY_REF = 6;
+    public static final int IGNORABLE_WHITESPACE = 7;
+    public static final int PROCESSING_INSTRUCTION = 8;
+    public static final int COMMENT = 9;
+    public static final int DOCDECL = 10;
+
 
     /** binds the given prefix to the given namespace. 
 	valid for the next element including child elements */
 
     void setPrefix (String prefix, String namespace);
 
-    /** sets the output to the given writer */
+
+    void setOutput (OutputStream os, String encoding); 
+	
+    /** sets the output to the given writer;
+	insert big warning here */
 
     void setOutput (Writer writer); 
     
@@ -35,7 +51,6 @@ public interface XmlSerializer {
 
     void flush () throws IOException;
 
-    void close () throws IOException;
 
     // indent must be set separately f. end: <!-- indented --> <tag>xxx</tag>
     // repetition of namespace and name is just for avoiding errors
@@ -49,11 +64,20 @@ public interface XmlSerializer {
 
     void text (String text) throws IOException;
 
-    /** writes an XML comment. Will be silently ignored in WBXML */
+    void text (char [] buf, int start, int len) throws IOException;
 
-    void comment (String comment) throws IOException ;
+    /** Find a better name for this.... writes a "legacy event": Any
+        of CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,
+        PROCESSING_INSTRUCTION, COMMENT, and DOCDECL Some types may be
+        silently ignored in WBXML (XXX should we make a distinction
+        here, which may be ignored, and which events cause an
+        exception???? XXX) */
 
-    /** writes a processing instructuib */
-
-    void processingInstruction (String pi);
+    void legacy (int type, String text)  throws IOException;
+    void legacy (int type, char [] text, int start, int len) throws IOException;
 }
+
+
+
+
+
