@@ -27,3 +27,4 @@ execs
 *_classes
 classpath*
 api*
+*.html
