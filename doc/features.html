@@ -99,7 +99,26 @@ START_DOCUMENT state i.e. this feature can not be changed during parsing.
 <h2>
 Optional features</h2>
 <p>
-They <b>MAY</b> be supported but are not part of XMLPULL API<p>
+They <b>MAY</b> be supported but are not part of XMLPULL API<h3>
+&nbsp;</h3>
+<h3>
+<a name="names-interned"></a>Optional feature: NAMES INTERNED<br>
+&nbsp;</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#names-interned">
+http://xmlpull.org/v1/doc/features.html#names-interned</a> </p>
+<p>If set to true then XMLPULL parser <b>MUST</b> intern all returned names 
+using java.lang.String.intern that includes following functions: getName(), 
+getPrefix(),&nbsp; getNamespace(), getNamespace(prefix), getNamespacePrefix(int),&nbsp; 
+getNamespaceUri(int pos) , getAttributeName(), getAttributeNamespace(), 
+getAttributePrefix(), getAttributeType(). However this feature provides no 
+assurance about String values (like getText()) or attribute values 
+(getAttributeValue()).&nbsp; </p>
+
+<p>NOTE: when enabled this feature allows for fast testing of equality against 
+string constants (no need to use String.equals()). </p>
+
+<p>
 &nbsp;<h3>
 <a name="xml-roundtrip"></a>Optional feature: XML ROUNDTRIP<br>
 &nbsp;</h3>
