@@ -160,10 +160,12 @@ public interface XmlPullParser {
     public static final byte IGNORABLE_WHITESPACE = 6;
     
     /**
-     * XML DOCTYPE declaration was just read
-     * and getText() will return text that is inside DOCDECL
+     * Entity reference was just read.
+     * The value of entity is available as geText() (null if unknown entity)
+     * and the entity naem is available by calling getName()
      */
-    public static final int DOCDECL = 7;
+    public final static byte ENTITY_REF            = 7;
+
     
     /**
      * XML processing instruction declaration was just read
@@ -177,11 +179,11 @@ public interface XmlPullParser {
     public static final int COMMENT                 = 9;
     
     /**
-     * Entity reference was just read.
-     * The value of entity is available as geText() (null if unknown entity)
-     * and the entity naem is available by calling getName()
+     * XML DOCTYPE declaration was just read
+     * and getText() will return text that is inside DOCDECL
      */
-    public final static byte ENTITY_REF            = 10;
+    public static final int DOCDECL = 10;
+
     
     
     /**
@@ -190,16 +192,17 @@ public interface XmlPullParser {
      */
     public static final String [] TYPES = {
         "START_DOCUMENT",
-            "END_DOCUMENT",
-            "START_TAG",
-            "END_TAG",
-            "TEXT",
-            "CDSECT",
-            "IGNORABLE_WHITESPACE",
-            "DOCDECL",
-            "PROCESSING_INSTRUCTION",
-            "COMMENT",
-            "ENTITY_REF"
+        "END_DOCUMENT",
+        "START_TAG",
+        "END_TAG",
+        "TEXT",
+        "CDSECT",
+        "IGNORABLE_WHITESPACE",
+        "ENTITY_REF",
+        "PROCESSING_INSTRUCTION",
+        "COMMENT",
+        "DOCDECL"
+        
     };
         
     
