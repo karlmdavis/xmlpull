@@ -89,18 +89,28 @@ public interface XmlSerializer {
 
     /**
      * Binds the given prefix to the given namespace.
-     * valid for the next element including child elements.
+     * This call is valid for the next element including child elements.
+     * The prefix and namespace MUST be always declared even if prefix
+     * is not used in element (startTag() or attribute()) - for XML 1.0 infoset
+     * it must result in declaring <code>xmlns:prefix='namespace'</code>
+     * (or <code>xmlns:prefix="namespace"</code> depending what character is used
+     * to quote attribute value).
      *
-     * <p><b>NOTE:</b> this method MUST be called direclty before startTag()
-     *   and if aything but startTag() or setPrefix() is called next there will be exception.
+     * <p><b>NOTE:</b> this method MUST be called directly before startTag()
+     *   and if anything but startTag() or setPrefix() is called next there will be exception.
      * <p><b>NOTE:</b> prefixes "xml" and "xmlns" are already bound
+     *   and can not be redefined see:
+     * <a href="http://www.w3.org/XML/xml-names-19990114-errata#NE05">Namespaces in XML Errata</a>.
      */
     public void setPrefix (String prefix, String namespace) throws IOException;
 
     /**
      * Return namespace that corresponds to given prefix
      * If there is no prefix bound to this namespace return null if
-     * generatePrefix is false otherwise return null.
+     * generatePrefix is false otherwise return generated prefix.
+     * <p><b>NOTE:</b> prefixes "xml" and "xmlns" are already bound
+     *   will have values as defined
+     * <a href="http://www.w3.org/TR/REC-xml-names/">Namespaces in XML specification</a>
      */
     public String getPrefix (String namespace, boolean generatePrefix);
 
@@ -150,7 +160,7 @@ public interface XmlSerializer {
 
     /**
      * write  CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,
-     * PROCESSING_INSTRUCTION, COMMENT, and DOCDECL Some types may be
+     *  PROCESSING_INSTRUCTION, COMMENT, and DOCDECL Some types may be
      * silently ignored in WBXML (XXX should we make a distinction
      * here, which may be ignored, and which events cause an
      * exception???? XXX)
