@@ -9,9 +9,10 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import org.xmlpull.v1.XmlSerializer;
 
-/** WARNING: This sample is NOT part of the XmlPull API. This class is just
- contained to help evaluating the serializer interface, which is
- also NOT part of the XmlPull API (yet) */
+/**
+ * This sample demonstrates how to roundtrip XML document
+ * (roundtrip is not exact but infoset level)
+ */
 
 public class Roundtrip {
     //private static final String FEATURE_XML_ROUNDTRIP=

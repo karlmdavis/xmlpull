@@ -368,6 +368,33 @@ public class TestMisc extends UtilTestCase {
     }
 
 
+    public void testRoundtripNext() throws Exception {
+        // check that entiy reference is reported in start tag as unexpanded when roundtrip is enabled
+        final String SAMPLE_XML =
+            "<foo attr=\"baz &amp; bar\"/>";
+
+        XmlPullParser pp = factory.newPullParser();
+        assertEquals(true, pp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        pp.setInput(new StringReader(SAMPLE_XML));
+
+        try {
+            pp.setFeature(FEATURE_XML_ROUNDTRIP, true);
+        } catch(Exception ex) {
+        }
+        // did we succeeded?
+        boolean roundtripSupported = pp.getFeature(FEATURE_XML_ROUNDTRIP);
+
+
+        pp.next();
+        String attrValue = pp.getAttributeValue(pp.NO_NAMESPACE, "attr");
+        assertEquals("baz & bar", attrValue);
+        if(roundtripSupported) {
+            String text = pp.getText();
+            assertEquals(SAMPLE_XML, text);
+        }
+
+    }
+
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestMisc.class));
     }

@@ -26,10 +26,22 @@ but instead content of XMLDecl is made available as set of properties
 and
 <a href="http://xmlpull.org/v1/doc/features.html#xmldecl-content">XMLDECL CONTENT</a>.
 
+<li>XmlSeriaizer is now required ot throw exception when user tries to
+write startTag()  in default namespace ("") and default namesapce is bound
+to non-empty string, added test to check for it
+
+<li>added patch by Holger Krug to SAX2 Driver to allow modification in sub classes
+of how Attributes in startElement() are kept. Added also AttributesCachingDriver
+that extends SAX2 Driver and creates a new copy of Attributes for each startElement()
+so provided Attributes will not change during parsing and can be kept indefinitely.
+
 <li>changed tests to reflect changed handling of XMLDecl
 and added tests to check for optional XMLDecl properties
 
 <li>more tests to check for CDATA end-of-line normalization
+
+<li>changed tests to require support for ROUNDTRIP==false
+and additional checks for EOL nomralization of tokens
 
 </ul>
 
