@@ -227,7 +227,7 @@ public interface XmlPullParser {
     public void setProperty (int propertyConstant,
                              boolean state) throws XmlPullParserException;
 
-    public int getProperty (int propertyConstant);
+    public boolean getProperty (int propertyConstant);
 
 
     //    public void setFeature(String featureUri,
