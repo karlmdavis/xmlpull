@@ -375,22 +375,26 @@ public interface XmlPullParser {
      * <a href="http://www.w3.org/TR/REC-xml#intern-replacement">XML 1.0 Section 4.5
      * Construction of Internal Entity Replacement Text</a>.
      * If FEATURE_PROCESS_DOCDECL or FEATURE_VALIDATION are set then calling this
-     * function will reulst in exception; when processing of DOCDECL is enabled
+     * function will reulst in exception because when processing of DOCDECL is enabled
      * there is no need to set manually entity replacement text.
      *
      * <p>The motivation for this function is to allow very small implementations of XMLPULL
      * that will work in J2ME environments and though may not be able to process DOCDECL
-     * but still can be made to work with predefined DTDs using this function.
+     * but still can be made to work with predefined DTDs by using this function to
+     * define well known in advance entities.
+     * Additionally as XML Schemas are replacing DTDs by allowing parsers not to process DTDs
+     * it is possible to create more efficient parser implementations
+     * that can be used as underlying layer to do XML schemas validation.
+     *
      *
      * <p><b>NOTE:</b> this is replacement text and it is not allowed
-     *  to contain any other entity references
-     * <p><b>NOTE:</b> list of entites will always containo standard XML
+     *  to contain any other entity reference
+     * <p><b>NOTE:</b> list of pre-defined entites will always contain standard XML
      * entities (such as &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos;)
-     * they cannot be replaced!
+     * and they cannot be replaced!
      *
-
      * @see #setInput
-     * @see #FEATURE_PROCESS_DOCDELC
+     * @see #FEATURE_PROCESS_DOCDECL
      * @see #FEATURE_VALIDATION
      */
     public void defineEntityReplacementText( String entityName,
