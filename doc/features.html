@@ -123,6 +123,35 @@ string constants (no need to use String.equals()). </p>
 <h3>
 &nbsp;</h3>
 <h3>
+<a name="expand-entity-ref"></a>Optional feature: EXPAND ENTITY REF</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#expand-entity-ref">
+http://xmlpull.org/v1/doc/features.html#expand-entity-ref</a> </p>
+
+<p>
+This optional feature changes behavior of nextToken() and when enabled parser <b>
+MUST</b> report expanded entity reference content as tokens and <b>MUST</b> 
+report end of expanded entity ref as ENTITY_REF with name that is null 
+(getText() returns null).</p>
+
+<p>
+For example if entity foo was defined to have replacement text bar then parser 
+will report following tokens: ENTITY_REF with 'foo' as entity name, TEXT with 
+value 'bar' and ENTITY_REF with no name to signal end of expansion) . If 
+PROCESS_DOCDECL is true then reported tokens may include START_TAG/END_TAG if 
+entity has embedded markup and ENTITY_REF for recursively expanded entity 
+references (following calls to nextToken() will report entity content&nbsp; as 
+possibly multiple TEXT, START_TAG, END_TAG, ENTITY_REF etc.). </p>
+
+<p>
+NOTE: it can only be supported when PROCESS_DOCDECL is true as 
+defineEntityReplacementText() will always escape markup or entity references.</p>
+
+<p>
+NOTE: next() will always expand entity ref and report combined TEXT event and 
+this feature does not affect next() behavior.<br>
+&nbsp;</p>
+<h3>
 <a name="xml-roundtrip"></a>Optional feature: XML ROUNDTRIP</h3>
 <p>This feature is identified by
 <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">
