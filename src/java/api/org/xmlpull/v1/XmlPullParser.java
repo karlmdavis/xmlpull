@@ -147,7 +147,7 @@ public interface XmlPullParser {
     /**
      * CDATA sections was just read and value of text inside is available  by callling getText()
      */
-    public final static byte CDSECT                = 5;
+    public final static byte CDSECT = 5;
     
     /**
      * Ignorable whitespace was just read. For non-validating
@@ -164,7 +164,7 @@ public interface XmlPullParser {
      * The value of entity is available as geText() (null if unknown entity)
      * and the entity naem is available by calling getName()
      */
-    public final static byte ENTITY_REF            = 7;
+    public final static byte ENTITY_REF = 7;
 
     
     /**
@@ -176,7 +176,7 @@ public interface XmlPullParser {
     /**
      * XML comment was just read and getText() will return value inside comment.
      */
-    public static final int COMMENT                 = 9;
+    public static final int COMMENT = 9;
     
     /**
      * XML DOCTYPE declaration was just read
@@ -411,14 +411,20 @@ public interface XmlPullParser {
     // --------------------------------------------------------------------------
     // TEXT related methods
     
-    /* Check if current TEXT event contains only whitespace characters.
-     For IGNORABLE_WHITESPACE, this is always true. If the current event
-     is neither a event TEXT nor a IGNORABLE_WHITESPACE event, false is
-     returned. Please note that non-validating parsers are not
-     able to distinguish whitespace and ignorable whitespace
-     except from whitespace outside the root element. ignorable
-     whitespace is reported as separate event which is exposed
-     via nextToken only. */
+    /**
+     * Check if current TEXT event contains only whitespace characters.
+     * For IGNORABLE_WHITESPACE, this is always true. If the current event
+     * is neither a event TEXT nor a IGNORABLE_WHITESPACE event, false is
+     * returned. Please note that non-validating parsers are not
+     * able to distinguish whitespace and ignorable whitespace
+     * except from whitespace outside the root element. ignorable
+     * whitespace is reported as separate event which is exposed
+     * via nextToken only.
+     *
+     * <p><b>NOTE:</b> it can be only called for element content related events
+     * such as TEXT, CDSECT, IGNORABLE_WHITESPACE and ENTITY_REF otherwise
+     * exception will be thrown.
+     */
     
     public boolean isWhitespace() throws XmlPullParserException;
     
@@ -659,4 +665,5 @@ public interface XmlPullParser {
     public String readText () throws XmlPullParserException, IOException;
     
 }
+
 
