@@ -411,11 +411,15 @@ public class StaticXmlSerializerWrapper extends XmlSerializerDelegate
         xs.endTag(namespace, name);
     }
 
-    public void wiriteStringElement(String namespace, String name, String s)
+    public void writeStringElement(String namespace, String name, String s)
         throws XmlPullParserException, IOException, IllegalArgumentException
     {
         xs.startTag(namespace, name);
-        writeString(s);
+        if(s == null) {
+            xs.attribute(XSD_NS, "nil", "true");
+        } else {
+            writeString(s);
+        }
         xs.endTag(namespace, name);
     }
 

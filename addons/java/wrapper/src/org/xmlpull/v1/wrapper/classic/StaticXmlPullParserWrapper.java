@@ -273,6 +273,11 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     }
 
     public String readString() throws XmlPullParserException, IOException {
+        String xsiNil = pp.getAttributeValue(XSD_NS, "nil");
+        if("true".equals(xsiNil)) {
+            nextEndTag();
+            return null;
+        }
         return pp.nextText();
     }
 

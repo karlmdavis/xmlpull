@@ -6,6 +6,8 @@ package org.xmlpull.v1.wrapper.junit;
 //import junit.framework.Test;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.xmlpull.v1.XmlPullParser;
@@ -14,7 +16,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.wrapper.XmlPullParserWrapper;
 import org.xmlpull.v1.wrapper.XmlPullWrapperFactory;
 import org.xmlpull.v1.wrapper.XmlSerializerWrapper;
-import java.io.StringWriter;
 
 /**
  * Test some wrapper utility operations.
@@ -159,6 +160,50 @@ public class TestXmlPullWrapper extends TestCase {
 
         assertEquals(pw.next(), XmlPullParser.END_DOCUMENT);
     }
+
+    public void testXsdTypes() throws IOException, XmlPullParserException {
+        XmlSerializerWrapper xs = wrappedFactory.newSerializerWrapper();
+        Writer out = new StringWriter();
+        xs.setOutput(out);
+        xs.startTag("test");
+        xs.writeStringElement(null, "s1", "foo");
+        xs.writeStringElement(null, "s2", "");
+        xs.writeStringElement(null, "s1", null);
+        xs.writeIntElement(null, "i1", 0);
+        xs.writeIntElement(null, "i2", 100);
+        xs.writeIntElement(null, "imax", Integer.MAX_VALUE);
+        xs.writeIntElement(null, "imin", Integer.MIN_VALUE);
+        xs.writeDoubleElement(null, "d1", 0.0);
+        xs.writeDoubleElement(null, "d2", -100.0);
+        xs.endDocument();
+        //System.err.println(getClass()+" s="+out.toString());
+
+        XmlPullParserWrapper pw = wrappedFactory.newPullParserWrapper();
+        pw.setInput(new StringReader(out.toString()));
+        pw.nextStartTag("test");
+        pw.nextTag();
+        String s1 = pw.readStringElemet(null, "s1");
+        assertEquals("foo", s1);
+        pw.nextTag();
+        String s2 = pw.readStringElemet(null, "s2");
+        assertEquals("", s2);
+        pw.nextTag();
+        s1 = pw.readStringElemet(null, "s1");
+        assertEquals(null, s1);
+        pw.nextTag();
+        assertEquals(0, pw.readIntElement(null, "i1"));
+        pw.nextTag();
+        assertEquals(100, pw.readIntElement(null, "i2"));
+        pw.nextTag();
+        assertEquals(Integer.MAX_VALUE, pw.readIntElement(null, "imax"));
+        pw.nextTag();
+        assertEquals(Integer.MIN_VALUE, pw.readIntElement(null, "imin"));
+        pw.nextTag();
+        assertEquals(0.0, pw.readDoubleElement(null, "d1"), 0.00001);
+        pw.nextTag();
+        assertEquals(-100.0, pw.readDoubleElement(null, "d2"), 0.00001);
+    }
+
 
     private static String printable(char ch) {
         if(ch == '\n') {

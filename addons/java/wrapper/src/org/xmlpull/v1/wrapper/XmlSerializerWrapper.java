@@ -15,8 +15,9 @@ import org.xmlpull.v1.XmlSerializer;
  * @author Naresh Bhatia
  */
 public interface XmlSerializerWrapper extends XmlSerializer {
-    public static final String NO_NAMESPACE = "";
-    public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
+    public static final String NO_NAMESPACE = XmlPullParserWrapper.NO_NAMESPACE;
+    public static final String XSI_NS = XmlPullParserWrapper.XSI_NS;
+    public static final String XSD_NS = XmlPullParserWrapper.XSD_NS;
 
     /**
      * Get namespace that is used as default when no namespace parameter is used for
@@ -75,7 +76,7 @@ public interface XmlSerializerWrapper extends XmlSerializer {
     // set of methods to make easy to write XSD types
 
     /**
-     * Write as text value of argument.
+     * Write as text value of argument (just calls text!).
      */
     public void writeDouble(double d)
         throws XmlPullParserException, IOException, IllegalArgumentException;
@@ -97,7 +98,7 @@ public interface XmlSerializerWrapper extends XmlSerializer {
         throws XmlPullParserException, IOException, IllegalArgumentException;
     public void writeIntElement(String namespace, String name, int i)
         throws XmlPullParserException, IOException, IllegalArgumentException;
-    public void wiriteStringElement(String namespace, String name, String s)
+    public void writeStringElement(String namespace, String name, String s)
         throws XmlPullParserException, IOException, IllegalArgumentException;
 }
 
