@@ -343,8 +343,8 @@ public class TestSerializeWithNs extends UtilTestCase {
                                attvalueUseApostrophe.booleanValue());
                 if(!serializerUseApostropheSupported) {
                     PackageTests.addNote(
-                        "* optional feature "
-                            +FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported");
+                        "* feature "
+                            +FEATURE_SERIALIZER_ATTVALUE_USE_APOSTROPHE+" is supported\n");
                     serializerUseApostropheSupported = true;
                 }
             } catch(Exception ex) {
@@ -356,8 +356,8 @@ public class TestSerializeWithNs extends UtilTestCase {
                 ser.setProperty(PROPERTY_SERIALIZER_INDENTATION, indentation);
                 if(!serializerIndentationSupported) {
                     PackageTests.addNote(
-                        "* optional property "
-                            +PROPERTY_SERIALIZER_INDENTATION+" is supported");
+                        "* property "
+                            +PROPERTY_SERIALIZER_INDENTATION+" is supported\n");
                     serializerIndentationSupported = true;
                 }
             } catch(Exception ex) {
@@ -369,8 +369,8 @@ public class TestSerializeWithNs extends UtilTestCase {
                 ser.setProperty(PROPERTY_SERIALIZER_LINE_SEPARATOR, lineSeparator);
                 if(!serializerLineSeparatorSupported) {
                     PackageTests.addNote(
-                        "* optional property "
-                            +PROPERTY_SERIALIZER_LINE_SEPARATOR+" is supported");
+                        "* property "
+                            +PROPERTY_SERIALIZER_LINE_SEPARATOR+" is supported\n");
                     serializerLineSeparatorSupported = true;
                 }
             } catch(Exception ex) {
@@ -539,6 +539,24 @@ public class TestSerializeWithNs extends UtilTestCase {
     }
 
 
+    public void testConflictingDefaultNs() throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ser.setOutput(baos, "UTF8");
+
+        ser.setPrefix("", "namesp");
+        ser.setPrefix("ns1", "namesp1");
+        ser.setPrefix("ns2", "namesp2");
+        try {
+            ser.startTag("", "foo");
+            fail("exception was expected when default namespace can not be declared");
+        } catch(IllegalStateException ex) {
+            //
+        }
+    }
+
+
     public void testMultipleOverlappingNamespaces() throws Exception {
         XmlSerializer ser = factory.newSerializer();
 
@@ -565,7 +583,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         ser.setPrefix("", "namesp");
         ser.setPrefix("ns1", "namesp1");
         ser.setPrefix("ns2", "namesp2");
-        ser.startTag("", "foo");
+        ser.startTag("namesp", "foo");
 
         ser.setPrefix("ns1", "x1");
         ser.setPrefix("ns3", "namesp3");
@@ -574,7 +592,7 @@ public class TestSerializeWithNs extends UtilTestCase {
 
         ser.startTag("namesp2", "gugu");
         ser.attribute("", "a1", "v1");
-        ser.attribute("namesp2", "a2", "v2");
+        ser.attribute("namesp2", "a2", "v2" );
         ser.attribute("http://www.w3.org/XML/1998/namespace", "lang", "en");
         ser.attribute("x1", "a3", "v3");
 
@@ -587,13 +605,13 @@ public class TestSerializeWithNs extends UtilTestCase {
 
         ser.endTag("x1", "bar");
 
-        ser.endTag("", "foo");
+        ser.endTag("namesp", "foo");
         ser.endDocument();
 
 
         byte[] binput = baos.toByteArray();
 
-        //System.out.println("serialized="+new String(binput, "US-ASCII"));
+        //System.out.println(getClass().getName()+"serialized="+new String(binput, "US-ASCII"));
 
         xpp.setInput(new ByteArrayInputStream( binput ), "US-ASCII" );
         assertEquals("US-ASCII", xpp.getInputEncoding());

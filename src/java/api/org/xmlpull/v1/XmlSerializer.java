@@ -163,7 +163,9 @@ public interface XmlSerializer {
      * immediately before this method.
      * If namespace is null no namespace prefix is printed but just name.
      * If namespace is empty string then serialzier will make sure that
-     * default empty namespace is declared (in XML 1.0 xmlns='').
+     * default empty namespace is declared (in XML 1.0 xmlns='')
+     * or throw IllegalStateException if default namespace is already bound
+     * to non-empty string.
      */
     public XmlSerializer startTag (String namespace, String name)
         throws IOException, IllegalArgumentException, IllegalStateException;

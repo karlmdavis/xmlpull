@@ -48,10 +48,10 @@ public class TestToken extends UtilTestCase {
         "[<!ENTITY % active.links \"INCLUDE\">"+
         "  <!ENTITY   test \"This is test! Do NOT Panic!\" >"+
         "]>"+
-        "<foo attrName='attrVal'>bar<!--comment-->"+
+        "<foo attrName='attrVal'>bar<!--comment\r\ntest-->"+
         "&test;&test;&lt;&#32;"+
         "&amp;&gt;&apos;&quot;&#x20;&#x3C;"+
-        "<?pi ds?><![CDATA[ vo<o ]]></foo>";
+        "<?pi ds\r\nda?><![CDATA[ vo<o ]]></foo>";
     private static final String MISC_XML =
         //"\n \r\n \n\r<!DOCTYPE titlepage SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
         //"<!--c2-->"+
@@ -116,11 +116,15 @@ public class TestToken extends UtilTestCase {
         // attempt to set roundtrip
         try {
             xpp.setFeature(FEATURE_XML_ROUNDTRIP, useRoundtrip);
-        } catch(Exception ex) {  // make sure we ignore if failed ...
+        } catch(Exception ex) {  // make sure we ignore if failed to set roundtrip ...
         }
         // did we succeeded?
         boolean roundtripSupported = xpp.getFeature(FEATURE_XML_ROUNDTRIP);
         //boolean unnormalizedSupported = xpp.getFeature(FEATURE_UNNORMALIZED_XML);
+        if(!useRoundtrip && roundtripSupported != false) {
+            throw new RuntimeException(
+                "disabling feature "+FEATURE_XML_ROUNDTRIP+" must be supported");
+        }
 
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
         try {
@@ -209,12 +213,21 @@ public class TestToken extends UtilTestCase {
         }
 
         //xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "comment", false, -1);
+
+        checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, false, -1);
         try {
             xpp.isWhitespace();
             fail("whitespace function must fail for COMMENT");
         } catch(XmlPullParserException ex) {
         }
+        {
+            String text = xpp.getText();
+                if(roundtripSupported) {
+                    assertEquals(printable("comment\r\ntest"), printable(text));
+                } else {
+                    assertEquals(printable("comment\ntest"), printable(text));
+                }
+            }
 
         boolean processDocdecl = xpp.getFeature(xpp.FEATURE_PROCESS_DOCDECL);
 
@@ -278,12 +291,20 @@ public class TestToken extends UtilTestCase {
         checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, "#x3C", "<", false, -1);
 
         xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, "pi ds", false, -1);
+        checkParserStateNs(xpp, 1, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, false, -1);
         try {
             xpp.isWhitespace();
             fail("whitespace function must fail for START_DOCUMENT");
         } catch(XmlPullParserException ex) {
         }
+        {
+            String text = xpp.getText();
+                if(roundtripSupported) {
+                    assertEquals(printable("pi ds\r\nda"), printable(text));
+                } else {
+                    assertEquals(printable("pi ds\nda"), printable(text));
+                }
+            }
 
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.CDSECT, null, 0, null, null, " vo<o ", false, -1);
@@ -346,7 +367,7 @@ public class TestToken extends UtilTestCase {
         if(!roundtripSupported) {
             return;
         }
-        PackageTests.addNote("* optional feature "+FEATURE_XML_ROUNDTRIP+" is supported\n");
+        PackageTests.addNote("* feature "+FEATURE_XML_ROUNDTRIP+" is supported\n");
 
         StringWriter sw = new StringWriter();
         String s;
