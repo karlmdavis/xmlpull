@@ -1,6 +1,6 @@
 <HTML>
 <HEAD>
-<TITLE>XMLPULL V1 API Changes
+<TITLE>XmlPull v1 API Changes
 </TITLE>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="Author" content="Aleksander Slominski [http://www.extreme.indiana.edu/~aslom]">
@@ -18,7 +18,14 @@ incorporate all changes since 1.0.x in stable version </ul>
 
 <h3><a name="XMLPULL_1_1_3"></a>2003-03 (XMLPULL_1_1_3)</h3>
 <ul>
-<li>work in progress
+<li>updated tests to look for boundary cases with PI/comments and next() (thanks to Henry Minsky)
+<li>marked all supported optional features and properties as such in unit tests summary
+
+
+<li>changed XmlPullParserFactory.newInstance() to use XmlPullParserFactory class
+as default class context and not String.class because when using String we will never
+find /META-INF/services/org.xmlpull.v1.XmlPullParserFactory resource ...
+
 </ul>
 
 <h3><a name="XMLPULL_1_1_2_1"></a>2003-02-26 (XMLPULL_1_1_2_1)</h3>
