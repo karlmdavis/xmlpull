@@ -60,7 +60,7 @@ public class TestXmlPullWrapper extends TestCase {
         xs.endDocument();
 
         String s = sw.toString();
-        System.out.println(getClass()+" s="+s);
+        //System.out.println(getClass()+" s="+s);
         XmlPullParserWrapper pw = wrapperFactory.newPullParserWrapper();
         pw.setInput(new StringReader(s));
         pw.nextStartTag("test");
@@ -71,6 +71,50 @@ public class TestXmlPullWrapper extends TestCase {
         assertTrue(pw.matches(XmlPullParser.END_TAG, null, "hello"));
         pw.nextEndTag("test");
     }
+
+
+
+    public void testSerializeEvent() throws IOException, XmlPullParserException
+    {
+
+        //final String XML ="<html xmlns=\"http://www.w3.org/1999/xhtml\"><body /></html>";
+        final String NS = "http://exmaple.com/foofoo";
+        final String XHTML_NS = "http://www.w3.org/1999/xhtml";
+        final String XML = "<m:blog  xmlns:m='"+NS+"' xmlns='"+XHTML_NS+"'><html /></m:blog>";
+
+        XmlPullWrapperFactory wf = XmlPullWrapperFactory.newInstance();
+        wf.setNamespaceAware(true);
+
+        XmlPullParserWrapper pp = wf.newPullParserWrapper();
+        pp.setInput( new StringReader(XML) );
+
+        XmlSerializerWrapper ser = wf.newSerializerWrapper();
+        StringWriter sw = new StringWriter();
+        ser.setOutput(sw);
+        //ser.setCurrentNamespaceForElements("http://www.w3.org/1999/xhtml");
+        //ser.startTag("p").attribute("class", "abstract").text("Hello");
+        //ser.endTag("p");
+
+        while (pp.nextToken() != XmlPullParser.END_DOCUMENT) {
+            ser.event(pp);
+        }
+        //System.out.println(getClass()+" sw="+sw);
+        String s = sw.toString();
+        pp.setInput(new StringReader( s ));
+        //assertEquals(
+
+        pp.nextStartTag(NS, "blog");
+        int start = pp.getNamespaceCount(pp.getDepth() - 1);
+        int end = pp.getNamespaceCount(pp.getDepth());
+        assertEquals(2, end - start);
+        assertEquals("m", pp.getNamespacePrefix(start));
+        assertEquals(NS, pp.getNamespaceUri(start));
+        assertEquals(null, pp.getNamespacePrefix(start+1));
+        assertEquals(XHTML_NS, pp.getNamespaceUri(start+1));
+        pp.nextStartTag(XHTML_NS, "html");
+
+    }
+
 
     public void testPI() throws IOException, XmlPullParserException {
         final String PI_TARGET = "xml-stylesheet";

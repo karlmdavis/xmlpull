@@ -33,9 +33,9 @@ interface <b>extend</b> them.
 <p>Here is example usage:</p>
 <pre>import org.xmlpull.v1.wrapper.*;
 
-XmlPullWrapperFactory wrapper = XmlPullWrapperFactory.newInstance();
+XmlPullWrapperFactory wf = XmlPullWrapperFactory.newInstance();
 
-XmlPullParserWrapper pw = wrapper.newPullWrapper();
+XmlPullParserWrapper pw = wf.newPullParserWrapper();
 pw.setInput( ... );
 pw.require(XmlPullParser.START_TAG, ..., ...);
 pw.skipSubTree();
@@ -265,7 +265,7 @@ public class AttributesCachingDriver extends Driver
 
 </p><hr>
 <font size="-1">
-Last modified $Id: addons.html,v 1.6 2003/05/18 13:49:30 aslom Exp $
+Last modified $Id: addons.html,v 1.7 2003/05/19 14:43:03 aslom Exp $
 </font>
 
 <!--extra space at bottom for hyperlinks #anchors to work -->

@@ -20,26 +20,23 @@ import org.xmlpull.v1.XmlSerializer;
 public class Roundtrip {
     //private static final String FEATURE_XML_ROUNDTRIP=
     //    "http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
-    protected final static String PROPERTY_XMLDECL_STANDALONE =
+    private final static String PROPERTY_XMLDECL_STANDALONE =
         "http://xmlpull.org/v1/doc/features.html#xmldecl-standalone";
 
-    XmlPullParser parser;
-    XmlSerializer serializer;
+    private XmlPullParser parser;
+    private XmlSerializer serializer;
 
-    public Roundtrip (XmlPullParser parser, XmlSerializer serializer) {
+    private Roundtrip (XmlPullParser parser, XmlSerializer serializer) {
         this.parser = parser;
         this.serializer = serializer;
     }
 
-    public void writeStartTag () throws XmlPullParserException, IOException {
-        //check forcase when feature xml roundtrip is supported
+    private void writeStartTag () throws XmlPullParserException, IOException {
+        //check for case when feature xml roundtrip is supported
         //if (parser.getFeature (FEATURE_XML_ROUNDTRIP)) {
-        //TODO: how to do pass through string with actual start tag in getText()
-        //return;
-        //}
         if (!parser.getFeature (XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES)) {
             for (int i = parser.getNamespaceCount (parser.getDepth ()-1);
-                 i < parser.getNamespaceCount (parser.getDepth ())-1; i++) {
+                 i <= parser.getNamespaceCount (parser.getDepth ())-1; i++) {
                 serializer.setPrefix
                     (parser.getNamespacePrefix (i),
                      parser.getNamespaceUri (i));
@@ -57,7 +54,7 @@ public class Roundtrip {
     }
 
 
-    public void writeToken (int eventType) throws XmlPullParserException, IOException {
+    private void writeToken (int eventType) throws XmlPullParserException, IOException {
         switch (eventType) {
             case XmlPullParser.START_DOCUMENT:
                 //use Boolean.TRUE to make it standalone
@@ -109,7 +106,7 @@ public class Roundtrip {
         }
     }
 
-    public void roundTrip () throws XmlPullParserException, IOException {
+    private void roundTrip() throws XmlPullParserException, IOException {
         parser.nextToken(); // read first token
         writeToken (XmlPullParser.START_DOCUMENT);  // write optional XMLDecl if present
         while (parser.getEventType () != XmlPullParser.END_DOCUMENT) {
@@ -119,15 +116,17 @@ public class Roundtrip {
         writeToken (XmlPullParser.END_DOCUMENT);
     }
 
+
     public static void main(String[] args) throws Exception {
         //for (int i = 0; i < args.length; i++)
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
         for (int i = 0; i < 1; i++)
         {
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser pp = factory.newPullParser();
-            XmlSerializer serializer = factory.newSerializer();
-
             pp.setInput(new java.net.URL(args[ i ]).openStream(), null);
+
+            XmlSerializer serializer = factory.newSerializer();
             serializer.setOutput( System.out, null);
 
             (new Roundtrip(pp, serializer)).roundTrip();

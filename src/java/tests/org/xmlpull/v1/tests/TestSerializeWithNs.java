@@ -644,9 +644,33 @@ public class TestSerializeWithNs extends UtilTestCase {
         return s;
     }
 
-    //setPrefix check that prefix is not duplicated ...
+    public void testSetPrefix(String prefix) throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+        StringWriter sw = new StringWriter();
+        ser.setOutput(sw);
+        final String NS = "http://example.com/test";
+        ser.setPrefix(prefix, NS);
+        ser.startTag(NS, "foo");
+        ser.endDocument();
+
+        String serialized = sw.toString();
+        //System.out.println(getClass()+" sw="+sw);
+        xpp.setInput(new StringReader(serialized));
+
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        String expectedPrefix = (prefix != null && prefix.length() == 0) ? null : prefix;
+        checkParserStateNs(xpp, 1, xpp.START_TAG, expectedPrefix, 1, NS, "foo", null, xpp.isEmptyElementTag() /*empty*/, 0);
+    }
 
     public void testSetPrefix() throws Exception {
+        testSetPrefix("ns");
+        testSetPrefix("");
+        testSetPrefix(null);
+    }
+
+    //setPrefix check that prefix is not duplicated ...
+    public void testSetPrefixAdv() throws Exception {
         //TODO check redeclaring defult namespace
 
 
