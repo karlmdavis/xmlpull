@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE.txt in distribution for copyright and license information
+// see LICENSE_TESTS.txt in distribution for copyright and license information
 
 package org.xmlpull.v1.tests;
 
@@ -60,14 +60,15 @@ public class UtilTestCase extends TestCase {
 
         if(xpp.getEventType() != xpp.START_TAG && xpp.getEventType() != xpp.END_TAG) {
             assertEquals("getText()", printable(text), printable(xpp.getText()));
-        }
-        int [] holderForStartAndLength = new int[2];
-        char[] buf = xpp.getTextCharacters(holderForStartAndLength);
-        if(buf != null) {
-            String s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-            assertEquals("getText(holder)", printable(text), printable(s));
-        } else {
-            assertEquals("getTextCharacters()", null, text);
+
+            int [] holderForStartAndLength = new int[2];
+            char[] buf = xpp.getTextCharacters(holderForStartAndLength);
+            if(buf != null) {
+                String s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                assertEquals("getText(holder)", printable(text), printable(s));
+            } else {
+                assertEquals("getTextCharacters()", null, text);
+            }
         }
         if(type == xpp.START_TAG) {
             assertEquals("isEmptyElementTag()", isEmpty, xpp.isEmptyElementTag());
@@ -185,22 +186,19 @@ public class UtilTestCase extends TestCase {
             return "\\r";
         } else if(ch == '\t') {
             return "\\t";
+        } if(ch > 127 || ch < 32) {
+            return "\\u"+Integer.toHexString((int)ch);
         }
         return ""+ch;
     }
 
     protected String printable(String s) {
         if(s == null) return null;
-        int iN = s.indexOf('\n');
-        int iR = s.indexOf('\r');
-        int iT = s.indexOf('\t');
-        if((iN != -1) || (iR != -1) || (iT != -1)) {
-            StringBuffer buf = new StringBuffer();
-            for(int i = 0; i < s.length(); ++i) {
-                buf.append(printable(s.charAt(i)));
-            }
-            s = buf.toString();
+        StringBuffer buf = new StringBuffer();
+        for(int i = 0; i < s.length(); ++i) {
+            buf.append(printable(s.charAt(i)));
         }
+        s = buf.toString();
         return s;
     }
 

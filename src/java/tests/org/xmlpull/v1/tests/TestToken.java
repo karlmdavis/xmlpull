@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE.txt in distribution for copyright and license information
+// see LICENSE_TESTS.txt in distribution for copyright and license information
 
 package org.xmlpull.v1.tests;
 
@@ -27,7 +27,6 @@ public class TestToken extends UtilTestCase {
 
     protected void setUp() throws XmlPullParserException {
         factory = XmlPullParserFactory.newInstance(
-            Thread.currentThread().getContextClassLoader().getClass(),
             System.getProperty(XmlPullParserFactory.DEFAULT_PROPERTY_NAME)
         );
         factory.setNamespaceAware(true);

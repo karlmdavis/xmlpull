@@ -1,5 +1,5 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
-// see LICENSE.txt in distribution for copyright and license information
+// see LICENSE_TESTS.txt in distribution for copyright and license information
 
 package org.xmlpull.v1.tests;
 
