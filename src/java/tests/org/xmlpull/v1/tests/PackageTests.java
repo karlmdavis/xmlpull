@@ -8,6 +8,31 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
+ * TODO: add tests for
+ * <pre>
+ *
+ * attrib uniq
+ * EOL normalization
+ *
+ *     public static final String REPORT_NAMESPACE_ATTRIBUTES =
+ *        "http://xmlpull.org/v1/features/report-namespace-prefixes";
+ *
+ *  public static final String PROCESS_DOCDECL =
+ *      "http://xmlpull.org/v1/features/process-docdecl";
+ *
+ *
+ *  public void defineCharacterEntity (String entity, String value) throws XmlPullParserException;
+ *
+ *    public boolean isWhitespace() throws XmlPullParserException;
+ *
+ *  public int nextToken()
+ *      throws XmlPullParserException, IOException;
+ *
+ *  public void require (int type, String namespace, String name)
+ *      throws XmlPullParserException, IOException;
+ *
+ *    public String readText () throws XmlPullParserException, IOException;
+ *
  */
 public class PackageTests extends TestCase
 {
@@ -22,6 +47,10 @@ public class PackageTests extends TestCase
 
         suite.addTestSuite(TestFactory.class);
         suite.addTestSuite(TestSimple.class);
+        suite.addTestSuite(TestSimpleWithNs.class);
+        suite.addTestSuite(TestSimpleToken.class);
+        suite.addTestSuite(TestEvent.class);
+        suite.addTestSuite(TestToken.class);
 
         return suite;
     }

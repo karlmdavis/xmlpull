@@ -8,7 +8,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class MyXmlPullApp
 {
-    
+
     public final static String SAMPLE_XML =
         "<?xml version=\"1.0\"?>\n"+
         "\n"+
@@ -19,7 +19,7 @@ public class MyXmlPullApp
         "<l>Sugar is sweet,</l>\n"+
         "<l>And I love you.</l>\n"+
         "</poem>";
-    
+
     public static void main (String args[])
         throws XmlPullParserException, IOException
     {
@@ -27,9 +27,9 @@ public class MyXmlPullApp
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
         System.out.println("parser implementation class is "+xpp.getClass());
-        
+
         MyXmlPullApp app = new MyXmlPullApp();
-        
+
         if(args.length == 0) {
             System.out.println("Parsing simple sample XML");//:\n"+ SAMPLE_XML);
             xpp.setInput( new StringReader( SAMPLE_XML ) );
@@ -42,12 +42,12 @@ public class MyXmlPullApp
             }
         }
     }
-    
-    
+
+
     public void processDocument(XmlPullParser xpp)
         throws XmlPullParserException, IOException
     {
-        int eventType = xpp.getType();
+        int eventType = xpp.getEventType();
         do {
             if(eventType == xpp.START_DOCUMENT) {
                 System.out.println("Start document");
@@ -63,8 +63,8 @@ public class MyXmlPullApp
             eventType = xpp.next();
         } while (eventType != xpp.END_DOCUMENT);
     }
-    
-    
+
+
     public void processStartElement (XmlPullParser xpp)
     {
         String name = xpp.getName();
@@ -75,8 +75,8 @@ public class MyXmlPullApp
             System.out.println("Start element: {" + uri + "}" + name);
         }
     }
-    
-    
+
+
     public void processEndElement (XmlPullParser xpp)
     {
         String name = xpp.getName();
@@ -86,9 +86,9 @@ public class MyXmlPullApp
         else
             System.out.println("End element:   {" + uri + "}" + name);
     }
-    
+
     int holderForStartAndLength[] = new int[2];
-    
+
     public void processText (XmlPullParser xpp) throws XmlPullParserException
     {
         char ch[] = xpp.getTextCharacters(holderForStartAndLength);

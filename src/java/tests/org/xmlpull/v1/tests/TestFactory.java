@@ -23,22 +23,22 @@ public class TestFactory extends TestCase {
     public void testFactory() throws Exception {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
             System.getProperty(XmlPullParserFactory.DEFAULT_PROPERTY_NAME));
-        System.out.println("factory = "+factory);
+        //System.out.println("factory = "+factory);
         XmlPullParser xpp = factory.newPullParser();
-        assertEquals(false, xpp.getFeature(XmlPullParser.PROCESS_NAMESPACES));
-        factory.setFeature(XmlPullParser.PROCESS_NAMESPACES, true);
+        assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         xpp = factory.newPullParser();
-        assertEquals(true, xpp.getFeature(XmlPullParser.PROCESS_NAMESPACES));
+        assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
 
         factory.setNamespaceAware(false);
         assertEquals(false, factory.isNamespaceAware());
         xpp = factory.newPullParser();
-        assertEquals(false, xpp.getFeature(XmlPullParser.PROCESS_NAMESPACES));
+        assertEquals(false, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
 
         factory.setNamespaceAware(true);
         assertEquals(true, factory.isNamespaceAware());
         xpp = factory.newPullParser();
-        assertEquals(true, xpp.getFeature(XmlPullParser.PROCESS_NAMESPACES));
+        assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
     }
 
     public static void main (String[] args) {
