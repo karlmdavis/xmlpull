@@ -127,7 +127,7 @@ public interface XmlSerializer {
      * If namespace is empty string no namespace prefix is printed but just name.
      */
 
-    public void startTag (String namespace, String name) throws IOException;
+    public XmlSerializer startTag (String namespace, String name) throws IOException;
 
     /**
      * Writes an attribute. calls to attribute must follow a call to
@@ -136,7 +136,7 @@ public interface XmlSerializer {
      * If namespace is nul no namespace prefix is printed but just name.
      */
 
-    public void attribute (String namespace, String name,
+    public XmlSerializer attribute (String namespace, String name,
                            String value) throws IOException;
 
     /**
@@ -155,12 +155,12 @@ public interface XmlSerializer {
      *  very difficult to find...
      * If namespace is nul no namespace prefix is printed but just name.
      */
-    public void endTag (String namespace, String name) throws IOException;
+    public XmlSerializer endTag (String namespace, String name) throws IOException;
 
     /** Writes text, where special XML chars are escaped automatically */
-    public void text (String text) throws IOException;
+    public XmlSerializer text (String text) throws IOException;
 
-    public void text (char [] buf, int start, int len) throws IOException;
+    public XmlSerializer text (char [] buf, int start, int len) throws IOException;
 
     /**
      * write  CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,

@@ -211,10 +211,14 @@ public class XmlPullParserFactory {
 
     public XmlSerializer newSerializer() throws XmlPullParserException {
 
-        if (serializerClasses == null) throw new XmlPullParserException
+        if (serializerClasses == null) {
+            throw new XmlPullParserException
                 ("Factory initialization incomplete - has not tried "+classNamesLocation);
-        if(serializerClasses.size() == 0) throw new XmlPullParserException
+        }
+        if(serializerClasses.size() == 0) {
+            throw new XmlPullParserException
                 ("No valid serializer classes found in "+classNamesLocation);
+        }
 
         StringBuffer issues = new StringBuffer ();
 
@@ -333,7 +337,9 @@ public class XmlPullParserFactory {
             pos = cut + 1;
         }
 
-        if (factory == null) factory = new XmlPullParserFactory ();
+        if (factory == null) {
+            factory = new XmlPullParserFactory ();
+        }
         factory.parserClasses = parserClasses;
         factory.serializerClasses = serializerClasses;
         factory.classNamesLocation = classNamesLocation;
