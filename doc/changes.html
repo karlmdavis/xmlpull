@@ -11,9 +11,19 @@
 
 <h3>2001-04 (XMLPULL_1_0_8)</h3>
 <ul>
+<li>all API changes are backward compatible with 1.0.7
+<li>added new functions:<ul>
+<li>getAttributeType(index)
+<li>isAttributeDefault(index)
+<li>setInput(InputStream is,  String inputEncoding)
+<li>getInputEncoding()
+<li>nextText()
+<li>nextTag()
+</ul>
+<li>method readText() was deprecated
 <li>modified tests to allow -1 for column or line number and updated javadoc to reflect it
 <li>
-&nbsp;</ul>
+updated all tests to check new functions</ul>
 
 <h3>2001-04-20 (XMLPULL_1_0_7_1)</h3>
 <ul>

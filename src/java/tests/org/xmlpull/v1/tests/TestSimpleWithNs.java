@@ -7,6 +7,7 @@ package org.xmlpull.v1.tests;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -89,13 +90,13 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
 
-        xpp.setInput(new StringReader(
-                         "<foo xmlns='n' xmlns:ns1='n1' xmlns:ns2='n2'>"+
+        byte[] binput = ("<foo xmlns='n' xmlns:ns1='n1' xmlns:ns2='n2'>"+
                              "<ns1:bar xmlns:ns1='x1' xmlns:ns3='n3' xmlns='n1'>"+
                              "<ns2:gugu a1='v1' ns2:a2='v2' xml:lang='en' ns1:a3=\"v3\"/>"+
                              "<baz xmlns:ns1='y1'></baz>"+
-                             "</ns1:bar></foo>"
-                     ));
+                             "</ns1:bar></foo>").getBytes("US-ASCII");
+        xpp.setInput(new ByteArrayInputStream( binput ), "US-ASCII" );
+        assertEquals("US-ASCII", xpp.getInputEncoding());
 
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
 

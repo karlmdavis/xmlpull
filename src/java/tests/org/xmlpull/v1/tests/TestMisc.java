@@ -34,6 +34,30 @@ public class TestMisc extends UtilTestCase {
     protected void tearDown() {
     }
 
+    public void testNextTag() throws Exception {
+        final String INPUT_XML = "<t>  <test1>foo</test1>\n<test2>  </test2>\n </t>";
+        XmlPullParser pp = factory.newPullParser();
+        pp.setInput( new StringReader( INPUT_XML ) );
+        pp.nextTag();
+        pp.require( pp.START_TAG, null, "t");
+        pp.nextTag();
+        pp.require( pp.START_TAG, null, "test1");
+        assertEquals( "foo", pp.nextText() );
+        pp.require( pp.END_TAG, null, "test1");
+
+        pp.nextTag();
+        pp.require( pp.START_TAG, null, "test2");
+        pp.nextTag();
+        pp.require( pp.END_TAG, null, "test2");
+
+
+        pp.nextTag();
+        pp.require( pp.END_TAG, null, "t");
+        pp.next();
+        pp.require( pp.END_DOCUMENT, null, null);
+
+    }
+
     public void testReadText() throws Exception {
         final String INPUT_XML = "<test>foo</test>";
         XmlPullParser pp = factory.newPullParser();
@@ -44,6 +68,63 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         assertEquals( "foo", pp.readText() );
         assertEquals( pp.TYPES[ pp.END_TAG ], pp.TYPES[ pp.getEventType() ]);
+    }
+
+    public void testNextText() throws Exception {
+        final String INPUT_XML = "<t><test1>foo</test1><test2></test2><test3/><test4>bar</test4></t>";
+        XmlPullParser pp = factory.newPullParser();
+        pp.setInput( new StringReader( INPUT_XML ) );
+        pp.next();
+        pp.require( pp.START_TAG, null, "t");
+        pp.next();
+        pp.require( pp.START_TAG, null, "test1");
+        assertEquals( "foo", pp.nextText() );
+        pp.require( pp.END_TAG, null, "test1");
+
+        pp.next();
+        pp.require( pp.START_TAG, null, "test2");
+        assertEquals( "", pp.nextText() );
+        pp.require( pp.END_TAG, null, "test2");
+
+        pp.next();
+        pp.require( pp.START_TAG, null, "test3");
+        assertEquals( "", pp.nextText() );
+        pp.require( pp.END_TAG, null, "test3");
+
+        pp.next();
+        pp.require( pp.START_TAG, null, "test4");
+        pp.next();
+        pp.require( pp.TEXT, null, null);
+        assertEquals( "bar", pp.nextText() );
+        pp.require( pp.END_TAG, null, "test4");
+
+        pp.next();
+        pp.require( pp.END_TAG, null, "t");
+        pp.next();
+        pp.require( pp.END_DOCUMENT, null, null);
+
+        // now check for error conditions
+        pp.setInput( new StringReader( INPUT_XML ) );
+        pp.next();
+        pp.require( pp.START_TAG, null, "t");
+        try {
+            pp.nextText();
+            fail("if next tag is START_TAG no text content can be returned!");
+        } catch(XmlPullParserException ex) {}
+
+        pp.setInput( new StringReader( INPUT_XML ) );
+        pp.next();
+        pp.require( pp.START_TAG, null, "t");
+        pp.next();
+        pp.require( pp.START_TAG, null, "test1");
+        pp.next();
+        pp.next();
+        pp.require( pp.END_TAG, null, "test1");
+        try {
+            pp.nextText();
+            fail("if current tag is END_TAG no text content can be returned!");
+        } catch(XmlPullParserException ex) {}
+
     }
 
     public void testRequire() throws Exception {

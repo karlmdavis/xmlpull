@@ -90,6 +90,47 @@ public class TestEvent extends UtilTestCase {
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
 
+    public void testMultiNs() throws Exception {
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(new StringReader("<foo><bar xmlns=''/><char xmlns=''></char></foo>"));
+
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "bar", null, true, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "bar", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "char", null, false, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "char", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+
+        xpp.setInput(new StringReader("<foo><bar xmlns=''></bar><char xmlns=''></char></foo>"));
+
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "bar", null, false, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "bar", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 2, xpp.START_TAG, null, 1, "", "char", null, false, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "char", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+
+    }
+
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestEvent.class));
     }

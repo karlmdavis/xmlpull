@@ -7,6 +7,7 @@ package org.xmlpull.v1.tests;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -67,6 +68,12 @@ public class TestSimple extends UtilTestCase {
             fail("exception was expected of next() if no input was set on parser");
         } catch(XmlPullParserException ex) {}
 
+        try {
+            xpp.setInput(null, null);
+            fail("exception was expected of setInput() if input stream is null");
+        } catch(IllegalArgumentException ex) {}
+
+        xpp.setInput(null);
         assertTrue("line number must be -1 or >= 1 not "+xpp.getLineNumber(),
                    xpp.getLineNumber() == -1 || xpp.getLineNumber() >= 1);
         assertTrue("column number must be -1 or >= 0 not "+xpp.getColumnNumber(),
@@ -74,6 +81,7 @@ public class TestSimple extends UtilTestCase {
 
         // check the simplest possible XML document - just one root element
         xpp.setInput(new StringReader("<foo></foo>"));
+        assertEquals(null, xpp.getInputEncoding());
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false /*empty*/, 0);
@@ -83,7 +91,11 @@ public class TestSimple extends UtilTestCase {
         checkParserState(xpp, 0, xpp.END_DOCUMENT, null, null, false, -1);
 
 
-        xpp.setInput(new StringReader( "<foo/>" ) );
+        //check taking input form input stream
+        byte[] binput = "<foo/>".getBytes("UTF8");
+        xpp.setInput(new ByteArrayInputStream( binput ), "UTF8" );
+        assertEquals("UTF8", xpp.getInputEncoding());
+        //xpp.setInput(new StringReader( "<foo/>" ) );
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, true /*empty*/, 0);

@@ -115,8 +115,8 @@ public class UtilTestCase extends TestCase {
 
         // this methid can be used with enabled and not enabled namespaces
         //assertEquals("PROCESS_NAMESPACES", true, xpp.getFeature(xpp.FEATURE_PROCESS_NAMESPACES));
-        assertEquals("TYPES[getType()]", xpp.TYPES[type], xpp.TYPES[xpp.getEventType()]);
-        assertEquals("getType()", type, xpp.getEventType());
+        assertEquals("TYPES[getEventType()]", xpp.TYPES[type], xpp.TYPES[xpp.getEventType()]);
+        assertEquals("getEventType()", type, xpp.getEventType());
         assertEquals("getName()", name, xpp.getName());
 
         assertEquals("getDepth()", depth, xpp.getDepth());
@@ -168,6 +168,8 @@ public class UtilTestCase extends TestCase {
         assertEquals("getAttributeName()",name, xpp.getAttributeName(pos));
         assertEquals("getAttributeValue()",value, xpp.getAttributeValue(pos));
         assertEquals("getAttributeValue(name)",value, xpp.getAttributeValue(null, name));
+        assertEquals("getAttributeType()","CDATA", xpp.getAttributeType(pos));
+        assertEquals("isAttributeDefault()",false, xpp.isAttributeDefault(pos));
     }
 
 
@@ -187,6 +189,8 @@ public class UtilTestCase extends TestCase {
         assertEquals("getAttributeValue()",printable(value), printable(xpp.getAttributeValue(pos)));
         assertEquals("getAttributeValue(ns,name)",
                      printable(value), printable(xpp.getAttributeValue(namespace, name)));
+        assertEquals("getAttributeType()","CDATA", xpp.getAttributeType(pos));
+        assertEquals("isAttributeDefault()",false, xpp.isAttributeDefault(pos));
     }
 
     public void checkNamespace(
