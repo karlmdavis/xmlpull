@@ -26,9 +26,10 @@ All addons can be compiled by build target <code>addons</code>
 </p><p>Source code is available in <code>addons/java/sax2_driver</code>.
 
 </p><p>
-NOTE: this driver is not going to work in MIDP environments
-
-
+NOTE: this driver is not going to work in MIDP environments.
+To port it to J2ME MIDP it is required to change also SAX2 API
+and to modify Driver not to use URL class that is not available in MIDP
+(mainly Drive.parse() method).
 </p>
 
 <a name="xmlrpc">
@@ -51,7 +52,7 @@ NOTE: this driver is not going to work in MIDP environments
 <p>If you want to extend SAX2 Driver to provides a separate Attributes object
 for each startElement call (so it is safe to keep the reference to Attributes)
 then create class AttributesCachingDriver that extends current SAX2 driver
-(need to do it was requestd by Holger Krug), for example:
+(need to do it was requested by Holger Krug), for example:
 </p>
 <pre>
 
@@ -96,7 +97,7 @@ public class AttributesCachingDriver extends Driver
 
 </p><hr>
 <font size="-1">
-Last modified $Id: addons.html,v 1.1 2003/02/17 22:09:08 aslom Exp $
+Last modified $Id: addons.html,v 1.2 2003/02/17 22:27:30 aslom Exp $
 </font>
 
 <!--extra space at bottom for hyperlinks #anchors to work -->
