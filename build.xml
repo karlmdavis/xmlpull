@@ -403,7 +403,7 @@ All generated files are created under ${build} directory
   <!-- Copy docs and downloads to XMLPULL website                          -->
   <!-- =================================================================== -->
 
-  <target name="website_doc" depends="prepare">
+  <target name="website_doc" depends="apidoc">
     <mkdir dir="${website}"/>
 
     <delete dir="${website}/${doc}"/>
