@@ -4,14 +4,14 @@
 package org.xmlpull.v1.tests;
 
 //import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import java.io.StringReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.io.StringReader;
+import junit.framework.TestSuite;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  * Test if entity replacement works ok.
@@ -21,21 +21,21 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class TestEntityReplacement extends UtilTestCase {
     private XmlPullParserFactory factory;
-
+    
     public TestEntityReplacement(String name) {
         super(name);
     }
-
+    
     protected void setUp() throws XmlPullParserException {
         factory = factoryNewInstance();
         factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         assertEquals(true, factory.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
         //assertEquals(false, factory.getFeature(XmlPullParser.FEATURE_VALIDATION));
     }
-
+    
     protected void tearDown() {
     }
-
+    
     public void testEntityReplacement() throws IOException, XmlPullParserException
     {
         // taken from http://www.w3.org/TR/REC-xml#sec-entexpand
@@ -48,7 +48,7 @@ public class TestEntityReplacement extends UtilTestCase {
             "%xx;\n"+
             "]>"+
             "<test>This sample shows a &tricky; method.</test>";
-
+        
         XmlPullParser pp = factory.newPullParser();
         // default parser must work!!!!
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
@@ -56,7 +56,7 @@ public class TestEntityReplacement extends UtilTestCase {
             pp.defineEntityReplacementText("tricky", "error-prone");
         }
         testEntityReplacement(pp);
-
+        
         // now we try for no FEATURE_PROCESS_DOCDECL
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
@@ -67,7 +67,7 @@ public class TestEntityReplacement extends UtilTestCase {
             pp.defineEntityReplacementText("tricky", "error-prone");
             testEntityReplacement(pp);
         }
-
+        
         // try to use FEATURE_PROCESS_DOCDECL if supported
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
@@ -78,7 +78,7 @@ public class TestEntityReplacement extends UtilTestCase {
         if( pp.getFeature( XmlPullParser.FEATURE_PROCESS_DOCDECL ) ) {
             testEntityReplacement(pp);
         }
-
+        
         // try to use FEATURE_VALIDATION if supported
         pp.setInput(new StringReader( XML_ENTITY_EXPANSION ) );
         try {
@@ -89,9 +89,9 @@ public class TestEntityReplacement extends UtilTestCase {
         if( pp.getFeature( XmlPullParser.FEATURE_VALIDATION ) ) {
             testEntityReplacement(pp);
         }
-
+        
     }
-
+    
     public void testEntityReplacement(XmlPullParser pp) throws IOException, XmlPullParserException
     {
         pp.next();
@@ -105,13 +105,43 @@ public class TestEntityReplacement extends UtilTestCase {
                            null, 0, "", "test", null, false, -1);
         pp.nextToken();
         checkParserStateNs(pp, 0, XmlPullParser.END_DOCUMENT, null, 0, null, null, null, false, -1);
-
+        
     }
-
-
+    
+    /**
+     * Additional tests to confirm that
+     * <a href="http://www.extreme.indiana.edu/bugzilla/show_bug.cgi?id=192">Bug 192
+     * Escaped characters disappear in certain cases</a>
+     * is not present in XmlPull implementations.
+     */
+    public void testLastEntity(String xml, String expectedText) throws Exception {
+        InputStream stream = new ByteArrayInputStream(xml.getBytes());
+        XmlPullParser pp = factory.newPullParser();
+        // default parser must work!!!!
+        pp.setInput(stream, "UTF-8" );
+        pp.nextTag();
+        assertEquals(XmlPullParser.START_TAG, pp.getEventType());
+        //assertEquals("UTF-8", pp.getCharacterEncodingScheme());
+        //assertEquals("1.0", startdoc.getVersion());
+        String c = pp.nextText();
+        assertEquals(expectedText,c); //FAILURE expected "<text>" but was "<text"
+        assertEquals(XmlPullParser.END_TAG, pp.getEventType());
+    }
+    
+    public void testLastEntity() throws Exception {
+        testLastEntity(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><document>&lt;text&gt;</document>",
+            "<text>"
+        );
+        testLastEntity(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><document>&lt;text&gt; </document>",
+            "<text> "
+        );
+    }
+    
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestEntityReplacement.class));
     }
-
+    
 }
 
