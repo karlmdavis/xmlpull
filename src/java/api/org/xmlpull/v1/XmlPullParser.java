@@ -201,8 +201,7 @@ public interface XmlPullParser {
             "COMMENT",
             "ENTITY_REF"
     };
-    
-    
+        
     
     // ----------------------------------------------------------------------------
     // namespace related properties
