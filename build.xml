@@ -11,7 +11,7 @@ All generated files are created under ${build} directory
 
   <property name="name" value="XmlPull"/>
   <property name="year" value="2003"/>
-  <property name="version" value="1_1_3"/>
+  <property name="version" value="1_1_3_1"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
   <property name="copyright"
