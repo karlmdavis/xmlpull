@@ -318,6 +318,7 @@ public interface XmlPullParser {
      * Set new value for entity.
      * <p><b>NOTE:</b> list of entites will be reset to standard XML
      * entities such as &amp; &lt; &gt;) after each call to setInput
+     *
      * @see #setInput
      */
     public void defineCharacterEntity (String entity, String value) throws XmlPullParserException;
@@ -325,10 +326,13 @@ public interface XmlPullParser {
     /**
      * Return position in stack of first namespace slot for element at passed depth.
      * If namespaces are not enabled it returns always 0.
+     * <p><b>NOTE:</b> default namespace is not included in namespace table but
+     *  available by getNamespace() and not available form getNamespace(String)
      *
      * @see #getNamespacePrefix
      * @see #getNamespaceUri
-     * @see #getNamespace
+     * @see #getNamespace()
+     * @see #getNamespace(String)
      */
     public int getNamespacesCount(int depth) throws XmlPullParserException;
 
