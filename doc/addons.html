@@ -10,10 +10,74 @@
 
 <h2>What is it?</h2>
 
-<p>Addons are resuable components that built on top of XmlPull API.
+<p>Addons are reusable components that built on top of XmlPull API.
 
 </p><p>
-All addons can be compiled by build target <code>addons</code>
+All addons can be compiled by build target <code>addons</code> (use: <code>ant addons</code>)
+
+
+
+<a name="dom2_builder">
+<h2>DOM2 builder</h2>
+</a>
+
+<p>This is <em>very</em> simple class to build DOM2 tree using XmlPull parser.
+</p>
+
+<p>Here is example usage:</p>
+<pre>import org.xmlpull.v1.dom2_builder.DOM2XmlPullBuilder;
+
+Reader reader = ...
+DOM2XmlPullBuilder builder = new DOM2XmlPullBuilder();
+dom2builder.parse(reader);
+</pre>
+
+<p>It can be compiled by build target <code>dom2_builder</code>
+
+</p><p>Source code is available in <code>addons/java/dom2_builder</code>.
+
+</p><p>
+NOTE: this is very simple class and builds DOM2 tree that contains only elements 
+and text content (collated).
+</p>
+
+
+
+
+<p>
+&nbsp;</p>
+
+
+
+
+<a name="parser_pool">
+<h2>Parser pool</h2>
+</a>
+
+<p>This class provides simple parser pool to facilitate parser reuse.
+
+<p>Example usage:</p>
+
+<pre>import org.xmlpull.v1.parser_pool.XmlPullParserPool;
+
+XmlPullParserPool pool = new XmlPullParserPool();
+XmlPullParser parser = pool.getPullParserFromPool();
+// use parser ...
+pool.returnPullParserToPool(p1);
+</pre>
+
+<p>It can be compiled by build target <code>parser_pool</code>
+
+</p><p>Source code is available in <code>addons/java/parser_pool</code>.</p>
+
+
+
+<p>NOTE: parser pool is safe to share between multiple threads but&nbsp; parser 
+instances<b> are not </b>safe to share.</p>
+
+
+
+<p>&nbsp;</p>
 
 
 
@@ -21,32 +85,52 @@ All addons can be compiled by build target <code>addons</code>
 <h2>SAX2 driver</h2>
 </a>
 
-<p>It can be compiled by build target <code>sax2</code>
+<p>This addon allows to use SAX2 API with XmlPull parser. This driver implements 
+SAX2
+
+</p>
+
+<p>To use simply set system property 
+<code>-Dorg.xml.sax.driver=org.xmlpull.v1.sax2.Driver</code> and then SAX2 
+standard API:</p>
+
+<pre>XMLReader parser = XMLReaderFactory.createXMLReader ();</pre>
+
+<p>or manually create driver:
+</p>
+
+<pre>XMLReader parser = new <code>org.xmlpull.v1.sax2.Driver</code>();</pre>
+
+<pre></pre>
+
+<p>This addon can be compiled by build target <code>sax2</code>
 
 </p><p>Source code is available in <code>addons/java/sax2_driver</code>.
 
 </p><p>
-NOTE: this driver is not going to work in MIDP environments.
-To port it to J2ME MIDP it is required to change also SAX2 API
-and to modify Driver not to use URL class that is not available in MIDP
-(mainly Drive.parse() method).
+NOTE: this driver is not going to work in MIDP environments. To port it to J2ME 
+MIDP it is required to change also SAX2 API and to modify Driver not to use URL 
+class that is not available in MIDP (check Driver.parse() method).
 </p>
+
+<p>
+&nbsp;</p>
 
 <a name="xmlrpc">
 <h2>XML RPC parser</h2>
 </a>
 <p>It can be compiled by build target <code>xmlrpc</code>
 
-</p><p>Source code is available in <code>addons/java/sax2_driver</code>.
-
-</p>
+</p><p>Source code is available in <code>addons/java/xmlrpc</code>. <br>
+&nbsp;</p>
 
 <a name="notes">
 <h2>Additional notes</h2>
 </a>
 
 <a name="sax2_example">
-<h3>How to extend SAX2 driver to provide dsafe to keep Attributes?</h3>
+<h3>How to extend SAX2 driver to provide Attributes that are safe to keep after 
+startElement?</h3>
 </a>
 
 <p>If you want to extend SAX2 Driver to provides a separate Attributes object
@@ -54,9 +138,7 @@ for each startElement call (so it is safe to keep the reference to Attributes)
 then create class AttributesCachingDriver that extends current SAX2 driver
 (need to do it was requested by Holger Krug), for example:
 </p>
-<pre>
-
-import org.xml.sax.SAXException;
+<pre>import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -97,7 +179,7 @@ public class AttributesCachingDriver extends Driver
 
 </p><hr>
 <font size="-1">
-Last modified $Id: addons.html,v 1.2 2003/02/17 22:27:30 aslom Exp $
+Last modified $Id: addons.html,v 1.3 2003/04/23 13:36:06 aslom Exp $
 </font>
 
 <!--extra space at bottom for hyperlinks #anchors to work -->
