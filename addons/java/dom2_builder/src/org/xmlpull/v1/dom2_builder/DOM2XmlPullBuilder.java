@@ -67,7 +67,8 @@ public class DOM2XmlPullBuilder {
     }
 
     protected XmlPullParser newParser() throws XmlPullParserException {
-        return null; //factory.newPullParser();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        return factory.newPullParser();
     }
 
     public Element parse(Reader reader) throws XmlPullParserException, IOException {
