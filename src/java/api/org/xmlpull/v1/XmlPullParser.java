@@ -371,14 +371,30 @@ public interface XmlPullParser {
     public void setInput(Reader in) throws XmlPullParserException;
 
     /**
-     * Set new value for entity.
-     * <p><b>NOTE:</b> list of entites will be reset to standard XML
-     * entities (such as &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos;)
-     * after each call to setInput.
+     * Set new value for entity replacement text as defined in
+     * <a href="http://www.w3.org/TR/REC-xml#intern-replacement">XML 1.0 Section 4.5
+     * Construction of Internal Entity Replacement Text</a>.
+     * If FEATURE_PROCESS_DOCDECL or FEATURE_VALIDATION are set then calling this
+     * function will reulst in exception; when processing of DOCDECL is enabled
+     * there is no need to set manually entity replacement text.
      *
+     * <p>The motivation for this function is to allow very small implementations of XMLPULL
+     * that will work in J2ME environments and though may not be able to process DOCDECL
+     * but still can be made to work with predefined DTDs using this function.
+     *
+     * <p><b>NOTE:</b> this is replacement text and it is not allowed
+     *  to contain any other entity references
+     * <p><b>NOTE:</b> list of entites will always containo standard XML
+     * entities (such as &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos;)
+     * they cannot be replaced!
+     *
+
      * @see #setInput
+     * @see #FEATURE_PROCESS_DOCDELC
+     * @see #FEATURE_VALIDATION
      */
-    public void defineCharacterEntity (String entity, String value) throws XmlPullParserException;
+    public void defineEntityReplacementText( String entityName,
+                                            String replacementText ) throws XmlPullParserException;
 
     /**
      * Return position in stack of first namespace slot for element at passed depth.
