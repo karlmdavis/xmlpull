@@ -14,9 +14,33 @@
 
 </p><p>
 All addons can be compiled by build target <code>addons</code> (use: <code>ant addons</code>)
+</p>
+
+<p>Following addons are available:
+<ul>
+<li><a href="#wrapper">Wrapper</a>: set of extensions for parser and serializer interfaces
+and their implementation that seemlesly add functionality to exisitng APIs
+</li>
+<li><a href="#util">Utility Methods</a>: set of static methods that can be easily used
+(good source for few lines of code to solve typical problems)
+</li>
+<li><a href="#dom2_builder">DOM2 Builder</a>: simple class to convert
+XML event streaminto DOM element tree
+</li>
+<li><a href="#parser_pool">Parser pool</a>: simple to use class to make pooling parser instances easy.
+</li>
+<li><a href="#sax2_driver">SAX2 Driver</a>: class that impements SAX2 XMLReader
+and allowsto convert stream of XML pull events into SAX2 events
+
+
+<li><a href="#xmlrpc">XML RPC parser</a>: exmpale of use of XmlPull API to
+do non-trivial databinding
+</li>
+
+</ul>
+</p>
+
 <p>&nbsp;</p>
-
-
 
 <a name="wrapper"><h2>Wrapper: Extended Pull Parser and Serializer Interfaces</h2>
 </a>
@@ -58,8 +82,8 @@ ser.fragment("&lt;p class=\"hint\"&gt;write blog title below&lt;/p&gt;");
 <p>It can be compiled by build target <code>wrapper</code>
 
 </p><p>Source code is available in <code>
-<a href="../addons/java/wrapper/src/org/xmlpull/v1/wrapper">addons/java/wrapper</a></code>&nbsp;
-(<a href="http://www.xmlpull.org/viewcvs/xmlpull-api-v1/addons/java/wrapper/src/org/xmlpull/v1/wrapper/">view
+<a href="../addons/java/wrapper/src/org/xmlpull/v1/wrapper/">addons/java/wrapper</a></code>&nbsp;
+(<a href="http://www.xmlpull.org/viewcvs/~checkout~/xmlpull-api-v1/addons/java/wrapper/src/org/xmlpull/v1/wrapper/">view
 CVS</a>).</p><p>
 TODO: add link to JavaDoc</p>
 
@@ -88,9 +112,11 @@ XmlPullUtil.skipSubTree(pp);
 <p>It can be compiled by build target <code>util</code>
 
 </p><p>Source code is available in <code>
-<a href="../addons/java/util/src/org/xmlpull/v1/util/XmlPullUtil.java">addons/java/util</a></code>
-(<a href="http://www.xmlpull.org/viewcvs/xmlpull-api-v1/addons/java/util/src/org/xmlpull/v1/util/">view
-CVS</a>).</p><p>
+<a href="../addons/java/util/src/org/xmlpull/v1/util/">addons/java/util</a></code>
+(<a href="http://www.xmlpull.org/viewcvs/~checkout~/xmlpull-api-v1/addons/java/util/src/org/xmlpull/v1/util/">view
+CVS</a>).</p>
+
+<p>
 TODO: add link to JavaDoc</p>
 
 
@@ -128,7 +154,10 @@ and text content (collated).
 </p>
 
 
-
+</p><p>Source code is available in <code>
+<a href="../addons/java/dom2_builder/src/org/xmlpull/v1/dom2_builder/">addons/java/dom2_builder</a></code>
+(<a href="http://www.xmlpull.org/viewcvs/~checkout~/xmlpull-api-v1/addons/java/dom2_builder/src/org/xmlpull/v1/dom2_builder/">view
+CVS</a>).</p>
 
 <p>
 &nbsp;</p>
@@ -163,11 +192,17 @@ instances<b> are not </b>safe to share.</p>
 
 
 
+</p><p>Source code is available in <code>
+<a href="../addons/java/parser_pool/src/org/xmlpull/v1/parser_pool/">addons/java/parser_pool</a></code>
+(<a href="http://www.xmlpull.org/viewcvs/~checkout~/xmlpull-api-v1/addons/java/parser_pool/src/org/xmlpull/v1/parser_pool/">view
+CVS</a>).</p>
+
 <p>&nbsp;</p>
 
 
-
 <a name="sax2">
+</a>
+<a name="sax2_driver">
 <h2>SAX2 driver</h2>
 </a>
 
@@ -199,6 +234,11 @@ MIDP it is required to change also SAX2 API and to modify Driver not to use URL
 class that is not available in MIDP (check Driver.parse() method).
 </p>
 
+</p><p>Source code is available in <code>
+<a href="../addons/java/sax2_driver/src/org/xmlpull/v1/sax2/">addons/java/sax2</a></code>
+(<a href="http://www.xmlpull.org/viewcvs/~checkout~/xmlpull-api-v1/addons/java/sax2_driver/src/org/xmlpull/v1/sax2/">view
+CVS</a>).</p>
+
 <p>
 &nbsp;</p>
 
@@ -207,8 +247,17 @@ class that is not available in MIDP (check Driver.parse() method).
 </a>
 <p>It can be compiled by build target <code>xmlrpc</code>
 
-</p><p>Source code is available in <code>addons/java/xmlrpc</code>. <br>
-&nbsp;</p>
+
+
+</p><p>Source code is available in <code>
+<a href="../addons/java/xmlrpc/src/org/xmlpull/v1/xmlrpc/">addons/java/dom2_builder</a></code>
+(<a href="http://www.xmlpull.org/viewcvs/~checkout~/xmlpull-api-v1/addons/java/xmlrpc/src/org/xmlpull/v1/xmlrpc/">view
+CVS</a>).</p>
+
+
+</p>&nbsp;</p>
+
+
 
 <a name="notes">
 <h2>Additional notes</h2>
@@ -265,7 +314,7 @@ public class AttributesCachingDriver extends Driver
 
 </p><hr>
 <font size="-1">
-Last modified $Id: addons.html,v 1.7 2003/05/19 14:43:03 aslom Exp $
+Last modified $Id: addons.html,v 1.8 2003/07/08 21:17:34 aslom Exp $
 </font>
 
 <!--extra space at bottom for hyperlinks #anchors to work -->

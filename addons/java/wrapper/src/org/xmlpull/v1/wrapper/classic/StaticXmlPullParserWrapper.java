@@ -262,7 +262,6 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         }
     }
 
-
     public int readInt() throws XmlPullParserException, IOException {
         try {
             //int i = Integer.parseInt(pp.nextText());
