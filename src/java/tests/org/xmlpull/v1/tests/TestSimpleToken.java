@@ -72,11 +72,22 @@ public class TestSimpleToken extends UtilTestCase {
         // one step further - it has content ...
 
 
-        xpp.setInput(new StringReader("<!--c-->  \r\n<foo attrName='attrVal'>bar<!--comment-->"+
-                                          "<?pi ds><![CDATA[ do ]]></foo>"));
+        xpp.setInput(new StringReader(
+                         "\n \r\n \n\r<!DOCTYPE titlepage SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
+                             "[<!ENTITY % active.links \"INCLUDE\">]>"+
+                             "<!--c-->  \r\n<foo attrName='attrVal'>bar<!--comment-->"+
+                             "&test;"+
+                             "<?pi ds?><![CDATA[ vo<o ]]></foo> \r\n"));
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.nextToken();
-        checkParserStateNs(xpp, 0, xpp.COMMENT, null, 0, null, null, "<!--c-->", false, -1);
+        checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
+                           "\n \r\n \n\r", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null,
+                           " titlepage SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
+                               "[<!ENTITY % active.links \"INCLUDE\">]", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.COMMENT, null, 0, null, null, "c", false, -1);
         xpp.nextToken();
         checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null, "  \r\n", false, -1);
         xpp.nextToken();
@@ -85,11 +96,21 @@ public class TestSimpleToken extends UtilTestCase {
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null, "bar", false, -1);
         xpp.nextToken();
-        checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "<!--comment-->", false, -1);
-//        xpp.next();
-//        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
-//        xpp.next();
-//        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "comment", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, null, "test", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, "pi ds", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.CDSECT, null, 0, null, null, " vo<o ", false, -1);
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
+                           " \r\n", false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
 
     }

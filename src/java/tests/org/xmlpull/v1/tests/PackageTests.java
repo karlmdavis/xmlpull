@@ -13,7 +13,10 @@ import junit.framework.TestSuite;
  *
  * attrib uniq
  * EOL normalization
- * mixed next() with nextToken()
+ * TODO test mixed next() with nextToken()
+ *
+ *
+ * TEST XML ROUNDTRIP capability
  *
  *     public static final String REPORT_NAMESPACE_ATTRIBUTES =
  *        "http://xmlpull.org/v1/features/report-namespace-prefixes";
@@ -21,6 +24,7 @@ import junit.framework.TestSuite;
  *  public static final String PROCESS_DOCDECL =
  *      "http://xmlpull.org/v1/features/process-docdecl";
  *
+ * TEST http://xmlpull.org/v1/features/xml-roundtrip
  *
  *  public void defineCharacterEntity (String entity, String value) throws XmlPullParserException;
  *
