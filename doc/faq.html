@@ -8,10 +8,10 @@
 <BODY BGCOLOR="white">
 
 <H1>XMLPULL API FAQ</H2>
-<pre>Version $Id: faq.html,v 1.5 2002/07/23 14:29:06 aslom Exp $</pre>
+<pre>Version $Id: faq.html,v 1.6 2002/07/23 14:54:02 aslom Exp $</pre>
 
 
-<h2><a name="TYPES"></a>Is XMLPULL V1 API compatible with XML 1.0?</h2>
+<h2><a name="XML_COMP"></a>Is XMLPULL V1 API compatible with XML 1.0?</h2>
 
 <P>
 
@@ -78,8 +78,11 @@ when there is significant need for it (and backward compatibility can not be
 maintained).
 
 
+
+
+
 <h2><a name="API_DESIGN"></a>Why is there only one "large" interface, 
-wouldn't it be cleaner to use event objects and polimorphism?</h2>
+wouldn't it be cleaner to use event objects and polymorphism?</h2>
 
 <p>On the first sight, it really seems cleaner to have event objects and
 polymorphism instead of placing all the access methods in one
@@ -127,26 +130,26 @@ cast. This would look like the next example:</p>
 else ...
 </pre>
 
-<p>Obviously, while in this case neiter an instanceof check nor
+<p>Obviously, while in this case neither an instanceof check nor
 a type cast is required, this approach would add a lot of methods
 to the parser, and it would be no longer significantly smaller
-than the integrated interface that is now used in the XmlPull API.</p>
+than the integrated interface that is now used in the XMLPULL API.</p>
 
-<p>Anothert option may be to add the access methods of 
+<p>Another option may be to add the access methods of 
 all event types to the event base class. However, in that case 
 the event object would be nearly as huge as the integrated
-interface of the XmlPull API, and the API 
+interface of the XMLPULL API, and the API 
 readability advantage would be lost.</p>
 
 <p>Finally, the event objects are not for free. Creating lots of
 objects that are used just for extracting some information to build an
-application dependend structure may create significant overhead. While
+application dependent structure may create significant overhead. While
 this overhead may be reduced by reusing event objects, reusing event
 objects is extremely dangerous since an object given to the user will
 change in the background without further notice. In contrast, in the
-XmlPull API it is obvious that the return values of query mehtods like
+XMLPULL API it is obvious that the return values of query methods like
 getEventType, getText() and getName() will be different after a call
-to one of the next() method that advane the parser to the next
+to one of the next() method that advance the parser to the next
 event. </p>
 
 
@@ -158,7 +161,7 @@ event. </p>
 <h2><a name="3NEXT"></a>What is the difference between 
 <tt>nextToken()</tt>, <tt>next()</tt>, <tt>nextTag()</tt>, and <tt>nextText()</tt>?</h2>
 
-<p>All those methods have in common that they advance the parset to
+<p>All those methods have in common that they advance the parser to
 a next event. </p>
 
 <ul> 
@@ -195,10 +198,10 @@ in general?</h2>
 is that they can easily be handed over to different methods as
 a parameter. Those methods can then handle their subtree. 
 However, when the parser would have a lot of state options, at 
-each of those hand over points it would be neccessary to
+each of those hand over points it would be necessary to
 make sure that the state matches the requirements of the
-subroutine. The same checks would be neccessary when the 
-soubroutine returns and the original processor regains
+subroutine. The same checks would be necessary when the 
+subroutine returns and the original processor regains
 control.</p>
 
 
