@@ -895,6 +895,10 @@ public interface XmlPullParser {
      * <p>If special feature
      * <a href="http://xmlpull.org/v1/doc/features.html#unnormalized-xml">FEATURE_UNNORMALIZED_XML</a>
      * (identified by URI: http://xmlpull.org/v1/doc/features.html#unnormalized-xml)
+     * is enabled returned content is laways unnormalized (exactly as in input).
+     * Otherwise returned content is end-of-line normalized as described
+     * <a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line Handling</a>
+     *
      * <p>If special feature
      * <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">FEATURE_XML_ROUNDTRIP</a>
      * (identified by URI: http://xmlpull.org/v1/doc/features.html#xml-roundtrip)
@@ -910,37 +914,48 @@ public interface XmlPullParser {
      *   enabled and then returns XML tag, ex: &lt;tag attr='val'>
      * <dt>END_TAG<dd>null unless FEATURE_XML_ROUNDTRIP
      *  id enabled and then returns XML tag, ex: &lt;/tag>
-     * <dt>TEXT<dd>return unnormalized (exact as in input) element content if
-     * FEATURE_UNNORMALIZED_CONTENT is enabled
-     * otherwise returned content is end-of-line normalized as described
-     * <a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line Handling</a>
-     * <dt>IGNORABLE_WHITESPACE<dd>return unnormalized characters
-     * if FEATURE_UNNORMALIZED_CONTENT is enabled otherwise
-     * returned content is end-of-line normalized as described
-     * <a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line Handling</a>
-     * <dt>CDSECT<dd>return unnormalized text <em>inside</em> CDATA
-     *  ex. 'fo&lt;o' from &lt;!CDATA[fo&lt;o]]>
-     * <dt>PROCESSING_INSTRUCTION<dd>return unnormalized PI content ex: 'pi foo' from &lt;?pi foo?>
+     * <dt>TEXT<dd>return element content.
+     *  Note that element content may be delevered in multiple consecutive TEXT events.
+     * <dt>IGNORABLE_WHITESPACE<dd>return characters that are determined to be ignorable white
+     * space. If is FEATURE_UNNORMALIZED_XML enabled all whitespace content outside root
+     * element will be also reported as IGNORABLE_WHITESPACE.
+     *  Note that element content may be delevered in multiple consecutive IGNORABLE_WHITESPACE events.
+     * <dt>CDSECT<dd>
+     * return text <em>inside</em> CDATA
+     *  (ex. 'fo&lt;o' from &lt;!CDATA[fo&lt;o]]>)
+     * otherwise content returned will be end-of-line normalized
+     * <dt>PROCESSING_INSTRUCTION<dd>
+     *  if FEATURE_XML_ROUNDTRIP is true
+     *  return PI content ex: 'pi foo' from &lt;?pi foo?>
+     *  otherwise return concatenation of PI target, space and data so for example for
+     *   &lt;?target    data?> string &quot;target data&quot; will be returned
      * <dt>COMMENT<dd>return comment content ex. 'foo bar' from &lt;!--foo bar-->
-     * <dt>ENTITY_REF<dd>return unnormalized text of entity_name (&entity_name;)
+     * <dt>ENTITY_REF<dd>getText() returns entity replacement text
+     * and getTextCharacters() of entity_name (&amp;entity_name;)
+     * <br><b>NOTE:</b> this is the only place where value returned from getText() and
+     *   getTextCharacters() <b>are different</b>
      * <br><b>NOTE:</b> it is user responsibility to resolve entity reference
      * <br><b>NOTE:</b> character entities and standard entities such as
      *  &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos; are reported as well
-     * and are not resolved and not reported as TEXT tokens but as ENTITY_REF tokens!
-     * This requirement is added to allow to do roundtrip of XML documents!
-     * <dt>DOCDECL<dd>return inside part of DOCDECL ex. returns:<pre>
+     *  and are not resolved and not reported as TEXT tokens but as ENTITY_REF tokens!
+     *  This requirement is added to allow to do roundtrip of XML documents!
+     * <dt>DOCDECL<dd>
+     * if FEATURE_XML_ROUNDTRIP is true
+     * return inside part of DOCDECL ex. returns:<pre>
      * &quot; titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
      * [&lt;!ENTITY % active.links "INCLUDE">]&quot;</pre>
      * <p>for input document that contained:<pre>
      * &lt;!DOCTYPE titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
      * [&lt;!ENTITY % active.links "INCLUDE">]></pre>
+     * otherwise of FEATURE_XML_ROUNDTRIP is false then what is returned is undefined
      * </dd>
      * </dl>
      *
-     * <p><strong>NOTE:</strong> there is no gurantee that there will only one TEXT
-     * event from nextToken() as parser may chose to deliver element content in
-     * multiple TEXT events (dividing element content into chunks)
-     * <p><strong>NOTE:</strong> returned text of token MAY NOT be end-of-line normalized
+     * <p><strong>NOTE:</strong> there is no gurantee that there will only one TEXT or
+     * IGNORABLE_WHITESPACE event from nextToken() as parser may chose to deliver element content in
+     * multiple tokens (dividing element content into chunks)
+     *
+     * <p><strong>NOTE:</strong> returned text of token MAY or MAY NOT be end-of-line normalized
      *  (depending on FEATURE_UNNORMIZED_XML).
      *
      * @see #next
