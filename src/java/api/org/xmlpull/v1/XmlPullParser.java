@@ -22,6 +22,7 @@ import java.io.Reader;
  *   FEATURE_VALIDATION is true (and that implies that FEATURE_PROCESS_DOCDECL is true)
  * </ul>
  *
+ *
  * <p>There are only two key methods: next() and nextToken() that provides
  * access to high level parsing events and to lower level tokens.
  *
