@@ -9,11 +9,21 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
-<h3>IN PROGRESS: <a name="XMLPULL_1_0_9"></a>2001-00 (XMLPULL_1_0_9)</h3>
+<h3>IN PROGRESS: <a name="XMLPULL_1_0_9"></a>2002-00 (XMLPULL_1_0_9)</h3>
 <ul>
 <li><strong>NEW! XmlSerializer API</strong> that is now required part of
 XMLPULL API on J2SE (on J2ME typically factory is not used and only implementation of
 serializer or parser interface may be available).
+
+<li><b>NOTE:</b> backward incompatible change to reporting IGNORABLE_WHITESPACE 
+for content outside element root - such content is now only reported when 
+optional <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML 
+ROUNDTRIP feature</a> is true. This change is made to keep consistency with XML 
+infoset <a href="http://www.w3.org/TR/xml-infoset/#infoitem.document">Document 
+Information Item properties</a> which only contain comments and processing 
+instructions but not white space content.<li>conformance tests can be now described in XML allowing to keep tests in 
+format independent from Java (and potentially to use the same XML tests with 
+other XmlPull API bindings such as C++ or PHP)
 
 <li>added newSerializer() method to XmlPullParserFactory
 
@@ -45,7 +55,7 @@ separated by colon in XMLPULL tests property (<code>org.xmlpull.v1.tests</code>)
 
 </ul>
 
-<h3><a name="XMLPULL_1_0_8"></a>2001-04-24 (XMLPULL_1_0_8)</h3>
+<h3><a name="XMLPULL_1_0_8"></a>2002-04-24 (XMLPULL_1_0_8)</h3>
 <ul>
 <li><b>two API changes are not backward compatible</b> with 1.0.7:
 <ul>
@@ -77,7 +87,7 @@ corresponding START_TAG are still accessible even though they are not in scope<l
 added tests to check that setInput() does not read any bytes from input stream
 or characters from reader until first call to next()</ul>
 
-<h3>2001-04-20 (XMLPULL_1_0_7_1)</h3>
+<h3>2002-04-20 (XMLPULL_1_0_7_1)</h3>
 <ul>
 <li>
 fixed Quick Introduction to use correct API for getTextCharacters and
@@ -94,7 +104,7 @@ nextToken())
 </ul>
 </ul>
 
-<h3><span style="font-weight: 400"><a name="XMLPULL_1_0_7"></a></span>2001-04-08 (XMLPULL_1_0_7)</h3>
+<h3><span style="font-weight: 400"><a name="XMLPULL_1_0_7"></a></span>2002-04-08 (XMLPULL_1_0_7)</h3>
 <ul>
 <li>
 changed default namespace semantics: the prefix must be reported as null and not
@@ -106,7 +116,7 @@ buffer with entity name the same as getName()<li>
 for ENTITY_REF token getName() must return entity name<li>
 added specific requirement that attribute values MUST be normalized</ul>
 
-<h3>2001-04-06 (XMLPULL_1_0_6)</h3>
+<h3>2002-04-06 (XMLPULL_1_0_6)</h3>
 <ul>
 <li>
 changed hard coded parser factory in XmlPullParserFactory name for KXML2 to
@@ -127,7 +137,7 @@ getNamespaceCount() and available from getNamespace...(...) methods<li>
 refactored tests for common problem: check if no XMLPULL implementation
 available and print just one error message (instead of dozen...)</ul>
 
-<h3>2001-04-03 (XMLPULL_1_0_5)</h3>
+<h3>2002-04-03 (XMLPULL_1_0_5)</h3>
 <ul>
 <li>
 changed features URI to point to actual documentation on
@@ -150,7 +160,7 @@ exactly what was in input. However this works on level of UNICODE characters
 getNamespacesCount changed to getNamespaceCount for consistency<li>
 getAttributesCount changed to getAttributeCount for consistency</ul>
 
-<h3>2001-03-30 (XMLPULL_1_0_4)</h3>
+<h3>2002-03-30 (XMLPULL_1_0_4)</h3>
 <ul>
 <li>
 added FEATURE_ prefix to all feature constants<li>
@@ -164,7 +174,7 @@ contain start and length will be set to -1]
 <li>added more comprehensive JUnit tests for API conformance
 </ul>
 
-<h3>2001-03-29 (XMLPULL_1_0_3)</h3>
+<h3>2002-03-29 (XMLPULL_1_0_3)</h3>
 <ul>
 <li>
 changed getTextCharacters to use pass by reference two int parameters (char[]
@@ -172,7 +182,7 @@ getTextCharacters (int [] holderForStartAndLength)<li>
 nextToken() is required to return actual input data with getText()&nbsp; (no
 end-of-line normalization) - this will allow to reconstruct input XML</ul>
 
-<h3>2001-03-28 (XMLPULL_1_0_2a)</h3>
+<h3>2002-03-28 (XMLPULL_1_0_2a)</h3>
 <ul>
 <li>
 fixed typos in getAttribute(s)* and getNamespace(s)* functions<li>
@@ -181,7 +191,7 @@ clarified PROCESS_DOCDECL and removed REPORT_DOCDECL
 <li>
 initial release of JUnit tests (very limited for now ...)</ul>
 
-<h3>2001-03-25 (XMLPULL_1_0_1)</h3>
+<h3>2002-03-25 (XMLPULL_1_0_1)</h3>
 <ul>
 <li>first interim release of API and supporting files (incomplete)
 </ul>

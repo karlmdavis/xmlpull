@@ -99,8 +99,10 @@ START_DOCUMENT state i.e. this feature can not be changed during parsing.
 <h2>
 Optional features</h2>
 <p>
-They <b>MAY</b> be supported but are not part of XMLPULL API<h3>
-&nbsp;</h3>
+They <b>MAY</b> be supported but are not part of XMLPULL API<p>
+&nbsp;
+
+
 <h3>
 <a name="names-interned"></a>Optional feature: NAMES INTERNED<br>
 &nbsp;</h3>
@@ -125,8 +127,14 @@ string constants (no need to use String.equals()). </p>
 <p>This feature is identified by
 <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">
 http://xmlpull.org/v1/doc/features.html#xml-roundtrip</a> </p>
-<p>If set to true then XMLPULL parser <b>MUST</b> make available original XML value for 
-START_TAG and END_TAG events with getText() and getTextCharacters() functions.<br>
+<p>If set to true then XMLPULL parser <b>MUST</b> make available original XML 
+value for START_TAG and END_TAG events with getText() and getTextCharacters() 
+functions and must report exact white space content outside of root element as 
+IGNORABLE WHITESPACE events (otherwise such content is not reported to make it 
+consistent with XML infoset
+<a href="http://www.w3.org/TR/xml-infoset/#infoitem.document">Document 
+Information Item properties</a> (white spaces in prolog and part root element 
+are ignored). <br>
 &nbsp;</p>
 
 <h3>
