@@ -116,8 +116,9 @@ public class Roundtrip {
         //for (int i = 0; i < args.length; i++)
         for (int i = 0; i < 1; i++)
         {
-            XmlPullParser pp = XmlPullParserFactory.newInstance().newPullParser();
-            XmlSerializer serializer = new MXSerializer();
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser pp = factory.newPullParser();
+            XmlSerializer serializer = factory.newSerializer();
 
             pp.setInput(new java.net.URL(args[ i ]).openStream(), null);
             serializer.setOutput( System.out, null);
