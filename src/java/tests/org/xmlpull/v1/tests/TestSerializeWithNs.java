@@ -169,8 +169,17 @@ public class TestSerializeWithNs extends UtilTestCase {
         StringWriter sw = new StringWriter();
         ser.setOutput(sw);
 
+        assertEquals(0, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals(null, ser.getName());
+
         // all comments etc
         ser.startDocument(null, Boolean.TRUE);
+        assertEquals(0, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals(null, ser.getName());
+
+
         final String docdecl = " foo [\n"+
             "<!ELEMENT foo (#PCDATA|bar)* >\n"+
             "<!ELEMENT pbar (#PCDATA) >\n"
@@ -179,21 +188,60 @@ public class TestSerializeWithNs extends UtilTestCase {
         ser.processingInstruction("pi test");
         final String iws = "\n\t";
         ser.ignorableWhitespace(iws);
+
+        assertEquals(0, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals(null, ser.getName());
+
         ser.startTag(null, "foo");
+        assertEquals(1, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals("foo", ser.getName());
+
+
         //check escaping & < > " '
         final String attrVal = "attrVal&<>\"''&amp;";
         //final String attrVal = "attrVal&;";
         ser.attribute(null, "attrName", attrVal);
+
+        assertEquals(1, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals("foo", ser.getName());
+
         ser.entityRef("amp");
         final String cdsect = "hello<test>\"test";
         ser.cdsect(cdsect);
+
+        ser.setPrefix("ns1", "usri2");
+
+        assertEquals(1, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals("foo", ser.getName());
+
         ser.startTag("uri1", "bar");
+        assertEquals(2, ser.getDepth());
+        assertEquals("uri1", ser.getNamespace());
+        assertEquals("bar", ser.getName());
+
         final String text = "test\n\ntest";
         char[] buf = text.toCharArray();
         ser.text(buf, 0, buf.length);
+
         final String comment = "comment B- ";
         ser.comment(comment);
+        assertEquals(2, ser.getDepth());
+        assertEquals("uri1", ser.getNamespace());
+        assertEquals("bar", ser.getName());
+
+        assertEquals(2, ser.getDepth());
+        assertEquals("uri1", ser.getNamespace());
+        assertEquals("bar", ser.getName());
+
+
         ser.endDocument(); // should close unclosed foo and bar start tag
+        assertEquals(0, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals(null, ser.getName());
 
         // -- now check that we get back what we serialized ...
 
@@ -232,16 +280,16 @@ public class TestSerializeWithNs extends UtilTestCase {
         assertEquals(false, xpp.isWhitespace());
 
         xpp.nextToken();
-        checkParserStateNs(xpp, 2, xpp.START_TAG, 1, "uri1", "bar", false, 0);
+        checkParserStateNs(xpp, 2, xpp.START_TAG, 2, "uri1", "bar", false, 0);
 
         String gotText = nextTokenGathered(xpp, xpp.TEXT, false);
         assertEquals(printable(text), printable(gotText));
 
         //xpp.nextToken();
-        checkParserStateNs(xpp, 2, xpp.COMMENT, null, 1, null, null, comment, false, -1);
+        checkParserStateNs(xpp, 2, xpp.COMMENT, null, 2, null, null, comment, false, -1);
 
         xpp.nextToken();
-        checkParserStateNs(xpp, 2, xpp.END_TAG, 1, "uri1", "bar", false, -1);
+        checkParserStateNs(xpp, 2, xpp.END_TAG, 2, "uri1", "bar", false, -1);
 
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.END_TAG, 0, "", "foo", false, -1);

@@ -371,7 +371,7 @@ public class TestMisc extends UtilTestCase {
     public void testRoundtripNext() throws Exception {
         // check that entiy reference is reported in start tag as unexpanded when roundtrip is enabled
         final String SAMPLE_XML =
-            "<foo attr=\"baz &amp; bar\"/>";
+            "<foo attEol='a\r\nv\n\ra\n\r\r\nio\rn\nica' attr=\"baz &amp; bar\"/>";
 
         XmlPullParser pp = factory.newPullParser();
         assertEquals(true, pp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
@@ -388,6 +388,8 @@ public class TestMisc extends UtilTestCase {
         pp.next();
         String attrValue = pp.getAttributeValue(pp.NO_NAMESPACE, "attr");
         assertEquals("baz & bar", attrValue);
+        String attEolValue = pp.getAttributeValue(pp.NO_NAMESPACE, "attEol");
+        assertEquals("a v  a   io n ica", attEolValue);
         if(roundtripSupported) {
             String text = pp.getText();
             assertEquals(SAMPLE_XML, text);

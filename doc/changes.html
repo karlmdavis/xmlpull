@@ -17,7 +17,12 @@ incorporate all changes since 1.0.x in stable version </ul>
 <h3>IN PROGRESS INTERIM RELEASE: </h3>
 
 <h3><a name="XMLPULL_1_1_2"></a>2002-09 (XMLPULL_1_1_2)</h3>
-<ul>
+<ul>added to XmlSerialzier three new utility methods:
+getDepth(), getName(), and getNamespace()
+to allows intelligent closing of serialized output for example
+when writing error/fault information into serialized XML stream
+from inside exception handler
+
 <li><b>NOTE:</b> <b>potentially backward incompatible change to nextToken</b>():
 XMLDecl (&lt;?xml ... ?&gt;) will no longer be reported as PROCESSING_INSTRUCTION
 but instead content of XMLDecl is made available as set of properties

@@ -621,7 +621,6 @@ public interface XmlPullParser {
      *     &lt;/foobar&gt;        2
      * &lt;/root&gt;              1
      * &lt;!-- outside --&gt;     0
-     * &lt;/pre&gt;
      * </pre>
      */
     public int getDepth();

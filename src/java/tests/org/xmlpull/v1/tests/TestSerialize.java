@@ -138,16 +138,52 @@ public class TestSerialize extends UtilTestCase {
         // one step further - it has an attribute and content ...
 
         StringWriter sw = new StringWriter();
+
+        assertEquals(0, ser.getDepth());
         ser.setOutput(sw);
+        assertEquals(0, ser.getDepth());
+
         ser.startDocument(null, null);
+        assertEquals(0, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals(null, ser.getName());
+
         ser.startTag(null, "foo");
+        assertEquals(1, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals("foo", ser.getName());
+
         ser.attribute(null, "attrName", "attrVal");
+        assertEquals(1, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals("foo", ser.getName());
+
         ser.text("bar");
+        assertEquals(1, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals("foo", ser.getName());
+
         ser.startTag("", "p:t");
+        assertEquals(2, ser.getDepth());
+        assertEquals("", ser.getNamespace());
+        assertEquals("p:t", ser.getName());
+
         ser.text("\n\t ");
+
         ser.endTag("", "p:t");
+        assertEquals(1, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals("foo", ser.getName());
+
         ser.endTag(null, "foo");
+        assertEquals(0, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals(null, ser.getName());
+
         ser.endDocument();
+        assertEquals(0, ser.getDepth());
+        assertEquals(null, ser.getNamespace());
+        assertEquals(null, ser.getName());
 
         //xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<p:t>\r\n\t </p:t></foo>"));
         String serialized = sw.toString();

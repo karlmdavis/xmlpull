@@ -156,6 +156,37 @@ public interface XmlSerializer {
         throws IllegalArgumentException;
 
     /**
+     * Returns the current depth of the element.
+     * Outside the root element, the depth is 0. The
+     * depth is incremented by 1 when startTag() is called.
+     * The depth is decremented after the call to endTag()
+     * event was observed.
+     *
+     * <pre>
+     * &lt;!-- outside --&gt;     0
+     * &lt;root>                  1
+     *   sometext                 1
+     *     &lt;foobar&gt;         2
+     *     &lt;/foobar&gt;        2
+     * &lt;/root&gt;              1
+     * &lt;!-- outside --&gt;     0
+     * </pre>
+     */
+    public int getDepth();
+
+    /**
+     * Returns the namespace URI of the current element as set by startTag().
+     */
+    public String getNamespace ();
+
+    /**
+     * Returns the name of the current element as set by startTag().
+     * It can only be null before first call to startTag()
+     * or when last endTag() is called to close first startTag().
+     */
+    public String getName();
+
+    /**
      * Writes a start tag with the given namespace and name.
      * If there is no prefix defined for the given namespace,
      * a prefix will be defined automatically.
