@@ -248,55 +248,31 @@ public class TestSerializeWithNs extends UtilTestCase {
 
     }
 
-    private final String ENV = "http://www.w3.org/2002/06/soap-envelope";
-    private final String ALERTCONTROL = "http://example.org/alertcontrol";
-    private final String ALERT = "http://example.org/alert";
-    private final String EXPIRES = "2001-06-22T14:00:00-05:00";
-    private final String MSG = "Pick up Mary at school at 2pm";
-    private final String ROLE = "http://www.w3.org/2002/06/soap-envelope/role/ultimateReceiver";
+    private static final String ENV = "http://www.w3.org/2002/06/soap-envelope";
+    private static final String ALERTCONTROL = "http://example.org/alertcontrol";
+    private static final String ALERT = "http://example.org/alert";
+    private static final String EXPIRES = "2001-06-22T14:00:00-05:00";
+    private static final String MSG = "Pick up Mary at school at 2pm";
+    private static final String ROLE = "http://www.w3.org/2002/06/soap-envelope/role/ultimateReceiver";
 
-    //setPrefix check that prefix is not duplicated ...
+    // based on example from SOAP 1.2 spec http://www.w3.org/TR/soap12-part1/
+    private static final String SOAP12 =
+        "<env:Envelope xmlns:env=\""+ENV+"\">"+
+        "<env:Header>"+
+        "<n:alertcontrol xmlns:n=\""+ALERTCONTROL+"\""+
+        " env:mustUnderstand=\"true\""+
+        " env:role=\""+ROLE+"\">"+
+        "<n:priority>1</n:priority>"+
+        "<n:expires>"+EXPIRES+"</n:expires>"+
+        "</n:alertcontrol>"+
+        "</env:Header>"+
+        "<env:Body>"+
+        "<m:alert xmlns:m=\""+ALERT+"\" >"+
+        "<m:msg>"+MSG+"</m:msg>"+
+        "</m:alert>"+
+        "</env:Body>"+
+        "</env:Envelope>";
 
-    public void testSetPrefix() throws Exception {
-        //TODO      redeclaring defult namespace
-
-        // based on example from SOAP 1.2 spec http://www.w3.org/TR/soap12-part1/
-        final String SOAP12 =
-            "<env:Envelope xmlns:env=\""+ENV+"\">"+
-            "<env:Header>"+
-            "<n:alertcontrol xmlns:n=\""+ALERTCONTROL+"\""+
-            " env:mustUnderstand=\"true\""+
-            " env:role=\""+ROLE+"\">"+
-            "<n:priority>1</n:priority>"+
-            "<n:expires>"+EXPIRES+"</n:expires>"+
-            "</n:alertcontrol>"+
-            "</env:Header>"+
-            "<env:Body>"+
-            "<m:alert xmlns:m=\""+ALERT+"\"  >"+
-            "<m:msg>"+MSG+"</m:msg>"+
-            "</m:alert>"+
-            "</env:Body>"+
-            "</env:Envelope>";
-
-
-        checkTestSetPrefix(SOAP12);
-        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m"));
-        checkTestSetPrefix(generateSoapEnvelope(null, null, "m"));
-        checkTestSetPrefix(generateSoapEnvelope("env", null, "m"));
-        checkTestSetPrefix(generateSoapEnvelope("env", "", ""));
-        checkTestSetPrefix(generateSoapEnvelope("", "n", "m"),1);
-        checkTestSetPrefix(generateSoapEnvelope("", null, "m"),1);
-
-        //check optional pretty printing
-        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", Boolean.FALSE, null, null));
-        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", Boolean.TRUE, null, null));
-        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", null, " ", null));
-        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", null, "\t", null));
-        checkTestSetPrefix(generateSoapEnvelope("env", "n", "m", null, "    ", null));
-        String s = generateSoapEnvelope("env", "n", "m", Boolean.TRUE, " ", "\n");
-        //System.out.println(getClass()+" envelope="+generateSoapEnvelope("", "n", "m"));
-        checkTestSetPrefix(s);
-    }
 
     private String generateSoapEnvelope(String envPrefix,
                                         String alertcontrolPrefix,
@@ -425,11 +401,49 @@ public class TestSerializeWithNs extends UtilTestCase {
         return s;
     }
 
-    private void checkTestSetPrefix(String soapEnvelope) throws Exception {
-        checkTestSetPrefix(soapEnvelope, 0);
+    //setPrefix check that prefix is not duplicated ...
+
+    public void testSetPrefix() throws Exception {
+        //TODO      redeclaring defult namespace
+
+
+        checkTestSetPrefixSoap(SOAP12);
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m"));
+        checkTestSetPrefixSoap(generateSoapEnvelope(null, null, "m"));
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", null, "m"));
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "", ""));
+
+
+        String generated = generateSoapEnvelope("", "n", "m");
+        //System.err.println(getClass()+" generated="+generated);
+
+        // 1 is for one extra namespace must be added to declare attrbute mustUnderstan in SOAP-ENV namespace
+        checkTestSetPrefixSoap(generated, 1);
+
+
+        checkTestSetPrefixSoap(generateSoapEnvelope("", null, "m"),1);
+
+        //check optional pretty printing
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", Boolean.FALSE, null, null));
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", Boolean.TRUE, null, null));
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, " ", null));
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, "\t", null));
+        checkTestSetPrefixSoap(generateSoapEnvelope("env", "n", "m", null, "    ", null));
+        String s = generateSoapEnvelope("env", "n", "m", Boolean.TRUE, " ", "\n");
+        //System.out.println(getClass()+" envelope="+generateSoapEnvelope("", "n", "m"));
+        checkTestSetPrefixSoap(s);
     }
 
-    private void checkTestSetPrefix(String soapEnvelope, int extraNs) throws Exception {
+    private void checkTestSetPrefixSoap(String soapEnvelope) throws Exception {
+        checkTestSetPrefixSoap(soapEnvelope, 0);
+    }
+
+    // run test using checkParserStateNs()
+    private void checkTestSetPrefixSoap(String soapEnvelope, int extraNs) throws Exception {
+
+        //compare that XML representation of soapEnvelope is as desired
+        assertXmlEquals(SOAP12, soapEnvelope);
+
         xpp.setInput(new StringReader(soapEnvelope));
 
         xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
@@ -440,7 +454,8 @@ public class TestSerializeWithNs extends UtilTestCase {
         xpp.nextTag();
         checkParserStateNs(xpp, 2, xpp.START_TAG, 1, ENV, "Header", false /*empty*/, 0);
         xpp.nextTag();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, 2+extraNs, ALERTCONTROL, "alertcontrol", false /*empty*/, 2);
+        checkParserStateNs(xpp, 3, xpp.START_TAG,
+                           2+extraNs, ALERTCONTROL, "alertcontrol", false /*empty*/, 2);
         checkAttribNs(xpp, 0, ENV, "mustUnderstand", "true");
         checkAttribNs(xpp, 1, ENV, "role", ROLE);
 
@@ -474,10 +489,11 @@ public class TestSerializeWithNs extends UtilTestCase {
         xpp.next();
         checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
 
-        checkTestSetPrefix2(soapEnvelope);
+        checkTestSetPrefixSoap2(soapEnvelope);
     }
 
-    private void checkTestSetPrefix2(String soapEnvelope) throws Exception {
+    // run test using parser.require()
+    private void checkTestSetPrefixSoap2(String soapEnvelope) throws Exception {
         xpp.setInput(new StringReader(soapEnvelope));
         xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
 
@@ -704,6 +720,99 @@ public class TestSerializeWithNs extends UtilTestCase {
 
     }
 
+    private void assertXmlEquals(String expectedXml, String actualXml)
+        throws Exception
+    {
+        XmlPullParser expect = factory.newPullParser();
+        expect.setInput(new StringReader(expectedXml));
+        XmlPullParser actual = factory.newPullParser();
+        actual.setInput(new StringReader(actualXml));
+        while(true) {
+            expect.next();
+            actual.next();
+            assertXml("inconsistent event type", expect, actual,
+                      expect.TYPES[ expect.getEventType() ],
+                      actual.TYPES[ actual.getEventType() ]
+                     );
+            if(expect.getEventType() == expect.END_DOCUMENT) {
+                break;
+            }
+            if(expect.getEventType() == expect.START_TAG
+               || expect.getEventType() == expect.END_TAG )
+            {
+                assertXml("tag names", expect, actual,
+                          expect.getName(), actual.getName());
+                assertXml("tag namespaces", expect, actual,
+                          expect.getNamespace(), actual.getNamespace());
+                if(expect.getEventType() == expect.START_TAG) {
+                    // check consisteny of attributes -- allow them to be in any order
+                    int expectAttrCount = expect.getAttributeCount();
+                    assertXml("attributes count", expect, actual,
+                              ""+expectAttrCount, ""+actual.getAttributeCount());
+                    for (int i = 0; i < expectAttrCount; i++)
+                    {
+                        String expectAttrNamespace = expect.getAttributeNamespace(i);
+                        String expectAttrName = expect.getAttributeName(i);
+                        String expectAttrType = expect.getAttributeType(i);
+                        String expectAttrValue = expect.getAttributeValue(i);
+                        boolean expectAttrDefault = expect.isAttributeDefault(i);
 
+                        // find this attribute actual position
+                        int actualPos = -1;
+                        for (int j = 0; j < expectAttrCount; j++)
+                        {
+                            if(expectAttrNamespace.equals(actual.getAttributeNamespace(j))
+                               && expectAttrName.equals(actual.getAttributeName(j)))
+                            {
+                                actualPos = j;
+                                break;
+                            }
+                        }
+                        String expectN = expectAttrNamespace+":"+expectAttrName;
+                        if(actualPos == -1) {
+                            fail("could not find expected attribute "+expectN
+                                     +" actual parser "+actual.getPositionDescription());
+                        }
+
+                        //and compare ...
+                        assertXml("attribute "+expectN+" namespace", expect, actual,
+                                  expectAttrNamespace, actual.getAttributeNamespace(actualPos) );
+                        assertXml("attribute "+expectN+" name", expect, actual,
+                                  expectAttrName, actual.getAttributeName(actualPos) );
+                        assertXml("attribute "+expectN+" type", expect, actual,
+                                  expectAttrType, actual.getAttributeType(actualPos) );
+                        assertXml("attribute "+expectN+" value", expect, actual,
+                                  expectAttrValue, actual.getAttributeValue(actualPos) );
+                        assertXml("attribute "+expectN+" default", expect, actual,
+                                  ""+expectAttrDefault, ""+actual.isAttributeDefault(actualPos) );
+                    }
+                }
+            } else if(expect.getEventType() == expect.TEXT) {
+                assertXml("text content", expect, actual,
+                          expect.getText(), actual.getText());
+            } else {
+                fail("unexpected event type "+expect.getEventType()+" "+expect.getPositionDescription());
+            }
+            //System.err.print(".");
+        }
+        //System.err.println("\nOK");
+    }
+
+    private static void assertXml(String formatted,
+                                  XmlPullParser pExpected, XmlPullParser pActual,
+                                  String expected, String actual
+                                 )
+    {
+        if((expected != null && !expected.equals(actual))
+           || (expected == null && actual != null))
+        {
+            fail(formatted
+                     +" expected:<"+expected+"> but was:<"+actual+">"
+                     +" (expecte parser position:"+pExpected.getPositionDescription()
+                     +" and actual parser positon:"+pActual.getPositionDescription()
+
+                );
+        }
+    }
 }
 
