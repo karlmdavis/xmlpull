@@ -43,23 +43,23 @@ public class TestToken extends UtilTestCase {
     }
 
     private static final String FOO_XML =
-	"<!DOCTYPE titlepage "+
+        "<!DOCTYPE titlepage "+
         "[<!ENTITY % active.links \"INCLUDE\">"+
         "  <!ENTITY   test \"This is test! Do NOT Panic!\" >"+
         "]>"+
-	"<foo attrName='attrVal'>bar<!--comment-->"+
+        "<foo attrName='attrVal'>bar<!--comment-->"+
         "&test;&test;&lt;&#32;"+
         "&amp;&gt;&apos;&quot;&#x20;&#x3C;"+
         "<?pi ds?><![CDATA[ vo<o ]]></foo>";
     private static final String MISC_XML =
         //"\n \r\n \n\r<!DOCTYPE titlepage SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
-	//"<!--c2-->"+
-	//"<?xml version='1.0'?><!--c-->"+
-	//"   \r\n <?c x?>"+
-	"\n \r\n \n\r"+
+        //"<!--c2-->"+
+        //"<?xml version='1.0'?><!--c-->"+
+        //"   \r\n <?c x?>"+
+        "\n \r\n \n\r"+
         "<!--c-->  \r\n"+
-	FOO_XML+
-	" \r\n";
+        FOO_XML+
+        " \r\n";
 
 
 
@@ -71,7 +71,7 @@ public class TestToken extends UtilTestCase {
 
         // make sure entity "test" can be resolved even when parser is not parsing DOCDECL
         if(!processDocdecl) {
-	    xpp.defineEntityReplacementText("test", "This is test! Do NOT Panic!");
+            xpp.defineEntityReplacementText("test", "This is test! Do NOT Panic!");
         }
 
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
@@ -80,8 +80,8 @@ public class TestToken extends UtilTestCase {
         checkAttribNs(xpp, 0, null, "", "attrName", "attrVal");
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.TEXT, null, 0, null, null,
-			   "barThis is test! Do NOT Panic!This is test! Do NOT Panic!< &>'\" < vo<o ",
-			   false, -1);
+                           "barThis is test! Do NOT Panic!This is test! Do NOT Panic!< &>'\" < vo<o ",
+                           false, -1);
         xpp.next();
         checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         xpp.next();
@@ -89,110 +89,121 @@ public class TestToken extends UtilTestCase {
 
     }
 
-
     public void testTokenTypes() throws Exception {
-	testTokenTypes(false);
+        testTokenTypes(false, false);
+        testTokenTypes(false, true);
     }
 
     public void testTokenTypesInPrologAndEpilog() throws Exception {
-	testTokenTypes(true);
+        testTokenTypes(true, false);
+        testTokenTypes(true, false);
     }
 
     // one step further - it has content ...
-    public void testTokenTypes(boolean checkPrologAndEpilog) throws Exception {
+    public void testTokenTypes(boolean checkPrologAndEpilog,
+                               boolean useRoundtrip) throws Exception {
         XmlPullParser xpp = factory.newPullParser();
         assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        System.out.println("using "+xpp);
 
-	if(checkPrologAndEpilog) {
-	    xpp.setInput(new StringReader(MISC_XML));
-	} else {
-	    xpp.setInput(new StringReader(FOO_XML));
-	}
+        if(checkPrologAndEpilog) {
+            xpp.setInput(new StringReader(MISC_XML));
+        } else {
+            xpp.setInput(new StringReader(FOO_XML));
+        }
 
         // attempt to set roundtrip
         try {
-	    xpp.setFeature(FEATURE_XML_ROUNDTRIP, true);
+            xpp.setFeature(FEATURE_XML_ROUNDTRIP, useRoundtrip);
         } catch(Exception ex) {  // make sure we ignore if failed ...
         }
         // did we succeeded?
         boolean roundtripSupported = xpp.getFeature(FEATURE_XML_ROUNDTRIP);
-        boolean unnormalizedSupported = xpp.getFeature(FEATURE_UNNORMALIZED_XML);
+        //boolean unnormalizedSupported = xpp.getFeature(FEATURE_UNNORMALIZED_XML);
 
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for START_DOCUMENT");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for START_DOCUMENT");
         } catch(XmlPullParserException ex) {
         }
 
-	if(checkPrologAndEpilog) {
-	    if(unnormalizedSupported) {
-		//		xpp.nextToken();
-		//		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
-		//				   "\n \r\n \n\r", false, -1);
-		//		assertTrue(xpp.isWhitespace());
-		String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
-		assertEquals(printable("\n \r\n \n\r"), printable(text));
-		assertEquals("\n \r\n \n\r", text);
-	    }
+        if(checkPrologAndEpilog) {
+            xpp.nextToken();
+            if(xpp.getEventType() == xpp.IGNORABLE_WHITESPACE) {
+                //              xpp.nextToken();
+                //              checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
+                //                                 "\n \r\n \n\r", false, -1);
+                //              assertTrue(xpp.isWhitespace());
+                String text = gatherTokenText(xpp, xpp.IGNORABLE_WHITESPACE, true);
+                if(roundtripSupported) {
+                    assertEquals(printable("\n \r\n \n\r"), printable(text));
+                    assertEquals("\n \r\n \n\r", text);
+                } else {
+                    assertEquals(printable("\n \n \n\n"), printable(text));
+                    assertEquals("\n \n \n\n", text);
+                }
+            }
 
-	    xpp.nextToken();
-	    checkParserStateNs(xpp, 0, xpp.COMMENT, null, 0, null, null, "c", false, -1);
-	    try {
-		xpp.isWhitespace();
-		fail("whitespace function must fail for START_DOCUMENT");
-	    } catch(XmlPullParserException ex) {
-	    }
+            checkParserStateNs(xpp, 0, xpp.COMMENT, null, 0, null, null, "c", false, -1);
+            try {
+                xpp.isWhitespace();
+                fail("whitespace function must fail for START_DOCUMENT");
+            } catch(XmlPullParserException ex) {
+            }
 
-	    if(unnormalizedSupported) {
-		//		xpp.nextToken();
-		//		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null, "  \r\n", false, -1);
-		//		assertTrue(xpp.isWhitespace());
-		String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
-		assertEquals(printable("  \r\n"), printable(text));
-	    } else {
-		xpp.nextToken();
-	    }
+            xpp.nextToken();
+            if(xpp.getEventType() == xpp.IGNORABLE_WHITESPACE) {
+                //              xpp.nextToken();
+                //              checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null, "  \r\n", false, -1);
+                //              assertTrue(xpp.isWhitespace());
+                String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+                if(roundtripSupported) {
+                    assertEquals(printable("  \r\n"), printable(text));
+                } else {
+                    assertEquals(printable("  \n"), printable(text));
+                }
+            }
 
 
-	} else {
-	    xpp.nextToken();
-	}
-	checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null,
-			       (roundtripSupported  ? " titlepage "+
-				    //"SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
-				    "[<!ENTITY % active.links \"INCLUDE\">"+
-				    "  <!ENTITY   test \"This is test! Do NOT Panic!\" >]" : null)
-			       , false, -1);
-	try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for DOCDECL");
-	} catch(XmlPullParserException ex) {
-	}
+        } else {
+            xpp.nextToken();
+        }
+        checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null,
+                               (roundtripSupported  ? " titlepage "+
+                                    //"SYSTEM \"http://www.foo.bar/dtds/typo.dtd\""+
+                                    "[<!ENTITY % active.links \"INCLUDE\">"+
+                                    "  <!ENTITY   test \"This is test! Do NOT Panic!\" >]" : null)
+                               , false, -1);
+        try {
+            xpp.isWhitespace();
+            fail("whitespace function must fail for DOCDECL");
+        } catch(XmlPullParserException ex) {
+        }
 
-	// now parse elements
+        // now parse elements
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 1);
         if(roundtripSupported) {
-	    assertEquals("start tag roundtrip", "<foo attrName='attrVal'>", xpp.getText());
+            assertEquals("start tag roundtrip", "<foo attrName='attrVal'>", xpp.getText());
         }
         checkAttribNs(xpp, 0, null, "", "attrName", "attrVal");
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for START_DOCUMENT");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for START_DOCUMENT");
         } catch(XmlPullParserException ex) {
         }
 
-	{
-	    String text = nextTokenGathered(xpp, xpp.TEXT, false);
-	    assertEquals(printable("bar"), printable(text));
-	}
+        {
+            String text = nextTokenGathered(xpp, xpp.TEXT, false);
+            assertEquals(printable("bar"), printable(text));
+        }
 
         //xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "comment", false, -1);
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for START_DOCUMENT");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for START_DOCUMENT");
         } catch(XmlPullParserException ex) {
         }
 
@@ -201,24 +212,24 @@ public class TestToken extends UtilTestCase {
         // uresolved entity must be reurned as null by nextToken()
         xpp.nextToken();
         if(!processDocdecl) {
-	    checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
-			       "test", null, false, -1);
+            checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
+                               "test", null, false, -1);
         } else {
-	    checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
-			       "test", "This is test! Do NOT Panic!", false, -1);
+            checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
+                               "test", "This is test! Do NOT Panic!", false, -1);
 
         }
 
         // now we check if we can resolve entity
         if(!processDocdecl) {
-	    xpp.defineEntityReplacementText("test", "This is test! Do NOT Panic!");
+            xpp.defineEntityReplacementText("test", "This is test! Do NOT Panic!");
         }
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null,
-			   "test", "This is test! Do NOT Panic!", false, -1);
+                           "test", "This is test! Do NOT Panic!", false, -1);
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for ENTITY_RED");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for ENTITY_RED");
         } catch(XmlPullParserException ex) {
         }
 
@@ -226,16 +237,16 @@ public class TestToken extends UtilTestCase {
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, "lt", "<", false, -1);
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for ENTITY_REF");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for ENTITY_REF");
         } catch(XmlPullParserException ex) {
         }
 
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, "#32", " ", false, -1);
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for ENTITY_REF");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for ENTITY_REF");
         } catch(XmlPullParserException ex) {
         }
 
@@ -260,8 +271,8 @@ public class TestToken extends UtilTestCase {
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, "pi ds", false, -1);
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for START_DOCUMENT");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for START_DOCUMENT");
         } catch(XmlPullParserException ex) {
         }
 
@@ -272,137 +283,140 @@ public class TestToken extends UtilTestCase {
         xpp.nextToken();
         checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
         if(roundtripSupported) {
-	    assertEquals("end tag roundtrip", "</foo>", xpp.getText());
+            assertEquals("end tag roundtrip", "</foo>", xpp.getText());
         }
         try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for END_TAG");
+            xpp.isWhitespace();
+            fail("whitespace function must fail for END_TAG");
         } catch(XmlPullParserException ex) {
         }
 
-	if(checkPrologAndEpilog) {
-	    if(unnormalizedSupported) {
-		//		xpp.nextToken();
-		//		checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
-		//				   " \r\n", false, -1);
-		//		assertTrue(xpp.isWhitespace());
-		String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
-		assertEquals(printable("\r\n "), printable(text));
-	    } else {
-		xpp.nextToken();
-	    }
-	} else {
-	    xpp.nextToken();
-	}
-	checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
-	try {
-	    xpp.isWhitespace();
-	    fail("whitespace function must fail for END_DOCUMENT");
-	} catch(XmlPullParserException ex) {
-	}
+        xpp.nextToken();
+        if(checkPrologAndEpilog) {
+            //if(unnormalizedSupported) {
+            if(xpp.getEventType() == xpp.IGNORABLE_WHITESPACE) {
+
+                //              xpp.nextToken();
+                //              checkParserStateNs(xpp, 0, xpp.IGNORABLE_WHITESPACE, null, 0, null, null,
+                //                                 " \r\n", false, -1);
+                //              assertTrue(xpp.isWhitespace());
+                String text = nextTokenGathered(xpp, xpp.IGNORABLE_WHITESPACE, true);
+                if(roundtripSupported) {
+                    assertEquals(printable("\r\n "), printable(text));
+                } else {
+                    assertEquals(printable("\n "), printable(text));
+                }
+            }
+        }
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        try {
+            xpp.isWhitespace();
+            fail("whitespace function must fail for END_DOCUMENT");
+        } catch(XmlPullParserException ex) {
+        }
 
     }
 
     // one step further - it has content ...
     public void testXmlRoundtrip() throws Exception {
-	XmlPullParser xpp = factory.newPullParser();
-	assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
+        XmlPullParser xpp = factory.newPullParser();
+        assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
 
 
-	// reset parser
-	xpp.setInput(null);
-	// attempt to set roundtrip
-	try {
-	    xpp.setFeature(FEATURE_XML_ROUNDTRIP, true);
-	} catch(Exception ex) {
-	}
-	// did we succeeded?
-	boolean roundtripSupported = xpp.getFeature(FEATURE_XML_ROUNDTRIP);
+        // reset parser
+        xpp.setInput(null);
+        // attempt to set roundtrip
+        try {
+            xpp.setFeature(FEATURE_XML_ROUNDTRIP, true);
+        } catch(Exception ex) {
+        }
+        // did we succeeded?
+        boolean roundtripSupported = xpp.getFeature(FEATURE_XML_ROUNDTRIP);
 
-	if(!roundtripSupported) {
-	    return;
-	}
-	PackageTests.addNote("* optional feature "+FEATURE_XML_ROUNDTRIP+" is supported\n");
+        if(!roundtripSupported) {
+            return;
+        }
+        PackageTests.addNote("* optional feature "+FEATURE_XML_ROUNDTRIP+" is supported\n");
 
-	StringWriter sw = new StringWriter();
-	String s;
-	//StringWriter st = new StringWriter();
-	xpp.setInput(new StringReader(MISC_XML));
-	int[] holderForStartAndLength = new int[2];
-	char[] buf;
-	while(xpp.nextToken() != xpp.END_DOCUMENT) {
-	    switch(xpp.getEventType()) {
-		case XmlPullParser.START_TAG:
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip START_TAG", xpp.getText(), s);
-		    sw.write(s);
-		    break;
-		case XmlPullParser.END_TAG:
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip END_TAG", xpp.getText(), s);
-		    sw.write(s);
-		    break;
-		case XmlPullParser.TEXT:
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip TEXT", xpp.getText(), s);
-		    sw.write(s);
-		    break;
-		case XmlPullParser.IGNORABLE_WHITESPACE:
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip IGNORABLE_WHITESPACE", xpp.getText(), s);
-		    sw.write(s);
-		    break;
-		case XmlPullParser.CDSECT:
-		    sw.write("<![CDATA[");
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip CDSECT", xpp.getText(), s);
-		    sw.write(s);
-		    sw.write("]]>");
-		    break;
-		case XmlPullParser.PROCESSING_INSTRUCTION:
-		    sw.write("<?");
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip PROCESSING_INSTRUCTION", xpp.getText(), s);
-		    sw.write(s);
-		    sw.write("?>");
-		    break;
-		case XmlPullParser.COMMENT:
-		    sw.write("<!--");
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip COMMENT", xpp.getText(), s);
-		    sw.write(s);
-		    sw.write("-->");
-		    break;
-		case XmlPullParser.ENTITY_REF:
-		    sw.write("&");
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip ENTITY_REF", xpp.getName(), s);
-		    sw.write(s);
-		    sw.write(";");
-		    break;
-		case XmlPullParser.DOCDECL:
-		    sw.write("<!DOCTYPE");
-		    buf = xpp.getTextCharacters(holderForStartAndLength);
-		    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
-		    assertEquals("roundtrip DOCDECL", xpp.getText(), s);
-		    sw.write(s);
-		    sw.write(">");
-		    break;
-		default:
-		    throw new RuntimeException("unknown token type");
-	    }
-	}
-	sw.close();
-	String RESULT_XML_BUF = sw.toString();
-	assertEquals("rountrip XML", printable(MISC_XML), printable(RESULT_XML_BUF));
+        StringWriter sw = new StringWriter();
+        String s;
+        //StringWriter st = new StringWriter();
+        xpp.setInput(new StringReader(MISC_XML));
+        int[] holderForStartAndLength = new int[2];
+        char[] buf;
+        while(xpp.nextToken() != xpp.END_DOCUMENT) {
+            switch(xpp.getEventType()) {
+                case XmlPullParser.START_TAG:
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip START_TAG", xpp.getText(), s);
+                    sw.write(s);
+                    break;
+                case XmlPullParser.END_TAG:
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip END_TAG", xpp.getText(), s);
+                    sw.write(s);
+                    break;
+                case XmlPullParser.TEXT:
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip TEXT", xpp.getText(), s);
+                    sw.write(s);
+                    break;
+                case XmlPullParser.IGNORABLE_WHITESPACE:
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip IGNORABLE_WHITESPACE", xpp.getText(), s);
+                    sw.write(s);
+                    break;
+                case XmlPullParser.CDSECT:
+                    sw.write("<![CDATA[");
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip CDSECT", xpp.getText(), s);
+                    sw.write(s);
+                    sw.write("]]>");
+                    break;
+                case XmlPullParser.PROCESSING_INSTRUCTION:
+                    sw.write("<?");
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip PROCESSING_INSTRUCTION", xpp.getText(), s);
+                    sw.write(s);
+                    sw.write("?>");
+                    break;
+                case XmlPullParser.COMMENT:
+                    sw.write("<!--");
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip COMMENT", xpp.getText(), s);
+                    sw.write(s);
+                    sw.write("-->");
+                    break;
+                case XmlPullParser.ENTITY_REF:
+                    sw.write("&");
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip ENTITY_REF", xpp.getName(), s);
+                    sw.write(s);
+                    sw.write(";");
+                    break;
+                case XmlPullParser.DOCDECL:
+                    sw.write("<!DOCTYPE");
+                    buf = xpp.getTextCharacters(holderForStartAndLength);
+                    s = new String(buf, holderForStartAndLength[0], holderForStartAndLength[1]);
+                    assertEquals("roundtrip DOCDECL", xpp.getText(), s);
+                    sw.write(s);
+                    sw.write(">");
+                    break;
+                default:
+                    throw new RuntimeException("unknown token type");
+            }
+        }
+        sw.close();
+        String RESULT_XML_BUF = sw.toString();
+        assertEquals("rountrip XML", printable(MISC_XML), printable(RESULT_XML_BUF));
     }
 
 

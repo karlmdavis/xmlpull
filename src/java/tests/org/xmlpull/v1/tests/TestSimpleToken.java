@@ -48,21 +48,21 @@ public class TestSimpleToken extends UtilTestCase {
         // check setInput semantics
         assertEquals(XmlPullParser.START_DOCUMENT, xpp.getEventType());
         try {
-	    xpp.nextToken();
-	    fail("exception was expected of nextToken() if no input was set on parser");
+            xpp.nextToken();
+            fail("exception was expected of nextToken() if no input was set on parser");
         } catch(XmlPullParserException ex) {}
 
         xpp.setInput(null);
         assertEquals(XmlPullParser.START_DOCUMENT, xpp.getEventType());
         try {
-	    xpp.nextToken();
-	    fail("exception was expected of next() if no input was set on parser");
+            xpp.nextToken();
+            fail("exception was expected of next() if no input was set on parser");
         } catch(XmlPullParserException ex) {}
 
         xpp.setInput(null); //reset parser
         // attempt to set roundtrip
         try {
-	    xpp.setFeature(FEATURE_XML_ROUNDTRIP, true);
+            xpp.setFeature(FEATURE_XML_ROUNDTRIP, true);
         } catch(Exception ex) {
         }
         // did we succeeded?
@@ -71,41 +71,41 @@ public class TestSimpleToken extends UtilTestCase {
 
         // check the simplest possible XML document - just one root element
         for(int i = 1; i <= 2; ++i) {
-	    xpp.setInput(new StringReader(i == 1 ? "<foo/>" : "<foo></foo>"));
-	    boolean empty = (i == 1);
-	    checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
-	    xpp.nextToken();
-	    checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, empty, 0);
-	    if(roundtripSupported) {
-		if(empty) {
-		    //              System.out.println("tag='"+xpp.getText()+"'");
-		    //              String foo ="<foo/>";
-		    //              String foo2 = xpp.getText();
-		    //              System.out.println(foo.equals(foo2));
-		    assertEquals("empty tag roundtrip",
-				 printable("<foo/>"),
-				 printable(xpp.getText()));
-		} else {
-		    assertEquals("start tag roundtrip",
-				 printable("<foo>"),
-				 printable(xpp.getText()));
-		}
-	    }
-	    xpp.nextToken();
-	    checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
-	    if(roundtripSupported) {
-		if(empty) {
-		    assertEquals("empty tag roundtrip",
-				 printable("<foo/>"),
-				 printable(xpp.getText()));
-		} else {
-		    assertEquals("end tag roundtrip",
-				 printable("</foo>"),
-				 printable(xpp.getText()));
-		}
-	    }
-	    xpp.nextToken();
-	    checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+            xpp.setInput(new StringReader(i == 1 ? "<foo/>" : "<foo></foo>"));
+            boolean empty = (i == 1);
+            checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+            xpp.nextToken();
+            checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, empty, 0);
+            if(roundtripSupported) {
+                if(empty) {
+                    //              System.out.println("tag='"+xpp.getText()+"'");
+                    //              String foo ="<foo/>";
+                    //              String foo2 = xpp.getText();
+                    //              System.out.println(foo.equals(foo2));
+                    assertEquals("empty tag roundtrip",
+                                 printable("<foo/>"),
+                                 printable(xpp.getText()));
+                } else {
+                    assertEquals("start tag roundtrip",
+                                 printable("<foo>"),
+                                 printable(xpp.getText()));
+                }
+            }
+            xpp.nextToken();
+            checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+            if(roundtripSupported) {
+                if(empty) {
+                    assertEquals("empty tag roundtrip",
+                                 printable("<foo/>"),
+                                 printable(xpp.getText()));
+                } else {
+                    assertEquals("end tag roundtrip",
+                                 printable("</foo>"),
+                                 printable(xpp.getText()));
+                }
+            }
+            xpp.nextToken();
+            checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
         }
     }
 
@@ -113,24 +113,32 @@ public class TestSimpleToken extends UtilTestCase {
     public void testNormalization() throws Exception {
         XmlPullParser xpp = factory.newPullParser();
         assertEquals(true, xpp.getFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES));
-	xpp.setInput(new StringReader("<foo>\n \r\n \n\r</foo>"));
-	checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
-	xpp.nextToken();
-	checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false/*empty*/, 0);
+        testNormalization(xpp);
+        try{ xpp.setFeature(FEATURE_XML_ROUNDTRIP, false); } catch(Exception ex) {}
+        testNormalization(xpp);
+        try{ xpp.setFeature(FEATURE_XML_ROUNDTRIP, true); } catch(Exception ex) {}
+        testNormalization(xpp);
+    }
 
-	boolean normalized = xpp.getFeature(FEATURE_UNNORMALIZED_XML) == false;
-	String text = nextTokenGathered(xpp, XmlPullParser.TEXT, true);
-	if(normalized) {
-	    assertEquals(printable("\n \n \n\n"), printable(text));
-	    assertEquals("\n \n \n\n", text);
-	} else {
-	    assertEquals(printable("\n \r\n \n\r"), printable(text));
-	    assertEquals("\n \r\n \n\r", text);
-	}
+    public void testNormalization(XmlPullParser xpp) throws Exception {
+        xpp.setInput(new StringReader("<foo>\n \r\n \n\r</foo>"));
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false/*empty*/, 0);
 
-	checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
-	xpp.nextToken();
-	checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+        boolean roundtrip = xpp.getFeature(FEATURE_XML_ROUNDTRIP) == false;
+        String text = nextTokenGathered(xpp, XmlPullParser.TEXT, true);
+        if(roundtrip) {
+            assertEquals(printable("\n \n \n\n"), printable(text));
+            assertEquals("\n \n \n\n", text);
+        } else {
+            assertEquals(printable("\n \r\n \n\r"), printable(text));
+            assertEquals("\n \r\n \n\r", text);
+        }
+
+        checkParserStateNs(xpp, 1, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
     }
 }
 
