@@ -175,6 +175,7 @@ public class TestXmlPullWrapper extends TestCase {
         xs.writeIntElement(null, "imin", Integer.MIN_VALUE);
         xs.writeDoubleElement(null, "d1", 0.0);
         xs.writeDoubleElement(null, "d2", -100.0);
+        xs.writeFloatElement(null, "f1", 7.54f);
         xs.endDocument();
         //System.err.println(getClass()+" s="+out.toString());
 
@@ -202,6 +203,8 @@ public class TestXmlPullWrapper extends TestCase {
         assertEquals(0.0, pw.readDoubleElement(null, "d1"), 0.00001);
         pw.nextTag();
         assertEquals(-100.0, pw.readDoubleElement(null, "d2"), 0.00001);
+        pw.nextTag();
+        assertEquals(7.54f, pw.readFloatElement(null, "f1"), 0.0000000001f);
     }
 
 
