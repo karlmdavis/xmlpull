@@ -12,7 +12,7 @@
 <h3>IN PROGRESS: <a name="XMLPULL_1_0_9"></a>2002-08 (XMLPULL_1_1_1)</h3>
 <ul>
 <li>this will be next official stable release (based on last of 1.0.x) to 
-incorporate all changes especially XmlSerailizer</ul>
+incorporate all changes especially XmlSerializer</ul>
 
 <h3>&nbsp;</h3>
 
@@ -23,17 +23,25 @@ XMLPULL API on J2SE (on J2ME typically factory is not used and only implementati
 serializer or parser interface may be available).
 
 <li><b>NOTE:</b> <b>potentially backward incompatible change to nextToken</b>(): 
-IGNORABLE_WHITESPACE for content outside element root and end-of-line 
-unnormalized content for elements is not reported by nextToken() when 
-optional <a href="http://xmlpull.org/v1/doc/features.html#unnormalized-content">
-UNNORMALIZED CONTENT feature</a> is false. However if this feature is true 
-parser behavior is exactly the same as in previous XmlPull API version . This change is made to keep consistency with XML 
-infoset <a href="http://www.w3.org/TR/xml-infoset/#infoitem.document">Document 
-Information Item properties</a> which only contain comments and processing 
-instructions but not white space content and element content has always 
-end-of-line normalized as described in
+content returned by getText()/getTextCharacters() is end-of-line normalized and 
+also IGNORABLE_WHITESPACE for content outside element root and end-of-line 
+unnormalized content for elements MAY not reported by nextToken() (unless optional
+<a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML ROUNDTRIP 
+feature</a> is false). However if&nbsp;
+<a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">XML ROUNDTRIP 
+feature</a> is true parser behavior is exactly the same as in previous XmlPull 
+API version . This change is made to improve compatibility with XML 
+by requiring normalized content as described in
 <a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line 
-Handling</a>.&nbsp; <li>conformance tests can be now described in XML allowing to keep tests in 
+Handling</a> and with XML infoset <a href="http://www.w3.org/TR/xml-infoset/#infoitem.document">Document 
+Information Item properties</a> which only contain comments and processing 
+instructions but not white space content (so now reporting IGNORABLE_WHITESPACE 
+event outside is optional).&nbsp; 
+
+<li>added clarification to nextToken() that there is no requirement for reported 
+token events to be coalesced (for example nextToken() may report multiple 
+consecutive TEXT or IGNORABLE_WHITESPACE events). This is different from next() 
+that always report exactly one TEXT event<li>conformance tests can be now described in XML allowing to keep tests in 
 format independent from Java (and potentially to use the same XML tests with 
 other XmlPull API bindings such as C++ or PHP) XML files with tests are read 
 from CLASSPATH<li>added newSerializer() method to XmlPullParserFactory

@@ -120,40 +120,66 @@ assurance about String values (like getText()) or attribute values
 <p>NOTE: when enabled this feature allows for fast testing of equality against 
 string constants (no need to use String.equals()). </p>
 
-<p>
-&nbsp;<h3>
-<a name="unnormalized-xml"></a>Optional feature: UNNORMALIZED XML<br>
+<h3>
 &nbsp;</h3>
-<p>This feature is identified by
-<a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">
-http://xmlpull.org/v1/doc/features.html#unnormalized-xml</a> </p>
-<p>By default this feature is false and it means that IGNORABLE_WHITESPACE 
-outside of root element <b>MUST NOT</b> be reported and that TEXT and 
-IGNORABLE_WHITESPACE content returned from nextToken() <b>MUST</b> <b>NOT</b> 
-report end-of-line unnormalized content but apply algorithm defined in
-<a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line 
-Handling</a>. The content outside of root element is not reported to make it 
-consistent with XML infoset
-<a href="http://www.w3.org/TR/xml-infoset/#infoitem.document">Document 
-Information Item properties</a> in which white spaces in prolog and part root 
-element are ignored.</p>
-<p>If this feature is true then parser <b>MUST</b> report exact white space 
-content outside of root element as IGNORABLE WHITESPACE events and <b>MUST</b> 
-report unnormalized (verbatim) element content TEXT and IGNORABLE_WHITESPACE 
-from nextToken().</p>
-<p>&nbsp;</p>
 <h3>
 <a name="xml-roundtrip"></a>Optional feature: XML ROUNDTRIP<br>
 &nbsp;</h3>
 <p>This feature is identified by
 <a href="http://xmlpull.org/v1/doc/features.html#xml-roundtrip">
 http://xmlpull.org/v1/doc/features.html#xml-roundtrip</a> </p>
-<p>If set to true then XMLPULL parser <b>MUST</b> make available original XML 
-value for START_TAG and END_TAG events with getText() and getTextCharacters() 
-functions, also parse MUST return exact content of DOCTYPE for DOCDECL token and 
-exact PI content for PROCESSING_INSTRUCTION token and implicitly&nbsp; <a href="#unnormalized-xml">UNNORMALIZED XML</a> 
-feature is set to true and <b>MUST</b> be reported as true.<br>
-&nbsp;</p>
+<p>If ROUNDTRIP is on it is affecting getText/getTextCharacters() when 
+nextToken()&nbsp; is used to make possible an exact roundtrip of XML 1.0 input - 
+here are constraints on values returned by getText()/getTextCharacters:</p>
+
+<ul>
+  <li>for all tokens exactly what was in input<b> MUST</b> be returned&nbsp; - 
+  in particular returned content <b>MUST NOT</b> be end-of-line normalized (the 
+  algorithm described in
+<a href="http://www.w3.org/TR/REC-xml#sec-line-ends">XML 1.0 End-of-Line 
+Handling</a> is not applied)</li>
+  <li>for START_TAG and END_TAG event original XML value <b>MUST</b> be returned 
+  for events for start/end tag (for example &quot;tag&quot; for &lt;tag&gt;)</li>
+  <li>for PROCESSING INSTRUCTION event exact content of PI <b>MUST</b> be 
+  returned: in &lt;?target&nbsp;&nbsp;&nbsp; data?&gt; white spaces between target and 
+  data must be preserved</li>
+  <li>DOCDECL <b>MUST</b> be reported exactly as in input</li>
+</ul>
+<p>additionally for nextToken()</p>
+
+<ul>
+  <li>ignorable whites spaces outside root element <b>MUST</b> be reported as 
+  IGNORABLE_WHITESPACE </li>
+</ul>
+<p>By default this feature is off and it implies unchanged behavior of 
+XmlPullParser:</p>
+
+<ul>
+  <li>for all tokens call to getText()/getTextCharacters returns end-of-line 
+  normalized content<br>
+  (that includes beside TEXT, IGNORABLE_WHITESPACE also COMMENT, 
+  PROCESSING_INSTRUCTION, ENTITY_REF etc.)</li>
+  <li>getText() for START_TAG and END_TAG event MUST return null</li>
+  <li>PROCESSING_INSTRUCTION MUST be reported as target + ' ' + data or exactly 
+  as it was in input</li>
+  <li>DOCDECL MUST be reported exactly if PROCESS DOCDECL is true otherwise MAY 
+  be reported (but does not have to and may be even null)</li>
+  <li>ignorable whites spaces (event IGNORABLE_WHITESPACE) outside root element<b>
+  </b>MAY<b> </b>be reported by nextToken()</li>
+</ul>
+<p>Note that content outside of root element is typically not reported by 
+parsers to make it 
+consistent with XML infoset
+<a href="http://www.w3.org/TR/xml-infoset/#infoitem.document">Document 
+Information Item properties</a> in which white spaces in prolog and part root 
+element are ignored. If reported IGNORABLE_WHITESPACE event may be used to 
+preserved formatting of XML input when serializing it.</p>
+
+<p>However as IGNORABLE_WHITESPACE event MAY be reported make sure that 
+application will be prepared to ignore IGNORABLE_WHITESPACE evens from 
+nextToken() when processing content outside of root element (getDepth() == 0).</p>
+
+<p>&nbsp;</p>
 
 <h3>
 <a name="detect-encoding"></a>Optional feature: DETECT ENCODING<br>
