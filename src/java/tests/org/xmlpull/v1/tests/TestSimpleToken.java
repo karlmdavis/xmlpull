@@ -56,7 +56,7 @@ public class TestSimpleToken extends UtilTestCase {
         } catch(XmlPullParserException ex) {}
 
         xpp.setInput(null); //reset parser
-        final String FEATURE_XML_ROUNDTRIP = "http://xmlpull.org/v1/features/xml-roundtrip";
+        final String FEATURE_XML_ROUNDTRIP="http://xmlpull.org/v1/doc/features.html#xml-roundtrip";
         // attempt to set roundtrip
         try {
             xpp.setFeature(FEATURE_XML_ROUNDTRIP, true);

@@ -295,23 +295,23 @@ public interface XmlPullParser {
      * @see #setFeature
      */
     public static final String FEATURE_PROCESS_NAMESPACES =
-        "http://xmlpull.org/v1/features/process-namespaces";
+        "http://xmlpull.org/v1/doc/features.html#process-namespaces";
 
     /**
      * FEATURE: Report namespace attributes also - they can be distinguished
      * looking for prefix == "xmlns" or prefix == null and name == "xmlns
-     * it is off by default and only meningful when FEATURE_PROCESS_NAMESPACES feature is on.
+     * it is off by default and only meaningful when FEATURE_PROCESS_NAMESPACES feature is on.
      * <p><strong>NOTE:</strong> can not be changed during parsing!
      *
      * @see #getFeature
      * @see #setFeature
      */
     public static final String FEATURE_REPORT_NAMESPACE_ATTRIBUTES =
-        "http://xmlpull.org/v1/features/report-namespace-prefixes";
+        "http://xmlpull.org/v1/doc/features.html#report-namespace-prefixes";
 
     /**
      * FEATURE: Processing of DOCDECL is by default set to false
-     * and if DOCDECL is encountred it is reported by nextToken()
+     * and if DOCDECL is encountered it is reported by nextToken()
      * and ignored by next().
      *
      * If processing is set to true then DOCDECL must be processed by parser.
@@ -325,11 +325,11 @@ public interface XmlPullParser {
      * @see #setFeature
      */
     public static final String FEATURE_PROCESS_DOCDECL =
-        "http://xmlpull.org/v1/features/process-docdecl";
+        "http://xmlpull.org/v1/doc/features.html#process-docdecl";
 
     /**
      * FEATURE: Report all validation errors as defined by XML 1.0 sepcification
-     * (implies that PROCESS_DOCDECL is true and both internal and external DOCDECL
+     * (implies that FEATURE_PROCESS_DOCDECL is true and both internal and external DOCDECL
      * will be processed).
      * <p><strong>NOTE:</strong> can not be changed during parsing!
      *
@@ -337,7 +337,7 @@ public interface XmlPullParser {
      * @see #setFeature
      */
     public static final String FEATURE_VALIDATION =
-        "http://xmlpull.org/v1/features/validation";
+        "http://xmlpull.org/v1/doc/features.html#validation";
 
     /**
      * Use this call to change the general behaviour of the parser,
@@ -734,7 +734,8 @@ public interface XmlPullParser {
      * additional event types (COMMENT, CDSECT, DOCDECL, ENTITY_REF, PROCESSING_INSTRUCTION, or
      * IGNORABLE_WHITESPACE) if they are available in input.
      *
-     * <p>If special feature FEATURE_XML_ROUNDTRIP (http://xmlpull.org/v1/features/xml-roundtrip)
+     * <p>If special feature FEATURE_XML_ROUNDTRIP
+     * (identified by URI: http://xmlpull.org/v1/doc/features.html#xml-roundtrip)
      * is true then it is possible to do XML document round trip ie. reproduce
      * exectly on output the XML input using getText().
      *
