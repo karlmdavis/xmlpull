@@ -9,6 +9,19 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
+<h3>2001-03-30 (XMLPULL_1_0_4)</h3>
+<ul>
+<li>
+added FEATURE_ prefix to all feature constants<li>
+changed function name getType() to getEventType()<li>
+clarified that getNamespacesCount() does not include default namespaces 
+declarations (xmlns='...')<li>
+specified that attributes if has no namespace declared will have &quot;&quot; namespace 
+(empty string)<li>
+clarified that when getTextCharacters&nbsp; returns null then holder MUST 
+contain start and length will be set to -1<li>
+<font SIZE="2">added more comprehensive JUnit tests for API conformance</font></ul>
+
 <h3>2001-03-29 (XMLPULL_1_0_3)</h3>
 <ul>
 <li>

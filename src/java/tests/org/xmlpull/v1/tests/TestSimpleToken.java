@@ -73,7 +73,7 @@ public class TestSimpleToken extends UtilTestCase {
 
 
         xpp.setInput(new StringReader("<!--c-->  \r\n<foo attrName='attrVal'>bar<!--comment-->"+
-                                          <?pi ds><![CDATA[ do ]]></foo>"));
+                                          "<?pi ds><![CDATA[ do ]]></foo>"));
         checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
         xpp.nextToken();
         checkParserStateNs(xpp, 0, xpp.COMMENT, null, 0, null, null, "<!--c-->", false, -1);
