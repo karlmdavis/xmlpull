@@ -5,6 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -49,6 +53,8 @@ public class MyXmlPullApp
             for (int i = 0; i < args.length; i++) {
                 System.out.println("Parsing file: "+args[i]);
                 xpp.setInput ( new FileReader ( args [i] ) );
+                //xpp.setInput ( new InputStreamReader( new FileInputStream ( args [i] ) ) );
+                //xpp.setInput ( new FileInputStream ( args [i] ), "UTF8"  );
                 app.processDocument(xpp);
             }
         }
