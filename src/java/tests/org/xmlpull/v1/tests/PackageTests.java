@@ -42,7 +42,7 @@ public class PackageTests extends TestCase
 
     public static void main (String[] args) {
         try {
-        UtilTestCase.factoryNewInstance();
+            UtilTestCase.factoryNewInstance();
         } catch (Exception ex) {
             System.err.println(
                 "ERROR: tests aborted - could not create instance of XmlPullParserFactory:");

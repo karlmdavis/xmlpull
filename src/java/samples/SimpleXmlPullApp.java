@@ -17,8 +17,8 @@ public class SimpleXmlPullApp
         throws XmlPullParserException, IOException
     {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        //factory.setNamespaceAware(true);
-        factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        factory.setNamespaceAware(true);
+        //factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
 
         XmlPullParser xpp = factory.newPullParser();
         System.out.println("parser implementation class is "+xpp.getClass());
