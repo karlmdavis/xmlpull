@@ -79,7 +79,7 @@ All generated files are created under ${build} directory
   <property name="jar_util"  value="${build_lib}/${xmlpull_version}-util.jar"/>
 
   <property name="build_wrapper" value="${build_addons}/wrapper"/>
-  <property name="src_wrapper" value="${src_addons}/util/wrapper"/>
+  <property name="src_wrapper" value="${src_addons}/wrapper/src"/>
   <property name="jar_wrapper"  value="${build_lib}/${xmlpull_version}-wrapper.jar"/>
 
   <property name="build_xmlrpc" value="${build_addons}/xmlrpc"/>
@@ -127,6 +127,10 @@ All generated files are created under ${build} directory
 
   <target name="check_junit" unless="junit_present" depends="prepare">
     <echo message="Warning: JUnit dependencies were not resolved."/>
+  </target>
+
+  <target name="require_junit" unless="junit_present" depends="prepare">
+    <fail message="ERROR: JUnit library must be present to compile this target (see http://www.junit.org)."/>
   </target>
 
   <target name="dependencies" depends="prepare,check_junit"/>
@@ -214,6 +218,15 @@ All generated files are created under ${build} directory
     </jar>       
   </target>
 
+  <target name="wrapper" depends="require_junit,util">
+    <mkdir dir="${build_wrapper}"/>
+    <javac debug="${debug}" deprecation="${deprecation}"
+       srcdir="${src_wrapper}" destdir="${build_wrapper}" classpath="${build_classes}:${build_util}"/>
+    <jar jarfile="${jar_wrapper}">
+      <fileset dir="${build_wrapper}"/>
+    </jar>       
+  </target>
+
   <target name="xmlrpc" depends="api">
     <mkdir dir="${build_xmlrpc}"/>
     <javac debug="${debug}" deprecation="${deprecation}"
@@ -224,7 +237,7 @@ All generated files are created under ${build} directory
   </target>
       
 
-  <target name="addons" depends="prepare,sax2,util,xmlrpc,parser_pool,dom2_builder"/>
+  <target name="addons" depends="prepare,sax2,util,wrapper,xmlrpc,parser_pool,dom2_builder"/>
 
   <!-- =================================================================== -->
   <!-- JUnit automatic tests                                               -->
