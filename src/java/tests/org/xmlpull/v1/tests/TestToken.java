@@ -212,7 +212,7 @@ public class TestToken extends UtilTestCase {
         checkParserStateNs(xpp, 1, xpp.COMMENT, null, 0, null, null, "comment", false, -1);
         try {
             xpp.isWhitespace();
-            fail("whitespace function must fail for START_DOCUMENT");
+            fail("whitespace function must fail for COMMENT");
         } catch(XmlPullParserException ex) {
         }
 

@@ -120,7 +120,8 @@ public class TestSerializeWithNs extends UtilTestCase {
         ser.setOutput(baos, "UTF-8");
         ser.startDocument("UTF-8", null);
         ser.startTag("", "foo");
-        ser.text("test");
+        final String text = "\"test<&>&amp;";
+        ser.text(text);
         ser.endTag("", "foo");
         ser.endDocument();
 
@@ -134,7 +135,7 @@ public class TestSerializeWithNs extends UtilTestCase {
 
         //xpp.setInput(new StringReader( "<foo/>" ) );
 
-        checkSimpleWriterResult("test");
+        checkSimpleWriterResult(text);
 
     }
 
@@ -164,13 +165,92 @@ public class TestSerializeWithNs extends UtilTestCase {
     }
 
     public void testMisc() throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+        StringWriter sw = new StringWriter();
+        ser.setOutput(sw);
+
         // all comments etc
+        ser.startDocument(null, Boolean.TRUE);
+        final String docdecl = " foo [\n"+
+            "<!ELEMENT foo (#PCDATA|bar)* >\n"+
+            "<!ELEMENT pbar (#PCDATA) >\n"
+            +"]";
+        ser.docdecl(docdecl);
+        ser.processingInstruction("pi test");
+        final String iws = "\n\t";
+        ser.ignorableWhitespace(iws);
+        ser.startTag(null, "foo");
+        final String attrVal = "attrVal&<>&amp;";
+        //final String attrVal = "attrVal&;";
+        ser.attribute(null, "attrName", attrVal);
+        ser.entityRef("amp");
+        final String cdsect = "hello<test>\"test";
+        ser.cdsect(cdsect);
+        ser.startTag("uri1", "bar");
+        final String text = "test\n\ntest";
+        char[] buf = text.toCharArray();
+        ser.text(buf, 0, buf.length);
+        final String comment = "comment B- ";
+        ser.comment(comment);
+        ser.endDocument(); // should close unclosed foo and bar start tag
+
+        // -- now check that we get back what we serialized ...
+
+        String serialized = sw.toString();
+        System.out.println(getClass()+" serialized="+serialized);
+        xpp.setInput(new StringReader(serialized));
+        xpp.setFeature(xpp.FEATURE_PROCESS_NAMESPACES, true);
+
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.DOCDECL, null, 0, null, null, false, -1);
+        String gotDocdecl = xpp.getText();
+        if(gotDocdecl != null) {
+            assertEquals(printable(docdecl), printable(gotDocdecl));
+        }
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 0, xpp.PROCESSING_INSTRUCTION, null, 0, null, null, "pi test", false, -1);
+
+
+        xpp.nextToken();
+        if(xpp.getEventType() == xpp.IGNORABLE_WHITESPACE) {
+            String expectedIws = gatherTokenText(xpp, xpp.IGNORABLE_WHITESPACE, true);
+            assertEquals(printable(iws), printable(expectedIws));
+        }
+
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false, 1);
+        checkAttribNs(xpp, 0, null, "", "attrName", attrVal);
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.ENTITY_REF, null, 0, null, "amp", "&", false, -1);
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.CDSECT, null, 0, null, null, cdsect, false, -1);
+        assertEquals(false, xpp.isWhitespace());
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 2, xpp.START_TAG, 1, "uri1", "bar", false, 0);
+
+        String gotText = nextTokenGathered(xpp, xpp.TEXT, false);
+        assertEquals(printable(text), printable(gotText));
+
+        //xpp.nextToken();
+        checkParserStateNs(xpp, 2, xpp.COMMENT, null, 1, null, null, comment, false, -1);
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 2, xpp.END_TAG, 1, "uri1", "bar", false, -1);
+
+        xpp.nextToken();
+        checkParserStateNs(xpp, 1, xpp.END_TAG, 0, "", "foo", false, -1);
+
     }
 
     public void testSetPrefix() throws Exception {
         //setPrefix check that prefix is not duplicated ...
 
-    //TODO      redeclaring defult namespace
+        //TODO      redeclaring defult namespace
     }
 
     public void testIndenting() throws Exception {

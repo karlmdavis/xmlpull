@@ -47,7 +47,7 @@ public class UtilTestCase extends TestCase {
 
     public static XmlPullParserFactory factoryNewInstance() throws XmlPullParserException {
         String property = System.getProperty(XmlPullParserFactory.PROPERTY_NAME);
-        //"org.xmlpull.mxp1.MXParserFactory",
+        //property = "org.xmlpull.mxp1.MXParserFactory";
         //"org.xmlpull.v1.xni2xmlpull1.X2ParserFactory",
         //property = "org.xmlpull.mxp1.MXParser,org.xmlpull.mxp1_serializer.MXSerializer";
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance(
@@ -151,7 +151,6 @@ public class UtilTestCase extends TestCase {
         XmlPullParser xpp,
         int depth,
         int type,
-        String prefix,
         int nsCount,
         String namespace,
         String name,
@@ -171,7 +170,6 @@ public class UtilTestCase extends TestCase {
         assertEquals("getName()", name, xpp.getName());
 
         assertEquals("getDepth()", depth, xpp.getDepth());
-        assertEquals("getPrefix()", prefix, xpp.getPrefix());
         assertEquals("getNamespacesCount(getDepth())", nsCount, xpp.getNamespaceCount(depth));
         assertEquals("getNamespace()", namespace, xpp.getNamespace());
 
@@ -185,6 +183,22 @@ public class UtilTestCase extends TestCase {
             }
         }
         assertEquals("getAttributeCount()", attribCount, xpp.getAttributeCount());
+    }
+
+    public void checkParserStateNs(
+        XmlPullParser xpp,
+        int depth,
+        int type,
+        String prefix,
+        int nsCount,
+        String namespace,
+        String name,
+        boolean isEmpty,
+        int attribCount
+    ) throws XmlPullParserException, IOException
+    {
+        checkParserStateNs(xpp, depth, type, nsCount, namespace, name, isEmpty, attribCount);
+        assertEquals("getPrefix()", prefix, xpp.getPrefix());
     }
 
     public void checkParserStateNs(
