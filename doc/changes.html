@@ -13,18 +13,18 @@
 <ul>
 <li><b>two API changes are not backward compatible</b> with 1.0.7:
 <ul>
-<li><b>readText</b>() function was <b>removed</b>, please use nextElementText() instead
-<li><b>require</b>() is <b>changed</b> and no longer will skip white space content
+<li><b>readText</b>() function was <b>removed</b>, please use nextText() instead
+<li><b>require</b>() is <b>changed</b> - no longer will skip white space content
 </ul>
 <li>added <b>new functions</b>:<ul>
 <li>getAttributeType(index)
 <li>isAttributeDefault(index)
 <li>setInput(InputStream is,  String inputEncoding)
 <li>getInputEncoding()
-<li>nextElementText()
+<li>nextText()
 <li>nextTag()
 </ul>
-<li>modified tests to allow -1 for column or line number and updated javadoc to reflect it
+<li>modified tests to allow -1 for column or line number and updated Javadoc to reflect it
 <li>
 updated all tests to check new functions<li>
 modified test driver PackageTest to accept list of XMLPULL factories or parsers 
@@ -37,7 +37,9 @@ but also if classNames is empty String or if it is equal to &quot;DEFAULT&quot;<
 improved error messages in XmlPullParserFactory to better diagnose why new pull 
 parser can not be created<li>
 added test to check that when on END_TAG namespaces that were declared in 
-corresponding START_TAG are still accessible even though they are not in scope</ul>
+corresponding START_TAG are still accessible even though they are not in scope<li>
+added tests to check that setInput() does not read any bytes from input stream 
+or characters from reader until first call to next()</ul>
 
 <h3>2001-04-20 (XMLPULL_1_0_7_1)</h3>
 <ul>

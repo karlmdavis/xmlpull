@@ -3,6 +3,7 @@
 
 package org.xmlpull.v1;
 
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -400,30 +401,28 @@ public interface XmlPullParser {
      * Set the input for parser. Parser event state is set to START_DOCUMENT.
      * Using null parameter will stop parsing and reset parser state
      * allowing parser to free internal resources (such as parsing buffers).
+     * No character will be read from input reader until first call to one of next() methods.
      */
     public void setInput(Reader in) throws XmlPullParserException;
 
     /**
      * Set the input stream for parser. Parser event state is set to START_DOCUMENT.
      * This call will stop parsing and reset parser state.
-     * Using null for input stream parameter will not set parser input but will still reset parser
-     * state and will allow parser to free internal resources (such as parsing buffers).
      *
-     * <p><strong>NOTE:</strong> calling this function MAY result in reading few input
-     * bytes when parser will try to determine input encoding
-     * including byte order marks and detection <? xml encoding even if inputEncoding is null.
-     * However some implementation may postpone reading of input bytes until
-     * first next() is called and in such case they should set feature
-     *  http://xmlpull.org/v1/doc/features.html#immutable-set-input
+     * <p><strong>NOTE:</strong> calling this function will not result in reading any input
+     * bytes even when parser have to determine input encoding
+     * including byte order marks and detection <? xml encoding
+     * (in case when inputEncoding is null).
+     * The XMLPULL implementation MUST postpone reading of input bytes until
+     * first call to one of next() methods.
      *
      * <p><strong>NOTE:</strong> if inputEncoding is passed it MUST be used otherwise
      *  if inputEncoding is null the parser SHOULD try to determine input encoding
      *  following XML 1.0 specification (see below) but it is not required
      *  (for example when parser is constrained by memory footprint such as in J2ME environments)
-     *
-     * <p><strong>NOTE:</strong> if encoding detection is supported then following feature
-     *   http://xmlpull.org/v1/doc/features.html#detect-encoding MUST be true
-     *   otherwise it must be false
+     *  If encoding detection is supported then following feature
+     *  <a href="http://xmlpull.org/v1/doc/features.html#detect-encoding">http://xmlpull.org/v1/doc/features.html#detect-encoding</a>
+     *  MUST be true otherwise it must be false
      *
      * @param inputStream contains raw byte input stream of possibly
      *     unknown encoding (when inputEncoding is null) and in such case the parser
@@ -439,7 +438,7 @@ public interface XmlPullParser {
      *      if inputStream is null the IllegalArgumentException must be thrown
      * @param inputEncoding if not null it MUST be used as encoding for inputStream
      */
-    public void setInput(java.io.InputStream inputStream, String inputEncoding)
+    public void setInput(InputStream inputStream, String inputEncoding)
         throws XmlPullParserException;
 
     /**

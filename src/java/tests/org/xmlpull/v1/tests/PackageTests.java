@@ -40,6 +40,7 @@ public class PackageTests extends TestRunner
         suite.addTestSuite(TestEvent.class);
         suite.addTestSuite(TestToken.class);
         suite.addTestSuite(TestMisc.class);
+        suite.addTestSuite(TestSetInput.class);
 
         return suite;
     }
