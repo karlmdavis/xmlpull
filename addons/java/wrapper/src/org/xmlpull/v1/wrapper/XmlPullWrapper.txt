@@ -54,7 +54,7 @@ public class XmlPullWrapper {
     {
         if(tagNamespace == null && tagName == null) {
             throw new IllegalArgumentException(
-                "namespace and name argument can not be bith null:"+pp.getPositionDescription());
+                "namespace and name argument can not be both null:"+pp.getPositionDescription());
         }
         pp.require(pp.START_TAG, null, null);
         while(true) {
@@ -89,7 +89,7 @@ public class XmlPullWrapper {
     {
         if(tagNamespace == null && tagName == null) {
             throw new IllegalArgumentException(
-                "namespace and name argument can not be bith null:"+pp.getPositionDescription());
+                "namespace and name argument can not be both null:"+pp.getPositionDescription());
         }
         while(true) {
             int eventType = pp.next();
@@ -120,7 +120,7 @@ public class XmlPullWrapper {
     {
         if(tagNamespace == null && tagName == null) {
             throw new IllegalArgumentException(
-                "namespace and name argument can not be bith null:"+pp.getPositionDescription());
+                "namespace and name argument can not be both null:"+pp.getPositionDescription());
         }
         while(true) {
             int eventType = pp.next();
