@@ -592,7 +592,7 @@ public interface XmlPullParser {
     /**
      * For START_TAG or END_ATAG returns the (local) name of the current element
      * when namespaces are enabled or raw name when namespaces are disabled.
-     * For ENTITY_REF it return entity name.
+     * For ENTITY_REF it returns entity name.
      * The current event must be START_TAG or END_TAG or ENTITY_REF, otherwise null is returned.
      * <p><b>NOTE:</b> to reconstruct raw element name
      *  when namespaces are enabled you will need to
@@ -677,9 +677,16 @@ public interface XmlPullParser {
     public String getAttributePrefix(int index);
 
     /**
-     * Returns the given attributes value
+     * Returns the given attributes value.
      * Throws an IndexOutOfBoundsException if the index is out of range
      * or current event type is not START_TAG.
+     *
+     * <p><strong>NOTE:</strong> attribute value must be normalized
+     * (including entity replacement text if PROCESS_DOCDECL is false) as described in
+     * <a href="http://www.w3.org/TR/REC-xml#AVNormalize">XML 1.0 section
+     * 3.3.3 Attribute-Value Normalization</a>
+     *
+     * @see #defineEntityReplacementText
      *
      * @param zero based index of attribute
      * @return value of attribute
@@ -688,8 +695,15 @@ public interface XmlPullParser {
 
     /**
      * Returns the attributes value identified by namespace URI and namespace localName.
-     * If namespaces are disbaled namespace must be null.
+     * If namespaces are disabled namespace must be null.
      * If current event type is not START_TAG then IndexOutOfBoundsException will be thrown.
+     *
+     * <p><strong>NOTE:</strong> attribute value must be normalized
+     * (including entity replacement text if PROCESS_DOCDECL is false) as described in
+     * <a href="http://www.w3.org/TR/REC-xml#AVNormalize">XML 1.0 section
+     * 3.3.3 Attribute-Value Normalization</a>
+     *
+     * @see #defineEntityReplacementText
      *
      * @param namespace Namespace of the attribute if namespaces are enabled otherwise must be null
      * @param name If namespaces enabled local name of attribute otherwise just attribute name
@@ -810,9 +824,9 @@ public interface XmlPullParser {
      *    next ();
      *
      *  if (type != getEventType()
-     *  || (namespace != null && !namespace.equals (getNamespace ()))
-     *  || (name != null && !name.equals (getName ()))
-     *     throw new XmlPullParserException ( "expected "+ TYPES[ type ]+getPositionDesctiption());
+     *  || (namespace != null && !namespace.equals( getNamespace () ) )
+     *  || (name != null && !name.equals( getName() ) ) )
+     *     throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
      * </pre>
      */
     public void require (int type, String namespace, String name)
@@ -828,9 +842,9 @@ public interface XmlPullParser {
      *
      * <p>essentially it does this
      * <pre>
-     *   if (getEventType != TEXT) return ""
-     *   String result = getText ();
-     *   next ();
+     *   if (getEventType() != TEXT) return "";
+     *   String result = getText();
+     *   next();
      *   return result;
      * </pre>
      */

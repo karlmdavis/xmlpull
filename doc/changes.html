@@ -9,7 +9,7 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
-<h3>2001-04 (XMLPULL_1_0_7)</h3>
+<h3>2001-04-08 (XMLPULL_1_0_7)</h3>
 <ul>
 <li>
 changed default namespace semantics: the prefix must be reported as null and not 
@@ -18,7 +18,8 @@ default namespace if declared in XML<li>
 modified getText() method behavior for ENTITY_REF: in this case getText() must 
 return entity replacement text and getTextCharacters() returns actual input 
 buffer with entity name the same as getName()<li>
-for ENTITY_REF token getName() must return entity name</ul>
+for ENTITY_REF token getName() must return entity name<li>
+added specific requirement that attribute values MUST be normalized</ul>
 
 <h3>2001-04-06 (XMLPULL_1_0_6)</h3>
 <ul>
