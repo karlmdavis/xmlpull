@@ -19,13 +19,15 @@ import java.util.Hashtable;
  * must be passed explicitly. If no name of parser factory was passed (or is null)
  * it will try to find name by searching in CLASSPATH for
  * META-INF/services/org.xmlpull.v1.XmlPullParserFactory resource that should contain
- * the name of parser facotry class. If none found it will try to create a default parser
- * factory (if available) or throw exception.
+ * comma separated list of class names of factories or parsers to try (in order from
+ * left to the right). If none found it will try to create a default parser
+ * factory (if available) or throw exception if it can not be created in case when
+ * no ddefault parser implementaion is available.
  *
  * <p><strong>NOTE:</strong>In J2SE or J2EE environments to get best results use
  * <code>newInstance(property, classLoaderCtx)</code>
  * where first argument is
- * <code>System.getProperty(XmlPullParserFactory.DEFAULT_PROPERTY_NAME)</code>
+ * <code>System.getProperty(XmlPullParserFactory.PROPERTY_NAME)</code>
  * and second is <code>Thread.getContextClassLoader().getClas()</code> .
  *
  * @see XmlPullParser
@@ -205,7 +207,7 @@ public class XmlPullParserFactory
      * Get a new instance of a PullParserFactory from given class name.
      *
      * @param property use specified factory class if not null
-     * @return result of call to newInstance(null, factoryClassName)
+     * @return result of call to newInstance(null, property)
      */
     public static XmlPullParserFactory newInstance(String property)
         throws XmlPullParserException
@@ -222,8 +224,9 @@ public class XmlPullParserFactory
      *
      * @param classLoaderCtx if null Class.forName will be used instead
      *    - simple way to use class loaders and still have ME compatibility!
-     * @param hint with name of parser factory to use -
-     *   it is a hint and is ignored if factory is not available.
+     * @param property list of comma separated class names of factories or parsers to use -
+     *   if null then it will try load list form JAR file and if none available
+     *   wll use some hardcoded defaults.
      */
     public static XmlPullParserFactory newInstance(Class classLoaderCtx,
                                                    String property)
