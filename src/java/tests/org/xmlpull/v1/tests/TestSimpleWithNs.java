@@ -54,17 +54,24 @@ public class TestSimpleWithNs extends UtilTestCase {
 
 
         // check the simplest possible XML document - just one root element
-        for(int i = 1; i <= 2; ++i) {
-            xpp.setInput(new StringReader(i == 1 ? "<foo/>" : "<foo></foo>"));
-            boolean empty = (i == 1);
-            checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
-            xpp.next();
-            checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, empty, 0);
-            xpp.next();
-            checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
-            xpp.next();
-            checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
-        }
+        xpp.setInput(new StringReader("<foo></foo>"));
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, false/*empty*/, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+
+        xpp.setInput(new StringReader("<foo/>"));
+        checkParserStateNs(xpp, 0, xpp.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 1, xpp.START_TAG, null, 0, "", "foo", null, true/*empty*/, 0);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_TAG, null, 0, "", "foo", null, false, -1);
+        xpp.next();
+        checkParserStateNs(xpp, 0, xpp.END_DOCUMENT, null, 0, null, null, null, false, -1);
+
 
         // one step further - it has content ...
 

@@ -649,7 +649,9 @@ public interface XmlPullParser {
      * specification to "http://www.w3.org/XML/1998/namespace".
      *
      * @param zero based index of attribute
-     * @return attribute namespace or "" if namesapces processing is not enabled.
+     * @return attribute namespace,
+     *   empty string ("") is returned  if namesapces processing is not enabled or
+     *   namespaces processing is enabled but attribute has no namespace (it has no prefix).
      */
     public String getAttributeNamespace (int index);
 
@@ -660,7 +662,7 @@ public interface XmlPullParser {
      * or current event type is not START_TAG.
      *
      * @param zero based index of attribute
-     * @return attribute names
+     * @return attribute name (null is never returned)
      */
     public String getAttributeName (int index);
 
@@ -672,7 +674,7 @@ public interface XmlPullParser {
      * or current event type is not START_TAG.
      *
      * @param zero based index of attribute
-     * @return attribute prefix or null if namesapces processing is not enabled.
+     * @return attribute prefix or null if namespaces processing is not enabled.
      */
     public String getAttributePrefix(int index);
 
@@ -689,7 +691,7 @@ public interface XmlPullParser {
      * @see #defineEntityReplacementText
      *
      * @param zero based index of attribute
-     * @return value of attribute
+     * @return value of attribute (null is never returned)
      */
     public String getAttributeValue(int index);
 
@@ -707,7 +709,7 @@ public interface XmlPullParser {
      *
      * @param namespace Namespace of the attribute if namespaces are enabled otherwise must be null
      * @param name If namespaces enabled local name of attribute otherwise just attribute name
-     * @return value of attribute
+     * @return value of attribute or null if attribute with given name does not exist
      */
     public String getAttributeValue(String namespace,
                                     String name);
