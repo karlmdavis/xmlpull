@@ -9,10 +9,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import org.xmlpull.v1.XmlSerializer;
 
-// TODO hide this impl. detail with facotry
-import org.xmlpull.mxp1_serializer.MXSerializer;
-
-
 /** WARNING: This sample is NOT part of the XmlPull API. This class is just
  contained to help evaluating the serializer interface, which is
  also NOT part of the XmlPull API (yet) */
