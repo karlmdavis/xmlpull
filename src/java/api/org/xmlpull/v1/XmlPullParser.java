@@ -150,6 +150,13 @@ public interface XmlPullParser {
     public final static byte CDSECT = 5;
     
     /**
+     * Entity reference was just read.
+     * The value of entity is available as geText() (null if unknown entity)
+     * and the entity naem is available by calling getName()
+     */
+    public final static byte ENTITY_REF            = 6;
+
+    /**
      * Ignorable whitespace was just read. For non-validating
      * parsers, this event is only reported by nextToken() when
      * outside the root elment.
@@ -157,14 +164,9 @@ public interface XmlPullParser {
      * other locations. Please note the differenct to isWhitespace().
      * The value of whotespace is available by calling getText()
      */
-    public static final byte IGNORABLE_WHITESPACE = 6;
+    public static final byte IGNORABLE_WHITESPACE = 7;
     
-    /**
-     * Entity reference was just read.
-     * The value of entity is available as geText() (null if unknown entity)
-     * and the entity naem is available by calling getName()
-     */
-    public final static byte ENTITY_REF = 7;
+
 
     
     /**
@@ -197,8 +199,8 @@ public interface XmlPullParser {
         "END_TAG",
         "TEXT",
         "CDSECT",
-        "IGNORABLE_WHITESPACE",
         "ENTITY_REF",
+        "IGNORABLE_WHITESPACE",
         "PROCESSING_INSTRUCTION",
         "COMMENT",
         "DOCDECL"
@@ -213,14 +215,14 @@ public interface XmlPullParser {
      * Processing of namespaces is by default false.
      * Can not be changed during parsing
      */
-    public static final int PROCESS_NAMESPACES = 0x101;
+    public static final int PROCESS_NAMESPACES = 1;
     
     /**
      * Report namespace attributes also - they can be distinguished
      * looking for prefix == "xmlns" or prefix == null and name == "xmlns
      * it is off by default and only meningful when PROCESS_NAMESPACES property is on.
      */
-    public static final int REPORT_NAMESPACE_ATTRIBUTES = 0x102;
+    public static final int REPORT_NAMESPACE_ATTRIBUTES = 2;
     
     // docdecl related properties
     
@@ -230,7 +232,7 @@ public interface XmlPullParser {
      * parser can not process it
      * Can not be changed during parsing.
      */
-    public static final int PROCESS_DOCDECL = 0x111;
+    public static final int PROCESS_DOCDECL = 4;
     
     /**
      * Reports the DOCDECL instead of throwing
@@ -238,7 +240,7 @@ public interface XmlPullParser {
      * set, by defualt this property is off
      * Can not be changed during parsing.
      */
-    public static final int REPORT_DOCDECL = 0x112;
+    public static final int REPORT_DOCDECL = 8;
     
     // additional (optional) features of parser
     
@@ -257,7 +259,7 @@ public interface XmlPullParser {
      * processing. Can not be changed during parsing.
      */
     
-    //public static final int RELAXED_PARSING = 0x0110;
+    //public static final int RELAXED_PARSING = 16;
     
     /** Use this call to change the general behaviour of the parser,
      such as namespace processing or doctype declaration handling.
@@ -508,12 +510,14 @@ public interface XmlPullParser {
     //public String getRawName();
     
     
+
     /**
      * Returns true if the current event is START_TAG or END_TAG and the
      * tag is degenerated (e.g. &lt;foobar/&gt;).
      * <p><b>NOTE:</b> if parser is not on START_TAG or END_TAG the exception will be thrown.
      */
     public boolean isEmptyElementTag() throws XmlPullParserException;
+
     //public boolean isDegenerated ();
     
     
