@@ -4,9 +4,6 @@
 package org.xmlpull.v1;
 
 import java.io.InputStream;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
