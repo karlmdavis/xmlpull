@@ -276,8 +276,8 @@ public class XmlPullParserFactory {
                 InputStream is = context.getResourceAsStream (RESOURCE_NAME);
 
                 if (is == null) throw new XmlPullParserException
-                        ("Ressource not found: "+RESOURCE_NAME);
-
+                        ("resource not found: "+RESOURCE_NAME
+                             +" make sure that parser implementing XmlPull API is available");
                 StringBuffer sb = new StringBuffer();
 
                 while (true) {
