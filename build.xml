@@ -234,7 +234,7 @@ All generated files are created under ${build} directory
       <fileset dir="${build}">
         <include name="lib/${xmlpull_version}*.jar"/>
         <include name="lib/xmlpull-tests_${version}*.jar"/>
-        <!--include name="classes/**"/-->
+        <include name="classes/**"/>
         <include name="samples/**"/>
         <include name="tests/**"/>
       </fileset>
@@ -247,8 +247,7 @@ All generated files are created under ${build} directory
     <copy todir="${dist}/${src_samples}">
       <fileset dir="${src_samples}">
         <!--include name="**"/-->
-        <!--exclude name="**/soap/**"/-->
-        <exclude name="**/*_protocol/**"/>
+        <!--exclude name="**/stuff/**"/-->
       </fileset>
     </copy>
 
@@ -256,8 +255,7 @@ All generated files are created under ${build} directory
     <copy todir="${dist}/${src_tests}">
       <fileset dir="${src_tests}">
         <!--include name="**"/-->
-        <!--exclude name="**/soap/**"/-->
-        <exclude name="**/*_protocol/**"/>
+        <!--exclude name="**/stuff/**"/-->
       </fileset>
     </copy>
 
@@ -305,7 +303,11 @@ All generated files are created under ${build} directory
       <copy todir="${dist}/lib">
         <fileset dir="lib">
           <exclude name="**/*.jar"/>
+          <exclude name="**/impl_*/**"/>
         </fileset>
+        <fileset dir="lib">
+          <include name="**/README.txt"/>
+        </fileset>          
       </copy>
 
      <chmod perm="a+x" dir="${dist}"
@@ -342,7 +344,7 @@ All generated files are created under ${build} directory
       <mkdir dir="${dist}/lib"/>
       <copy todir="${dist}/lib">
         <fileset dir="lib">
-          <exclude name="**/*jsse*/*.jar"/>
+          <exclude name="**/*impl_*/*"/>
         </fileset>
       </copy>
 
