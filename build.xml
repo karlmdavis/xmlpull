@@ -375,7 +375,7 @@ All generated files are created under ${build} directory
     <mkdir dir="${website}/download"/>
     <copy todir="${website}/download">
       <fileset dir="${build}/dist">
-        <include name="{xmlpull_version}_*.*"/>      
+        <include name="${xmlpull_version}_*.*"/>      
       </fileset>
     </copy>
 
