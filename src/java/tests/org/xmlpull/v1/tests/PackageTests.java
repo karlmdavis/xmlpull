@@ -10,34 +10,10 @@ import junit.framework.TestSuite;
 /**
  * TODO: add tests for
  * <pre>
+ * test mixed next() with nextToken()
+ * </pre>
  *
- * attrib uniq
- * EOL normalization
- * TODO test mixed next() with nextToken()
- *
- *
- * TEST XML ROUNDTRIP capability
- *
- *     public static final String REPORT_NAMESPACE_ATTRIBUTES =
- *        "http://xmlpull.org/v1/features/report-namespace-prefixes";
- *
- *  public static final String PROCESS_DOCDECL =
- *      "http://xmlpull.org/v1/features/process-docdecl";
- *
- * TEST http://xmlpull.org/v1/features/xml-roundtrip
- *
- *  public void defineCharacterEntity (String entity, String value) throws XmlPullParserException;
- *
- *    public boolean isWhitespace() throws XmlPullParserException;
- *
- *  public int nextToken()
- *      throws XmlPullParserException, IOException;
- *
- *  public void require (int type, String namespace, String name)
- *      throws XmlPullParserException, IOException;
- *
- *    public String readText () throws XmlPullParserException, IOException;
- *
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class PackageTests extends TestCase
 {
@@ -54,8 +30,12 @@ public class PackageTests extends TestCase
         suite.addTestSuite(TestSimple.class);
         suite.addTestSuite(TestSimpleWithNs.class);
         suite.addTestSuite(TestSimpleToken.class);
+        suite.addTestSuite(TestAttributes.class);
+        suite.addTestSuite(TestEolNormalization.class);
+        suite.addTestSuite(TestEntityReplacement.class);
         suite.addTestSuite(TestEvent.class);
         suite.addTestSuite(TestToken.class);
+        suite.addTestSuite(TestMisc.class);
 
         return suite;
     }

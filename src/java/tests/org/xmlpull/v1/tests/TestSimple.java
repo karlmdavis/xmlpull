@@ -16,7 +16,7 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Simple test ot verify pull parser factory
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestSimple extends UtilTestCase {
     private XmlPullParserFactory factory;
@@ -90,13 +90,21 @@ public class TestSimple extends UtilTestCase {
         // one step further - it has content ...
 
 
-        xpp.setInput(new StringReader("<foo attrName='attrVal'>bar</foo>"));
+        xpp.setInput(new StringReader("<foo attrName='attrVal'>bar<p:t>\r\n\t </p:t></foo>"));
         checkParserState(xpp, 0, xpp.START_DOCUMENT, null, null, false, -1);
         xpp.next();
         checkParserState(xpp, 1, xpp.START_TAG, "foo", null, false, 1);
         checkAttrib(xpp, 0, "attrName", "attrVal");
         xpp.next();
         checkParserState(xpp, 1, xpp.TEXT, null, "bar", false, -1);
+        assertEquals(false, xpp.isWhitespace());
+        xpp.next();
+        checkParserState(xpp, 2, xpp.START_TAG, "p:t", null, false, 0);
+        xpp.next();
+        checkParserState(xpp, 2, xpp.TEXT, null, "\n\t ", false, -1);
+        assertTrue(xpp.isWhitespace());
+        xpp.next();
+        checkParserState(xpp, 1, xpp.END_TAG, "p:t", null, false, -1);
         xpp.next();
         checkParserState(xpp, 0, xpp.END_TAG, "foo", null, false, -1);
         xpp.next();

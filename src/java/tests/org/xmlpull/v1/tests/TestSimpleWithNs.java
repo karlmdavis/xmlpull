@@ -16,7 +16,7 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Simple test for minimal XML parsing with namespaces
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestSimpleWithNs extends UtilTestCase {
     private XmlPullParserFactory factory;
@@ -87,7 +87,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         xpp.setInput(new StringReader(
                          "<foo xmlns='n' xmlns:ns1='n1' xmlns:ns2='n2'>"+
                              "<ns1:bar xmlns:ns1='x1' xmlns:ns3='n3' xmlns='n1'>"+
-                             "<ns2:gugu a1='v1' ns2:a2='v2' ns1:a3='v3'/>"+
+                             "<ns2:gugu a1='v1' ns2:a2='v2' xml:lang='en' ns1:a3=\"v3\"/>"+
                              "<baz xmlns:ns1='y1'></baz>"+
                              "</ns1:bar></foo>"
                      ));
@@ -110,7 +110,7 @@ public class TestSimpleWithNs extends UtilTestCase {
         checkNamespace(xpp, 3, "ns3", "n3", true);
 
         xpp.next();
-        checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 4, "n2", "gugu", null, true, 3);
+        checkParserStateNs(xpp, 3, xpp.START_TAG, "ns2", 4, "n2", "gugu", null, true, 4);
         assertEquals(4, xpp.getNamespaceCount(2));
         assertEquals(4, xpp.getNamespaceCount(3));
         assertEquals("x1", xpp.getNamespace("ns1"));
@@ -118,7 +118,8 @@ public class TestSimpleWithNs extends UtilTestCase {
         assertEquals("n3", xpp.getNamespace("ns3"));
         checkAttribNs(xpp, 0, null, "", "a1", "v1");
         checkAttribNs(xpp, 1, "ns2", "n2", "a2", "v2");
-        checkAttribNs(xpp, 2, "ns1", "x1", "a3", "v3");
+        checkAttribNs(xpp, 2, "xml", "http://www.w3.org/XML/1998/namespace", "lang", "en");
+        checkAttribNs(xpp, 3, "ns1", "x1", "a3", "v3");
 
         xpp.next();
         checkParserStateNs(xpp, 2, xpp.END_TAG, "ns2", 4, "n2", "gugu", null, false, -1);
@@ -158,7 +159,7 @@ public class TestSimpleWithNs extends UtilTestCase {
     }
 
     public static void main (String[] args) {
-        junit.textui.TestRunner.run (new TestSuite(TestSimple.class));
+        junit.textui.TestRunner.run (new TestSuite(TestSimpleWithNs.class));
     }
 
 }

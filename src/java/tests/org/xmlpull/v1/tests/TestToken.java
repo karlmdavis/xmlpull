@@ -16,7 +16,7 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Simple test ot verify pull parser factory
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestToken extends UtilTestCase {
     private XmlPullParserFactory factory;
@@ -44,7 +44,7 @@ public class TestToken extends UtilTestCase {
     }
 
     public static void main (String[] args) {
-        junit.textui.TestRunner.run (new TestSuite(TestSimple.class));
+        junit.textui.TestRunner.run (new TestSuite(TestToken.class));
     }
 
 }

@@ -3,6 +3,8 @@
 
 package org.xmlpull.v1.tests;
 
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -12,7 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Some common utilities to help with XMLPULL tests.
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class UtilTestCase extends TestCase {
     private XmlPullParserFactory factory;
@@ -43,7 +45,7 @@ public class UtilTestCase extends TestCase {
         String text,
         boolean isEmpty,
         int attribCount
-    ) throws Exception
+    ) throws XmlPullParserException, IOException
     {
         assertEquals("PROCESS_NAMESPACES", false, xpp.getFeature(xpp.FEATURE_PROCESS_NAMESPACES));
         assertEquals("TYPES[getType()]", xpp.TYPES[type], xpp.TYPES[xpp.getEventType()]);
@@ -93,7 +95,7 @@ public class UtilTestCase extends TestCase {
         String text,
         boolean isEmpty,
         int attribCount
-    ) throws Exception
+    ) throws XmlPullParserException, IOException
     {
         // this methid can be used with enabled and not enabled namespaces
         //assertEquals("PROCESS_NAMESPACES", true, xpp.getFeature(xpp.FEATURE_PROCESS_NAMESPACES));
@@ -137,7 +139,7 @@ public class UtilTestCase extends TestCase {
         int pos,
         String name,
         String value
-    ) throws Exception
+    ) throws XmlPullParserException, IOException
     {
         assertEquals("must be on START_TAG", xpp.START_TAG, xpp.getEventType());
         assertEquals("getAttributePrefix()",null, xpp.getAttributePrefix(pos));
@@ -155,7 +157,7 @@ public class UtilTestCase extends TestCase {
         String namespace,
         String name,
         String value
-    ) throws Exception
+    ) throws XmlPullParserException, IOException
     {
         assertEquals("must be on START_TAG", xpp.START_TAG, xpp.getEventType());
         assertEquals("getAttributePrefix()",prefix, xpp.getAttributePrefix(pos));
@@ -172,7 +174,7 @@ public class UtilTestCase extends TestCase {
         String prefix,
         String uri,
         boolean checkMapping
-    ) throws Exception
+    ) throws XmlPullParserException, IOException
     {
         assertEquals("getNamespacePrefix()",prefix, xpp.getNamespacePrefix(pos));
         assertEquals("getNamespaceUri()",uri, xpp.getNamespaceUri(pos));

@@ -16,7 +16,7 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * More complete test to verify paring.
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestEvent extends UtilTestCase {
     private XmlPullParserFactory factory;
@@ -91,7 +91,7 @@ public class TestEvent extends UtilTestCase {
     }
 
     public static void main (String[] args) {
-        junit.textui.TestRunner.run (new TestSuite(TestSimple.class));
+        junit.textui.TestRunner.run (new TestSuite(TestEvent.class));
     }
 
 }

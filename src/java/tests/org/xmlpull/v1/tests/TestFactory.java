@@ -12,7 +12,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 /**
  * Simple test ot verify pull parser factory
  *
- * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
+ * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
  */
 public class TestFactory extends TestCase {
 
