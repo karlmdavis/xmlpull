@@ -9,15 +9,22 @@
 
 <H1>Changes to XMLPULL V1 API</H1><P>
 
-<h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2002-08 (XMLPULL_1_2_1)</h3>
+<h3>IN PROGRESS: <a name="XMLPULL_1_2_1"></a>2002-11-... (XMLPULL_1_2_1)</h3>
 <ul>
 <li>this will be next official stable release (based on last of 1.1.x) to
 incorporate all changes since 1.0.x in stable version </ul>
 
 <h3>IN PROGRESS INTERIM RELEASE: </h3>
 
-<h3><a name="XMLPULL_1_1_2"></a>2002-09 (XMLPULL_1_1_2)</h3>
-<ul>added to XmlSerialzier three new utility methods:
+<h3><a name="XMLPULL_1_1_2"></a>2002-10- (XMLPULL_1_1_2)</h3>
+
+
+<ul>
+
+<li>j2me compatibility issue fixed: chnaged to use <tt>instanceof</tt>
+instead.class in XmlPullParserFactory
+
+<li>added to XmlSerialzier three new utility methods:
 getDepth(), getName(), and getNamespace()
 to allows intelligent closing of serialized output for example
 when writing error/fault information into serialized XML stream
@@ -31,17 +38,19 @@ but instead content of XMLDecl is made available as set of properties
 and
 <a href="http://xmlpull.org/v1/doc/features.html#xmldecl-content">XMLDECL CONTENT</a>.
 
+<li>changed tests to reflect changed handling of XMLDecl
+and added tests to check for optional XMLDecl properties
+
 <li>XmlSeriaizer is now required ot throw exception when user tries to
 write startTag()  in default namespace ("") and default namesapce is bound
 to non-empty string, added test to check for it
 
 <li>added patch by Holger Krug to SAX2 Driver to allow modification in sub classes
 of how Attributes in startElement() are kept. Added also AttributesCachingDriver
-that extends SAX2 Driver and creates a new copy of Attributes for each startElement()
-so provided Attributes will not change during parsing and can be kept indefinitely.
-
-<li>changed tests to reflect changed handling of XMLDecl
-and added tests to check for optional XMLDecl properties
+that extends SAX2 Driver to create a new copy of Attributes for each startElement()
+so Attributes provided in startTag() will not change during parsing and can be kept
+indefinitely (not that Attributes object is created for each startTag() and this
+is expensive both perfromance and memory wise and is not required by SAX2.
 
 <li>more tests to check for CDATA end-of-line normalization
 
