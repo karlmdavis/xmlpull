@@ -16,19 +16,10 @@ incorporate all changes since 1.0.x in stable version </ul>
 
 <h3>IN PROGRESS INTERIM RELEASE: </h3>
 
-<h3><a name="XMLPULL_1_1_2"></a>2002-10- (XMLPULL_1_1_2)</h3>
+<h3><a name="XMLPULL_1_1_2"></a>2002-10-16 (XMLPULL_1_1_2)</h3>
 
 
 <ul>
-
-<li>j2me compatibility issue fixed: chnaged to use <tt>instanceof</tt>
-instead.class in XmlPullParserFactory
-
-<li>added to XmlSerialzier three new utility methods:
-getDepth(), getName(), and getNamespace()
-to allows intelligent closing of serialized output for example
-when writing error/fault information into serialized XML stream
-from inside exception handler
 
 <li><b>NOTE:</b> <b>potentially backward incompatible change to nextToken</b>():
 XMLDecl (&lt;?xml ... ?&gt;) will no longer be reported as PROCESSING_INSTRUCTION
@@ -38,11 +29,20 @@ but instead content of XMLDecl is made available as set of properties
 and
 <a href="http://xmlpull.org/v1/doc/features.html#xmldecl-content">XMLDECL CONTENT</a>.
 
+<li>J2ME compatibility issue fixed: changed to use <tt>instanceof</tt> instead 
+of class in XmlPullParserFactory
+
+<li>added to XmlSerializer three new utility methods:
+getDepth(), getName(), and getNamespace()
+to allows intelligent closing of serialized output for example
+when writing error/fault information into serialized XML stream
+from inside exception handler
+
 <li>changed tests to reflect changed handling of XMLDecl
 and added tests to check for optional XMLDecl properties
 
-<li>XmlSeriaizer is now required ot throw exception when user tries to
-write startTag()  in default namespace ("") and default namesapce is bound
+<li>XmlSerializer is now required to throw exception when user tries to
+write startTag()  in default namespace ("") and default namespace is bound
 to non-empty string, added test to check for it
 
 <li>added patch by Holger Krug to SAX2 Driver to allow modification in sub classes
@@ -55,7 +55,7 @@ is expensive both perfromance and memory wise and is not required by SAX2.
 <li>more tests to check for CDATA end-of-line normalization
 
 <li>changed tests to require support for ROUNDTRIP==false
-and additional checks for EOL nomralization of tokens
+and additional checks for EOL normalization of tokens
 
 </ul>
 
