@@ -1,37 +1,34 @@
+/* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
+// for license please see accompanying LICENSE.txt file (available also at http://www.xmlpull.org/)
+
 package eventlist;
 
 import java.io.*;
 
-//import org.kxml2.io.*;
 import org.xmlpull.v1.*;
 
 public class EventList {
 
     public static void main (String [] args) throws IOException, XmlPullParserException{
-
-        //XmlReader xr = new XmlReader ();
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        //factory.setNamespaceAware(true);
-        factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-
+        factory.setNamespaceAware(true);
+        Reader reader = (args.length > 0) ?
+            new FileReader (args [0]) :
+            (Reader) new StringReader("<sample>Hello World!</sample>");
         XmlPullParser xpp = factory.newPullParser();
-        xpp.setInput (new FileReader (args [0]));
+        xpp.setInput (reader);
         int eventType;
         while ((eventType = xpp.next()) != xpp.END_DOCUMENT) {
             if(eventType == xpp.START_TAG) {
-                System.out.println ("START_TAG "+xpp.getName());
+                System.out.println("START_TAG "+xpp.getName());
             } else if(eventType == xpp.END_TAG) {
-                System.out.println ("END_TAG  "+xpp.getName());
+                System.out.println("END_TAG   "+xpp.getName());
             } else if(eventType == xpp.TEXT) {
-                System.out.println ("TEXT     "+xpp.getName());
+                System.out.println("TEXT      "+xpp.getText());
             }
         }
 
     }
 
 }
-
-
-
-
 
