@@ -170,19 +170,18 @@ public interface XmlPullParser {
      * and getText() will return text that is inside processing instruction.
      */
     public static final byte PROCESSING_INSTRUCTION = 8;
-    
+        
+    /**
+     * XML comment was just read and getText() will return value inside comment.
+     */
+    public static final int COMMENT                 = 9;
     
     /**
      * Entity reference was just read.
      * The value of entity is available as geText() (null if unknown entity)
      * and the entity naem is available by calling getName()
      */
-    public final static byte ENTITY_REF            = 9;
-    
-    /**
-     * XML comment was just read and getText() will return value inside comment.
-     */
-    public static final int COMMENT = 10;
+    public final static byte ENTITY_REF            = 10;
     
     
     
@@ -300,13 +299,13 @@ public interface XmlPullParser {
     /**
      * Return namespace prefixes for position pos in namespace stack
      */
-    public void getNamespacesPrefix(int pos) throws XmlPullParserException;
+    public String getNamespacesPrefix(int pos) throws XmlPullParserException;
     
     /**
      * Return namespace URIs for position pos in namespace stack
      * If pos id out of range it throw exception.
      */
-    public void getNamespacesUri(int pos) throws XmlPullParserException;
+    public String getNamespacesUri(int pos) throws XmlPullParserException;
     
     /*
      * Return local part of qname.
