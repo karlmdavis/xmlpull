@@ -16,44 +16,12 @@
 All addons can be compiled by build target <code>addons</code> (use: <code>ant addons</code>)
 <p>&nbsp;</p>
 
-<a name="util"><h2>Util class</h2>
+
+
+<a name="wrapper"><h2>Wrapper: Extended Pull Parser and Serializer Interfaces</h2>
 </a>
 
-<p>This class provides set of static utility methods for XmlPull parser and 
-serializer.
-</p>
-
-<p>Here is example usage:</p>
-<pre>import org.xmlpull.v1.util.XmlPullUtil;
-
-XmlPullParser parser = ...
-parser.require(XmlPullParser.START_TAG, ..., ...);
-XmlPullUtil.skipSubTree(pp);
-</pre>
-
-<p>It can be compiled by build target <code>util</code>
-
-</p><p>Source code is available in <code>
-<a href="../addons/java/util/src/org/xmlpull/v1/util/XmlPullUtil.java">addons/java/util</a></code> 
-(<a href="http://www.xmlpull.org/viewcvs/xmlpull-api-v1/addons/java/util/src/org/xmlpull/v1/util/">view 
-CVS</a>).</p><p>
-TODO: add link to JavaDoc</p>
-
-
-
-
-
-<p>
-&nbsp;</p>
-
-
-
-
-
-<a name="wrapper"><h2>Wrapper: Parser and Serializer Extended Interfaces</h2>
-</a>
-
-<p>This package provides extended XmlPullParser and XmlSerializer interfaces 
+<p>This package provides extended XmlPullParser and XmlSerializer interfaces
 called XmlPullParserWrapper and XmlSerializerWrapper that has additional
 methods that make it more convenient and more concise to write parsing and serialzing
 code by providing seemlesly integrated additional methods.
@@ -90,14 +58,49 @@ ser.fragment("&lt;p class=\"hint\"&gt;write blog title below&lt;/p&gt;");
 <p>It can be compiled by build target <code>wrapper</code>
 
 </p><p>Source code is available in <code>
-<a href="../addons/java/wrapper/src/org/xmlpull/v1/wrapper">addons/java/wrapper</a></code>&nbsp; 
-(<a href="http://www.xmlpull.org/viewcvs/xmlpull-api-v1/addons/java/wrapper/src/org/xmlpull/v1/wrapper/">view 
+<a href="../addons/java/wrapper/src/org/xmlpull/v1/wrapper">addons/java/wrapper</a></code>&nbsp;
+(<a href="http://www.xmlpull.org/viewcvs/xmlpull-api-v1/addons/java/wrapper/src/org/xmlpull/v1/wrapper/">view
 CVS</a>).</p><p>
 TODO: add link to JavaDoc</p>
 
 
 <p>
 &nbsp;</p>
+
+
+
+
+<a name="util"><h2>Util Addon</h2>
+</a>
+
+<p>This class provides set of static utility methods for XmlPull parser and
+serializer.
+</p>
+
+<p>Here is example usage:</p>
+<pre>import org.xmlpull.v1.util.XmlPullUtil;
+
+XmlPullParser parser = ...
+parser.require(XmlPullParser.START_TAG, ..., ...);
+XmlPullUtil.skipSubTree(pp);
+</pre>
+
+<p>It can be compiled by build target <code>util</code>
+
+</p><p>Source code is available in <code>
+<a href="../addons/java/util/src/org/xmlpull/v1/util/XmlPullUtil.java">addons/java/util</a></code>
+(<a href="http://www.xmlpull.org/viewcvs/xmlpull-api-v1/addons/java/util/src/org/xmlpull/v1/util/">view
+CVS</a>).</p><p>
+TODO: add link to JavaDoc</p>
+
+
+
+
+
+<p>
+&nbsp;</p>
+
+
 
 
 <a name="dom2_builder">
@@ -120,7 +123,7 @@ dom2builder.parse(reader);
 </p><p>Source code is available in <code>addons/java/dom2_builder</code>.
 
 </p><p>
-NOTE: this is very simple class and builds DOM2 tree that contains only elements 
+NOTE: this is very simple class and builds DOM2 tree that contains only elements
 and text content (collated).
 </p>
 
@@ -155,7 +158,7 @@ pool.returnPullParserToPool(p1);
 
 
 
-<p>NOTE: parser pool is safe to share between multiple threads but&nbsp; parser 
+<p>NOTE: parser pool is safe to share between multiple threads but&nbsp; parser
 instances<b> are not </b>safe to share.</p>
 
 
@@ -168,13 +171,13 @@ instances<b> are not </b>safe to share.</p>
 <h2>SAX2 driver</h2>
 </a>
 
-<p>This addon allows to use SAX2 API with XmlPull parser. This driver implements 
+<p>This addon allows to use SAX2 API with XmlPull parser. This driver implements
 SAX2
 
 </p>
 
-<p>To use simply set system property 
-<code>-Dorg.xml.sax.driver=org.xmlpull.v1.sax2.Driver</code> and then SAX2 
+<p>To use simply set system property
+<code>-Dorg.xml.sax.driver=org.xmlpull.v1.sax2.Driver</code> and then SAX2
 standard API:</p>
 
 <pre>XMLReader parser = XMLReaderFactory.createXMLReader ();</pre>
@@ -191,8 +194,8 @@ standard API:</p>
 </p><p>Source code is available in <code>addons/java/sax2_driver</code>.
 
 </p><p>
-NOTE: this driver is not going to work in MIDP environments. To port it to J2ME 
-MIDP it is required to change also SAX2 API and to modify Driver not to use URL 
+NOTE: this driver is not going to work in MIDP environments. To port it to J2ME
+MIDP it is required to change also SAX2 API and to modify Driver not to use URL
 class that is not available in MIDP (check Driver.parse() method).
 </p>
 
@@ -212,7 +215,7 @@ class that is not available in MIDP (check Driver.parse() method).
 </a>
 
 <a name="sax2_example">
-<h3>How to extend SAX2 driver to provide Attributes that are safe to keep after 
+<h3>How to extend SAX2 driver to provide Attributes that are safe to keep after
 startElement?</h3>
 </a>
 
@@ -262,7 +265,7 @@ public class AttributesCachingDriver extends Driver
 
 </p><hr>
 <font size="-1">
-Last modified $Id: addons.html,v 1.5 2003/05/18 13:42:54 aslom Exp $
+Last modified $Id: addons.html,v 1.6 2003/05/18 13:49:30 aslom Exp $
 </font>
 
 <!--extra space at bottom for hyperlinks #anchors to work -->
