@@ -4,7 +4,7 @@
 package org.xmlpull.v1;
 
 /**
- * This exception is thrown to signal XML Pull Parser related excepions.
+ * This exception is thrown to signal XML Pull Parser related faults.
  *
  * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
  */

@@ -58,7 +58,7 @@ public abstract class XmlPullParserFactory
     //protected boolean namespaceAware;
 
     /**
-     * Proteted constructor to be called by factory implementations.
+     * Protected constructor to be called by factory implementations.
      */
     protected XmlPullParserFactory()
     {

@@ -7,20 +7,10 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Interface defining simple XML Pull Parser.
- *
- * <p>Properties
- * <p>
- * All propertires are false by default.
- * Properties are encoded as flags passed to setProperty() method to
- * enable extra features. Conforming parsers MUST provide a
- * version with all features switched off and SHOULD provide
- * support for PROCESS_NAMESPACES. All other features are
- * optional.
+ * Interface defining XML Pull Parser.
  *
  * @author Stefan Haustein
  * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
-
  */
 
 public interface XmlPullParser {
@@ -125,7 +115,6 @@ public interface XmlPullParser {
             "PROCESSING_INSTRUCTION",
             "COMMENT",
             "DOCDECL"
-
     };
 
 
@@ -136,7 +125,6 @@ public interface XmlPullParser {
      * Processing of namespaces is by default false.
      * Can not be changed during parsing
      */
-    //public static final int PROCESS_NAMESPACES = 1;
     public static final String PROCESS_NAMESPACES =
         "http://xmlpull.org/v1/features/process-namespaces";
 
@@ -145,7 +133,6 @@ public interface XmlPullParser {
      * looking for prefix == "xmlns" or prefix == null and name == "xmlns
      * it is off by default and only meningful when PROCESS_NAMESPACES feature is on.
      */
-    //public static final int REPORT_NAMESPACE_ATTRIBUTES = 2;
     public static final String REPORT_NAMESPACE_ATTRIBUTES =
         "http://xmlpull.org/v1/features/report-namespace-prefixes";
 
@@ -157,7 +144,6 @@ public interface XmlPullParser {
      * parser can not process it
      * Can not be changed during parsing.
      */
-    //public static final int PROCESS_DOCDECL = 4;
     public static final String PROCESS_DOCDECL =
         "http://xmlpull.org/v1/features/process-docdecl";
 
@@ -179,26 +165,6 @@ public interface XmlPullParser {
     public static final String VALIDATION =
         "http://xmlpull.org/v1/features/validation";
 
-
-    // additional (optional) features of parser
-
-    /**
-     * This is very useful property for parsing XML (such as SOAP) that has no mixed content
-     * so parser can remove ignorable whitespaces when called by next()
-     * See http://www.w3.org/TR/REC-xml#sec-mixed-content for more description
-     */
-
-    //public static final int NO_MIXED_CONTENT = 0x111;
-
-    /**
-     * Relaxed parsing rules
-     *   are applied, allowing "abuse" of the parser for
-     *   HTML parsing. Cannot be combined with namespace
-     * processing. Can not be changed during parsing.
-     */
-
-    //public static final int RELAXED_PARSING = 16;
-
     /**
      * Use this call to change the general behaviour of the parser,
      * such as namespace processing or doctype declaration handling.
@@ -210,7 +176,6 @@ public interface XmlPullParser {
      * to properties requested from the factory.
      *
      */
-
     public void setFeature(String name,
                            boolean state) throws XmlPullParserException;
 
@@ -250,24 +215,6 @@ public interface XmlPullParser {
      */
     public void setInput(Reader in) throws XmlPullParserException;
 
-    /*
-     * Reset the parser state.  Usefult to reclaim buffer spaces when
-     * for exmaple when parser is returned to pool.
-
-     what about setInput(null)
-
-     public void reset() throws XmlPullParserException;
-
-     */
-
-    /**
-     * Set the entity table to use by parser (in addition to standard XML
-     * entities such as &amp; &lt; &gt;).
-     * Must be called before parsing is started.
-     */
-
-    //public void setCharacterEntityTable (Hashtable h) throws XmlPullParserException;
-
     /**
      * Set new value for enyity.
      * <p><b>NOTE:</b> list of entites will be reset to to standard XML
@@ -293,16 +240,8 @@ public interface XmlPullParser {
      */
     public String getNamespacesUri(int pos) throws XmlPullParserException;
 
-    /*
-     * Return local part of qname.
-     * For example for 'xsi:type' it returns 'type'.
-
-     public String getQNameLocal(String qName)
-     throws XmlPullParserException;
-     */
-
-
-    /** Return uri for the given prefix.
+    /**
+     * Return uri for the given prefix.
      * It is depending on current state of parser to find
      * what namespace uri is mapped from namespace prefix.
      * For example for 'xsi' if xsi namespace prefix
@@ -394,7 +333,7 @@ public interface XmlPullParser {
     public boolean isWhitespace() throws XmlPullParserException;
 
     /**
-     * Read current content as Stirng.
+     * Read current content as String.
      *
      * <p><b>NOTE:</b> parser must be on TEXT, COMMENT, PROCESSING_INSTRUCTION
      * or DOCDECL event;
@@ -404,34 +343,6 @@ public interface XmlPullParser {
 
     public String getText () throws XmlPullParserException;
 
-
-    // --------------------------------------------------------------------------
-    // CONTENT related methods
-
-    /*
-     * Check if current CONTENT contains only whitespace characters.
-     *
-     public boolean isWhitespaceTextContent() throws XmlPullParserException;
-
-     *
-     * Read current content as Stirng
-     * this method return gathered content for element
-     * (aggregating multiple TEXT, entity references and CDATA sections).
-     *
-     * <p><b>NOTE:</b> parser must be on CONTENT event.
-     *
-     public String readTextContent()
-     throws XmlPullParserException;
-
-     *
-     * Return how big is content.
-     *
-     * <p><b>NOTE:</b> parser must be on CONTENT event.
-     *
-     public int getTextContentLength()
-     throws XmlPullParserException;
-
-     */
 
     // --------------------------------------------------------------------------
     // START_TAG / END_TAG shared methods
@@ -467,22 +378,11 @@ public interface XmlPullParser {
 
 
     /**
-     * Returns the raw name (prefix + ':' + localName) of the current element
-     * (current event must be START_TAG or END_TAG)
-     */
-    //public String getRawName();
-
-
-
-    /**
      * Returns true if the current event is START_TAG or END_TAG and the
      * tag is degenerated (e.g. &lt;foobar/&gt;).
      * <p><b>NOTE:</b> if parser is not on START_TAG or END_TAG the exception will be thrown.
      */
     public boolean isEmptyElementTag() throws XmlPullParserException;
-
-    //public boolean isDegenerated ();
-
 
     // --------------------------------------------------------------------------
     // START_TAG Attributes retrieval methods
@@ -517,26 +417,12 @@ public interface XmlPullParser {
      */
     public String getAttributePrefix(int index);
 
-    /*
-     * Returns the raw name of the specified attribute
-     * Returns null if invalid index.
-
-     public String getAttributeRawName(int index);
-
-
      /**
      * Returns the given attributes value
      * Throws an IndexOutOfBoundsException if the index is
      * out of range.
      */
     public String getAttributeValue(int index);
-
-
-    /**
-     * Returns the given attributes value
-     * Returns null if no attribute with rawName.
-     */
-    //public String getAttributeValueFromRawName(String rawName);
 
     /**
      * Returns the attributes value identified by namespace URI and namespace localName.
@@ -545,23 +431,12 @@ public interface XmlPullParser {
     public String getAttributeValue(String namespace,
                                     String name);
 
-    /*
-     * Return true if attribute at index is namespace declaration
-     * such as xmlns='...' or xmlns:prefix='...'
-
-     this is really simple to implement if really needed...
-     remvoing saves ~50bytes in the .class file
-
-
-     public boolean isAttributeNamespaceDeclaration(int index);
-     */
-
 
     // --------------------------------------------------------------------------
     // actual parsing methods
 
     /**
-     * Returns the type of the current element (START_TAG, END_TAG, CONTENT, etc)
+     * Returns the type of the current event (START_TAG, END_TAG, CONTENT, etc)
      */
     public int getType()
         throws XmlPullParserException;
