@@ -11,7 +11,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
-import org.apache.xml.serialize.XMLSerializer;
+//import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -37,8 +37,8 @@ public class DOM2XmlPullBuilder {
     public static void main(String[] args) throws Exception {
         DOM2XmlPullBuilder builder = new DOM2XmlPullBuilder();
 
-        StringReader reader = new StringReader(
-            "<n:foo xmlns:n='uri1'><bar n:attr='test' xmlns='uri2'>baz</bar></n:foo>");
+        final String XML = "<n:foo xmlns:n='uri1'><bar n:attr='test' xmlns='uri2'>baz</bar></n:foo>";
+        StringReader reader = new StringReader(XML);
 
         // create document
 
@@ -58,12 +58,13 @@ public class DOM2XmlPullBuilder {
         //        idTransform.transform(input, output);
 
         //OutputFormat fmt = new OutputFormat();
-        XMLSerializer serializer = new XMLSerializer(sw, null);
-        serializer.serialize(doc1);
-        sw.close();
-        String serialized = sw.toString();
-        System.out.println("serialized="+serialized);
-        reader = new StringReader(serialized);
+        //XMLSerializer serializer = new XMLSerializer(sw, null);
+        //serializer.serialize(doc1);
+        //sw.close();
+        //String serialized = sw.toString();
+        //System.out.println("serialized="+serialized);
+
+        reader = new StringReader(XML);
 
         // reparse
 
