@@ -741,6 +741,7 @@ public interface XmlPullParser {
     /**
      * Returns if the specified attribute was not in input was declared in XML.
      * If parser is non-validating it MUST always return false.
+     * This information is part of XML infoset:
      *
      * @param zero based index of attribute
      * @return false if attribute was in input
@@ -900,8 +901,9 @@ public interface XmlPullParser {
      *     throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
      * </pre>
      */
-    public void require (int type, String namespace, String name)
+    public void require(int type, String namespace, String name)
         throws XmlPullParserException, IOException;
+
 
 
     /**
@@ -919,7 +921,75 @@ public interface XmlPullParser {
      *   return result;
      * </pre>
      */
-    public String readText () throws XmlPullParserException, IOException;
+    public String readText() throws XmlPullParserException, IOException;
+
+
+    /**
+     * Test if the current event is of the given type and if the
+     * namespace and name do match. null will match any namespace
+     * and any name. If the test is not passed, an exception is
+     * thrown. The exception text indicates the parser position,
+     * the expected event and the current event (not meeting the
+     * requirement.
+     *
+     * <p>essentially it does this
+     * <pre>
+     *  if (type != getEventType()
+     *  || (namespace != null && !namespace.equals( getNamespace () ) )
+     *  || (name != null && !name.equals( getName() ) ) )
+     *     throw new XmlPullParserException( "expected "+ TYPES[ type ]+getPositionDescription());
+     * </pre>
+     */
+    //public void requireEvent(int eventType, String namespace, String name)
+    //    throws XmlPullParserException, IOException;
+
+    /**
+     * Call next() and return event if it is START_TAG or END_TAG
+     * otherwise throw an exception.
+     *
+     * <p>essentially it does this
+     * <pre>
+     *   int eventType = next();
+     *   if (eventType != START_TAG && eventType != END_TAG) {
+     *      throw new XmlPullParserException("expected start or end tag", this, null);
+     *   }
+     *   return eventType;
+     * </pre>
+     */
+    //public String nextTag() throws XmlPullParserException, IOException;
+
+
+    /**
+     * If current event is START_TAG and isEmptyElementTag() is true
+     * then empty string ("") is returned,
+     * if the next event is TEXT, the value of getText is returned
+     * otherwise exception is thrown indicating that TEXT was expected.
+     *
+     * <p>The motivation for this function is to allow to parse consistently both
+     * empty elements and elements that has non empty content, for example for input: <ol>
+     * <li>&lt;tag>foo&lt;/tag>
+     * <li>&lt;tag>&lt;/tag> (which is equivalent to &lt;tag/>) </ol>
+     * both input can be parsed with the same code:
+     * <pre>
+     *   p.nextTag()
+     *   p.requireEvent(p.START_TAG, "", "tag");
+     *   String content = p.nextText();
+     *   p.nextTag()
+     *   p.requireEvent(p.END_TAG, "", "tag");
+     * </pre>
+     *
+     * <p>essentially it does this
+     * <pre>
+     *    if(getEventType() == START_TAG && isEmptyElementTag()) {
+     *      return "";
+     *    }
+     *    if(next() != TEXT) {
+     *      throw new XmlPullParserException("expected TEXT and not "+TYPES[getEventType()], this, null);
+     *    }
+     *    return getText();
+     * </pre>
+     */
+    //public String nextText () throws XmlPullParserException, IOException;
 
 }
 
