@@ -59,9 +59,11 @@ and <b>MUST</b> be reported as true<p>
 If the feature is set to false and if
 <a href="http://www.w3.org/TR/2000/REC-xml-20001006#NT-doctypedecl">XML document
 type declaration</a> (in short DOCDECL) is encountered it <b>MUST</b> be reported by nextToken() and
-<b>MUST</b> be ignored by next(). Note that as the DOCDECL was ignored then
-during parsing  may be fatal exception when
-undeclared entity is encountered!<p>
+<b>MUST</b> be ignored by next(). 
+<p>
+As the DOCDECL was ignored, references to entities cannot be expanded (they will 
+produce a fatal error if you call next(), but will be reported as ENTITY_REF if 
+you call nextToken() instead).<p>
 If the feature is true and VALIDATION feature is false then parser <b>MUST</b> be non validating as defined
 in <a href="http://www.w3.org/TR/2000/REC-xml-20001006">XML 1.0 specification</a>
 (DOCDECL <b>MUST</b> be parsed and processed by parser). <p>
