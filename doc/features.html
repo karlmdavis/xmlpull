@@ -226,7 +226,7 @@ nextToken() when processing content outside of root element (getDepth() == 0).</
 <p>This feature is identified by
 <a href="http://xmlpull.org/v1/doc/features.html#detect-encoding">
 http://xmlpull.org/v1/doc/features.html#detect-encoding</a> </p>
-<p>If this feature is true it means that XMLPULL parser <b>MUST</b> detect
+<p>If this feature is true it means that XmlPull parser <b>MUST</b> detect
 encoding from input stream when inputEncoding is null
 in call setInput(InputStream inputStream, String inputEncoding).</p>
 
@@ -265,6 +265,24 @@ use apostrophe (') to quote attribute value.</p>
 
 <p>If the feature is set to false it means than XmlSerializer parser <b>MUST</b>
 use quotation mark (&quot;) to quote attribute value.</p>
+
+
+<p>&nbsp;</p>
+
+<h3>
+<a name="relaxed"></a>Optional feature: RELAXED<br>
+&nbsp;</h3>
+<p>This feature is identified by
+<a href="http://xmlpull.org/v1/doc/features.html#relaxed">
+http://xmlpull.org/v1/doc/features.html#relaxed</a> </p>
+<p>If this feature is supported that means that XmlPull parser will be lenient 
+when checking XML well formedness. </p>
+
+<p><b>NOTE</b>: use it only if XML input is not well-formed and in general usage 
+if this feature is <b>discouraged</b> </p>
+
+<p><b>NOTE</b>: as there is no definition of what is relaxed XML parsing 
+therefore what parser will do completely depends on implementation used</p>
 
 <p>&nbsp;</p>
 
