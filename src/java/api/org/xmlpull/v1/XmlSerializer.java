@@ -1,45 +1,8 @@
-package org.xmlpull.v1.serializer;
+package org.xmlpull.v1;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-
-//ISSUE: how to write epilog?
-
-//ISSUE: how to avoid possibility that user will call setPrefx and may override automatic prefix ...
-//ISSUE: if namespace set in setPrefix was not used shoul dit still result in xmlns:ns='' declaration?
-
-//ISSUE: is flush doing anything but call closeStartTag()?
-//ISSUE: maybe replace flush() with closeStartTag() (if not used it is still called implicitly ...)
-//      this will allow to write unesscaped strings safely (like for example BASE64 or hexbin)
-
-// RESOLVED: left flush() with exact description what it does but also added text("") to close stag
-
-//ISSUE: implicit closing of startTag() by text("") requires more description and exmaples!!!
-
-//ISSUE: how to write efficiently unescaped XML --> use flush() and write into stream ...
-
-// PROPOSAL: maybe have unesapced(String), unesapced(char[], off, len) methods?
-
-//ISSUE: where setPrefix() should (or not) be called (before first startTag(), between attribute() ...
-// RESOLVED: setPrefix() MUST be called before startTag() is affecting only this startTag
-
-//ISSUE: add close() that validates if XML document was writent correctly (finsihed depth == 0, etc.)
-//RESOLVED: instead provides endDocument() (and startDoument())
-
-//ISSUE: have one method tagWithContent() that combines startTag, text and endTag  ...
-//RESOLVED: later ...
-
-//ISSUE: additional properties to specify indent character, indent size, attrib quotation character
-//RESOLVED: added get/setProperty to support it as options
-
-//ISSUE: should xml:space and xml:lang scope be maintained ?
-//RESOLVED: not in this version
-
-//ISSUE: document that element and attribute names and namespaces are not escpaed!
-//ISSUE: document that comment, CDSECT etc. are not escaped!!!
-//ISSUE: docuemnt that duplicate attribute declarations are not detected !
-
 
 /**
  * Define an interface to serialziation of XML Infoset.
@@ -135,9 +98,11 @@ public interface XmlSerializer {
     public void setPrefix (String prefix, String namespace) throws IOException;
 
     /**
-     * Return prefix that is currently bound to namespace.
+     * Return namespace that corresponds to given prefix
+     * If there is no prefix bound to this namespace return null if
+     * generatePrefix is false otherwise return null.
      */
-    public String getPrefix (String namespace);
+    public String getPrefix (String namespace, boolean generatePrefix);
 
     /**
      * Writes a start tag with the given namespace and name.

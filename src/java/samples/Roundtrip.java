@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import org.xmlpull.v1.serializer.XmlSerializer;
+import org.xmlpull.v1.XmlSerializer;
 
 // TODO hide this impl. detail with facotry
 import org.xmlpull.mxp1_serializer.MXSerializer;
