@@ -30,17 +30,35 @@ Optional properties</h2>
 <p>
 They <b>MAY</b> be supported but are not part of
 <a href="http://www.xmlpull.org/">XmlPull API</a>.<p>
-Please report them to XmlPull discussion group so they can be added here and
+Please report suggestions for other useful properties to 
+<a href="http://www.xmlpull.org/discussion.shtml">XmlPull discussion group</a> so they can be added here and
 made easier to discover.<p>&nbsp;</p>
 
 
-<p>NOTE:</p> to detect if optional property
+<p><b>NOTE:</b> to detect if optional property
 is supported try to call getProperty()
 and only if it returns non-null value
 it can be assumed that the property is supported.
-Parser implementation is required to return null
+Implementations are required to return null
 for all unknown properties names as null
-is assumed to be default value for all properties.
+is assumed to be default value for all properties. </p> 
+
+
+<p>&nbsp;</p>
+
+<h3>
+<a name="location"></a>Optional property: LOCATION</h3>
+<p>This property is identified by
+<a href="http://xmlpull.org/v1/doc/properties.html#location">http://xmlpull.org/v1/doc/properties.html#location</a> </p>
+
+<p>This property takes String as value. If supported this property can be set after setInput() to indicate 
+location of input (for parser) or output (for serializer). The value of this 
+property will be then used in getPositionDescription() and in exception messages 
+to provide better diagnostic messages.</pre>
+
+
+
+<p>&nbsp;</p> 
 
 <h3>
 <a name="xmldecl-version"></a>Optional property: XMLDECL VERSION</h3>
@@ -148,7 +166,7 @@ will be written.</p>
 
 <HR>
 <address><a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a><address>
-<font size="2">Last Modified: $Id: properties.html,v 1.8 2003/02/25 20:06:38 aslom Exp $</font><address>
+<font size="2">Last Modified: $Id: properties.html,v 1.9 2003/04/23 12:25:18 aslom Exp $</font><address>
 </address>
 </address>
 <p>&nbsp;</p>
