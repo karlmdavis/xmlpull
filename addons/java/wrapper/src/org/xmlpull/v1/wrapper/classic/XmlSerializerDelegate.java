@@ -28,7 +28,9 @@ public class XmlSerializerDelegate implements XmlSerializer {
         return xs.getName();
     }
 
-    public void setPrefix(String prefix, String namespace) throws IOException, IllegalArgumentException, IllegalStateException {
+    public void setPrefix(String prefix, String namespace)
+        throws IOException, IllegalArgumentException, IllegalStateException
+    {
         xs.setPrefix(prefix, namespace);
     }
 
@@ -116,7 +118,9 @@ public class XmlSerializerDelegate implements XmlSerializer {
         return xs.getNamespace();
     }
 
-    public XmlSerializer endTag(String namespace, String name) throws IOException, IllegalArgumentException, IllegalStateException {
+    public XmlSerializer endTag(String namespace, String name)
+        throws IOException, IllegalArgumentException, IllegalStateException
+    {
         return xs.endTag(namespace, name);
     }
 

@@ -52,7 +52,7 @@ public class Driver
             System.err.println("direct test took "+(endDirect-startDirect)/1000.0+" seconds");
 
             startStaticWrap = System.currentTimeMillis();
-            XmlPullParserWrapper spw = staticWrapperFactory.newPullWrapper();
+            XmlPullParserWrapper spw = staticWrapperFactory.newPullParserWrapper();
             for (int i = 0; i < REPEAT; i++)
             {
                 StringReader sr = new StringReader("<hello>world!</hello>");

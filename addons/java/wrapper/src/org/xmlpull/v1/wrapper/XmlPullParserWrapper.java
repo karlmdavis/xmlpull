@@ -98,7 +98,6 @@ public interface XmlPullParserWrapper extends XmlPullParser {
     public void nextStartTag(String namespace, String name)
         throws XmlPullParserException, IOException;
 
-
     /**
      * Call parser nextTag() and check that it is END_TAG, throw exception if not.
      */
@@ -116,7 +115,6 @@ public interface XmlPullParserWrapper extends XmlPullParser {
      */
     public void nextEndTag(String namespace, String name)
         throws XmlPullParserException, IOException;
-
 
     /**
      * Read text content of element ith given namespace and name

@@ -36,7 +36,7 @@ public class XmlPullWrapperFactory {
     }
 
     public static XmlPullWrapperFactory newInstance (String classNames, Class context)
-                throws XmlPullParserException
+        throws XmlPullParserException
     {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance(classNames, context);
         return new XmlPullWrapperFactory(factory);
@@ -53,6 +53,9 @@ public class XmlPullWrapperFactory {
         }
     }
 
+    public XmlPullParserFactory getFactory() throws XmlPullParserException {
+        return f;
+    }
 
     public void setFeature(String name,
                            boolean state) throws XmlPullParserException
@@ -83,7 +86,7 @@ public class XmlPullWrapperFactory {
     //public void setUseDynamic(boolean enable) { useDynamic = enable; };
     //public boolean getUseDynamic() { return useDynamic; };
 
-    public XmlPullParserWrapper newPullWrapper() throws XmlPullParserException {
+    public XmlPullParserWrapper newPullParserWrapper() throws XmlPullParserException {
         XmlPullParser pp = f.newPullParser();
         //        if(useDynamic) {
         //            return (XmlPullParserWrapper) DynamicXmlPullParserWrapper.newProxy(pp, classLoader);
@@ -91,17 +94,17 @@ public class XmlPullWrapperFactory {
         return new StaticXmlPullParserWrapper(pp);
     }
 
-    public XmlPullParserWrapper newPullWrapper(XmlPullParser pp) throws XmlPullParserException {
+    public XmlPullParserWrapper newPullParserWrapper(XmlPullParser pp) throws XmlPullParserException {
         return new StaticXmlPullParserWrapper(pp);
     }
 
     public XmlSerializerWrapper newSerializerWrapper() throws XmlPullParserException {
         XmlSerializer xs = f.newSerializer();
-        return new StaticXmlSerializerWrapper(xs);
+        return new StaticXmlSerializerWrapper(xs, this);
     }
 
     public XmlSerializerWrapper newSerializerWrapper(XmlSerializer xs) throws XmlPullParserException {
-        return new StaticXmlSerializerWrapper(xs);
+        return new StaticXmlSerializerWrapper(xs, this);
     }
 
 }
