@@ -415,7 +415,7 @@ public interface XmlPullParser {
      * If none were requested, all feautures are deactivated by default.
      *
      * @exception XmlPullParserException If the feature is not supported or can not be set
-     * @exception IllegalArgumentException If the feature string is null
+     * @exception IllegalArgumentException If string with the feature name is null
      */
     public void setFeature(String name,
                            boolean state) throws XmlPullParserException;
@@ -427,7 +427,7 @@ public interface XmlPullParser {
      *
      * @param name The name of feature to be retrieved.
      * @return The value of the feature.
-     * @exception IllegalArgumentException if feature string is null
+     * @exception IllegalArgumentException if string the feature name is null
      */
 
     public boolean getFeature(String name);
@@ -436,6 +436,9 @@ public interface XmlPullParser {
      * Set the value of a property.
      *
      * The property name is any fully-qualified URI.
+     *
+     * @exception XmlPullParserException If the property is not supported or can not be set
+     * @exception IllegalArgumentException If string with the property name is null
      */
     public void setProperty(String name,
                             Object value) throws XmlPullParserException;
@@ -443,9 +446,9 @@ public interface XmlPullParser {
     /**
      * Look up the value of a property.
      *
-     * The property name is any fully-qualified URI. I
-     * <p><strong>NOTE:</strong> unknown properties are <string>always</strong>
-     * returned as null
+     * The property name is any fully-qualified URI.
+     * <p><strong>NOTE:</strong> unknown properties are <strong>always</strong>
+     * returned as null.
      *
      * @param name The name of property to be retrieved.
      * @return The value of named property.
@@ -978,14 +981,14 @@ public interface XmlPullParser {
      *  This requirement is added to allow to do roundtrip of XML documents!
      * <dt>DOCDECL<dd>
      * if FEATURE_XML_ROUNDTRIP is true or PROCESS_DOCDECL is false
-     * return inside part of DOCDECL ex. returns:<pre>
+     * then return what is inside of DOCDECL for example it returns:<pre>
      * &quot; titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
      * [&lt;!ENTITY % active.links "INCLUDE">]&quot;</pre>
      * <p>for input document that contained:<pre>
      * &lt;!DOCTYPE titlepage SYSTEM "http://www.foo.bar/dtds/typo.dtd"
      * [&lt;!ENTITY % active.links "INCLUDE">]></pre>
-     * otherwise of FEATURE_XML_ROUNDTRIP is false and PROCESS_DOCDECL is true
-     *    then what is returned is undefined (it may be evn null)
+     * otherwise if FEATURE_XML_ROUNDTRIP is false and PROCESS_DOCDECL is true
+     *    then what is returned is undefined (it may be even null)
      * </dd>
      * </dl>
      *
