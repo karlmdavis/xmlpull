@@ -679,10 +679,21 @@ public interface XmlPullParser {
 
     /**
      * Returns the text content of the current event as String.
+     * The value returned depends on current event type,
+     * for example for TEXT event it is element content
+     * (this is typical case when next() is used).
+     *
+     * See description of nextToken() for detailed description of
+     * possible returned values for different types of events.
+     *
      * <p><strong>NOTE:</strong> in case of ENTITY_REF, this method returns
      * the entity replacement text (or null if not available). This is
      * the only case where
      * getText() and getTextCharacters() return different values.
+     *
+     * @see #getEventType
+     * @see #next
+     * @see #nextToken
      */
     public String getText ();
 
@@ -690,7 +701,7 @@ public interface XmlPullParser {
     /**
      * Returns the buffer that contains the text of the current event,
      * as well as the start offset and length relevant for the current
-     * event.
+     * event. See getText(), next() and nextToken() for description of possible returned values.
      *
      * <p><strong>Please note:</strong> this buffer must not
      * be modified and its content MAY change after a call to
@@ -704,6 +715,8 @@ public interface XmlPullParser {
      * and length).
      *
      * @see #getText
+     * @see #next
+     * @see #nextToken
      *
      * @param holderForStartAndLength Must hold an 2-element int array
      * into which the start offset and length values will be written.
@@ -935,7 +948,7 @@ public interface XmlPullParser {
      * <dt>END_TAG<dd>null unless FEATURE_XML_ROUNDTRIP
      *  id enabled and then returns XML tag, ex: &lt;/tag>
      * <dt>TEXT<dd>return element content.
-     *  <br>Note: that element content may be delevered in multiple consecutive TEXT events.
+     *  <br>Note: that element content may be delivered in multiple consecutive TEXT events.
      * <dt>IGNORABLE_WHITESPACE<dd>return characters that are determined to be ignorable white
      * space. If the FEATURE_XML_ROUNDTRIP is enabled all whitespace content outside root
      * element will always reported as IGNORABLE_WHITESPACE otherise rteporting is optional.

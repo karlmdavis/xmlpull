@@ -181,7 +181,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         ser.ignorableWhitespace(iws);
         ser.startTag(null, "foo");
         //check escaping & < > " '
-        final String attrVal = "attrVal&<>\"&amp;";
+        final String attrVal = "attrVal&<>\"''&amp;";
         //final String attrVal = "attrVal&;";
         ser.attribute(null, "attrName", attrVal);
         ser.entityRef("amp");
