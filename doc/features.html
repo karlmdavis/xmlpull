@@ -60,6 +60,8 @@ START_DOCUMENT state i.e. this feature can not be changed during parsing. <p>
 Identified by <a href="http://xmlpull.org/v1/doc/features.html#process-docdecl">
 http://xmlpull.org/v1/doc/features.html#process-docdecl</a> <p>
 The default value of the feature is undefined.<p>
+If the VALIDATION feature is true then this feature <b>MUST</b> not be modified 
+and <b>MUST</b> be reported as true<p>
 If the feature is set to false and if 
 <a href="http://www.w3.org/TR/2000/REC-xml-20001006#NT-doctypedecl">XML document 
 type declaration</a> (in short DOCDECL) is encountered it <b>MUST</b> be reported by nextToken() and 
@@ -82,6 +84,8 @@ http://xmlpull.org/v1/doc/features.html#validation</a> <p>
 The feature <b>MUST</b> be false by default.<p>
 See description of <a href="#process-docdecl">PROCESS DOCDECL</a> feature for 
 required behavior.<p>
+If the feature is set to true then PROCESS DOCDECL <b>MUST</b> be automatically 
+set to true as well.<p>
 The feature <b>MUST</b> be allowed to be changed only when parser is in 
 START_DOCUMENT state i.e. this feature can not be changed during parsing. 
 <p>&nbsp;</p>
