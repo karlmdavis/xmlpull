@@ -668,6 +668,42 @@ public class TestSerializeWithNs extends UtilTestCase {
         testSetPrefix("");
         testSetPrefix(null);
     }
+
+    public void testAttrPrefix(String prefix, boolean extraPrefix) throws Exception {
+        XmlSerializer ser = factory.newSerializer();
+        StringWriter sw = new StringWriter();
+        ser.setOutput(sw);
+        final String NS = "http://example.com/test";
+        ser.setPrefix(prefix, NS);
+        if(extraPrefix) ser.setPrefix("p1", NS);
+        ser.startTag(NS, "foo");
+        ser.attribute(NS, "attr", "aar");
+        ser.endDocument();
+        
+        String serialized = sw.toString();
+        //System.out.println(getClass()+" sw="+sw);
+        xpp.setInput(new StringReader(serialized));
+        
+        checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
+        xpp.next();
+        String expectedPrefix = (prefix != null && prefix.length() == 0) ? null : prefix;
+        if(extraPrefix) expectedPrefix = "p1";
+        int nsCount = 1;
+        if(extraPrefix) ++nsCount;
+        if(expectedPrefix == null) ++nsCount;
+        checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, expectedPrefix, nsCount, NS, "foo", null, xpp.isEmptyElementTag() /*empty*/, 1);
+        checkAttribNs(xpp, 0, NS, "attr", "aar");
+    }
+
+    public void testAttrPrefix() throws Exception {
+        testAttrPrefix("ns", false);
+        testAttrPrefix("", false);
+        testAttrPrefix(null, false);
+        testAttrPrefix("ns", true);
+        testAttrPrefix("", true);
+        testAttrPrefix(null, true);
+    }
+
     
     /** setPrefix check that prefix is not duplicated ... */
     public void testSetPrefixAdv() throws Exception {
@@ -712,10 +748,10 @@ public class TestSerializeWithNs extends UtilTestCase {
         // check case when prefix in Infoset is invalid -- prefix preoprty is optional after all
         // http://www.w3.org/TR/xml-infoset/#infoitem.element
         testSetPrefixPreferences("sample", "saml");
-
+        
         testSetPrefixPreferences("", null);
         testSetPrefixPreferences("saml", "saml");
-    
+        
     }
     
     private void testSetPrefixPreferences(String preferredPrefix, String expectedPrefix) throws Exception {
@@ -1073,8 +1109,8 @@ public class TestSerializeWithNs extends UtilTestCase {
             expect.next();
             actual.next();
             assertXml("inconsistent event type", expect, actual,
-            		XmlPullParser.TYPES[ expect.getEventType() ],
-            		XmlPullParser.TYPES[ actual.getEventType() ]
+                      XmlPullParser.TYPES[ expect.getEventType() ],
+                      XmlPullParser.TYPES[ actual.getEventType() ]
                      );
             if(expect.getEventType() == XmlPullParser.END_DOCUMENT) {
                 break;
