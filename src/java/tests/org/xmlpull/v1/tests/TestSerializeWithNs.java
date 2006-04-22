@@ -669,8 +669,12 @@ public class TestSerializeWithNs extends UtilTestCase {
         testSetPrefix(null);
     }
 
+    /**
+     * Testing for case described in http://www.extreme.indiana.edu/bugzilla/show_bug.cgi?id=241
+     */
     public void testAttrPrefix(String prefix, boolean extraPrefix) throws Exception {
         XmlSerializer ser = factory.newSerializer();
+        //System.err.println(getClass()+" ser="+ser.getClass());
         StringWriter sw = new StringWriter();
         ser.setOutput(sw);
         final String NS = "http://example.com/test";
@@ -681,7 +685,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         ser.endDocument();
         
         String serialized = sw.toString();
-        //System.out.println(getClass()+" sw="+sw);
+        //System.err.println(getClass()+" sw="+sw);
         xpp.setInput(new StringReader(serialized));
         
         checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
