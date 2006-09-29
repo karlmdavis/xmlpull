@@ -391,7 +391,7 @@ public class Driver implements Locator, XMLReader, Attributes
                             }
                             startElement(pp.getNamespace(),
                                          name,
-                                         prefix != null ? name : rawName.toString());
+                                         prefix != null ? rawName.toString() : name );
                         } else {
                             startElement(pp.getNamespace(),
                                          pp.getName(),
