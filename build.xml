@@ -10,8 +10,8 @@ All generated files are created under ${build} directory
   <!-- set global properties for this build -->
 
   <property name="name" value="XmlPull"/>
-  <property name="year" value="2005"/>
-  <property name="version" value="1_1_3_4b"/>
+  <property name="year" value="2006"/>
+  <property name="version" value="1_1_3_4c"/>
   <property name="xmlpull_version" value="xmlpull_${version}"/>
   <property name="xmlpull_tag" value="XMLPULL_${version}"/>
   <property name="copyright"

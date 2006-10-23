@@ -24,6 +24,7 @@ class CloneParser {
         {
             CloenableCharArrayReader cloned = (CloenableCharArrayReader) super.clone();
             cloned.buf = (char[]) buf.clone();
+            //cloned.buf = buf.clone();
             //UGLY UGLY UGLY ...
             cloned.lock = cloned;
             return cloned;

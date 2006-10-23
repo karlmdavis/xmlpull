@@ -685,7 +685,6 @@ public class TestSerializeWithNs extends UtilTestCase {
         ser.endDocument();
         
         String serialized = sw.toString();
-        //System.err.println(getClass()+" sw="+sw);
         xpp.setInput(new StringReader(serialized));
         
         checkParserStateNs(xpp, 0, XmlPullParser.START_DOCUMENT, null, 0, null, null, null, false, -1);
@@ -695,6 +694,7 @@ public class TestSerializeWithNs extends UtilTestCase {
         int nsCount = 1;
         if(extraPrefix) ++nsCount;
         if(expectedPrefix == null) ++nsCount;
+        //System.err.println(getClass()+" nsCount="+nsCount+" extraPrefix="+extraPrefix+" expectedPrefix="+expectedPrefix+" sw="+sw);
         checkParserStateNs(xpp, 1, XmlPullParser.START_TAG, expectedPrefix, nsCount, NS, "foo", null, xpp.isEmptyElementTag() /*empty*/, 1);
         checkAttribNs(xpp, 0, NS, "attr", "aar");
     }
