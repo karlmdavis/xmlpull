@@ -125,6 +125,20 @@ public interface XmlPullParserWrapper extends XmlPullParser {
      * Skip sub tree that is currently porser positioned on.
      * <br>NOTE: parser must be on START_TAG and when funtion returns
      * parser will be positioned on matching END_TAG
+     *
+     * This is typically optimized internally by parser but the logic should follow this:
+     * <code>
+     * pp.require(XmlPullParser.START_TAG, null, null);
+     * int level = 1;
+     * while(level > 0) {
+     *   int eventType = pp.next();
+     *   if(eventType == XmlPullParser.END_TAG) {
+     *     --level;
+     *   } else if(eventType == XmlPullParser.START_TAG) {
+     *     ++level;
+     *   }
+     * }
+     * </code>
      */
     public void skipSubTree()
         throws XmlPullParserException, IOException;

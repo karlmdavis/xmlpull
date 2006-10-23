@@ -139,6 +139,14 @@ public class TestEntityReplacement extends UtilTestCase {
         );
     }
     
+    public void testDefineEntityBeforeSetInput() throws IOException, XmlPullParserException
+    {
+        XmlPullParser pp = factory.newPullParser();
+        pp.defineEntityReplacementText("foo", "bar");
+        pp.setInput(new StringReader( "<foo/>" ) );
+        
+    }
+    
     public static void main (String[] args) {
         junit.textui.TestRunner.run (new TestSuite(TestEntityReplacement.class));
     }
