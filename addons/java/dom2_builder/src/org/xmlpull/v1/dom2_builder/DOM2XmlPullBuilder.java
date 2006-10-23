@@ -225,68 +225,6 @@ public class DOM2XmlPullBuilder {
      * Minimal inline test
      */
     public static void main(String[] args) throws Exception {
-        DOM2XmlPullBuilder builder = new DOM2XmlPullBuilder();
-
-        final String XML = "<n:foo xmlns:n='uri1'><bar n:attr='test' xmlns='uri2'>baz</bar></n:foo>";
-        StringReader reader = new StringReader(XML);
-
-        // create document
-
-        Element el1 = builder.parse(reader);
-        //System.out.println("doc="+doc);
-
-
-        // serialize and deserialzie ...
-        StringWriter sw = new StringWriter();
-
-        // requires JAXP
-        //        TransformerFactory xformFactory
-        //            = TransformerFactory.newInstance();
-        //        Transformer idTransform = xformFactory.newTransformer();
-        //        Source input = new DOMSource(doc1);
-        //        Result output = new StreamResult(sw);
-        //        idTransform.transform(input, output);
-
-        //OutputFormat fmt = new OutputFormat();
-        //XMLSerializer serializer = new XMLSerializer(sw, null);
-        //serializer.serialize(doc1);
-        //sw.close();
-        //String serialized = sw.toString();
-        //System.out.println("serialized="+serialized);
-
-        reader = new StringReader(XML);
-
-        // reparse
-
-        Element el2 = builder.parse(reader);
-
-        // check that what was written is OK
-
-        Element root = el2; //doc2.getDocumentElement();
-        //System.out.println("root="+root);
-        System.out.println ("root ns=" + root.getNamespaceURI() + ", localName=" +root.getLocalName());
-        assertEquals("uri1", root.getNamespaceURI());
-        assertEquals("foo", root.getLocalName());
-
-        NodeList children = root.getElementsByTagNameNS("*","bar");
-        Element bar = (Element)children.item(0);
-        System.out.println ("bar ns=" + bar.getNamespaceURI() + ", localName=" +bar.getLocalName());
-        assertEquals("uri2", bar.getNamespaceURI());
-        assertEquals("bar", bar.getLocalName());
-
-        //
-        String attrValue = bar.getAttributeNS("uri1", "attr");
-        assertEquals("test", attrValue);
-        Attr attr = bar.getAttributeNodeNS("uri1", "attr");
-        assertNotNull(attr);
-        assertEquals("uri1", attr.getNamespaceURI());
-        assertEquals("attr", attr.getLocalName());
-        assertEquals("test", attr.getValue());
-
-
-        Text text = (Text)bar.getFirstChild();
-        System.out.println("text="+text.getNodeValue());
-        assertEquals("baz", text.getNodeValue());
 
     }
 
