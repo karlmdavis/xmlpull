@@ -26,6 +26,7 @@ public class PackageTests extends TestRunner {
     private static boolean runAll;
     
     public static boolean runnigAllTests() { return runAll; }
+    public static void setRunnigAllTests(boolean enable) { runAll = enable; }
     
     public PackageTests() {
         super();
