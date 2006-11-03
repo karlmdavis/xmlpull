@@ -420,7 +420,7 @@ public class Driver implements Locator, XMLReader, Attributes
                             }
                             contentHandler.endElement(pp.getNamespace(),
                                                       name,
-                                                      prefix != null ? name : rawName.toString()
+                                                      prefix != null ? rawName.toString() : name
                                                      );
                             // when entering show prefixes for all levels!!!!
                             final int depth = pp.getDepth();
