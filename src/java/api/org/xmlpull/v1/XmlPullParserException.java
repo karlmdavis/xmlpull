@@ -13,9 +13,6 @@ public class XmlPullParserException extends Exception {
     protected int row = -1;
     protected int column = -1;
 
-    /*    public XmlPullParserException() {
-          }*/
-
     public XmlPullParserException(String s) {
         super(s);
     }

@@ -322,4 +322,3 @@ public interface XmlSerializer {
         throws IOException;
 
 }
-
