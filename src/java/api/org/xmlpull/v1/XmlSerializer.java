@@ -5,8 +5,8 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 /**
- * Define an interface to serialziation of XML Infoset.
- * This interface abstracts away if serialized XML is XML 1.0 comaptible text or
+ * Define an interface to serialization of XML Infoset.
+ * This interface abstracts away if serialized XML is XML 1.0 compatible text or
  * other formats of XML 1.0 serializations (such as binary XML for example with WBXML).
  *
  * <p><b>PLEASE NOTE:</b> This interface will be part of XmlPull 1.2 API.
@@ -27,20 +27,20 @@ import java.io.Writer;
  * <p><b>NOTE:</b> writing  CDSECT, ENTITY_REF, IGNORABLE_WHITESPACE,
  *  PROCESSING_INSTRUCTION, COMMENT, and DOCDECL in some implementations
  * may not be supported (for example when serializing to WBXML).
- * In such case IllegalStateException will be thrown and it is recommened
+ * In such case IllegalStateException will be thrown and it is recommended
  * to use an optional feature to signal that implementation is not
  * supporting this kind of output.
  */
 
 public interface XmlSerializer {
-    
+
     /**
      * Set feature identified by name (recommended to be URI for uniqueness).
      * Some well known optional features are defined in
      * <a href="http://www.xmlpull.org/v1/doc/features.html">
      * http://www.xmlpull.org/v1/doc/features.html</a>.
      *
-     * If feature is not recocgnized or can not be set
+     * If feature is not recognized or can not be set
      * then IllegalStateException MUST be thrown.
      *
      * @exception IllegalStateException If the feature is not supported or can not be set
@@ -48,8 +48,8 @@ public interface XmlSerializer {
     void setFeature(String name,
                            boolean state)
         throws IllegalArgumentException, IllegalStateException;
-    
-    
+
+
     /**
      * Return the current value of the feature with given name.
      * <p><strong>NOTE:</strong> unknown properties are <strong>always</strong> returned as null
@@ -59,16 +59,16 @@ public interface XmlSerializer {
      * @exception IllegalArgumentException if feature string is null
      */
     boolean getFeature(String name);
-    
-    
+
+
     /**
      * Set the value of a property.
-     * (the property name is recommened to be URI for uniqueness).
+     * (the property name is recommended to be URI for uniqueness).
      * Some well known optional properties are defined in
      * <a href="http://www.xmlpull.org/v1/doc/properties.html">
      * http://www.xmlpull.org/v1/doc/properties.html</a>.
      *
-     * If property is not recocgnized or can not be set
+     * If property is not recognized or can not be set
      * then IllegalStateException MUST be thrown.
      *
      * @exception IllegalStateException if the property is not supported or can not be set
@@ -76,31 +76,31 @@ public interface XmlSerializer {
     void setProperty(String name,
                             Object value)
         throws IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Look up the value of a property.
      *
      * The property name is any fully-qualified URI. I
-     * <p><strong>NOTE:</strong> unknown properties are <string>always</strong> returned as null
+     * <p><strong>NOTE:</strong> unknown properties are <strong>always</strong> returned as null
      *
      * @param name The name of property to be retrieved.
      * @return The value of named property.
      */
     Object getProperty(String name);
-    
+
     /**
      * Set to use binary output stream with given encoding.
      */
     void setOutput (OutputStream os, String encoding)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Set the output to the given writer.
      * <p><b>WARNING</b> no information about encoding is available!
      */
     void setOutput (Writer writer)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Write &lt;&#63;xml declaration with encoding (if encoding not null)
      * and standalone flag (if standalone not null)
@@ -108,7 +108,7 @@ public interface XmlSerializer {
      */
     void startDocument (String encoding, Boolean standalone)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Finish writing. All unclosed start tags will be closed and output
      * will be flushed. After calling this method no more output can be
@@ -116,7 +116,7 @@ public interface XmlSerializer {
      */
     void endDocument ()
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Binds the given prefix to the given namespace.
      * This call is valid for the next element including child elements.
@@ -138,13 +138,13 @@ public interface XmlSerializer {
      */
     void setPrefix (String prefix, String namespace)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Return namespace that corresponds to given prefix
      * If there is no prefix bound to this namespace return null
      * but if generatePrefix is false then return generated prefix.
      *
-     * <p><b>NOTE:</b> if the prefix is empty string "" and defualt namespace is bound
+     * <p><b>NOTE:</b> if the prefix is empty string "" and default namespace is bound
      * to this prefix then empty string ("") is returned.
      *
      * <p><b>NOTE:</b> prefixes "xml" and "xmlns" are already bound
@@ -153,7 +153,7 @@ public interface XmlSerializer {
      */
     String getPrefix (String namespace, boolean generatePrefix)
         throws IllegalArgumentException;
-    
+
     /**
      * Returns the current depth of the element.
      * Outside the root element, the depth is 0. The
@@ -172,11 +172,11 @@ public interface XmlSerializer {
      * </pre>
      */
     int getDepth();
-    
+
     /**
      * Returns the namespace URI of the current element as set by startTag().
      *
-     * <p><b>NOTE:</b> that measn in particaulr that: <ul>
+     * <p><b>NOTE:</b> that means in particular that: <ul>
      * <li>if there was startTag("", ...) then getNamespace() returns ""
      * <li>if there was startTag(null, ...) then getNamespace() returns null
      * </ul>
@@ -184,7 +184,7 @@ public interface XmlSerializer {
      * @return namespace set by startTag() that is currently in scope
      */
     String getNamespace ();
-    
+
     /**
      * Returns the name of the current element as set by startTag().
      * It can only be null before first call to startTag()
@@ -193,7 +193,7 @@ public interface XmlSerializer {
      * @return namespace set by startTag() that is currently in scope
      */
     String getName();
-    
+
     /**
      * Writes a start tag with the given namespace and name.
      * If there is no prefix defined for the given namespace,
@@ -201,14 +201,14 @@ public interface XmlSerializer {
      * The explicit prefixes for namespaces can be established by calling setPrefix()
      * immediately before this method.
      * If namespace is null no namespace prefix is printed but just name.
-     * If namespace is empty string then serialzier will make sure that
+     * If namespace is empty string then serializer will make sure that
      * default empty namespace is declared (in XML 1.0 xmlns='')
      * or throw IllegalStateException if default namespace is already bound
      * to non-empty string.
      */
     XmlSerializer startTag (String namespace, String name)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Write an attribute. Calls to attribute() MUST follow a call to
      * startTag() immediately. If there is no prefix defined for the
@@ -218,19 +218,19 @@ public interface XmlSerializer {
      */
     XmlSerializer attribute (String namespace, String name, String value)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Write end tag. Repetition of namespace and name is just for avoiding errors.
      * <p><b>Background:</b> in kXML endTag had no arguments, and non matching tags were
      *  very difficult to find...
      * If namespace is null no namespace prefix is printed but just name.
-     * If namespace is empty string then serialzier will make sure that
+     * If namespace is empty string then serializeer will make sure that
      * default empty namespace is declared (in XML 1.0 xmlns='').
      */
     XmlSerializer endTag (String namespace, String name)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
-    
+
+
     //    /**
     //     * Writes a start tag with the given namespace and name.
     //     * <br />If there is no prefix defined (prefix == null) for the given namespace,
@@ -283,19 +283,19 @@ public interface XmlSerializer {
     // ALEK: This is really optional as prefix in end tag MUST correspond to start tag but good for error checking
     //    XmlSerializer endTag (String prefix, String namespace, String name)
     //        throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Writes text, where special XML chars are escaped automatically
      */
     XmlSerializer text (String text)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Writes text, where special XML chars are escaped automatically
      */
     XmlSerializer text (char [] buf, int start, int len)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     void cdsect (String text)
         throws IOException, IllegalArgumentException, IllegalStateException;
     void entityRef (String text)  throws IOException,
@@ -308,19 +308,19 @@ public interface XmlSerializer {
         throws IOException, IllegalArgumentException, IllegalStateException;
     void ignorableWhitespace (String text)
         throws IOException, IllegalArgumentException, IllegalStateException;
-    
+
     /**
      * Write all pending output to the stream.
      * If method startTag() or attribute() was called then start tag is closed (final &gt;)
      * before flush() is called on underlying output stream.
      *
      * <p><b>NOTE:</b> if there is need to close start tag
-     * (so no more attribute() calls are allowed) but without flushinging output
+     * (so no more attribute() calls are allowed) but without flushing output
      * call method text() with empty string (text("")).
      *
      */
     void flush ()
         throws IOException;
-    
+
 }
 

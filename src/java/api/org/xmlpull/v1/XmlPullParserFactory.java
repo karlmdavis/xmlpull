@@ -98,7 +98,7 @@ public class XmlPullParserFactory {
      *
      * @param name The name of feature to be retrieved.
      * @return The value of named feature.
-     *     Unknown features are <string>always</strong> returned as false
+     *     Unknown features are <strong>always</strong> returned as false
      */
 
     public boolean getFeature (String name) {
@@ -253,7 +253,7 @@ public class XmlPullParserFactory {
      * to create XML pull parsers (see class description for more
      * details).
      *
-     * @return a new instance of a PullParserFactory, as returned by newInstance (null, null); 
+     * @return a new instance of a PullParserFactory, as returned by newInstance (null, null);
      */
     public static XmlPullParserFactory newInstance () throws XmlPullParserException {
         return newInstance(null, null);
