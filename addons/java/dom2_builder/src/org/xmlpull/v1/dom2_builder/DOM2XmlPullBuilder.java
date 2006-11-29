@@ -22,7 +22,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.w3c.dom.DOMException;
 
-//TOOD add parse methodthat will usenextToken() to reconstruct complete XML infoset
+//TOOD add parse method that will usenextToken() to reconstruct complete XML Infoset
 
 /**
  * <strong>Simplistic</strong> DOM2 builder that should be enough to do support most cases.
