@@ -176,5 +176,9 @@ public class XmlPullParserDelegate implements XmlPullParser {
         return pp.getAttributeNamespace(index);
     }
 
+    public void skipSubTree() throws XmlPullParserException, IOException {
+        pp.skipSubTree();
+    }
+
 }
 

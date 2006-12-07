@@ -90,6 +90,10 @@ public class XmlSerializerDelegate implements XmlSerializer {
         return xs.startTag(namespace, name);
     }
 
+    public XmlSerializer startTag(String prefix, String namespace, String name) throws IOException, IllegalArgumentException, IllegalStateException {
+        return xs.startTag(prefix, namespace, name);
+    }
+
     public void ignorableWhitespace(String text) throws IOException, IllegalArgumentException, IllegalStateException {
         xs.ignorableWhitespace(text);
     }
@@ -104,6 +108,10 @@ public class XmlSerializerDelegate implements XmlSerializer {
 
     public XmlSerializer attribute(String namespace, String name, String value) throws IOException, IllegalArgumentException, IllegalStateException {
         return xs.attribute(namespace, name, value);
+    }
+
+    public XmlSerializer attribute(String prefix, String namespace, String name, String value) throws IOException, IllegalArgumentException, IllegalStateException {
+        return xs.attribute(prefix, namespace, name, value);
     }
 
     public void startDocument(String encoding, Boolean standalone) throws IOException, IllegalArgumentException, IllegalStateException {
@@ -122,6 +130,10 @@ public class XmlSerializerDelegate implements XmlSerializer {
         throws IOException, IllegalArgumentException, IllegalStateException
     {
         return xs.endTag(namespace, name);
+    }
+
+    public XmlSerializer endTag(String prefix, String namespace, String name) throws IOException, IllegalArgumentException, IllegalStateException {
+        return xs.endTag(prefix, namespace, name);
     }
 
     public XmlSerializer text(char[] buf, int start, int len) throws IOException, IllegalArgumentException, IllegalStateException {
