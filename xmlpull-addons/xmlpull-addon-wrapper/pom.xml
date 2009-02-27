@@ -17,6 +17,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.xmlpull</groupId>
+			<artifactId>xmlpull-addon-util</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>

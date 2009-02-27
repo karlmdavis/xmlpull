@@ -16,6 +16,10 @@
 	</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.xmlpull</groupId>
+			<artifactId>xmlpull-addon-wrapper</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

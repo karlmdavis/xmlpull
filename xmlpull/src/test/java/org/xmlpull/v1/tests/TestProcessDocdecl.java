@@ -101,7 +101,7 @@ public class TestProcessDocdecl extends UtilTestCase {
 
         //        final String PUB_ENTITY_INTERNAL_REPLACEMENT =
         //            "La Peste: Albert Camus,\n"+
-        //            "© 1947 Éditions Gallimard. &rights;";
+        //            "Copyright 1947 Editions Gallimard. &rights;";
         final String PUB_ENTITY_INTERNAL_REPLACEMENT =
             "La Peste: Albert Camus,\n"+
             "&pub;. &rights;";
@@ -109,7 +109,7 @@ public class TestProcessDocdecl extends UtilTestCase {
 
         final String PUB_ENTITY_REPLACEMENT =
             "La Peste: Albert Camus,\n"+
-            "© 1947 Éditions Gallimard. All rights reserved";
+            "Copyright 1947 Editions Gallimard. All rights reserved";
 
         //next
         xpp.setInput(new StringReader( XML_SIMPLE_ENT ));

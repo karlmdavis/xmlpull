@@ -26,6 +26,130 @@
 		<module>xmlpull-addon-xmlrpc-samples</module>
 	</modules>
 
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-dom2-builder</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-dom2-builder</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-parser-pool</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-parser-pool</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-sax2-driver</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-sax2-driver</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-util</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-util</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-wrapper</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-wrapper</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-wrapper-samples</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-wrapper-samples</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-xmlrpc</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-xmlrpc</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-xmlrpc-samples</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-addon-xmlrpc-samples</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.xmlpull</groupId>
