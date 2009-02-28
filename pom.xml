@@ -30,6 +30,7 @@
 
 	<modules>
 		<module>xmlpull</module>
+		<module>xmlpull-tck</module>
 		<module>xmlpull-addons</module>
 		<module>xmlpull-samples</module>
 	</modules>
@@ -104,6 +105,20 @@
 			<dependency>
 				<groupId>org.xmlpull</groupId>
 				<artifactId>xmlpull</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-tck</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull-tck</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
