@@ -15,13 +15,11 @@
 	<url>http://xmlpull.org</url>
 	<inceptionYear>2000</inceptionYear>
 	
-<!--
 	<scm>
-		<connection>scm:git:TODO</connection>
-		<developerConnection>scm:svn:TODO</developerConnection>
-		<url>TODO</url>
+		<connection>scm:git:git://github.com/karlmdavis/xmlpull.git</connection>
+		<developerConnection>scm:git:git@github.com:karlmdavis/xmlpull.git</developerConnection>
+		<url>http://github.com/karlmdavis/xmlpull/tree/master</url>
 	</scm>
--->
 
 	<issueManagement>
 		<system>Bugzilla</system>
@@ -37,23 +35,23 @@
 	
 	<distributionManagement>
 		<repository>
-			<id>eddings</id>
-			<name>eddings</name>
-			<url>scp://eddings.davisonlinehome.name/var/www/maven/repo</url>
+			<uniqueVersion>false</uniqueVersion>
+			<id>googlecode</id>
+			<url>svn:https://ksoap2-android.googlecode.com/svn/m2-repo</url>
 		</repository>
 	</distributionManagement>
 	<repositories>
 		<repository>
-			<id>simplepersistence</id>
-			<name>Simple Persistence Repo</name>
-			<url>http://75.146.134.33:8080/maven/repo</url>
+			<id>googlecode-ksoap2-android</id>
+			<name>googlecode-ksoap2-android</name>
+			<url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>simplepersistence</id>
-			<name>Simple Persistence Repo</name>
-			<url>http://75.146.134.33:8080/maven/repo</url>
+			<id>googlecode-ksoap2-android</id>
+			<name>googlecode-ksoap2-android</name>
+			<url>http://ksoap2-android.googlecode.com/svn/m2-repo</url>
 		</pluginRepository>
 	</pluginRepositories>
 	
@@ -194,6 +192,16 @@
 							</goals>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.0-beta-9</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<useReleaseProfile>false</useReleaseProfile>
+						<arguments>-Prelease</arguments>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
